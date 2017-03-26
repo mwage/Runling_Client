@@ -25,14 +25,14 @@ public class PlayerMovement : MonoBehaviour
         targetPos = transform.position;
         acceleration = 100f;
         deceleration = 100f;
-        accelerate = true;
-        stop = false;
+        currentSpeed = 0;
+        accelerate = false;
+        stop = true;
         highestSpeedReached = 0;
         stopSensitivity = 20;
     }
 
-
-    private void FixedUpdate()
+    private void Update()
     {
         // On right mouseclick, set new target location
         if (Input.GetMouseButtonDown(1))
@@ -63,7 +63,11 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
+    }
 
+
+    private void FixedUpdate()
+    {
         distance = (targetPos - transform.position).magnitude;
         currentSpeed = rb.velocity.magnitude;
 

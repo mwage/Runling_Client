@@ -15,5 +15,4 @@ public class OptionsMenu : MonoBehaviour {
         gameObject.SetActive(false);
         menu.gameObject.SetActive(true);
     }
-
 }

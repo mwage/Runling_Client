@@ -16,6 +16,7 @@ public class InGameMenuSLA : MonoBehaviour {
     {
         gameObject.SetActive(false);
         _inGameMenuManagerSLA.menuOn = false;
+        Time.timeScale = 1;
     }
 
     public void HighScores()
@@ -31,6 +32,7 @@ public class InGameMenuSLA : MonoBehaviour {
         GameControl.dead = true;
         HighScoreSLA.totalScoreSLA = 0;
         GameControl.currentLevel = 0;
+        Time.timeScale = 1;
 
         SceneManager.LoadScene("SLA");
     }
@@ -45,6 +47,7 @@ public class InGameMenuSLA : MonoBehaviour {
     public void BackToMenu()
     {
         GameControl.gameActive = false;
+        Time.timeScale = 1;
         SceneManager.LoadScene("MainMenu");
     }
 }

@@ -14,14 +14,17 @@ public class InGameMenuManagerSLA : MonoBehaviour
     public GameObject optionsMenu;
     public GameObject highScoreMenu;
     public GameObject winScreen;
+    public GameObject pauseScreen;
 
     public bool menuOn;
+    bool pause;
 
     private void Awake()
     {
         menuOn = false;
         _optionsMenu.optionsMenuActive = false;
         _highScoreMenuSLA.highScoreMenuActive = false;
+        pause = false;
     }
 
     public void CloseMenus()
@@ -33,11 +36,13 @@ public class InGameMenuManagerSLA : MonoBehaviour
 
     void Update()
     {
+        // Navigate menu with esc
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (menuOn == false && !winScreen.gameObject.activeSelf)
+            if (!menuOn && !winScreen.gameObject.activeSelf)
             {
                 inGameMenu.SetActive(true);
+                Time.timeScale = 0;
                 menuOn = true;
             }
             else if (menuOn == true && _optionsMenu.optionsMenuActive)
@@ -55,7 +60,25 @@ public class InGameMenuManagerSLA : MonoBehaviour
             else
             {
                 inGameMenu.SetActive(false);
+                Time.timeScale = 1;
                 menuOn = false;
+            }
+        }
+
+        //pause game
+        if (Input.GetKeyDown(KeyCode.Pause))
+        {
+            if (!pause)
+            {
+                Time.timeScale = 0;
+                pause = true;
+                pauseScreen.SetActive(true);
+            }
+            else if (pause)
+            {
+                Time.timeScale = 1;
+                pause = false;
+                pauseScreen.SetActive(false);
             }
         }
     }
