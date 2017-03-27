@@ -20,10 +20,10 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        rotationSpeed = 20f;
+        rotationSpeed = 15f;
         rb = this.GetComponent<Rigidbody>();
         targetPos = transform.position;
-        acceleration = 100f;
+        acceleration = 150f;
         deceleration = 100f;
         currentSpeed = 0;
         accelerate = false;

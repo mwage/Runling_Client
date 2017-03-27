@@ -32,7 +32,7 @@ public class InitializeGameSLA : MonoBehaviour {
     IEnumerator PrepareLevel()
     {
         // Set current Level and movespeed
-        GameControl.moveSpeed = SettingsSLA.moveSpeedSLA[GameControl.currentLevel];
+        GameControl.moveSpeed = _levelManagerSLA.moveSpeedSLA[GameControl.currentLevel];
         GameControl.currentLevel++;
 
 
@@ -47,7 +47,7 @@ public class InitializeGameSLA : MonoBehaviour {
         currentPRWindow.SetActive(false);
         yield return new WaitForSeconds(1f);
 
-        //Load drones and player
+        // Load drones and player
         _levelManagerSLA.LoadDrones(GameControl.currentLevel);
         newPlayer = Instantiate(player);
         Transform trigger = newPlayer.transform.FindChild("Trigger");

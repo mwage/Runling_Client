@@ -20,25 +20,24 @@ public class MovementTest : MonoBehaviour
 
     void Start()
     {
-        rotationSpeed = 20f;
+        rotationSpeed = 15f;
         rb = this.GetComponent<Rigidbody>();
-        GameControl.moveSpeed = 10f;
         targetPos = transform.position;
         acceleration = 100f;
         deceleration = 100f;
-        accelerate = true;
-        stop = false;
+        currentSpeed = 0;
+        GameControl.moveSpeed = 10;
+        accelerate = false;
+        stop = true;
         highestSpeedReached = 0;
         stopSensitivity = 20;
     }
 
-
-    private void FixedUpdate()
+    private void Update()
     {
         // On right mouseclick, set new target location
         if (Input.GetMouseButtonDown(1))
         {
-            Debug.Log("Mouseclick!");
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -53,7 +52,8 @@ public class MovementTest : MonoBehaviour
                     direction = (targetPos - transform.position).normalized;
                     accelerate = true;
                     stop = false;
-                    if ((targetPos - transform.position).magnitude < 0.4)
+
+                    if ((targetPos - transform.position).magnitude < 0.5)
                     {
                         rb.velocity = direction * currentSpeed / 2;
                     }
@@ -64,16 +64,17 @@ public class MovementTest : MonoBehaviour
                 }
             }
         }
+    }
 
+
+    private void FixedUpdate()
+    {
         distance = (targetPos - transform.position).magnitude;
         currentSpeed = rb.velocity.magnitude;
-
-        Debug.Log("Distance: " + distance + ", current Speed: " + currentSpeed);
 
         // Stop
         if (distance < highestSpeedReached / (10 * stopSensitivity) | distance < 0.02f)
         {
-            Debug.Log("Stop");
             rb.velocity = Vector3.zero;
             stop = true;
             accelerate = false;
@@ -83,20 +84,10 @@ public class MovementTest : MonoBehaviour
         // Accelerate
         if (accelerate)
         {
-
             if (currentSpeed < maxSpeed)
             {
-                Debug.Log("accelerating");
-                if (distance < 0.5f)
-                {
-                    rb.AddForce(direction * acceleration / 3, ForceMode.Acceleration);
-                    highestSpeedReached = rb.velocity.magnitude;
-                }
-                else
-                {
-                    rb.AddForce(direction * acceleration, ForceMode.Acceleration);
-                    highestSpeedReached = currentSpeed;
-                }
+                rb.AddForce(direction * acceleration, ForceMode.Acceleration);
+                highestSpeedReached = currentSpeed;
             }
 
             // Don't accelerate over maxSpeed
@@ -112,7 +103,6 @@ public class MovementTest : MonoBehaviour
         // Decelerate
         if (distance < highestSpeedReached * highestSpeedReached / (2 * deceleration) && !stop)
         {
-            Debug.Log("decelerate");
             rb.AddForce(direction * (-deceleration), ForceMode.Acceleration);
             accelerate = false;
         }
@@ -128,14 +118,14 @@ public class MovementTest : MonoBehaviour
             if (collision.contacts[0].normal.x == 0)
             {
                 rb.velocity = new Vector3(1, 0, 0) * rb.velocity.x;
-                targetPos = transform.position + new Vector3(1 / 2, 0, 0) * rb.velocity.x;
+                targetPos = transform.position + new Vector3(0.1f, 0, 0) * rb.velocity.x;
                 direction = (targetPos - transform.position).normalized;
                 highestSpeedReached = rb.velocity.magnitude;
             }
             else if (collision.contacts[0].normal.z == 0)
             {
                 rb.velocity = new Vector3(0, 0, 1) * rb.velocity.z;
-                targetPos = transform.position + new Vector3(1 / 2, 0, 0) * rb.velocity.z;
+                targetPos = transform.position + new Vector3(0.1f, 0, 0) * rb.velocity.z;
                 direction = (targetPos - transform.position).normalized;
                 highestSpeedReached = rb.velocity.magnitude;
             }

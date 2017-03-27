@@ -19,6 +19,10 @@ public class LevelManagerSLA : MonoBehaviour {
 
     public GameObject win;
 
+    // Set movementspeed for the different levels
+    public int[] moveSpeedSLA = { 8, 9, 10, 11, 10 };
+
+
     //Spawn Drones according to what level is active
     public void LoadDrones(int level)
     {
