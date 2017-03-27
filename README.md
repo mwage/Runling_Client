@@ -5,7 +5,6 @@
 Launcher (Folder): scripts that won't be destroyed on load to hold important variables for different modes
  * GameControl: static variables: dead, gameActive, currentLevel, moveSpeed, lastLevelSLA
  * HighScoreSLA: static variables: totalScore, highScoreSLA[], loads highScoreSLA from playerprefs
- * SettingsSLA: moveSpeed[] for different levels
     
 UI (Folder): UI related scripts
  * MainMenu (Folder): Main menu related scripts, main menu also accesses SLAMenu/HighscoreMenuSLA and OptionsMenu
@@ -21,13 +20,13 @@ UI (Folder): UI related scripts
     
 SLA (Folder): All scripts used specifically for SLA
   * ControlSLA: script that controls the flow of the game
-  * InitializeGameSLA: spawnimmunity, sets movespeed, countdown, leveltexts, instantiates player and activates deathtrigger
+  * InitializeGameSLA: spawnimmunity, countdown, leveltexts, instantiates player and activates deathtrigger
   * DeathSLA: manages what happens after death in SLA
   * ScoreSLA: handles the score (current/total), compares and sets highscores and triggers on highscore events
   * WinSLA: winscreen, shows highscores, winscreen buttons
   * StopCoroutineSLA: stops all methods that spawn regularly spawn drones when a new level is initialized
   * Levels (Folder): everything that happens during the levels (mostly related to drones)
-    * LevelManager: Loads the scripts according to the level, ends the levels
+    * LevelManager: Sets movespeed for different levels, loads the drone-scripts according to the level, ends the levels
     * Level1SLA: spawns drones for Level 1
     * Level2SLA: spawns drones for Level 2
     * Level3SLA: spawns drones for Level 3
@@ -38,7 +37,8 @@ SLA (Folder): All scripts used specifically for SLA
     * TestSLA: the control script for the drone test level
     * DroneTestSLA: loads drones for the test scene
     * ScoreTestSLA: handles score in the test scene
-    * MovementTestSLA: script to test movements in the movementtest scene
+    * MovementTest: script to test movement in the movementtest scene
+    * MovementTest2: script to test movement on a sphere
 
 Players (Folder): everything regarding the player
   * PlayerMovement: movement script
