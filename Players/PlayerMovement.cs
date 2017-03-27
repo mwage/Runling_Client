@@ -20,9 +20,9 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        rotationSpeed = 15f;
         rb = this.GetComponent<Rigidbody>();
         targetPos = transform.position;
+        rotationSpeed = 15f;
         acceleration = 150f;
         deceleration = 100f;
         currentSpeed = 0;
@@ -60,6 +60,8 @@ public class PlayerMovement : MonoBehaviour
                     {
                         rb.velocity = direction * currentSpeed;
                     }
+
+                    highestSpeedReached = rb.velocity.magnitude;
                 }
             }
         }
@@ -85,16 +87,9 @@ public class PlayerMovement : MonoBehaviour
         {
             if (currentSpeed < maxSpeed)
             {
-                if (distance < 0.5f)
-                {
-                    rb.AddForce(direction * acceleration / 3, ForceMode.Acceleration);
-                    highestSpeedReached = rb.velocity.magnitude;
-                }
-                else
-                {
-                    rb.AddForce(direction * acceleration, ForceMode.Acceleration);
-                    highestSpeedReached = currentSpeed;
-                }
+                rb.AddForce(direction * acceleration, ForceMode.Acceleration);
+                currentSpeed = rb.velocity.magnitude;
+                highestSpeedReached = currentSpeed;
             }
 
             // Don't accelerate over maxSpeed

@@ -15,7 +15,7 @@ public class Level3SLA : MonoBehaviour
     public void Level3Drones()
     {
         // Spawn drones (dronecount/delay, speed, size, color)
-        _spawnDrone.RandomFlyingBouncingDrone(130, 6f, 1f, Color.magenta, _area.flyingSLA);
-        _addDrone.RandomFlyingBouncingDrone(0.5f, 6f, 1f, Color.magenta, _area.flyingSLA);
+        _spawnDrone.RandomFlyingBouncingDrone(130, 5f, 1f, Color.magenta, _area.flyingSLA);
+        _addDrone.RandomFlyingBouncingDrone(0.5f, 5f, 1f, Color.magenta, _area.flyingSLA);
     }
 }

@@ -19,10 +19,14 @@ public class LevelManagerSLA : MonoBehaviour {
 
     public GameObject win;
 
-    // Set movementspeed for the different levels
-    public int[] moveSpeedSLA = { 8, 9, 10, 11, 10 };
+    public int[] moveSpeedSLA;
 
-
+    public void Awake()
+    {
+        // Set movementspeed for the different levels
+        moveSpeedSLA = new int[] { 8, 9, 9, 9, 9 };
+    }
+    
     //Spawn Drones according to what level is active
     public void LoadDrones(int level)
     {
@@ -75,7 +79,7 @@ public class LevelManagerSLA : MonoBehaviour {
         {
             Destroy(enemies[i]);
         }
-
+        _score.currentScoreText.text = "0";
         _initializeGameSLA.InitializeGame();
     }
 

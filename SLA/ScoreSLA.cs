@@ -13,6 +13,7 @@ public class ScoreSLA : MonoBehaviour
     public Text currentScoreText;
     public Text totalScoreText;
     public Text newHighScore;
+
     private void Awake()
     {
         totalScoreText.text = HighScoreSLA.totalScoreSLA.ToString();

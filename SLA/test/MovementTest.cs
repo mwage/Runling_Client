@@ -20,9 +20,9 @@ public class MovementTest : MonoBehaviour
 
     void Start()
     {
-        rotationSpeed = 15f;
         rb = this.GetComponent<Rigidbody>();
         targetPos = transform.position;
+        rotationSpeed = 15f;
         acceleration = 100f;
         deceleration = 100f;
         currentSpeed = 0;
@@ -61,6 +61,8 @@ public class MovementTest : MonoBehaviour
                     {
                         rb.velocity = direction * currentSpeed;
                     }
+
+                    highestSpeedReached = rb.velocity.magnitude;
                 }
             }
         }
@@ -71,6 +73,7 @@ public class MovementTest : MonoBehaviour
     {
         distance = (targetPos - transform.position).magnitude;
         currentSpeed = rb.velocity.magnitude;
+
 
         // Stop
         if (distance < highestSpeedReached / (10 * stopSensitivity) | distance < 0.02f)
@@ -87,6 +90,7 @@ public class MovementTest : MonoBehaviour
             if (currentSpeed < maxSpeed)
             {
                 rb.AddForce(direction * acceleration, ForceMode.Acceleration);
+                currentSpeed = rb.velocity.magnitude;
                 highestSpeedReached = currentSpeed;
             }
 
