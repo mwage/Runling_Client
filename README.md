@@ -27,11 +27,8 @@ SLA (Folder): All scripts used specifically for SLA
   * StopCoroutineSLA: stops all methods that spawn regularly spawn drones when a new level is initialized
   * Levels (Folder): everything that happens during the levels (mostly related to drones)
     * LevelManager: Sets movespeed for different levels, loads the drone-scripts according to the level, ends the levels
-    * Level1SLA: spawns drones for Level 1
-    * Level2SLA: spawns drones for Level 2
-    * Level3SLA: spawns drones for Level 3
-    * Level4SLA: spawns drones for Level 4
-    * Level5SLA: spawns drones for Level 5
+    * Level*X*SLA: spawns drones for Level *X*
+
     * BoundariesSLA: sets the area in which random drones get spawned
   * test (Folder): scripts related to test scenes
     * TestSLA: the control script for the drone test level

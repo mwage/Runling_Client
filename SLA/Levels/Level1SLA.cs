@@ -13,7 +13,7 @@ public class Level1SLA : MonoBehaviour {
     public void Level1Drones()
     {
         //Spawn drones (dronecount/delay, speed, size, color)
-        _spawnDrone.RandomBouncingDrone(60, 4f, 1f, Color.blue, _area.bouncingSLA);
+        _spawnDrone.RandomBouncingDrone(50, 4f, 1f, Color.blue, _area.bouncingSLA);
         _addDrone.RandomBouncingDrone(1.5f, 4f, 1f, Color.blue, _area.bouncingSLA);
     }
 }

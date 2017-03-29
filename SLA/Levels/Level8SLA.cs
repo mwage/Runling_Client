@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DroneTestSLA : MonoBehaviour
+public class Level8SLA : MonoBehaviour
 {
 
     // attach scripts
     public SpawnDrone _spawnDrone;
     public AddDrone _addDrone;
     public BoundariesSLA _area;
+    
 
-    public void LoadDrones()
+    public void Level8Drones()
     {
-
         // Spawn drones (dronecount/delay, speed, size, color)
         _spawnDrone.RandomBouncingDrone(10, 5f, 1f, Color.blue, _area.bouncingSLA);
         _addDrone.RandomBouncingDrone(4f, 5f, 1f, Color.blue, _area.bouncingSLA);
@@ -32,11 +32,11 @@ public class DroneTestSLA : MonoBehaviour
         while (true)
         {
             _spawnDrone.DelayedStraightFlying360Drones(16 + 2 * droneCount, 0.2f, 7f, size, color, startPos, 90, false);
-            yield return new WaitForSeconds(delay/3);
+            yield return new WaitForSeconds(delay / 3);
             _spawnDrone.DelayedStraightFlying360Drones(16 + 2 * droneCount, 0.2f, 7f, size, color, startPos, -90, true);
             yield return new WaitForSeconds(delay);
             _spawnDrone.DelayedStraightFlying360Drones(16 + 2 * droneCount, 0.2f, 7f, size, color, startPos2, 90, true);
-            yield return new WaitForSeconds(delay /3);
+            yield return new WaitForSeconds(delay / 3);
             _spawnDrone.DelayedStraightFlying360Drones(16 + 2 * droneCount, 0.2f, 7f, size, color, startPos2, -90, false);
             yield return new WaitForSeconds(delay);
             if (delay > 1f) { delay -= delay * 0.1f; }

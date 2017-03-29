@@ -17,11 +17,11 @@ public class AddDrone : MonoBehaviour
     // add a basic drone every x seconds with a set speed/size
     public void RandomBouncingDrone(float delay, float droneSpeed, float size, Color color, Area boundary)
     {
-        StartCoroutine(AddRandomBouncingDrone(delay, droneSpeed, size, color, boundary));
+        StartCoroutine(IRandomBouncingDrone(delay, droneSpeed, size, color, boundary));
     }
 
     // add a bouncing drone every x seconds with a set speed/size at the corner.
-    IEnumerator AddRandomBouncingDrone(float delay, float droneSpeed, float size, Color color, Area boundary)
+    IEnumerator IRandomBouncingDrone(float delay, float droneSpeed, float size, Color color, Area boundary)
     {
         while (true)
         {
@@ -49,11 +49,11 @@ public class AddDrone : MonoBehaviour
     // add a basic drone every x seconds with a set speed/size
     public void RandomFlyingBouncingDrone(float delay, float droneSpeed, float size, Color color, Area boundary)
     {
-        StartCoroutine(AddRandomFlyingBouncingDrone(delay, droneSpeed, size, color, boundary));
+        StartCoroutine(IRandomFlyingBouncingDrone(delay, droneSpeed, size, color, boundary));
     }
 
     // add a bouncing drone every x seconds with a set speed/size at the corner.
-    IEnumerator AddRandomFlyingBouncingDrone(float delay, float droneSpeed, float size, Color color, Area boundary)
+    IEnumerator IRandomFlyingBouncingDrone(float delay, float droneSpeed, float size, Color color, Area boundary)
     {
         while (true)
         {
