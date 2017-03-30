@@ -2,63 +2,48 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Level6SLA : MonoBehaviour
+public class Level9SLA : MonoBehaviour
 {
-
     // attach scripts
     public SpawnDrone _spawnDrone;
     public AddDrone _addDrone;
     public BoundariesSLA _area;
+    public GameObject flyingOnewayDrone;
+    public Chaser _chaser;
+    public InitializeGameSLA _initializeGameSLA;
+    
 
-        public void Level6Drones()
+    public void Level9Drones()
     {
         // Spawn drones (dronecount/delay, speed, size, color)
-        _spawnDrone.RandomBouncingDrone(20, 6f, 1f, Color.blue, _area.bouncingSLA);
-        _addDrone.RandomBouncingDrone(6f, 6f, 1f, Color.blue, _area.bouncingSLA);
+        _spawnDrone.RandomBouncingDrone(15, 7f, 1.5f, Color.red, _area.bouncingSLA);
+        _addDrone.RandomBouncingDrone(9f, 7f, 1.5f, Color.red, _area.bouncingSLA);
+
+        // Spawn chaser
+        GameObject chaser = Instantiate(flyingOnewayDrone, new Vector3(0, 0.6f, 0), Quaternion.identity);
+        GameObject player = _initializeGameSLA.newPlayer;
+        _chaser.ChaserDrone(chaser, player, 8f, 1.2f, Color.yellow);
 
         // Spawn green drones (initial delay, size)
-        StartCoroutine(GreenDronesLevel6(5f, 1.5f));
+        StartCoroutine(GreenDronesLevel9(4f, 1.5f));
     }
 
-    IEnumerator GreenDronesLevel6(float delay, float size)
+    IEnumerator GreenDronesLevel9(float delay, float size)
     {
+        int droneCount = 0;
         while (true)
         {
             Vector3 startPos = new Vector3();
             Vector3 startPos2 = new Vector3();
-            float rotation;
-            float rotation2;
-            bool clockwise;
-            bool clockwise2;
             startPos = Location(size, _area.flyingSLA);
             startPos2 = OtherLocation(size, _area.flyingSLA);
 
-            if (startPos.x < 0)
-            {
-                rotation = 90f;
-                clockwise = false;
-            }
-            else
-            {
-                rotation = -90f;
-                clockwise = true;
-            }
-
-            if (startPos2.x < 0)
-            {
-                rotation2 = 90f;
-                clockwise2 = true;
-            }
-            else
-            {
-                rotation2 = -90f;
-                clockwise2 = false;
-            }
-
-            _spawnDrone.DelayedStraightFlying360Drones(32, 0.2f, 6f, size, Color.green, startPos, rotation, clockwise);
-            _spawnDrone.DelayedStraightFlying360Drones(32, 0.2f, 6f, size, Color.green, startPos2, rotation2, clockwise2);
+            _spawnDrone.StraightFlying360Drones(16 + 2 * droneCount, 8f, size, Color.green, startPos);
             yield return new WaitForSeconds(delay);
-            if (delay > 1f) { delay -= delay * 0.03f; }
+            _spawnDrone.StraightFlying360Drones(16 + 2 * droneCount, 8f, size, Color.green, startPos2);
+            yield return new WaitForSeconds(delay);
+            if (delay > 1f) { delay -= delay * 0.1f; }
+            if (droneCount < 15) { droneCount++; }
         }
     }
 
@@ -89,7 +74,7 @@ public class Level6SLA : MonoBehaviour
         }
         else if (location == 5)
         {
-            startPos.Set(boundary.rightBoundary - (30.5f + size / 2), 0.6f, boundary.bottomBoundary + (0.5f + size / 2));
+            startPos.Set(boundary.rightBoundary - (0.5f + size / 2), 0.6f, boundary.bottomBoundary + (0.5f + size / 2));
         }
         else if (location == 6)
         {

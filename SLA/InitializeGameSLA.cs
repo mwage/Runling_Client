@@ -48,12 +48,13 @@ public class InitializeGameSLA : MonoBehaviour {
         yield return new WaitForSeconds(1f);
 
         // Load drones and player
-        _levelManagerSLA.LoadDrones(GameControl.currentLevel);
+
         newPlayer = Instantiate(player);
         Transform trigger = newPlayer.transform.FindChild("Trigger");
         trigger.gameObject.SetActive(false);
         GameControl.dead = false;
         _controlSLA.stopUpdate = false;
+        _levelManagerSLA.LoadDrones(GameControl.currentLevel);
 
         // Countdown
         text3.SetActive(true);

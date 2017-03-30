@@ -10,7 +10,7 @@ public class GameControl : MonoBehaviour {
     public static bool dead = true;                 //to set Player to dead/alive 
     public static bool gameActive = false;          //if a game is ongoing
     public static int currentLevel = 0;             //current active level
-    public static int lastLevelSLA = 8;             //currently last level available in SLA
+    public static int lastLevelSLA = 9;             //currently last level available in SLA
     public static float moveSpeed = 0;              //movespeed of your character
 
 

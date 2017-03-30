@@ -9,15 +9,21 @@ public class DroneTestSLA : MonoBehaviour
     public SpawnDrone _spawnDrone;
     public AddDrone _addDrone;
     public BoundariesSLA _area;
+    public GameObject flyingOnewayDrone;
+    public Chaser _chaser;
+    public InitializeGameSLA _initializeGameSLA;
+
 
     public void LoadDrones()
     {
-
         // Spawn drones (dronecount/delay, speed, size, color)
         _spawnDrone.RandomBouncingDrone(10, 5f, 1f, Color.blue, _area.bouncingSLA);
         _addDrone.RandomBouncingDrone(4f, 5f, 1f, Color.blue, _area.bouncingSLA);
         _spawnDrone.RandomBouncingDrone(8, 5f, 1.5f, Color.red, _area.bouncingSLA);
         _addDrone.RandomBouncingDrone(8f, 5f, 1.5f, Color.red, _area.bouncingSLA);
+        GameObject chaser = Instantiate(flyingOnewayDrone, new Vector3(0, 0.6f, 0), Quaternion.identity);
+        GameObject player = _initializeGameSLA.newPlayer;
+        _chaser.ChaserDrone(chaser, player, 4f, 1.5f, Color.yellow);
 
         // Spawn green drones (initial delay, inbetween delay, size)
         StartCoroutine(GreenDronesLevel8(5f, 1.5f, Color.green));

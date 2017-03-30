@@ -17,7 +17,6 @@ public class TestSLA : MonoBehaviour
         GameControl.moveSpeed = 10f;
 
 
-
         //load drones and spawn immunity
         _droneTestSLA.LoadDrones();
         SpawnImmunity(3f);

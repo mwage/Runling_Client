@@ -13,21 +13,20 @@ public class Level7SLA : MonoBehaviour
     public GameObject flyingOnewayDrone;
 
     GameObject mine;
-
-
+    
 
     public void Level7Drones()
     {
 
         // Spawn drones (dronecount/delay, speed, size, color)
-        _spawnDrone.RandomBouncingDrone(15, 5f, 1.5f, Color.red, _area.bouncingSLA);
-        _addDrone.RandomBouncingDrone(6f, 5f, 1.5f, Color.red, _area.bouncingSLA);
+        _spawnDrone.RandomBouncingDrone(15, 6f, 1.5f, Color.red, _area.bouncingSLA);
+        _addDrone.RandomBouncingDrone(6f, 6f, 1.5f, Color.red, _area.bouncingSLA);
 
         // Spawn Mine (speed, size)
-        mine = _spawnDrone.MineSLA(4f, 3f, _area.flyingSLA);
+        mine = _spawnDrone.MineSLA(5f, 3f, _area.flyingSLA);
 
         // Spawn Green drones (dronecount, delay, speed, size, color)
-        StartCoroutine(GreenDronesLevel7(64, 0.1f, 7f, 1.5f, Color.cyan));
+        StartCoroutine(GreenDronesLevel7(64, 5f, 8f, 1.3f, Color.cyan));
     }
 
     IEnumerator GreenDronesLevel7(int droneCount, float delay, float droneSpeed, float size, Color color)
@@ -52,7 +51,7 @@ public class Level7SLA : MonoBehaviour
 
                 // move drone
                 _moveDrone.MoveStraight(newDrone, droneSpeed);
-                yield return new WaitForSeconds(delay);
+                yield return new WaitForSeconds(delay/droneCount);
             }
             for (int i = 0; i < droneCount; i++)
             {
@@ -69,7 +68,8 @@ public class Level7SLA : MonoBehaviour
 
                 // move drone
                 _moveDrone.MoveStraight(newDrone, droneSpeed);
-                yield return new WaitForSeconds(delay);
+                yield return new WaitForSeconds(delay/droneCount);
+                if (delay < 3)delay -= 0.05f * delay;
             }
         }
     }

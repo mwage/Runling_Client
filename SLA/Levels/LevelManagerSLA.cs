@@ -16,6 +16,8 @@ public class LevelManagerSLA : MonoBehaviour {
     public Level6SLA _level6;
     public Level7SLA _level7;
     public Level8SLA _level8;
+    public Level9SLA _level9;
+    public StopCoroutineSLA _stopCoroutineSLA;
 
     public ScoreSLA _score;
     public InitializeGameSLA _initializeGameSLA;
@@ -27,7 +29,7 @@ public class LevelManagerSLA : MonoBehaviour {
     public void Awake()
     {
         // Set movementspeed for the different levels
-        moveSpeedSLA = new int[] { 8, 9, 9, 9, 9, 9, 9, 9 };
+        moveSpeedSLA = new int[] { 8, 9, 9, 10, 9, 10, 11, 11, 11, 8, 8, 8, 12};
     }
     
     //Spawn Drones according to what level is active
@@ -59,6 +61,9 @@ public class LevelManagerSLA : MonoBehaviour {
             case 8:
                 _level8.Level8Drones();
                 break;
+            case 9:
+                _level9.Level9Drones();
+                break;
             default:
                 Debug.Log("Error: Couldn't load Level " + GameControl.currentLevel);
                 SceneManager.LoadScene("MainMenu");
@@ -86,11 +91,13 @@ public class LevelManagerSLA : MonoBehaviour {
     {
         yield return new WaitForSeconds(delay);
         _score.highScore.SetActive(false);
+        _stopCoroutineSLA.StopRespawn();
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
         for (int i = 0; i < enemies.Length; i++)
         {
             Destroy(enemies[i]);
         }
+        Destroy(_initializeGameSLA.newPlayer);
         _score.currentScoreText.text = "0";
         _initializeGameSLA.InitializeGame();
     }

@@ -11,6 +11,6 @@ public class DeathSLA : MonoBehaviour
     public void Death()
     {
 
-        Destroy(_initializeGameSLA.newPlayer);
+        _initializeGameSLA.newPlayer.SetActive(false);
     }
 }

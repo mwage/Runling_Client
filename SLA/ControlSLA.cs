@@ -12,7 +12,6 @@ public class ControlSLA : MonoBehaviour
     public InitializeGameSLA _initialize;
     public DeathSLA _deathSLA;
 
-    public StopCoroutineSLA _stopCoroutineSLA;
 
     public bool stopUpdate;
 
@@ -22,6 +21,7 @@ public class ControlSLA : MonoBehaviour
         // Set current Level and movespeed, load drones and spawn immunity
         stopUpdate = true;
         _initialize.InitializeGame();
+        //GameControl.currentLevel = 9;
     }
 
     //update when dead
@@ -35,7 +35,6 @@ public class ControlSLA : MonoBehaviour
             _score.SetLevelHighScore();
 
             //change level
-            _stopCoroutineSLA.StopRespawn();
             _levelManager.EndLevel(3f);
 
             //dont repeat above once player dead
