@@ -142,19 +142,20 @@ public class SpawnDrone : MonoBehaviour
     public GameObject MineSLA(float droneSpeed, float size, Area boundary)
     {
         Vector3 scale;
+        int direction = Random.Range(0, 4);
 
         // spawn new drone within boundaries and with dronespeed
-            GameObject newDrone = Instantiate(mineSLA, _droneStartPosition.RandomPositionGround(size, boundary), Quaternion.Euler(0, -45, 0));
+        GameObject newDrone = Instantiate(mineSLA, _droneStartPosition.RandomPositionGround(size, boundary), Quaternion.Euler(0, -45 + 90*direction, 0));
 
-            // adjust size
-            scale = newDrone.transform.localScale;
-            scale.x *= size;
-            scale.z *= size;
-            newDrone.transform.localScale = scale;
+        // adjust size
+        scale = newDrone.transform.localScale;
+        scale.x *= size;
+        scale.z *= size;
+        newDrone.transform.localScale = scale;
 
-            // move drone
-            _moveDrone.MoveStraight(newDrone, droneSpeed);
+        // move drone
+        _moveDrone.MoveStraight(newDrone, droneSpeed);
 
-            return newDrone;
+        return newDrone;
     }
 }

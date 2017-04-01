@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Level6SLA : MonoBehaviour
+public class Level12SLA : MonoBehaviour
 {
 
     // attach scripts
@@ -10,25 +10,28 @@ public class Level6SLA : MonoBehaviour
     public AddDrone _addDrone;
     public BoundariesSLA _area;
 
-        public void Level6Drones()
+    public void Level12Drones()
     {
         // Spawn drones (dronecount/delay, speed, size, color)
-        _spawnDrone.RandomBouncingDrone(15, 7f, 1f, Color.blue, _area.bouncingSLA);
-        _addDrone.RandomBouncingDrone(6f, 7f, 1f, Color.blue, _area.bouncingSLA);
+        _spawnDrone.RandomBouncingDrone(15, 7f, 1.5f, Color.red, _area.bouncingSLA);
+        _addDrone.RandomBouncingDrone(7f, 7f, 1.5f, Color.red, _area.bouncingSLA);
 
-        // Spawn green drones (initial delay, speed, size)
-        StartCoroutine(GreenDronesLevel6Bottom(4f, 7f, 1.5f));
-        StartCoroutine(GreenDronesLevel6Top(5f, 7f, 1.5f));
+        // Spawn green drones (initial delay, size)
+        StartCoroutine(GreenDronesLevel12(4f, 8f, 1.5f));
     }
 
-    IEnumerator GreenDronesLevel6Bottom(float delay, float speed, float size)
+    IEnumerator GreenDronesLevel12(float delay, float speed, float size)
     {
         while (true)
         {
             Vector3 startPos = new Vector3();
+            Vector3 startPos2 = new Vector3();
             float rotation;
+            float rotation2;
             bool clockwise;
+            bool clockwise2;
             startPos = Location(size, _area.flyingSLA);
+            startPos2 = OtherLocation(size, _area.flyingSLA);
             int droneCount = 0;
 
             if (startPos.x < 0)
@@ -42,40 +45,22 @@ public class Level6SLA : MonoBehaviour
                 clockwise = true;
             }
 
-
-            _spawnDrone.DelayedStraightFlying360Drones(24+droneCount, 3f/(16+droneCount), speed, size, Color.green, startPos, rotation, clockwise);
-            yield return new WaitForSeconds(delay);
-            if (delay > 1.5f) { delay -= delay * 0.03f; }
-            if (droneCount < 24) { droneCount +=2; }
-        }
-    }
-
-    IEnumerator GreenDronesLevel6Top(float delay, float speed, float size)
-    {
-        while (true)
-        {
-            Vector3 startPos = new Vector3();
-            float rotation;
-            bool clockwise;
-
-            startPos = OtherLocation(size, _area.flyingSLA);
-            int droneCount = 0;            
-
-            if (startPos.x < 0)
+            if (startPos2.x < 0)
             {
-                rotation = 90f;
-                clockwise = true;
+                rotation2 = 90f;
+                clockwise2 = true;
             }
             else
             {
-                rotation = -90f;
-                clockwise = false;
+                rotation2 = -90f;
+                clockwise2 = false;
             }
 
-            _spawnDrone.DelayedStraightFlying360Drones(24 + droneCount, 3f/(16+droneCount), speed, size, Color.green, startPos, rotation, clockwise);
+            _spawnDrone.DelayedStraightFlying360Drones(24+droneCount, 0.2f, speed, size, Color.green, startPos, rotation, clockwise);
+            _spawnDrone.DelayedStraightFlying360Drones(24+droneCount, 0.2f, speed, size, Color.green, startPos2, rotation2, clockwise2);
             yield return new WaitForSeconds(delay);
-            if (delay > 1.5f) { delay -= delay * 0.04f; }
-            if (droneCount < 24) { droneCount +=2; }
+            if (delay > 1.5f) { delay -= delay * 0.03f; }
+            if (droneCount < 24) { droneCount += 2; }
         }
     }
 

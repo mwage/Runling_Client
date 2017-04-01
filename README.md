@@ -28,7 +28,6 @@ SLA (Folder): All scripts used specifically for SLA
   * Levels (Folder): everything that happens during the levels (mostly related to drones)
     * LevelManager: Sets movespeed for different levels, loads the drone-scripts according to the level, ends the levels
     * Level*X*SLA: spawns drones for Level *X*
-
     * BoundariesSLA: sets the area in which random drones get spawned
   * test (Folder): scripts related to test scenes
     * TestSLA: the control script for the drone test level
@@ -43,9 +42,10 @@ Players (Folder): everything regarding the player
   * CameraMovement: moves camera
 
 Drones (Folder): different kinds of drone movements
-  * SpawnDrone: spawns drones at once: RandomBouncingDrone, RandomFlyingBouncingDrone, StraightFlyingOnewayDrone, StraightFlying360Drones
+  * SpawnDrone: spawns drones at once: RandomBouncingDrone, RandomFlyingBouncingDrone, StraightFlyingOnewayDrone, StraightFlying360Drones, DelayedStraightFlying360Drones, MineSLA
   * AddDrone: adds drones over time (coroutines): RandomBouncingDrone, RandomFlyingBouncingDrone
   * MoveDrone: adds force to make drones move: MoveStraight
+  * Chaser: behaviour of chaser drones
   * DroneDirection: directions of drone: RandomDirection
   * DroneStartPosition: start positions: RandomPositionGround, RandomCornerGround, RandomPositionAir, RandomCornerAir
   * DestroyDroneTrigger: destroys oneway drones after hitting air collider

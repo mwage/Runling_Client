@@ -17,6 +17,10 @@ public class LevelManagerSLA : MonoBehaviour {
     public Level7SLA _level7;
     public Level8SLA _level8;
     public Level9SLA _level9;
+    public Level10SLA _level10;
+    public Level11SLA _level11;
+    public Level12SLA _level12;
+    public Level13SLA _level13;
     public StopCoroutineSLA _stopCoroutineSLA;
 
     public ScoreSLA _score;
@@ -29,7 +33,7 @@ public class LevelManagerSLA : MonoBehaviour {
     public void Awake()
     {
         // Set movementspeed for the different levels
-        moveSpeedSLA = new int[] { 8, 9, 9, 10, 9, 10, 11, 11, 11, 8, 8, 8, 12};
+        moveSpeedSLA = new int[] { 8, 9, 9, 10, 9, 10, 11, 11, 11, 10, 11, 11, 14};
     }
     
     //Spawn Drones according to what level is active
@@ -63,6 +67,18 @@ public class LevelManagerSLA : MonoBehaviour {
                 break;
             case 9:
                 _level9.Level9Drones();
+                break;
+            case 10:
+                _level10.Level10Drones();
+                break;
+            case 11:
+                _level11.Level11Drones();
+                break;
+            case 12:
+                _level12.Level12Drones();
+                break;
+            case 13:
+                _level13.Level13Drones();
                 break;
             default:
                 Debug.Log("Error: Couldn't load Level " + GameControl.currentLevel);

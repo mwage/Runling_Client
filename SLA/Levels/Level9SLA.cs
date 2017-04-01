@@ -22,7 +22,7 @@ public class Level9SLA : MonoBehaviour
         // Spawn chaser
         GameObject chaser = Instantiate(flyingOnewayDrone, new Vector3(0, 0.6f, 0), Quaternion.identity);
         GameObject player = _initializeGameSLA.newPlayer;
-        _chaser.ChaserDrone(chaser, player, 8f, 1.2f, Color.yellow);
+        _chaser.ChaserDrone(chaser, player, 9f, 1.2f, Color.yellow);
 
         // Spawn green drones (initial delay, size)
         StartCoroutine(GreenDronesLevel9(4f, 1.5f));

@@ -8,8 +8,8 @@ public class ControlSLA : MonoBehaviour
 {
     //attach scripts
     public LevelManagerSLA _levelManager;
-    public ScoreSLA _score;
-    public InitializeGameSLA _initialize;
+    public ScoreSLA _scoreSLA;
+    public InitializeGameSLA _initializeGameSLA;
     public DeathSLA _deathSLA;
 
 
@@ -20,8 +20,8 @@ public class ControlSLA : MonoBehaviour
     {
         // Set current Level and movespeed, load drones and spawn immunity
         stopUpdate = true;
-        _initialize.InitializeGame();
-        //GameControl.currentLevel = 9;
+        _initializeGameSLA.InitializeGame();
+        //GameControl.currentLevel = 10;
     }
 
     //update when dead
@@ -32,7 +32,7 @@ public class ControlSLA : MonoBehaviour
             _deathSLA.Death();
 
             //in case of highscore, save and 
-            _score.SetLevelHighScore();
+            _scoreSLA.SetLevelHighScore();
 
             //change level
             _levelManager.EndLevel(3f);

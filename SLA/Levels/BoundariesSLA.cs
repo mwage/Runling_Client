@@ -17,6 +17,7 @@ public class BoundariesSLA : MonoBehaviour
 {
     public Area bouncingSLA;
     public Area flyingSLA;
+    public Area test;
 
     public void Awake()
     {
@@ -33,5 +34,12 @@ public class BoundariesSLA : MonoBehaviour
         flyingSLA.rightBoundary = 40f;
         flyingSLA.topBoundary = 20f;
         flyingSLA.bottomBoundary = -20f;
+
+        // Boundaries for bouncing drones
+        test = new Area();
+        test.leftBoundary = -15f;
+        test.rightBoundary = 15f;
+        test.topBoundary = 2f;
+        test.bottomBoundary = -2f;
     }
 }

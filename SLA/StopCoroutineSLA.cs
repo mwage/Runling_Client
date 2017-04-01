@@ -12,6 +12,8 @@ public class StopCoroutineSLA : MonoBehaviour {
     public Level7SLA _level7SLA;
     public Level8SLA _level8SLA;
     public Level9SLA _level9SLA;
+    public Level11SLA _level11SLA;
+    public Level12SLA _level12SLA;
 
 
     public void StopRespawn()
@@ -24,5 +26,7 @@ public class StopCoroutineSLA : MonoBehaviour {
         _level7SLA.StopAllCoroutines();
         _level8SLA.StopAllCoroutines();
         _level9SLA.StopAllCoroutines();
+        _level11SLA.StopAllCoroutines();
+        _level12SLA.StopAllCoroutines();
     }
 }
