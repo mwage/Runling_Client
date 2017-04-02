@@ -1,45 +1,40 @@
-﻿
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-// Boundaries in which new drones can be spawned
-public struct Area
+namespace Assets.Scripts.SLA.Levels
 {
-    public float leftBoundary;
-    public float rightBoundary;
-    public float topBoundary;
-    public float bottomBoundary;
-}
-
-
-public class BoundariesSLA : MonoBehaviour
-{
-    public Area bouncingSLA;
-    public Area flyingSLA;
-    public Area test;
-
-    public void Awake()
+    // Boundaries in which new drones can be spawned
+    public struct Area
     {
-        // Boundaries for bouncing drones
-        bouncingSLA = new Area();
-        bouncingSLA.leftBoundary = -35f;
-        bouncingSLA.rightBoundary = 35f;
-        bouncingSLA.topBoundary = 5f;
-        bouncingSLA.bottomBoundary = -5f;
+        public float LeftBoundary;
+        public float RightBoundary;
+        public float TopBoundary;
+        public float BottomBoundary;
+    }
 
-        // Boundaries for flying drones
-        flyingSLA = new Area();
-        flyingSLA.leftBoundary = -40f;
-        flyingSLA.rightBoundary = 40f;
-        flyingSLA.topBoundary = 20f;
-        flyingSLA.bottomBoundary = -20f;
+    public class BoundariesSLA
+    {
+        public static Area BouncingSla = new Area
+        {
+            LeftBoundary = -35f,
+            RightBoundary = 35f,
+            TopBoundary = 5f,
+            BottomBoundary = -5f
+        };
 
-        // Boundaries for bouncing drones
-        test = new Area();
-        test.leftBoundary = -15f;
-        test.rightBoundary = 15f;
-        test.topBoundary = 2f;
-        test.bottomBoundary = -2f;
+        public static Area FlyingSla = new Area
+        {
+            LeftBoundary = -40f,
+            RightBoundary = 40f,
+            TopBoundary = 20f,
+            BottomBoundary = -20f
+        };
+
+        public static Area Test = new Area
+        {
+            LeftBoundary = -15f,
+            RightBoundary = 15f,
+            TopBoundary = 2f,
+            BottomBoundary = -2f
+        };
     }
 }

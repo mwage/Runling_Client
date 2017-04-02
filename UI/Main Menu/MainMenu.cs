@@ -1,31 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class MainMenu : MonoBehaviour
+namespace Assets.Scripts.UI.Main_Menu
 {
-    public GameObject optionsMenu;
-    public GameObject SLAMenu;
-    public OptionsMenu _optionsMenu;
-    public SLAMenu _SLAMenu;
-
-    public void SLA()
+    public class MainMenu : MonoBehaviour
     {
-        gameObject.SetActive(false);
-        SLAMenu.gameObject.SetActive(true);
-        _SLAMenu.SLAMenuActive = true;
-    }
+        public GameObject optionsMenu;
+        public GameObject SLAMenu;
+        public OptionsMenu _optionsMenu;
+        public SLAMenu _SLAMenu;
 
-    public void Options()
-    {
-        gameObject.SetActive(false);
-        optionsMenu.gameObject.SetActive(true);
-        _optionsMenu.optionsMenuActive = true;
-    }
+        public void SLA()
+        {
+            gameObject.SetActive(false);
+            SLAMenu.gameObject.SetActive(true);
+            _SLAMenu.SLAMenuActive = true;
+        }
 
-    public void Quit()
-    {
-        Application.Quit();
-    }
+        public void Options()
+        {
+            gameObject.SetActive(false);
+            optionsMenu.gameObject.SetActive(true);
+            _optionsMenu.optionsMenuActive = true;
+        }
 
+        public void Quit()
+        {
+            Application.Quit();
+        }
+
+    }
 }

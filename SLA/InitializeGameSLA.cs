@@ -1,74 +1,76 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using Assets.Scripts.Launcher;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
-public class InitializeGameSLA : MonoBehaviour {
+namespace Assets.Scripts.SLA
+{
+    public class InitializeGameSLA : MonoBehaviour {
 
-    // Attach scripts
-    public LevelManagerSLA _levelManagerSLA;
-    public ScoreSLA _scoreSLA;
-    public ControlSLA _controlSLA;
-    public InGameMenuManagerSLA _inGameMenuManagerSLA;
+        // Attach scripts
+        public LevelManagerSLA LevelManagerSla;
+        public ScoreSLA ScoreSla;
+        public ControlSLA ControlSla;
+        public InGameMenuManagerSLA InGameMenuManagerSla;
 
-    public GameObject player;
-    public GameObject levelTextObject;
-    public GameObject text3;
-    public GameObject text2;
-    public GameObject text1;
-    public GameObject currentPRWindow;
-    public GameObject newPlayer;
-    public Text currentPR;
-    TextMeshProUGUI levelText;
-
-
-    //set Spawnimmunity once game starts
-    public void InitializeGame()
-    {
-        StartCoroutine(PrepareLevel());
-    }
-
-    IEnumerator PrepareLevel()
-    {
-        // Set current Level and movespeed
-        GameControl.moveSpeed = _levelManagerSLA.moveSpeedSLA[GameControl.currentLevel];
-        GameControl.currentLevel++;
+        public GameObject Player;
+        public GameObject LevelTextObject;
+        public GameObject Text3;
+        public GameObject Text2;
+        public GameObject Text1;
+        public GameObject CurrentPrWindow;
+        public GameObject NewPlayer;
+        public Text CurrentPr;
+        TextMeshProUGUI _levelText;
 
 
-        // Show level highscore and current level
-        currentPR.text = HighScoreSLA.highScoreSLA[GameControl.currentLevel].ToString();
-        levelText = levelTextObject.GetComponent<TextMeshProUGUI>();
-        levelText.text = "Level " + GameControl.currentLevel;
-        levelTextObject.SetActive(true);
-        currentPRWindow.SetActive(true);
-        yield return new WaitForSeconds(2f);
-        levelTextObject.SetActive(false);
-        currentPRWindow.SetActive(false);
-        yield return new WaitForSeconds(1f);
+        //set Spawnimmunity once game starts
+        public void InitializeGame()
+        {
+            StartCoroutine(PrepareLevel());
+        }
 
-        // Load drones and player
+        IEnumerator PrepareLevel()
+        {
+            // Set current Level and movespeed
+            GameControl.currentLevel++;
+            GameControl.moveSpeed = LevelManagerSla.GetMovementSpeed(GameControl.currentLevel);
+            
+            // Show level highscore and current level
+            CurrentPr.text = HighScoreSLA.highScoreSLA[GameControl.currentLevel].ToString();
+            _levelText = LevelTextObject.GetComponent<TextMeshProUGUI>();
+            _levelText.text = "Level " + GameControl.currentLevel;
+            LevelTextObject.SetActive(true);
+            CurrentPrWindow.SetActive(true);
+            yield return new WaitForSeconds(2f);
+            LevelTextObject.SetActive(false);
+            CurrentPrWindow.SetActive(false);
+            yield return new WaitForSeconds(1f);
 
-        newPlayer = Instantiate(player);
-        Transform trigger = newPlayer.transform.FindChild("Trigger");
-        trigger.gameObject.SetActive(false);
-        GameControl.dead = false;
-        _controlSLA.stopUpdate = false;
-        _levelManagerSLA.LoadDrones(GameControl.currentLevel);
+            // Load drones and player
 
-        // Countdown
-        text3.SetActive(true);
-        yield return new WaitForSeconds(1f);
-        text3.SetActive(false);
-        text2.SetActive(true);
-        yield return new WaitForSeconds(1f);
-        text2.SetActive(false);
-        text1.SetActive(true);
-        yield return new WaitForSeconds(1f);
-        text1.SetActive(false);
+            NewPlayer = Instantiate(Player);
+            var trigger = NewPlayer.transform.FindChild("Trigger");
+            trigger.gameObject.SetActive(false);
+            GameControl.dead = false;
+            ControlSla.StopUpdate = false;
+            LevelManagerSla.LoadDrones(GameControl.currentLevel);
 
-        trigger.gameObject.SetActive(true);
-        _scoreSLA.StartScore();
+            // Countdown
+            Text3.SetActive(true);
+            yield return new WaitForSeconds(1f);
+            Text3.SetActive(false);
+            Text2.SetActive(true);
+            yield return new WaitForSeconds(1f);
+            Text2.SetActive(false);
+            Text1.SetActive(true);
+            yield return new WaitForSeconds(1f);
+            Text1.SetActive(false);
 
+            trigger.gameObject.SetActive(true);
+            ScoreSla.StartScore();
+
+        }
     }
 }

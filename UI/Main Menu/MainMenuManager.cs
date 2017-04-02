@@ -1,53 +1,51 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.Scripts.UI.SLA_Menu;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class MainMenuManager : MonoBehaviour {
+namespace Assets.Scripts.UI.Main_Menu
+{
+    public class MainMenuManager : MonoBehaviour {
 
-    public MainMenu _mainMenu;
-    public OptionsMenu _optionsMenu;
-    public SLAMenu _sLAMenu;
-    public HighScoreMenuSLA _highScoreMenuSLA;
+        public MainMenu _mainMenu;
+        public OptionsMenu _optionsMenu;
+        public SLAMenu _sLAMenu;
+        public HighScoreMenuSLA _highScoreMenuSLA;
 
-    public GameObject mainMenu;
-    public GameObject optionsMenu;
-    public GameObject sLAMenu;
-    public GameObject highScoreMenu;
+        public GameObject mainMenu;
+        public GameObject optionsMenu;
+        public GameObject sLAMenu;
+        public GameObject highScoreMenu;
  
-
-
-
-    private void Awake()
-    {
-        _optionsMenu.optionsMenuActive = false;
-        _sLAMenu.SLAMenuActive = false;
-        _highScoreMenuSLA.highScoreMenuActive = false;
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        private void Awake()
         {
+            _optionsMenu.optionsMenuActive = false;
+            _sLAMenu.SLAMenuActive = false;
+            _highScoreMenuSLA.highScoreMenuActive = false;
+        }
 
-            if (_optionsMenu.optionsMenuActive)
+        void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                optionsMenu.SetActive(false);
-                _optionsMenu.optionsMenuActive = false;
-                mainMenu.SetActive(true);
-            }
-            else if (_sLAMenu.SLAMenuActive)
-            {
-                sLAMenu.SetActive(false);
-                _sLAMenu.SLAMenuActive = false;
-                mainMenu.SetActive(true);
-            }
-            else if (_highScoreMenuSLA.highScoreMenuActive)
-            {
-                highScoreMenu.SetActive(false);
-                _highScoreMenuSLA.highScoreMenuActive = false;
-                sLAMenu.SetActive(true);
-                _sLAMenu.SLAMenuActive = true;
+
+                if (_optionsMenu.optionsMenuActive)
+                {
+                    optionsMenu.SetActive(false);
+                    _optionsMenu.optionsMenuActive = false;
+                    mainMenu.SetActive(true);
+                }
+                else if (_sLAMenu.SLAMenuActive)
+                {
+                    sLAMenu.SetActive(false);
+                    _sLAMenu.SLAMenuActive = false;
+                    mainMenu.SetActive(true);
+                }
+                else if (_highScoreMenuSLA.highScoreMenuActive)
+                {
+                    highScoreMenu.SetActive(false);
+                    _highScoreMenuSLA.highScoreMenuActive = false;
+                    sLAMenu.SetActive(true);
+                    _sLAMenu.SLAMenuActive = true;
+                }
             }
         }
     }

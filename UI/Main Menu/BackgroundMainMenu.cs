@@ -1,20 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.Scripts.Drones;
+using Assets.Scripts.SLA.Levels;
 using UnityEngine;
 
-
-public class BackgroundMainMenu : MonoBehaviour
+namespace Assets.Scripts.UI.Main_Menu
 {
-    //attach scripts
-    public SpawnDrone _spawnDrone;
-    public BoundariesSLA _area;
-
-
-    void Start()
+    public class BackgroundMainMenu : MonoBehaviour
     {
-        //Spawn drones (dronecount/delay, speed, size, color, boundaries)
-        _spawnDrone.RandomBouncingDrone(20, 3f, 1f, Color.blue, _area.bouncingSLA);
-        _spawnDrone.RandomFlyingBouncingDrone(30, 5f, 1f, Color.magenta, _area.flyingSLA);
+        //attach scripts
+        public BoundariesSLA Area;
+        public DroneFactory DroneFactory;
+
+
+        void Start()
+        {
+            DroneFactory.SpawnDrones(new RandomBouncingDrone(3f, 1f, Color.blue), 20);
+            DroneFactory.SpawnDrones(new RandomFlyingBouncingDrone(5f, 1f, Color.magenta), 30);
+        }
     }
 }
 

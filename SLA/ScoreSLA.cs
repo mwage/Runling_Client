@@ -1,82 +1,85 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using Assets.Scripts.Launcher;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ScoreSLA : MonoBehaviour
+namespace Assets.Scripts.SLA
 {
-    //attach gameobjects
-    public GameObject highScore;
-
-    //attach scripts
-    public int currentScore;
-    public Text currentScoreText;
-    public Text totalScoreText;
-    public Text newHighScore;
-
-    private void Awake()
+    public class ScoreSLA : MonoBehaviour
     {
-        totalScoreText.text = HighScoreSLA.totalScoreSLA.ToString();
-    }
+        //attach gameobjects
+        public GameObject HighScore;
 
-    //count current and total score
-    public void StartScore()
-    {
-        currentScore = -2;
-        HighScoreSLA.totalScoreSLA -= 2;
-        StartCoroutine(AddScore());
-    }
+        //attach scripts
+        public int CurrentScore;
+        public Text CurrentScoreText;
+        public Text TotalScoreText;
+        public Text NewHighScore;
+
+        private void Awake()
+        {
+            TotalScoreText.text = HighScoreSLA.totalScoreSLA.ToString();
+        }
+
+        //count current and total score
+        public void StartScore()
+        {
+            CurrentScore = -2;
+            HighScoreSLA.totalScoreSLA -= 2;
+            StartCoroutine(AddScore());
+        }
     
-    IEnumerator AddScore()
-    {
-        while (GameControl.dead == false)
+        IEnumerator AddScore()
         {
-            currentScore += 2;
-            HighScoreSLA.totalScoreSLA += 2;
-            currentScoreText.text = currentScore.ToString();
-            totalScoreText.text = HighScoreSLA.totalScoreSLA.ToString();
+            while (GameControl.dead == false)
+            {
+                CurrentScore += 2;
+                HighScoreSLA.totalScoreSLA += 2;
+                CurrentScoreText.text = CurrentScore.ToString();
+                TotalScoreText.text = HighScoreSLA.totalScoreSLA.ToString();
             
-            yield return new WaitForSeconds(0.25f);
+                yield return new WaitForSeconds(0.25f);
+            }
         }
-    }
 
-    //message that you got a new highscore
-    public void NewHighScoreSLA()
-    {
-        newHighScore.text = "New Highscore: " + currentScore.ToString();
-        highScore.SetActive(true);
-    }
-
-    //Checks for a new highscore and saves it
-    public void SetLevelHighScore()
-    {
-        if (currentScore > HighScoreSLA.highScoreSLA[GameControl.currentLevel])
+        //message that you got a new highscore
+        public void NewHighScoreSLA()
         {
-            NewHighScoreSLA();
-            HighScoreSLA.highScoreSLA[GameControl.currentLevel] = currentScore;
-            PlayerPrefs.SetInt("HighScoreSLA" + GameControl.currentLevel, HighScoreSLA.highScoreSLA[GameControl.currentLevel]);
+            NewHighScore.text = "New Highscore: " + CurrentScore.ToString();
+            HighScore.SetActive(true);
         }
-    }
 
-    //compare total score to best game and set highscore
-    public void SetGameHighScore()
-    {
-        if (HighScoreSLA.totalScoreSLA > HighScoreSLA.highScoreSLA[0])
+        //Checks for a new highscore and saves it
+        public void SetLevelHighScore()
         {
-            HighScoreSLA.highScoreSLA[0] = HighScoreSLA.totalScoreSLA;
+            if (CurrentScore > HighScoreSLA.highScoreSLA[GameControl.currentLevel])
+            {
+                NewHighScoreSLA();
+                HighScoreSLA.highScoreSLA[GameControl.currentLevel] = CurrentScore;
+                PlayerPrefs.SetInt("HighScoreSLA" + GameControl.currentLevel, HighScoreSLA.highScoreSLA[GameControl.currentLevel]);
+            }
         }
-        PlayerPrefs.SetInt("HighScoreSLAGame", HighScoreSLA.highScoreSLA[0]);
-    }
 
-    //add level highscores for combined score
-    public void SetCombinedScore()
-    {
-        HighScoreSLA.highScoreSLA[14] = 0;
-        for (int i = 1; i <= GameControl.lastLevelSLA; i++)
+        //compare total score to best game and set highscore
+        public void SetGameHighScore()
         {
-            HighScoreSLA.highScoreSLA[14] += HighScoreSLA.highScoreSLA[i];
+            if (HighScoreSLA.totalScoreSLA > HighScoreSLA.highScoreSLA[0])
+            {
+                HighScoreSLA.highScoreSLA[0] = HighScoreSLA.totalScoreSLA;
+            }
+            PlayerPrefs.SetInt("HighScoreSLAGame", HighScoreSLA.highScoreSLA[0]);
         }
-        PlayerPrefs.SetInt("HighScoreSLACombined", HighScoreSLA.highScoreSLA[14]);
-    }
 
+        //add level highscores for combined score
+        public void SetCombinedScore()
+        {
+            HighScoreSLA.highScoreSLA[14] = 0;
+            for (var i = 1; i <= LevelManagerSLA.NumLevels; i++)
+            {
+                HighScoreSLA.highScoreSLA[14] += HighScoreSLA.highScoreSLA[i];
+            }
+            PlayerPrefs.SetInt("HighScoreSLACombined", HighScoreSLA.highScoreSLA[14]);
+        }
+
+    }
 }

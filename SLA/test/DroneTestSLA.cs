@@ -1,21 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.Scripts.Drones;
+using Assets.Scripts.SLA.Levels;
 using UnityEngine;
 
-public class DroneTestSLA : MonoBehaviour
+namespace Assets.Scripts.SLA.test
 {
-
-    // attach scripts
-    public SpawnDrone _spawnDrone;
-    public AddDrone _addDrone;
-    public BoundariesSLA _area;
-
-
-    public void LoadDrones()
+    public class DroneTestSLA : MonoBehaviour
     {
-        // Spawn drones (dronecount/delay, speed, size, color)
-        _spawnDrone.RandomBouncingDrone(5, 5f, 1f, Color.grey, _area.test);
-        _spawnDrone.RandomBouncingDrone(5, 5f, 2f, Color.grey, _area.test);
+        // attach scripts
+        public BoundariesSLA Area;
+        public DroneFactory DroneFactory;
 
+        public void LoadDrones()
+        {
+            // Spawn drones (dronecount/delay, speed, size, color)
+            DroneFactory.SpawnDrones(new RandomBouncingDrone(5f, 1f, Color.grey), 5);
+            DroneFactory.SpawnDrones(new RandomBouncingDrone(5f, 2f, Color.grey), 5);
+        }
     }
 }
