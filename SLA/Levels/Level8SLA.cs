@@ -49,8 +49,7 @@ namespace Assets.Scripts.SLA.Levels
             Vector3 scale;
             float rotation;
             float delay = 2.5f / droneCount;
-            Debug.Log(droneCount);
-            Debug.Log(delay);
+
 
             for (int i = 0; i < droneCount; i++)
             {

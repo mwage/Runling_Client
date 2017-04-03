@@ -52,14 +52,13 @@ public class LevelManagerSLA : MonoBehaviour {
     //Spawn Drones according to what level is active
     public void LoadDrones(int level)
     {
-        Debug.Log("Loading Level: " + level);
         try
         {
             _levels[level - 1].CreateDrones();
         }
         catch (Exception e)
         {
-            Debug.Log("Failed to load " + level + ": " + e.Message + " - " + e.StackTrace);
+            Debug.Log("Failed to load level " + level + ": " + e.Message + " - " + e.StackTrace);
             SceneManager.LoadScene("MainMenu");
         }
     }

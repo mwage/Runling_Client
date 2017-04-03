@@ -34,11 +34,9 @@ namespace Assets.Scripts.Drones
             _maxSpeed = Speed;
 
             // adjust drone color and size
-            Renderer rend;
-            Vector3 scale;
-            rend = _chaser.GetComponent<Renderer>();
+            var rend = _chaser.GetComponent<Renderer>();
             rend.material.color = Color;
-            scale = _chaser.transform.localScale;
+            var scale = _chaser.transform.localScale;
             scale.x *= Size;
             scale.z *= Size;
             _chaser.transform.localScale = scale;
