@@ -1,39 +1,42 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.Scripts.Launcher;
+using Assets.Scripts.UI.SLA_Menu;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SLAMenu : MonoBehaviour {
+namespace Assets.Scripts.UI.Main_Menu
+{
+    public class SLAMenu : MonoBehaviour {
 
-    public HighScoreMenuSLA _highScoreMenuSLA;
+        public HighScoreMenuSLA _highScoreMenuSLA;
 
-    public GameObject mainMenu;
-    public GameObject highScoreMenu;
+        public GameObject mainMenu;
+        public GameObject highScoreMenu;
 
-    public bool SLAMenuActive;
+        public bool SLAMenuActive;
 
-    public void StartGame()
-    {
-        GameControl.gameActive = true;
-        GameControl.dead = true;
-        HighScoreSLA.totalScoreSLA = 0;
-        GameControl.currentLevel = 0;
+        public void StartGame()
+        {
+            GameControl.gameActive = true;
+            GameControl.dead = true;
+            HighScoreSLA.totalScoreSLA = 0;
+            GameControl.currentLevel = 0;
 
-        SceneManager.LoadScene("SLA");
-    }
+            SceneManager.LoadScene("SLA");
+        }
 
-    public void HighScores()
-    {
-        gameObject.SetActive(false);
-        SLAMenuActive = false;
-        highScoreMenu.gameObject.SetActive(true);
-        _highScoreMenuSLA.highScoreMenuActive = true;
-    }
+        public void HighScores()
+        {
+            gameObject.SetActive(false);
+            SLAMenuActive = false;
+            highScoreMenu.gameObject.SetActive(true);
+            _highScoreMenuSLA.highScoreMenuActive = true;
+        }
 
-    public void BackToMenu()
-    {
-        SLAMenuActive = false;
-        gameObject.SetActive(false);
-        mainMenu.gameObject.SetActive(true);
+        public void BackToMenu()
+        {
+            SLAMenuActive = false;
+            gameObject.SetActive(false);
+            mainMenu.gameObject.SetActive(true);
+        }
     }
 }

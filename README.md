@@ -3,7 +3,7 @@
 ### Script folder structure:
 
 Launcher (Folder): scripts that won't be destroyed on load to hold important variables for different modes
- * GameControl: static variables: dead, gameActive, currentLevel, moveSpeed, lastLevelSLA
+ * GameControl: static variables: dead, gameActive, currentLevel, moveSpeed
  * HighScoreSLA: static variables: totalScore, highScoreSLA[], loads highScoreSLA from playerprefs
     
 UI (Folder): UI related scripts
@@ -26,9 +26,10 @@ SLA (Folder): All scripts used specifically for SLA
   * WinSLA: winscreen, shows highscores, winscreen buttons
   * StopCoroutineSLA: stops all methods that spawn regularly spawn drones when a new level is initialized
   * Levels (Folder): everything that happens during the levels (mostly related to drones)
-    * LevelManager: Sets movespeed for different levels, loads the drone-scripts according to the level, ends the levels
+    * LevelManager: Manages the levels, drone creation, and transactions between levels
+    * ADrone: Abstract class for levels.  All levels need a movement speed and a way to create drones
     * Level*X*SLA: spawns drones for Level *X*
-    * BoundariesSLA: sets the area in which random drones get spawned
+    * BoundariesSLA: defines the boundaries for SLA
   * test (Folder): scripts related to test scenes
     * TestSLA: the control script for the drone test level
     * DroneTestSLA: loads drones for the test scene
@@ -42,10 +43,16 @@ Players (Folder): everything regarding the player
   * CameraMovement: moves camera
 
 Drones (Folder): different kinds of drone movements
-  * SpawnDrone: spawns drones at once: RandomBouncingDrone, RandomFlyingBouncingDrone, StraightFlyingOnewayDrone, StraightFlying360Drones, DelayedStraightFlying360Drones, MineSLA
-  * AddDrone: adds drones over time (coroutines): RandomBouncingDrone, RandomFlyingBouncingDrone
-  * MoveDrone: adds force to make drones move: MoveStraight
-  * Chaser: behaviour of chaser drones
-  * DroneDirection: directions of drone: RandomDirection
-  * DroneStartPosition: start positions: RandomPositionGround, RandomCornerGround, RandomPositionAir, RandomCornerAir
+  * IDrone: Drone interface to create/configure drones
+  * ADrone: Abstract drone class that all drone classes are derived from
+  * RandomBouncingDrone: Drone class for random bouncing drones
+  * RandomFlyingBouncingDrone: Drone class for random flying bouncing drones
+  * StraightFlying360Drone: Drone class for straight flying 360 drones
+  * StraightFlyingOneWayDrone: Drone class for straight flying one way drones
+  * ChaserDrone: Drone class for chaser drones
+  * MineDrone: Drone class for mine drones
+  * DroneFactory: Primary point of interaction to spawn/add drones
+  * DroneDirection: Contains a static method to generate a random direction
+  * MoveDrone: Contains a static method to move a drone in a straight line
+  * DroneStartPosition: Contains some static methods for various ways to get a starting position
   * DestroyDroneTrigger: destroys oneway drones after hitting air collider

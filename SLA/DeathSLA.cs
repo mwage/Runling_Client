@@ -1,16 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-
-public class DeathSLA : MonoBehaviour
+namespace Assets.Scripts.SLA
 {
-    public InitializeGameSLA _initializeGameSLA;
-
-    //events following Deathtrigger
-    public void Death()
+    public class DeathSLA : MonoBehaviour
     {
+        public InitializeGameSLA _initializeGameSLA;
 
-        _initializeGameSLA.newPlayer.SetActive(false);
+        //events following Deathtrigger
+        public void Death()
+        {
+            _initializeGameSLA.NewPlayer.SetActive(false);
+        }
     }
 }

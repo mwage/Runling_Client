@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 1e7c37baaa5d2a34e8433450da7f969a
+timeCreated: 1491159903
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - BouncingDrone: {fileID: 1979405949330132, guid: 773784d7c99887b48bbc27a98964878f,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

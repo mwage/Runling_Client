@@ -1,7 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.Scripts.SLA;
+using Assets.Scripts.UI;
+using Assets.Scripts.UI.SLA_Menu;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class InGameMenuManagerSLA : MonoBehaviour
 {

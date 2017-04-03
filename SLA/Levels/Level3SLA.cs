@@ -1,21 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.Scripts.Drones;
 using UnityEngine;
 
-public class Level3SLA : MonoBehaviour
+namespace Assets.Scripts.SLA.Levels
 {
-
-    //attach scripts
-    public SpawnDrone _spawnDrone;
-    public AddDrone _addDrone;
-    public BoundariesSLA _area;
-
-
-
-    public void Level3Drones()
+    public class Level3SLA : ALevel
     {
-        // Spawn drones (dronecount/delay, speed, size, color)
-        _spawnDrone.RandomFlyingBouncingDrone(130, 5f, 1f, Color.magenta, _area.flyingSLA);
-        _addDrone.RandomFlyingBouncingDrone(0.3f, 5f, 1f, Color.magenta, _area.flyingSLA);
+        public Level3SLA(LevelManagerSLA manager) : base(manager)
+        {
+        }
+
+        public override float GetMovementSpeed()
+        {
+            return 9;
+        }
+
+        public override void CreateDrones()
+        {
+            DroneFactory.SpawnAndAddDrones(new RandomFlyingBouncingDrone(5f, 1f, Color.magenta), 130, 0.3f);
+        }
     }
 }

@@ -1,14 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class DestroyDroneTrigger : MonoBehaviour {
+namespace Assets.Scripts.Drones
+{
+    public class DestroyDroneTrigger : MonoBehaviour {
 
-    public GameObject drone;
+        public GameObject drone;
 
-    void OnTriggerStay(Collider other)
-    {
-        Destroy(drone);
+        void OnTriggerStay(Collider other)
+        {
+            Destroy(drone);
+        }
     }
-
 }

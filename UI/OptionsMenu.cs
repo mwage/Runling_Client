@@ -1,18 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine;
 
-public class OptionsMenu : MonoBehaviour {
+namespace Assets.Scripts.UI
+{
+    public class OptionsMenu : MonoBehaviour {
 
-    public GameObject menu;
+        public GameObject menu;
 
-    public bool optionsMenuActive;
+        public bool optionsMenuActive;
 
-    public void BackToMenu()
-    {
-        optionsMenuActive = false;
-        gameObject.SetActive(false);
-        menu.gameObject.SetActive(true);
+        public void BackToMenu()
+        {
+            optionsMenuActive = false;
+            gameObject.SetActive(false);
+            menu.gameObject.SetActive(true);
+        }
     }
 }

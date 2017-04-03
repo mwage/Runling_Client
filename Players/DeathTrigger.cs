@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.Scripts.Launcher;
 using UnityEngine;
 
 public class DeathTrigger : MonoBehaviour

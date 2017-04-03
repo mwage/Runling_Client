@@ -1,44 +1,42 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.Scripts.Launcher;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-
-public class ControlSLA : MonoBehaviour
+namespace Assets.Scripts.SLA
 {
-    //attach scripts
-    public LevelManagerSLA _levelManager;
-    public ScoreSLA _scoreSLA;
-    public InitializeGameSLA _initializeGameSLA;
-    public DeathSLA _deathSLA;
-
-
-    public bool stopUpdate;
-
-
-    void Start()
+    public class ControlSLA : MonoBehaviour
     {
-        // Set current Level and movespeed, load drones and spawn immunity
-        stopUpdate = true;
-        _initializeGameSLA.InitializeGame();
-        //GameControl.currentLevel = 10;
-    }
+        //attach scripts
+        public LevelManagerSLA LevelManager;
+        public ScoreSLA ScoreSla;
+        public InitializeGameSLA InitializeGameSla;
+        public DeathSLA DeathSla;
 
-    //update when dead
-    private void Update()
-    {
-        if (GameControl.dead && !stopUpdate)
+        public bool StopUpdate;
+        
+        void Start()
         {
-            _deathSLA.Death();
+            // Set current Level and movespeed, load drones and spawn immunity
+            StopUpdate = true;
+            InitializeGameSla.InitializeGame();
+            //GameControl.currentLevel = 10;
+        }
 
-            //in case of highscore, save and 
-            _scoreSLA.SetLevelHighScore();
+        //update when dead
+        private void Update()
+        {
+            if (GameControl.dead && !StopUpdate)
+            {
+                DeathSla.Death();
 
-            //change level
-            _levelManager.EndLevel(3f);
+                //in case of highscore, save and 
+                ScoreSla.SetLevelHighScore();
 
-            //dont repeat above once player dead
-            stopUpdate = true;
+                //change level
+                LevelManager.EndLevel(3f);
+
+                //dont repeat above once player dead
+                StopUpdate = true;
+            }
         }
     }
 }

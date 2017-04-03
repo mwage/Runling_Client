@@ -1,15 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class MoveDrone : MonoBehaviour
+namespace Assets.Scripts.Drones
 {
-
-    //move drones in a straight line
-    public void MoveStraight(GameObject drone, float droneSpeed)
+    public class MoveDrone
     {
-        //apply dronespeed
-        Rigidbody rb = drone.GetComponent<Rigidbody>();
-        rb.AddForce(drone.transform.forward * droneSpeed, ForceMode.VelocityChange);
+        //move drones in a straight line
+        public static void MoveStraight(GameObject drone, float droneSpeed)
+        {
+            //apply dronespeed
+            var rb = drone.GetComponent<Rigidbody>();
+            rb.AddForce(drone.transform.forward * droneSpeed, ForceMode.VelocityChange);
+        }
     }
 }
