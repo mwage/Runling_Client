@@ -29,6 +29,5 @@ namespace Assets.Scripts.SLA.Levels
 
             MineVariations.StraightFlying360Drones(32, 8f, 8f, 1f, Color.cyan, mines, DroneFactory, 0.1f);
         }
-
     }
 }
