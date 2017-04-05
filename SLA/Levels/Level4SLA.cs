@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.SLA.Levels
 {
-    public class Level4SLA : ALevel
+    public class Level4SLA : ALevelSLA
     {
         public Level4SLA(LevelManagerSLA manager) : base(manager)
         {

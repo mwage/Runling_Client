@@ -12,9 +12,9 @@ using UnityEngine.SceneManagement;
 public class LevelManagerSLA : MonoBehaviour {
 
     //attach scripts
-    public InGameMenuManagerSLA _inGameMenuManagerSLA;
-    public ScoreSLA _score;
-    public InitializeGameSLA _initializeGameSLA;
+    public InGameMenuManagerSLA InGameMenuManagerSLA;
+    public ScoreSLA Score;
+    public InitializeGameSLA InitializeGameSLA;
 
     public GameObject win;
 
@@ -22,11 +22,11 @@ public class LevelManagerSLA : MonoBehaviour {
     public BoundariesSLA Area;
 
     public static int NumLevels = 13;             //currently last level available in SLA
-    private List<ILevel> _levels;
+    private List<ILevelSLA> _levels;
 
     private void InitializeLevels()
     {
-        _levels = new List<ILevel>
+        _levels = new List<ILevelSLA>
         {
             new Level1SLA(this),
             new Level2SLA(this),
@@ -78,29 +78,29 @@ public class LevelManagerSLA : MonoBehaviour {
     private IEnumerator NextLevel(float delay)
     {
         yield return new WaitForSeconds(delay);
-        _score.HighScore.SetActive(false);
+        Score.HighScore.SetActive(false);
         DroneFactory.StopAllCoroutines();
         var enemies = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (var t in enemies)
         {
             Destroy(t);
         }
-        Destroy(_initializeGameSLA.NewPlayer);
-        _score.CurrentScoreText.text = "0";
-        _initializeGameSLA.InitializeGame();
+        Destroy(InitializeGameSLA.NewPlayer);
+        Score.CurrentScoreText.text = "0";
+        InitializeGameSLA.InitializeGame();
     }
 
     //load after the last level
     private IEnumerator EndGameSLA(float delay)
     {                
         //check/set highscores
-        _score.SetGameHighScore();
-        _score.SetCombinedScore();
+        Score.SetGameHighScore();
+        Score.SetCombinedScore();
                 
         //load win screen
         yield return new WaitForSeconds(delay);
-        _score.HighScore.SetActive(false);
-        _inGameMenuManagerSLA.CloseMenus();
+        Score.HighScore.SetActive(false);
+        InGameMenuManagerSLA.CloseMenus();
         win.gameObject.SetActive(true);
     }
 }

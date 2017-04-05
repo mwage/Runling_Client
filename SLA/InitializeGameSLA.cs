@@ -22,7 +22,7 @@ namespace Assets.Scripts.SLA
         public GameObject CurrentPrWindow;
         public GameObject NewPlayer;
         public Text CurrentPr;
-        TextMeshProUGUI _levelText;
+        TextMeshProUGUI levelText;
 
 
         //set Spawnimmunity once game starts
@@ -39,8 +39,8 @@ namespace Assets.Scripts.SLA
             
             // Show level highscore and current level
             CurrentPr.text = HighScoreSLA.highScoreSLA[GameControl.currentLevel].ToString();
-            _levelText = LevelTextObject.GetComponent<TextMeshProUGUI>();
-            _levelText.text = "Level " + GameControl.currentLevel;
+            levelText = LevelTextObject.GetComponent<TextMeshProUGUI>();
+            levelText.text = "Level " + GameControl.currentLevel;
             LevelTextObject.SetActive(true);
             CurrentPrWindow.SetActive(true);
             yield return new WaitForSeconds(2f);

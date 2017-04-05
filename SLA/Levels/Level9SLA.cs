@@ -4,7 +4,7 @@ using Assets.Scripts.SLA;
 using Assets.Scripts.SLA.Levels;
 using UnityEngine;
 
-public class Level9SLA : ALevel
+public class Level9SLA : ALevelSLA
 {
     public Level9SLA(LevelManagerSLA manager) : base(manager)
     {
@@ -12,7 +12,7 @@ public class Level9SLA : ALevel
 
     public override float GetMovementSpeed()
     {
-        return 11;
+        return 10;
     }
 
     public override void CreateDrones()
@@ -21,7 +21,7 @@ public class Level9SLA : ALevel
         DroneFactory.SpawnAndAddDrones(new RandomBouncingDrone(7f, 1.5f, Color.red), 15, 9f);
 
         // Spawn chaser
-        var player = Manager._initializeGameSLA.NewPlayer;
+        var player = Manager.InitializeGameSLA.NewPlayer;
         DroneFactory.SpawnDrones(new ChaserDrone(9f, 1.2f, Color.yellow, player));
         
         // Spawn green drones (initial delay, size)

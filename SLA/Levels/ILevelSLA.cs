@@ -1,7 +1,7 @@
 ﻿
 namespace Assets.Scripts.SLA.Levels
 {
-    internal interface ILevel
+    internal interface ILevelSLA
     {
         float GetMovementSpeed();
         void CreateDrones();
