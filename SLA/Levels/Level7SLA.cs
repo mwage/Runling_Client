@@ -20,10 +20,10 @@ namespace Assets.Scripts.SLA.Levels
         public override void CreateDrones()
         {
             // Spawn Bouncing Drones
-            DroneFactory.SpawnAndAddDrones(new RandomBouncingDrone(6f, 1.5f, Color.red), 15, 6f);
+            DroneFactory.SpawnAndAddDrones(new RandomBouncingDrone(6f, 1.5f, Color.red), 15, 6f, BoundariesSLA.BouncingSla);
             
             // Spawn Mine Drone
-             var mine = DroneFactory.SpawnDrones(new MineDrone(5f, 3f, Color.black));
+             var mine = DroneFactory.SpawnDrones(new MineDrone(5f, 3f, Color.black), area: BoundariesSLA.FlyingSla);
 
             // Spawn Green Drones
             MineVariations.DelayedStraightFlying360Drones(32, 2f, 2, 8f, 1.3f, Color.cyan, mine, DroneFactory);

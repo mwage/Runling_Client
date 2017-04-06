@@ -15,7 +15,7 @@ namespace Assets.Scripts.Drones
             Color = color;
         }
 
-        public abstract GameObject CreateDroneInstance(DroneFactory factory, bool isAdded);
+        public abstract GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area);
 
         public void ConfigureDrone(GameObject drone)
         {

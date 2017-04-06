@@ -20,24 +20,24 @@ namespace Assets.Scripts.Drones
             Position = position;
         }
 
-        public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded)
+        public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area)
         {
-            factory.StartCoroutine(Generate360Drones(factory));
+            factory.StartCoroutine(Generate360Drones(factory, area));
             return null;
         }
 
-        private IEnumerator Generate360Drones(DroneFactory factory)
+        private IEnumerator Generate360Drones(DroneFactory factory, Area area)
         {
             var clockwise = true;
             var startRotation = 0f;
             var position = Position ?? (IsTop
-                ? DroneStartPosition.GetRandomTopSector(Size, BoundariesSLA.FlyingSla)
-                : DroneStartPosition.GetRandomBottomSector(Size, BoundariesSLA.FlyingSla));
+                ? DroneStartPosition.GetRandomTopSector(Size, area)
+                : DroneStartPosition.GetRandomBottomSector(Size, area));
             
             // If delay is not null, the drones will go out in a fan motion.  If it is null, all rays will go out at the same time
             if (Delay != null)
             {
-                clockwise = (IsTop) ?  position.x >= 0 : position.x < 0;
+                clockwise = (IsTop) ? position.x < 0 : position.x >= 0;
                 startRotation = (position.x < 0) ? 90f : -90f;
             }
 

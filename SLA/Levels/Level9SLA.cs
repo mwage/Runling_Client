@@ -18,7 +18,7 @@ public class Level9SLA : ALevelSLA
     public override void CreateDrones()
     {
         // Spawn Bouncing Drones
-        DroneFactory.SpawnAndAddDrones(new RandomBouncingDrone(7f, 1.5f, Color.red), 15, 9f);
+        DroneFactory.SpawnAndAddDrones(new RandomBouncingDrone(7f, 1.5f, Color.red), 15, 9f, BoundariesSLA.BouncingSla);
 
         // Spawn Chaser Drone
         var player = Manager.InitializeGameSLA.NewPlayer;
@@ -33,9 +33,9 @@ public class Level9SLA : ALevelSLA
         var droneCount = 0;
         while (true)
         {
-            DroneFactory.SpawnDrones(new StraightFlying360Drone(speed, size, color, initialDroneCount + 2 * droneCount, true));
+            DroneFactory.SpawnDrones(new StraightFlying360Drone(speed, size, color, initialDroneCount + 2 * droneCount, false), area: BoundariesSLA.FlyingSla);
             yield return new WaitForSeconds(delay);
-            DroneFactory.SpawnDrones(new StraightFlying360Drone(speed, size, color, initialDroneCount + 2 * droneCount, false));
+            DroneFactory.SpawnDrones(new StraightFlying360Drone(speed, size, color, initialDroneCount + 2 * droneCount, true), area: BoundariesSLA.FlyingSla);
             yield return new WaitForSeconds(delay);
             if (delay > minDelay) { delay -= delay * reduceDelay; }
             if (droneCount < maxDrones) { droneCount += droneIncrease; }

@@ -18,7 +18,7 @@ namespace Assets.Scripts.SLA.Levels
         public override void CreateDrones()
         {
             // Spawn Bouncing Drones
-            DroneFactory.SpawnAndAddDrones(new RandomBouncingDrone(7f, 1f, Color.blue), 15, 6f);
+            DroneFactory.SpawnAndAddDrones(new RandomBouncingDrone(7f, 1f, Color.blue), 15, 6f, BoundariesSLA.BouncingSla);
             
             // Spawn Green Drones
             DroneFactory.StartCoroutine(GreenDronesLevel6Bottom(4f, 24, 7f, 1.5f, Color.green, 0.03f, 1.5f, 2, 24));
@@ -30,7 +30,7 @@ namespace Assets.Scripts.SLA.Levels
             while (true)
             {
                 var droneCount = 0;
-                DroneFactory.SpawnDrones(new StraightFlying360Drone(speed, size, color, initialDroneCount + droneCount, true, 3f / (16 + droneCount)));
+                DroneFactory.SpawnDrones(new StraightFlying360Drone(speed, size, color, initialDroneCount + droneCount, false, 3f / (16 + droneCount)), area: BoundariesSLA.FlyingSla);
                 yield return new WaitForSeconds(delay);
                 if (delay > minDelay) { delay -= delay * reduceDelay; }
                 if (droneCount < maxDrones) { droneCount += droneIncrease; }
@@ -42,7 +42,7 @@ namespace Assets.Scripts.SLA.Levels
             while (true)
             {
                 var droneCount = 0;
-                DroneFactory.SpawnDrones(new StraightFlying360Drone(speed, size, color, initialDroneCount + droneCount, false, 3f / (16 + droneCount)));
+                DroneFactory.SpawnDrones(new StraightFlying360Drone(speed, size, color, initialDroneCount + droneCount, true, 3f / (16 + droneCount)), area: BoundariesSLA.FlyingSla);
                 yield return new WaitForSeconds(delay);
                 if (delay > minDelay) { delay -= delay * reduceDelay; }
                 if (droneCount < maxDrones) { droneCount += droneIncrease; }

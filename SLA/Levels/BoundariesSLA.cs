@@ -1,16 +1,7 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Drones;
 
 namespace Assets.Scripts.SLA.Levels
 {
-    // Boundaries in which new drones can be spawned
-    public struct Area
-    {
-        public float LeftBoundary;
-        public float RightBoundary;
-        public float TopBoundary;
-        public float BottomBoundary;
-    }
-
     public class BoundariesSLA
     {
         public static Area BouncingSla = new Area

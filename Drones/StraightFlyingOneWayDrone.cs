@@ -14,7 +14,7 @@ namespace Assets.Scripts.Drones
             Direction = direction;
         }
 
-        public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded)
+        public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area)
         {
             return Object.Instantiate(factory.FlyingOnewayDrone, Position, Quaternion.Euler(0, Direction, 0));
         }
