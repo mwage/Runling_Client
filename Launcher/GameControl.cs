@@ -12,6 +12,8 @@ namespace Assets.Scripts.Launcher
         public static int currentLevel = 0;             //current active level
         public static float moveSpeed = 0;              //movespeed of your character
 
+        public static bool IsAutoclicking = false;
+        public static bool IsInvulnerable = false;
 
         //Keep Game Manager active and destroy any additional copys
         private void Awake()

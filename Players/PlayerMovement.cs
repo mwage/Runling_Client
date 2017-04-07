@@ -1,149 +1,205 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
 using Assets.Scripts.Launcher;
+using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+namespace Assets.Scripts.Players
 {
-    Vector3 clickPos;
-    Vector3 targetPos;
-    Vector3 direction;
-    float rotationSpeed;
-    float maxSpeed;
-    float currentSpeed;
-    float highestSpeedReached;
-    float distance;
-    float acceleration;
-    float deceleration;
-    float stopSensitivity;
-    bool accelerate;
-    bool stop;
-    Rigidbody rb;
-
-    void Start()
+    public class PlayerMovement : MonoBehaviour
     {
-        rb = this.GetComponent<Rigidbody>();
-        targetPos = transform.position;
-        rotationSpeed = 15f;
-        acceleration = 150f;
-        deceleration = 100f;
-        currentSpeed = 0;
-        accelerate = false;
-        stop = true;
-        highestSpeedReached = 0;
-        stopSensitivity = 20;
-    }
+        public static float ZeroTolerance = 0.0001f;
 
-    private void Update()
-    {
-        // On right mouseclick, set new target location
-        if (Input.GetMouseButtonDown(1))
+        private Vector3 _clickPos;
+        private Vector3 _targetPos;
+        private Vector3 _direction;
+        private float _rotationSpeed;
+        private float _maxSpeed;
+        private float _currentSpeed;
+        private float _highestSpeedReached;
+        private float _distance;
+        private float _acceleration;
+        private float _deceleration;
+        private float _stopSensitivity;
+        private bool _accelerate;
+        private bool _stop;
+        private Rigidbody _rb;
+        private Coroutine _autoClickRoutine;
+
+        void Start()
+        {
+            _rb = GetComponent<Rigidbody>();
+            _targetPos = transform.position;
+            _rotationSpeed = 15f;
+            _acceleration = 150f;
+            _deceleration = 100f;
+            _currentSpeed = 0;
+            _accelerate = false;
+            _stop = true;
+            _highestSpeedReached = 0;
+            _stopSensitivity = 20;
+
+            if (GameControl.IsAutoclicking)
+                _autoClickRoutine = StartCoroutine(DoAutoclick());
+        }
+
+        private void Update()
+        {
+            // Press Tab to start autoclicking
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                if (!GameControl.IsAutoclicking)
+                {
+                    GameControl.IsAutoclicking = true;
+                    _autoClickRoutine = StartCoroutine(DoAutoclick());
+                }
+            }
+
+            // Press backquote to stop autoclicking
+            if (Input.GetKeyDown(KeyCode.BackQuote))
+            {
+                if (GameControl.IsAutoclicking)
+                {
+                    GameControl.IsAutoclicking = false;
+                    StopCoroutine(_autoClickRoutine);
+                }
+            }
+
+            // Press 1 to be invulnerable
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                GameControl.IsInvulnerable = true;
+            }
+
+            // Press 2 to be vulnerable
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                GameControl.IsInvulnerable = false;
+            }
+
+            // On right mouseclick, set new target location
+            if (Input.GetMouseButtonDown(1))
+            {
+                MoveToPosition(Input.mousePosition);
+            }
+        }
+
+        private IEnumerator DoAutoclick()
+        {
+            while (true)
+            {
+                MoveToPosition(Input.mousePosition);
+                yield return new WaitForSeconds(0.05f);
+            }
+        }
+
+        private void MoveToPosition(Vector3 position)
         {
             RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            var ray = Camera.main.ScreenPointToRay(position);
 
             if (Physics.Raycast(ray, out hit))
             {
-                maxSpeed = GameControl.moveSpeed;
-                clickPos = hit.point;
-                clickPos.y = 0;
-                if ((clickPos - transform.position).magnitude > 0.05f)
+                _maxSpeed = GameControl.moveSpeed;
+                _clickPos = hit.point;
+                _clickPos.y = 0;
+                if ((_clickPos - transform.position).magnitude > 0.05f)
                 {
-                    targetPos = clickPos;
-                    direction = (targetPos - transform.position).normalized;
-                    accelerate = true;
-                    stop = false;
+                    _targetPos = _clickPos;
+                    _direction = (_targetPos - transform.position).normalized;
+                    _accelerate = true;
+                    _stop = false;
 
-                    if ((targetPos - transform.position).magnitude < 0.5)
+                    if ((_targetPos - transform.position).magnitude < 0.5)
                     {
-                        rb.velocity = direction * currentSpeed / 2;
+                        _rb.velocity = _direction * _currentSpeed / 2;
                     }
                     else
                     {
-                        rb.velocity = direction * currentSpeed;
+                        _rb.velocity = _direction * _currentSpeed;
                     }
 
-                    highestSpeedReached = rb.velocity.magnitude;
+                    _highestSpeedReached = _rb.velocity.magnitude;
                 }
             }
         }
-    }
 
-
-    private void FixedUpdate()
-    {
-        distance = (targetPos - transform.position).magnitude;
-        currentSpeed = rb.velocity.magnitude;
-
-        // Stop
-        if (distance < highestSpeedReached / (10 * stopSensitivity) | distance < 0.02f)
+        private void FixedUpdate()
         {
-            rb.velocity = Vector3.zero;
-            stop = true;
-            accelerate = false;
-            currentSpeed = 0f;
+            _distance = (_targetPos - transform.position).magnitude;
+            _currentSpeed = _rb.velocity.magnitude;
+
+            // Stop
+            if (_distance < _highestSpeedReached / (10 * _stopSensitivity) | _distance < 0.02f)
+            {
+                _rb.velocity = Vector3.zero;
+                _stop = true;
+                _accelerate = false;
+                _currentSpeed = 0f;
+            }
+
+            // Accelerate
+            if (_accelerate)
+            {
+                if (_currentSpeed < _maxSpeed)
+                {
+                    _rb.AddForce(_direction * _acceleration, ForceMode.Acceleration);
+                    _currentSpeed = _rb.velocity.magnitude;
+                    _highestSpeedReached = _currentSpeed;
+                }
+
+                // Don't accelerate over maxSpeed
+                else
+                {
+                    _currentSpeed = _maxSpeed;
+                    _rb.velocity = _direction * _currentSpeed;
+                    _accelerate = false;
+                    _highestSpeedReached = _currentSpeed;
+                }
+            }
+
+            // Decelerate
+            if (_distance < _highestSpeedReached * _highestSpeedReached / (2 * _deceleration) && !_stop)
+            {
+                _rb.AddForce(_direction * (-_deceleration), ForceMode.Acceleration);
+                _accelerate = false;
+            }
+
+            if (Math.Abs(_currentSpeed) > ZeroTolerance) { Rotate(); }
         }
 
-        // Accelerate
-        if (accelerate)
+        private void OnCollisionStay(Collision collision)
         {
-            if (currentSpeed < maxSpeed)
+            if (collision.collider.tag == "Wall")
             {
-                rb.AddForce(direction * acceleration, ForceMode.Acceleration);
-                currentSpeed = rb.velocity.magnitude;
-                highestSpeedReached = currentSpeed;
-            }
-
-            // Don't accelerate over maxSpeed
-            else
-            {
-                currentSpeed = maxSpeed;
-                rb.velocity = direction * currentSpeed;
-                accelerate = false;
-                highestSpeedReached = currentSpeed;
+                transform.position = transform.position + collision.contacts[0].normal * 0.05f;
+                if (Math.Abs(collision.contacts[0].normal.x) < ZeroTolerance)
+                {
+                    _rb.velocity = new Vector3(1, 0, 0) * _rb.velocity.x;
+                    _targetPos = transform.position + new Vector3(0.1f, 0, 0) * _rb.velocity.x;
+                    _direction = (_targetPos - transform.position).normalized;
+                    _highestSpeedReached = _rb.velocity.magnitude;
+                }
+                else if (Math.Abs(collision.contacts[0].normal.z) < ZeroTolerance)
+                {
+                    _rb.velocity = new Vector3(0, 0, 1) * _rb.velocity.z;
+                    _targetPos = transform.position + new Vector3(0.1f, 0, 0) * _rb.velocity.z;
+                    _direction = (_targetPos - transform.position).normalized;
+                    _highestSpeedReached = _rb.velocity.magnitude;
+                }
+                else
+                {
+                    _rb.velocity = Vector3.zero;
+                    _stop = true;
+                    _accelerate = false;
+                }
             }
         }
 
-        // Decelerate
-        if (distance < highestSpeedReached * highestSpeedReached / (2 * deceleration) && !stop)
+        // Rotate Player
+        void Rotate()
         {
-            rb.AddForce(direction * (-deceleration), ForceMode.Acceleration);
-            accelerate = false;
+            var lookrotation = _targetPos - transform.position;
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookrotation), _rotationSpeed * Time.deltaTime);
         }
-
-        if (currentSpeed != 0) { Rotate(); }
-    }
-
-    private void OnCollisionStay(Collision collision)
-    {
-        if (collision.collider.tag == "Wall")
-        {
-            transform.position = transform.position + collision.contacts[0].normal * 0.05f;
-            if (collision.contacts[0].normal.x == 0)
-            {
-                rb.velocity = new Vector3(1, 0, 0) * rb.velocity.x;
-                targetPos = transform.position + new Vector3(0.1f, 0, 0) * rb.velocity.x;
-                direction = (targetPos - transform.position).normalized;
-                highestSpeedReached = rb.velocity.magnitude;
-            }
-            else if (collision.contacts[0].normal.z == 0)
-            {
-                rb.velocity = new Vector3(0, 0, 1) * rb.velocity.z;
-                targetPos = transform.position + new Vector3(0.1f, 0, 0) * rb.velocity.z;
-                direction = (targetPos - transform.position).normalized;
-                highestSpeedReached = rb.velocity.magnitude;
-            }
-            else
-            {
-                rb.velocity = Vector3.zero;
-                stop = true;
-                accelerate = false;
-            }
-        }
-    }
-
-    // Rotate Player
-    void Rotate()
-    {
-        Vector3 lookrotation = targetPos - transform.position;
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookrotation), rotationSpeed * Time.deltaTime);
     }
 }
