@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Assets.Scripts.Launcher;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.Drones
 {
@@ -8,13 +10,12 @@ namespace Assets.Scripts.Drones
     {
         protected readonly GameObject Player;
 
-        private Vector3 targetPos;
+        private Vector3 _targetPos;
         private Vector3 _direction;
 
         private GameObject _chaser;
-        float rotationSpeed = 15f;
-
-
+        private float _rotationSpeed = 15f;
+        
         public ChaserDrone(float speed, float size, Color color, GameObject player) : base(speed, size, color)
         {
             Player = player;
@@ -24,11 +25,6 @@ namespace Assets.Scripts.Drones
         {
             _chaser = Object.Instantiate(factory.FlyingOnewayDrone, new Vector3(0, 0.6f, 0), Quaternion.identity);
 
-
-
-
-
-
             // adjust drone color and size
             var rend = _chaser.GetComponent<Renderer>();
             rend.material.color = Color;
@@ -37,26 +33,25 @@ namespace Assets.Scripts.Drones
             scale.z *= Size;
             _chaser.transform.localScale = scale;
 
-            factory.StartCoroutine(IChaser(_chaser));
+            factory.StartCoroutine(MoveChaser(_chaser));
             return _chaser;
         }
 
-        private IEnumerator IChaser(GameObject chaserDrone)
+        private IEnumerator MoveChaser(GameObject chaserDrone)
         {
-            Rigidbody rb = chaserDrone.GetComponent<Rigidbody>();
-            rotationSpeed = 15f;
-            float acceleration = 50f;
-            float currentSpeed = 0;
-            float maxSpeed = Speed;
+            var rb = chaserDrone.GetComponent<Rigidbody>();
+            _rotationSpeed = 15f;
+            const float acceleration = 50f;
+            var maxSpeed = Speed;
 
             do
             {
-                targetPos = Player.transform.position;
-                targetPos.y += 0.6f;
-                currentSpeed = rb.velocity.magnitude;
-                _direction = (targetPos - chaserDrone.transform.position).normalized;
+                _targetPos = Player.transform.position;
+                _targetPos.y += 0.6f;
+                var currentSpeed = rb.velocity.magnitude;
+                _direction = (_targetPos - chaserDrone.transform.position).normalized;
 
-                if ((targetPos - chaserDrone.transform.position).magnitude > 0.1f)
+                if ((_targetPos - chaserDrone.transform.position).magnitude > 0.1f)
                 {
                     rb.velocity = _direction * currentSpeed;
 
@@ -72,27 +67,25 @@ namespace Assets.Scripts.Drones
                         rb.velocity = _direction * currentSpeed;
                     }
 
-                    if (currentSpeed != 0) { Rotate(); }
+                    if (Math.Abs(currentSpeed) > 0.00001) { Rotate(); }
                 }
                 else
                 {
                     rb.velocity = Vector3.zero;
-                    currentSpeed = 0f;
                 }
 
                 yield return new WaitForSeconds(0.02f);
             } while (!GameControl.dead);
 
             rb.velocity = Vector3.zero;
-            currentSpeed = 0f;
             chaserDrone.SetActive(false);
         }
 
         // Rotate Player
         private void Rotate()
         {
-            Vector3 lookrotation = targetPos - _chaser.transform.position;
-            _chaser.transform.rotation = Quaternion.Slerp(_chaser.transform.rotation, Quaternion.LookRotation(lookrotation), rotationSpeed * Time.deltaTime);
+            var lookrotation = _targetPos - _chaser.transform.position;
+            _chaser.transform.rotation = Quaternion.Slerp(_chaser.transform.rotation, Quaternion.LookRotation(lookrotation), _rotationSpeed * Time.deltaTime);
         }
     }
 }

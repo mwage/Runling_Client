@@ -3,7 +3,7 @@ using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.Drones
 {
-    class StraightFlyingOnewayDrone : ADrone
+    public class StraightFlyingOnewayDrone : ADrone
     {
         protected readonly Vector3 Position;
         protected readonly float Direction;

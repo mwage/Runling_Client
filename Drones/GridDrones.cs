@@ -1,56 +1,60 @@
-﻿using Assets.Scripts.SLA.Levels;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
-
-
 
 namespace Assets.Scripts.Drones
 {
-    public class GridDrones
+    public class GridDrones : ADrone
     {
-        public void Grid(int droneCount, float delay, float speed, float size, Color color, Area area, DroneFactory DroneFactory, bool? addDrones = null)
-        {
-            bool AddDrones = addDrones ?? false;
+        protected int DroneCount;
+        protected float Delay;
 
-            DroneFactory.StartCoroutine(IGridDronesHorizontal(droneCount, delay, speed, size, color, area, DroneFactory, AddDrones));
-            DroneFactory.StartCoroutine(IGridDronesVertical(droneCount, delay, speed, size, color, area, DroneFactory, AddDrones));
+        public GridDrones(float speed, float size, Color color, int droneCount, float delay ) : base(speed, size, color)
+        {
+            DroneCount = droneCount;
+            Delay = delay;
         }
 
-        IEnumerator IGridDronesHorizontal(int droneCount, float delay, float speed, float size, Color color, Area area, DroneFactory DroneFactory, bool AddDrones)
+        public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area)
+        {
+            factory.StartCoroutine(GenerateHorizontalGridDrones(DroneCount, Delay, Speed, Size, Color, area, factory));
+            factory.StartCoroutine(GenerateVerticalGridDrones(DroneCount, Delay, Speed, Size, Color, area, factory));
+            return null;
+        }
+        
+        private static IEnumerator GenerateHorizontalGridDrones(int droneCount, float delay, float speed, float size, Color color, Area area, DroneFactory factory)
         {
             var height = area.TopBoundary - (0.5f + size / 2);
-            var lenght = area.RightBoundary - (0.5f + size / 2);
-            var direction = 90f;
+            var length = area.RightBoundary - (0.5f + size / 2);
+            const float direction = 90f;
 
             while (true)
             {
-                for (var j = 0; j < (int)(lenght / height); j++)
+                for (var j = 0; j < (int)(length / height); j++)
                 {
                     for (var i = 0; i < droneCount; i++)
                     {
-                        var startPos = new Vector3(-lenght, 0.6f, height - i * 2 * height / droneCount);
-                        DroneFactory.SpawnDrones(new StraightFlyingOnewayDrone(speed, size, color, startPos, direction));
+                        var startPos = new Vector3(-length, 0.6f, height - i * 2 * height / droneCount);
+                        factory.SpawnDrones(new StraightFlyingOnewayDrone(speed, size, color, startPos, direction));
 
                         yield return new WaitForSeconds(delay * 2 * height / droneCount);
                     }
                     for (var i = 0; i < droneCount; i++)
                     {
-                        var startPos = new Vector3(-lenght, 0.6f, -height + i * 2 * height / droneCount);
-                        DroneFactory.SpawnDrones(new StraightFlyingOnewayDrone(speed, size, color, startPos, direction));
+                        var startPos = new Vector3(-length, 0.6f, -height + i * 2 * height / droneCount);
+                        factory.SpawnDrones(new StraightFlyingOnewayDrone(speed, size, color, startPos, direction));
                         yield return new WaitForSeconds(delay * 2 * height / droneCount);
                     }
                 }
 
-                if (AddDrones)
-                    droneCount++;
+                droneCount++;
             }
         }
 
-        IEnumerator IGridDronesVertical(int droneCount, float delay, float speed, float size, Color color, Area area, DroneFactory DroneFactory, bool AddDrones)
+        private static IEnumerator GenerateVerticalGridDrones(int droneCount, float delay, float speed, float size, Color color, Area area, DroneFactory factory)
         {
             var height = area.TopBoundary - (0.5f + size / 2);
             var lenght = area.RightBoundary - (0.5f + size / 2);
-            var direction = 180f;
+            const float direction = 180f;
             droneCount *= (int)(lenght / height);
 
             while (true)
@@ -58,18 +62,17 @@ namespace Assets.Scripts.Drones
                 for (var i = 0; i < droneCount; i++)
                 {
                     var startPos = new Vector3(-lenght + i * 2 * lenght / droneCount, 0.6f, height);
-                    DroneFactory.SpawnDrones(new StraightFlyingOnewayDrone(speed, size, color, startPos, direction));
+                    factory.SpawnDrones(new StraightFlyingOnewayDrone(speed, size, color, startPos, direction));
                     yield return new WaitForSeconds(delay * 2 * lenght / droneCount);
                 }
                 for (var i = 0; i < droneCount; i++)
                 {
                     var startPos = new Vector3(lenght - i * 2 * lenght / droneCount, 0.6f, height);
-                    DroneFactory.SpawnDrones(new StraightFlyingOnewayDrone(speed, size, color, startPos, direction));
+                    factory.SpawnDrones(new StraightFlyingOnewayDrone(speed, size, color, startPos, direction));
                     yield return new WaitForSeconds(delay * 2 * lenght / droneCount);
                 }
 
-                if(AddDrones)
-                    droneCount += (int)(lenght / height);
+                droneCount += (int)(lenght / height);
             }
         }
 

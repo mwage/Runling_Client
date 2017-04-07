@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -6,32 +7,31 @@ namespace Assets.Scripts.Drones
 {
     public class MineVariations
     {
-        public void StraightFlying360Drones(int droneCount, float delay, float speed, float size, Color color, GameObject[] mines, DroneFactory DroneFactory, float? reduceDelay = null)
+        public static void AddStraightFlying360Drones(int droneCount, float delay, float speed, float size, Color color, GameObject[] mines, DroneFactory factory, float? reduceDelay = null)
         {
-            DroneFactory.StartCoroutine(IStraightFlying360Drones(droneCount, delay, speed, size, color, mines, DroneFactory, reduceDelay));
+            factory.StartCoroutine(GenerateStraightFlying360Drones(droneCount, delay, speed, size, color, mines, factory, reduceDelay));
         }
 
-        public void DelayedStraightFlying360Drones(int droneCount, float delay, int rotations, float speed, float size, Color color, GameObject mine, DroneFactory DroneFactory)
+        public static void AddDelayedStraightFlying360Drones(int droneCount, float delay, int rotations, float speed, float size, Color color, GameObject mine, DroneFactory factory)
         {
-            DroneFactory.StartCoroutine(IDelayedStraightFlying360Drones(droneCount, delay, rotations, speed, size, color, mine, DroneFactory));
+            factory.StartCoroutine(GenerateDelayedStraightFlying360Drones(droneCount, delay, rotations, speed, size, color, mine, factory));
         }
 
-
-        private IEnumerator IStraightFlying360Drones(int droneCount, float delay, float speed, float size, Color color, GameObject[] mines, DroneFactory DroneFactory, float? reduceDelay = null)
+        private static IEnumerator GenerateStraightFlying360Drones(int droneCount, float delay, float speed, float size, Color color, ICollection<GameObject> mines, DroneFactory factory, float? reduceDelay = null)
         {
             while (true)
             {
-                for (var i = 0; i < mines.Length; i++)
+                foreach (var m in mines)
                 {
-                    DroneFactory.SpawnDrones(new StraightFlying360Drone(speed, size, color, droneCount, false, position: mines[i].transform.position));
-                    yield return new WaitForSeconds(delay / mines.Length);
+                    factory.SpawnDrones(new StraightFlying360Drone(speed, size, color, droneCount, false, position: m.transform.position));
+                    yield return new WaitForSeconds(delay / mines.Count);
                 }
 
-                if (reduceDelay != null) { delay = delay > mines.Length ? delay - delay * reduceDelay.Value : 3f; }
+                if (reduceDelay != null) { delay = delay > mines.Count ? delay - delay * reduceDelay.Value : 3f; }
             }
         }
 
-        private IEnumerator IDelayedStraightFlying360Drones(int droneCount, float delay, int rotations, float speed, float size, Color color, GameObject mine, DroneFactory DroneFactory)
+        private static IEnumerator GenerateDelayedStraightFlying360Drones(int droneCount, float delay, int rotations, float speed, float size, Color color, GameObject mine, DroneFactory factory)
         {
             while (true)
             {
@@ -39,7 +39,7 @@ namespace Assets.Scripts.Drones
                 {
                     for (var i = 0; i < droneCount; i++)
                     {
-                        DroneFactory.SpawnDrones(new StraightFlyingOnewayDrone(speed, size, color, mine.transform.position, i * 360 / droneCount));
+                        factory.SpawnDrones(new StraightFlyingOnewayDrone(speed, size, color, mine.transform.position, i * 360f / droneCount));
                         yield return new WaitForSeconds(delay / droneCount);
                     }
                 }
@@ -47,7 +47,7 @@ namespace Assets.Scripts.Drones
                 {
                     for (var i = 0; i < droneCount; i++)
                     {
-                        DroneFactory.SpawnDrones(new StraightFlyingOnewayDrone(speed, size, color, mine.transform.position, -i * 360 / droneCount));
+                        factory.SpawnDrones(new StraightFlyingOnewayDrone(speed, size, color, mine.transform.position, -i * 360f / droneCount));
                         yield return new WaitForSeconds(delay / droneCount);
                     }
                 }

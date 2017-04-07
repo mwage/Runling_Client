@@ -1,11 +1,9 @@
 ﻿using System.Collections;
-using Assets.Scripts.SLA.Levels;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.Drones
 {
-    class StraightFlying360Drone : ADrone
+    public class StraightFlying360Drone : ADrone
     {
         protected readonly int NumRays;
         protected readonly bool IsTop;

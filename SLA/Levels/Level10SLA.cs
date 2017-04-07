@@ -14,15 +14,13 @@ namespace Assets.Scripts.SLA.Levels
             return 10;
         }
 
-        GridDrones GridDrones = new GridDrones();
-
         public override void CreateDrones()
         {
             // Spawn Bouncing Drones
             DroneFactory.SpawnAndAddDrones(new RandomBouncingDrone(7f, 1.15f, Color.blue), 7, 5f, BoundariesSLA.BouncingSla);
 
             // Spawn Grid Drones
-            GridDrones.Grid(10, 0.05f, 7f, 1f, Color.magenta, BoundariesSLA.FlyingSla, DroneFactory, true);
+            DroneFactory.SpawnDrones(new GridDrones(7f, 1f, Color.magenta, 10, 0.05f), area: BoundariesSLA.FlyingSla);
         }        
     }
 }

@@ -11,8 +11,6 @@ namespace Assets.Scripts.Drones
         public GameObject FlyingOnewayDrone;
         public GameObject MineDrone;
 
-
-
         public GameObject SpawnDrones(IDrone drone, int droneCount = 1, bool isAdded = false, Area area = new Area())
         {
             GameObject newDrone = null;
@@ -28,10 +26,10 @@ namespace Assets.Scripts.Drones
 
         public void AddDrones(IDrone drone, float delay, Area area)
         {
-            StartCoroutine(DroneGenerator(drone, delay, area));
+            StartCoroutine(GenerateDrones(drone, delay, area));
         }
 
-        private IEnumerator DroneGenerator(IDrone drone, float delay, Area area)
+        private IEnumerator GenerateDrones(IDrone drone, float delay, Area area)
         {
             while (true)
             {

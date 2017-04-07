@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Assets.Scripts.Drones;
+﻿using Assets.Scripts.Drones;
 using UnityEngine;
 
 namespace Assets.Scripts.SLA.Levels
@@ -15,8 +14,6 @@ namespace Assets.Scripts.SLA.Levels
             return 11;
         }
 
-        MineVariations MineVariations = new MineVariations();
-
         public override void CreateDrones()
         {
             // Spawn Bouncing Drones
@@ -26,7 +23,7 @@ namespace Assets.Scripts.SLA.Levels
              var mine = DroneFactory.SpawnDrones(new MineDrone(5f, 3f, Color.black), area: BoundariesSLA.FlyingSla);
 
             // Spawn Green Drones
-            MineVariations.DelayedStraightFlying360Drones(32, 2f, 2, 8f, 1.3f, Color.cyan, mine, DroneFactory);
+            MineVariations.AddDelayedStraightFlying360Drones(32, 2f, 2, 8f, 1.3f, Color.cyan, mine, DroneFactory);
         }
     }
 }

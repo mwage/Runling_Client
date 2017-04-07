@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.SLA.Levels;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Scripts.Drones
 {
@@ -12,7 +11,7 @@ namespace Assets.Scripts.Drones
         public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area)
         {
             var direction = Random.Range(0, 4);
-            var newDrone = Object.Instantiate(factory.MineDrone, DroneStartPosition.RandomPositionGround(Size, area), Quaternion.Euler(0, -45 + 90 * direction, 0));
+            var newDrone = Object.Instantiate(factory.MineDrone, DroneStartPosition.GetRandomPositionGround(Size, area), Quaternion.Euler(0, -45 + 90 * direction, 0));
             return newDrone;
         }
     }
