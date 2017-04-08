@@ -6,37 +6,35 @@ namespace Assets.Scripts.Drones
     public class StraightFlying360Drone : ADrone
     {
         protected readonly int NumRays;
-        protected readonly bool IsTop;
         protected readonly float? Delay;
-        protected readonly Vector3? Position;
-
-        public StraightFlying360Drone(float speed, float size, Color color, int numRays, bool isTop, float? delay = null, Vector3? position = null) : base(speed, size, color)
+        
+        public StraightFlying360Drone(float speed, float size, Color color, int numRays, float? delay = null) : base(speed, size, color)
         {
             NumRays = numRays;
-            IsTop = isTop;
             Delay = delay;
-            Position = position;
         }
 
-        public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area)
+        public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null)
         {
-            factory.StartCoroutine(Generate360Drones(factory, area));
+            factory.StartCoroutine(Generate360Drones(factory, area, posDelegate));
             return null;
         }
 
-        private IEnumerator Generate360Drones(DroneFactory factory, Area area)
+        private IEnumerator Generate360Drones(DroneFactory factory, Area area, StartPositionDelegate posDelegate)
         {
             var clockwise = true;
             var startRotation = 0f;
-            var position = Position ?? (IsTop
-                ? DroneStartPosition.GetRandomTopSector(Size, area)
-                : DroneStartPosition.GetRandomBottomSector(Size, area));
+
+            var position = posDelegate(Size, area);
             
             // If delay is not null, the drones will go out in a fan motion.  If it is null, all rays will go out at the same time
             if (Delay != null)
             {
-                clockwise = (IsTop) ? position.x < 0 : position.x >= 0;
+                /////////// Note:  Change this so we calculate clockwise and startRotation based on position
+                var isTop = posDelegate == DroneStartPosition.GetRandomTopSector;
+                clockwise = (isTop) ? position.x < 0 : position.x >= 0;
                 startRotation = (position.x < 0) ? 90f : -90f;
+                
             }
 
             for (var i = 0; i < NumRays; i++)
