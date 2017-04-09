@@ -16,7 +16,7 @@ namespace Assets.Scripts.Drones
             AddDrones = addDrones ?? false;
         }
 
-        public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area)
+        public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null)
         {
             factory.StartCoroutine(GenerateHorizontalGridDrones(DroneCount, Delay, Speed, Size, Color, area, factory, AddDrones));
             factory.StartCoroutine(GenerateVerticalGridDrones(DroneCount, Delay, Speed, Size, Color, area, factory, AddDrones));

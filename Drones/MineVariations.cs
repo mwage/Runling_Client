@@ -23,7 +23,7 @@ namespace Assets.Scripts.Drones
             {
                 foreach (var m in mines)
                 {
-                    factory.SpawnDrones(new StraightFlying360Drone(speed, size, color, droneCount, false, position: m.transform.position));
+                    factory.SpawnDrones(new StraightFlying360Drone(speed, size, color, droneCount), posDelegate: delegate { return m.transform.position; });
                     yield return new WaitForSeconds(delay / mines.Count);
                 }
 

@@ -16,7 +16,7 @@ public class LevelManagerSLA : MonoBehaviour {
     public ScoreSLA Score;
     public InitializeGameSLA InitializeGameSLA;
 
-    public GameObject win;
+    public GameObject Win;
 
     public DroneFactory DroneFactory;
     public BoundariesSLA Area;
@@ -101,6 +101,6 @@ public class LevelManagerSLA : MonoBehaviour {
         yield return new WaitForSeconds(delay);
         Score.HighScore.SetActive(false);
         InGameMenuManagerSLA.CloseMenus();
-        win.gameObject.SetActive(true);
+        Win.gameObject.SetActive(true);
     }
 }

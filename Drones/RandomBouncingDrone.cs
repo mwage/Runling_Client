@@ -8,14 +8,19 @@ namespace Assets.Scripts.Drones
         {
         }
 
-        public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area)
+        public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null)
         {
-            var pos = isAdded
+            Vector3 pos;
+            if (posDelegate != null)
+                pos = posDelegate(Size, area);
+            else
+            {
+                pos = isAdded
                 ? DroneStartPosition.GetRandomCornerGround(Size, area)
                 : DroneStartPosition.GetRandomPositionGround(Size, area);
+            }
 
-            var newDrone = Object.Instantiate(factory.BouncingDrone, pos, Quaternion.Euler(0, DroneDirection.RandomDirection(1f), 0));
-            return newDrone;
+            return Object.Instantiate(factory.BouncingDrone, pos, Quaternion.Euler(0, DroneDirection.RandomDirection(1f), 0));
         }
     }
 }

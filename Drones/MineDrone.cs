@@ -8,7 +8,7 @@ namespace Assets.Scripts.Drones
         {
         }
 
-        public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area)
+        public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null)
         {
             var direction = Random.Range(0, 4);
             var newDrone = Object.Instantiate(factory.MineDrone, DroneStartPosition.GetRandomPositionGround(Size, area), Quaternion.Euler(0, -45 + 90 * direction, 0));

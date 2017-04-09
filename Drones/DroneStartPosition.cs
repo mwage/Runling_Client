@@ -2,10 +2,10 @@
 
 namespace Assets.Scripts.Drones
 {
+    public delegate Vector3 StartPositionDelegate(float size, Area boundary);
+
     public class DroneStartPosition
     {
-        public delegate Vector3 StartPositionDelegate(float size, Area boundary);
-
         // Random position for bounding drones
         public static Vector3 GetRandomPositionGround(float size, Area boundary)
         {
