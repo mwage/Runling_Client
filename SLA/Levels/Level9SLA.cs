@@ -30,6 +30,7 @@ namespace Assets.Scripts.SLA.Levels
 
         IEnumerator GenerateLevel9GreenDrones(float delay, int initialDroneCount, float speed, float size, Color color, float reduceDelay, float minDelay, int droneIncrease, int maxDrones)
         {
+<<<<<<< HEAD
             var droneCount = 0;
             while (true)
             {
@@ -40,6 +41,14 @@ namespace Assets.Scripts.SLA.Levels
                 if (delay > minDelay) { delay -= delay * reduceDelay; }
                 if (droneCount < maxDrones) { droneCount += droneIncrease; }
             }
+=======
+            DroneFactory.SpawnDrones(new StraightFlying360Drone(speed, size, color, initialDroneCount + 2 * droneCount), area: BoundariesSLA.FlyingSla, posDelegate: DroneStartPosition.GetRandomBottomSector);
+            yield return new WaitForSeconds(delay);
+            DroneFactory.SpawnDrones(new StraightFlying360Drone(speed, size, color, initialDroneCount + 2 * droneCount), area: BoundariesSLA.FlyingSla, posDelegate: DroneStartPosition.GetRandomTopSector);
+            yield return new WaitForSeconds(delay);
+            if (delay > minDelay) { delay -= delay * reduceDelay; }
+            if (droneCount < maxDrones) { droneCount += droneIncrease; }
+>>>>>>> origin/Mine&Grid_Changes
         }
     }
 }
