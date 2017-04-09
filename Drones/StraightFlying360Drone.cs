@@ -34,8 +34,8 @@ namespace Assets.Scripts.Drones
 
         private IEnumerator Generate360Drones(DroneFactory factory, Area area, StartPositionDelegate posDelegate)
         {
-            var clockwise = Clockwise ?? true;
-            var startRotation = StartRotation ?? 0f;
+            var clockwise = true;
+            var startRotation = 0f;
             var position = posDelegate(Size, area);
 
 
@@ -63,6 +63,9 @@ namespace Assets.Scripts.Drones
                     clockwise = position.z >= 0;
                     startRotation = (position.z < 0) ? 0f : 180f;
                 }
+
+                clockwise = Clockwise ?? clockwise;
+                startRotation = StartRotation ?? startRotation;
             }
 
             do

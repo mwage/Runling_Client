@@ -45,7 +45,7 @@ namespace Assets.Scripts.Players
         private void Update()
         {
             // Press Tab to start autoclicking
-            if (Input.GetKeyDown(KeyCode.Tab))
+            if (Input.GetKeyDown(KeyCode.LeftControl))
             {
                 if (!GameControl.IsAutoclicking)
                 {
@@ -55,7 +55,7 @@ namespace Assets.Scripts.Players
             }
 
             // Press backquote to stop autoclicking
-            if (Input.GetKeyDown(KeyCode.BackQuote))
+            if (Input.GetKeyDown(KeyCode.LeftAlt))
             {
                 if (GameControl.IsAutoclicking)
                 {

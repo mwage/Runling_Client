@@ -19,7 +19,6 @@ namespace Assets.Scripts.SLA.Levels
         {
             // Spawn Bouncing Drones
             DroneFactory.SpawnAndAddDrones(new RandomBouncingDrone(4f, 1f, Color.blue), 50, 1.5f, BoundariesSLA.BouncingSla);
-            DroneFactory.SpawnDrones(new StraightFlying360Drone(8f, 1.5f, Color.black, 32, repeat: true));
         }
     }
 }
