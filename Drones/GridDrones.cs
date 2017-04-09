@@ -7,23 +7,21 @@ namespace Assets.Scripts.Drones
     {
         protected int DroneCount;
         protected float Delay;
-        protected bool AddDrones;
 
-        public GridDrones(float speed, float size, Color color, int droneCount, float delay, bool? addDrones = null ) : base(speed, size, color)
+        public GridDrones(float speed, float size, Color color, int droneCount, float delay ) : base(speed, size, color)
         {
             DroneCount = droneCount;
             Delay = delay;
-            AddDrones = addDrones ?? false;
         }
 
         public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null)
         {
-            factory.StartCoroutine(GenerateHorizontalGridDrones(DroneCount, Delay, Speed, Size, Color, area, factory, AddDrones));
-            factory.StartCoroutine(GenerateVerticalGridDrones(DroneCount, Delay, Speed, Size, Color, area, factory, AddDrones));
+            factory.StartCoroutine(GenerateHorizontalGridDrones(DroneCount, Delay, Speed, Size, Color, area, factory));
+            factory.StartCoroutine(GenerateVerticalGridDrones(DroneCount, Delay, Speed, Size, Color, area, factory));
             return null;
         }
         
-        private static IEnumerator GenerateHorizontalGridDrones(int droneCount, float delay, float speed, float size, Color color, Area area, DroneFactory factory, bool addDrones)
+        private static IEnumerator GenerateHorizontalGridDrones(int droneCount, float delay, float speed, float size, Color color, Area area, DroneFactory factory)
         {
             var height = area.TopBoundary - (0.5f + size / 2);
             var length = area.RightBoundary - (0.5f + size / 2);
@@ -48,12 +46,11 @@ namespace Assets.Scripts.Drones
                     }
                 }
 
-                if (addDrones)
-                    droneCount++;
+                droneCount++;
             }
         }
 
-        private static IEnumerator GenerateVerticalGridDrones(int droneCount, float delay, float speed, float size, Color color, Area area, DroneFactory factory, bool addDrones)
+        private static IEnumerator GenerateVerticalGridDrones(int droneCount, float delay, float speed, float size, Color color, Area area, DroneFactory factory)
         {
             var height = area.TopBoundary - (0.5f + size / 2);
             var lenght = area.RightBoundary - (0.5f + size / 2);
@@ -75,8 +72,7 @@ namespace Assets.Scripts.Drones
                     yield return new WaitForSeconds(delay * 2 * lenght / droneCount);
                 }
 
-                if (addDrones)
-                    droneCount += (int)(lenght / height);
+                droneCount += (int)(lenght / height);
             }
         }
 
