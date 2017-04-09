@@ -32,7 +32,7 @@ namespace Assets.Scripts.SLA.Levels
 
             while (true)
             {
-                DroneFactory.SpawnDrones(new StraightFlying360Drone(speed, size, color, initialDroneCount + droneCount, 3f / (16 + droneCount)), area: BoundariesSLA.FlyingSla, posDelegate: posDelegate);
+                DroneFactory.SpawnDrones(new StraightFlying360Drone(speed, size, color, initialDroneCount + droneCount, 5f), area: BoundariesSLA.FlyingSla, posDelegate: posDelegate);
                 yield return new WaitForSeconds(delay);
                 if (delay > minDelay) { delay -= delay * reduceDelay; }
                 if (droneCount < maxDrones) { droneCount += droneIncrease; }
