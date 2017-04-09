@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Drones;
+﻿using System.Security.Permissions;
+using Assets.Scripts.Drones;
 using UnityEngine;
 
 namespace Assets.Scripts.SLA.Levels
@@ -16,7 +17,8 @@ namespace Assets.Scripts.SLA.Levels
 
         public override void CreateDrones()
         {
-            DroneFactory.SpawnAndAddDrones(new RandomBouncingDrone(4f, 1f, Color.blue), 50, 1.5f);
+            // Spawn Bouncing Drones
+            DroneFactory.SpawnAndAddDrones(new RandomBouncingDrone(4f, 1f, Color.blue), 50, 1.5f, BoundariesSLA.BouncingSla);
         }
     }
 }

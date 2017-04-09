@@ -1,5 +1,4 @@
-﻿
-using Assets.Scripts.Drones;
+﻿using Assets.Scripts.Drones;
 
 namespace Assets.Scripts.SLA.Levels
 {
@@ -7,7 +6,7 @@ namespace Assets.Scripts.SLA.Levels
     {
         protected readonly LevelManagerSLA Manager;
         protected readonly DroneFactory DroneFactory;
-        
+
         protected ALevelSLA(LevelManagerSLA manager)
         {
             Manager = manager;

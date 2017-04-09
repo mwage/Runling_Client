@@ -51,6 +51,8 @@ Drones (Folder): different kinds of drone movements
   * StraightFlyingOneWayDrone: Drone class for straight flying one way drones
   * ChaserDrone: Drone class for chaser drones
   * MineDrone: Drone class for mine drones
+  * GridDrones: Spawns drones in grid pattern
+  * MineVariations: Different patterns for drones spawned by mine drones
   * DroneFactory: Primary point of interaction to spawn/add drones
   * DroneDirection: Contains a static method to generate a random direction
   * MoveDrone: Contains a static method to move a drone in a straight line

@@ -6,7 +6,7 @@ public class DeathTrigger : MonoBehaviour
     //death trigger
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Enemy")
+        if (other.tag == "Enemy" && !GameControl.IsInvulnerable)
         {
             GameControl.dead = true;
         }

@@ -17,34 +17,25 @@ namespace Assets.Scripts.SLA.Levels
 
         public override void CreateDrones()
         {
-            DroneFactory.SpawnAndAddDrones(new RandomBouncingDrone(7f, 1f, Color.blue), 15, 6f);
-            
-            // Spawn green drones (initial delay, speed, size)
-            DroneFactory.StartCoroutine(GreenDronesLevel6Bottom(4f, 7f, 1.5f));
-            DroneFactory.StartCoroutine(GreenDronesLevel6Top(5f, 7f, 1.5f));
+            // Spawn Bouncing Drones
+            DroneFactory.SpawnAndAddDrones(new RandomBouncingDrone(7f, 1f, Color.blue), 15, 6f, BoundariesSLA.BouncingSla);
+
+            // Spawn Green Drones
+            DroneFactory.StartCoroutine(GenerateLevel6GreenDrones(4f, 24, 7f, 1.5f, Color.green, 0.03f, 1.5f, 2, 24, DroneStartPosition.GetRandomBottomSector));
+            DroneFactory.StartCoroutine(GenerateLevel6GreenDrones(5f, 24, 7f, 1.5f, Color.green, 0.04f, 1.5f, 2, 24, DroneStartPosition.GetRandomTopSector));
         }
 
-        private IEnumerator GreenDronesLevel6Bottom(float delay, float speed, float size)
+        private IEnumerator GenerateLevel6GreenDrones(float delay, int initialDroneCount, float speed, float size, Color color,
+            float reduceDelay, float minDelay, int droneIncrease, int maxDrones, StartPositionDelegate posDelegate)
         {
-            while (true)
-            {
-                var droneCount = 0;
-                DroneFactory.SpawnDrones(new StraightFlying360Drone(speed, size, Color.green, 24+droneCount, true, 3f / (16 + droneCount)));
-                yield return new WaitForSeconds(delay);
-                if (delay > 1.5f) { delay -= delay * 0.03f; }
-                if (droneCount < 24) { droneCount +=2; }
-            }
-        }
+            var droneCount = 0;
 
-        private IEnumerator GreenDronesLevel6Top(float delay, float speed, float size)
-        {
             while (true)
             {
-                var droneCount = 0;
-                DroneFactory.SpawnDrones(new StraightFlying360Drone(speed, size, Color.green, 24 + droneCount, false, 3f / (16 + droneCount)));
+                DroneFactory.SpawnDrones(new StraightFlying360Drone(speed, size, color, initialDroneCount + droneCount, 5f), area: BoundariesSLA.FlyingSla, posDelegate: posDelegate);
                 yield return new WaitForSeconds(delay);
-                if (delay > 1.5f) { delay -= delay * 0.04f; }
-                if (droneCount < 24) { droneCount +=2; }
+                if (delay > minDelay) { delay -= delay * reduceDelay; }
+                if (droneCount < maxDrones) { droneCount += droneIncrease; }
             }
         }
     }

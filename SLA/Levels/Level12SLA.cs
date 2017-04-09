@@ -17,23 +17,24 @@ namespace Assets.Scripts.SLA.Levels
 
         public override void CreateDrones()
         {
-            // Spawn drones (dronecount/delay, speed, size, color)
-            DroneFactory.SpawnAndAddDrones(new RandomBouncingDrone(7f, 1.5f, Color.red), 15, 7f);
+            // Spawn Bouncing Drones
+            DroneFactory.SpawnAndAddDrones(new RandomBouncingDrone(7f, 1.5f, Color.red), 15, 7f, BoundariesSLA.BouncingSla);
 
-            // Spawn green drones (initial delay, size)
-            DroneFactory.StartCoroutine(GreenDronesLevel12(4f, 8f, 1.5f));
+            // Spawn Green Drones
+            DroneFactory.StartCoroutine(GenerateLevel12GreenDrones(4f, 9f, 1.2f, Color.cyan, 32, 0.03f, 1.5f, 1, 16));
         }
 
-        private IEnumerator GreenDronesLevel12(float delay, float speed, float size)
+        private IEnumerator GenerateLevel12GreenDrones(float delay, float speed, float size, Color color, int initialDroneCount, float reduceDelay, float minDelay, int droneIncrease, int maxDrones)
         {
+            var droneCount = 0;
+
             while (true)
             {
-                var droneCount = 0;
-                DroneFactory.SpawnDrones(new StraightFlying360Drone(speed, size, Color.green, 24 + droneCount, true, 0.2f));
-                DroneFactory.SpawnDrones(new StraightFlying360Drone(speed, size, Color.green, 24 + droneCount, false, 0.2f));
+                DroneFactory.SpawnDrones(new StraightFlying360Drone(speed, size, color, initialDroneCount + droneCount, 5f), area: BoundariesSLA.FlyingSla, posDelegate: DroneStartPosition.GetRandomBottomSector);
+                DroneFactory.SpawnDrones(new StraightFlying360Drone(speed, size, color, initialDroneCount + droneCount, 5f), area: BoundariesSLA.FlyingSla, posDelegate: DroneStartPosition.GetRandomTopSector);
                 yield return new WaitForSeconds(delay);
-                if (delay > 1.5f) { delay -= delay * 0.03f; }
-                if (droneCount < 24) { droneCount += 2; }
+                if (delay > minDelay) { delay -= delay * reduceDelay; }
+                if (droneCount < maxDrones) { droneCount += droneIncrease; }
             }
         }
     }

@@ -3,7 +3,7 @@ using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.Drones
 {
-    class StraightFlyingOnewayDrone : ADrone
+    public class StraightFlyingOnewayDrone : ADrone
     {
         protected readonly Vector3 Position;
         protected readonly float Direction;
@@ -14,7 +14,7 @@ namespace Assets.Scripts.Drones
             Direction = direction;
         }
 
-        public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded)
+        public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null)
         {
             return Object.Instantiate(factory.FlyingOnewayDrone, Position, Quaternion.Euler(0, Direction, 0));
         }
