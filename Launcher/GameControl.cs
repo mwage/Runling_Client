@@ -7,13 +7,14 @@ namespace Assets.Scripts.Launcher
 
         public static GameControl control;
 
-        public static bool dead = true;                 //to set Player to dead/alive 
-        public static bool gameActive = false;          //if a game is ongoing
-        public static int currentLevel = 0;             //current active level
-        public static float moveSpeed = 0;              //movespeed of your character
+        public static bool Dead = true;                 //to set Player to dead/alive 
+        public static bool GameActive = false;          //if a game is ongoing
+        public static int CurrentLevel = 0;             //current active level
+        public static float MoveSpeed = 0;              //movespeed of your character
 
-        public static bool IsAutoclicking = false;
+        public static bool AutoClickerActive = false;
         public static bool IsInvulnerable = false;
+        public static bool GodModeActive = false;
 
         //Keep Game Manager active and destroy any additional copys
         private void Awake()

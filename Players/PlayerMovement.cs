@@ -22,10 +22,12 @@ namespace Assets.Scripts.Players
         private float _stopSensitivity;
         private bool _accelerate;
         private bool _stop;
+        private bool _isAutoClicking;
+        private int _defLayer;
         private Rigidbody _rb;
         private Coroutine _autoClickRoutine;
 
-        void Start()
+        private void Start()
         {
             _rb = GetComponent<Rigidbody>();
             _targetPos = transform.position;
@@ -37,44 +39,30 @@ namespace Assets.Scripts.Players
             _stop = true;
             _highestSpeedReached = 0;
             _stopSensitivity = 20;
-
-            if (GameControl.IsAutoclicking)
-                _autoClickRoutine = StartCoroutine(DoAutoclick());
+            _defLayer = (1 << 0);
+            _isAutoClicking = false;
         }
 
         private void Update()
         {
-            // Press Tab to start autoclicking
-            if (Input.GetKeyDown(KeyCode.LeftControl))
+            if (GameControl.AutoClickerActive)
             {
-                if (!GameControl.IsAutoclicking)
+                if (!_isAutoClicking)
                 {
-                    GameControl.IsAutoclicking = true;
                     _autoClickRoutine = StartCoroutine(DoAutoclick());
+                    _isAutoClicking = true;
                 }
             }
 
-            // Press backquote to stop autoclicking
-            if (Input.GetKeyDown(KeyCode.LeftAlt))
+            if (!GameControl.AutoClickerActive)
             {
-                if (GameControl.IsAutoclicking)
+                if (_isAutoClicking)
                 {
-                    GameControl.IsAutoclicking = false;
                     StopCoroutine(_autoClickRoutine);
+                    _isAutoClicking = false;
                 }
             }
 
-            // Press 1 to be invulnerable
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                GameControl.IsInvulnerable = true;
-            }
-
-            // Press 2 to be vulnerable
-            if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                GameControl.IsInvulnerable = false;
-            }
 
             // On right mouseclick, set new target location
             if (Input.GetMouseButtonDown(1))
@@ -97,11 +85,10 @@ namespace Assets.Scripts.Players
             RaycastHit hit;
             var ray = Camera.main.ScreenPointToRay(position);
 
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, _defLayer))
             {
-                _maxSpeed = GameControl.moveSpeed;
+                _maxSpeed = GameControl.MoveSpeed;
                 _clickPos = hit.point;
-                _clickPos.y = 0;
                 if ((_clickPos - transform.position).magnitude > 0.05f)
                 {
                     _targetPos = _clickPos;
@@ -152,7 +139,6 @@ namespace Assets.Scripts.Players
                 {
                     _currentSpeed = _maxSpeed;
                     _rb.velocity = _direction * _currentSpeed;
-                    _accelerate = false;
                     _highestSpeedReached = _currentSpeed;
                 }
             }

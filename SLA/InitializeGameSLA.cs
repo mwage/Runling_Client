@@ -22,7 +22,7 @@ namespace Assets.Scripts.SLA
         public GameObject CurrentPrWindow;
         public GameObject NewPlayer;
         public Text CurrentPr;
-        TextMeshProUGUI levelText;
+        private TextMeshProUGUI _levelText;
 
 
         //set Spawnimmunity once game starts
@@ -34,13 +34,13 @@ namespace Assets.Scripts.SLA
         IEnumerator PrepareLevel()
         {
             // Set current Level and movespeed
-            GameControl.currentLevel++;
-            GameControl.moveSpeed = LevelManagerSla.GetMovementSpeed(GameControl.currentLevel);
+            GameControl.CurrentLevel++;
+            GameControl.MoveSpeed = LevelManagerSla.GetMovementSpeed(GameControl.CurrentLevel);
             
             // Show level highscore and current level
-            CurrentPr.text = HighScoreSLA.highScoreSLA[GameControl.currentLevel].ToString();
-            levelText = LevelTextObject.GetComponent<TextMeshProUGUI>();
-            levelText.text = "Level " + GameControl.currentLevel;
+            CurrentPr.text = HighScoreSLA.highScoreSLA[GameControl.CurrentLevel].ToString();
+            _levelText = LevelTextObject.GetComponent<TextMeshProUGUI>();
+            _levelText.text = "Level " + GameControl.CurrentLevel;
             LevelTextObject.SetActive(true);
             CurrentPrWindow.SetActive(true);
             yield return new WaitForSeconds(2f);
@@ -51,11 +51,10 @@ namespace Assets.Scripts.SLA
             // Load drones and player
 
             NewPlayer = Instantiate(Player);
-            var trigger = NewPlayer.transform.FindChild("Trigger");
-            trigger.gameObject.SetActive(false);
-            GameControl.dead = false;
+            GameControl.Dead = false;
+            GameControl.IsInvulnerable = true;
             ControlSla.StopUpdate = false;
-            LevelManagerSla.LoadDrones(GameControl.currentLevel);
+            LevelManagerSla.LoadDrones(GameControl.CurrentLevel);
 
             // Countdown
             Text3.SetActive(true);
@@ -68,7 +67,7 @@ namespace Assets.Scripts.SLA
             yield return new WaitForSeconds(1f);
             Text1.SetActive(false);
 
-            trigger.gameObject.SetActive(true);
+            GameControl.IsInvulnerable = false;
             ScoreSla.StartScore();
 
         }

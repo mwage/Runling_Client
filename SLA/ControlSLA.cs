@@ -24,7 +24,7 @@ namespace Assets.Scripts.SLA
         //update when dead
         private void Update()
         {
-            if (GameControl.dead && !StopUpdate)
+            if (GameControl.Dead && !StopUpdate)
             {
                 DeathSla.Death();
 
@@ -36,6 +36,33 @@ namespace Assets.Scripts.SLA
 
                 //dont repeat above once player dead
                 StopUpdate = true;
+            }
+
+
+            // Press Ctrl to start autoclicking
+            if (Input.GetKeyDown(KeyCode.LeftControl))
+            {
+                if (!GameControl.AutoClickerActive)
+                    GameControl.AutoClickerActive = true;
+            }
+
+            // Press Alt to stop autoclicking
+            if (Input.GetKeyDown(KeyCode.LeftAlt))
+            {
+                if (GameControl.AutoClickerActive)
+                    GameControl.AutoClickerActive = false;
+            }
+
+            // Press 1 to be invulnerable
+            if (Input.GetKeyDown(KeyCode.Alpha1) && !GameControl.GodModeActive)
+            {
+                GameControl.GodModeActive = true;
+            }
+
+            // Press 2 to be vulnerable
+            if (Input.GetKeyDown(KeyCode.Alpha2) && GameControl.GodModeActive)
+            {
+                GameControl.GodModeActive = false;
             }
         }
     }

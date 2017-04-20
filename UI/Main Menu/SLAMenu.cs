@@ -16,10 +16,10 @@ namespace Assets.Scripts.UI.Main_Menu
 
         public void StartGame()
         {
-            GameControl.gameActive = true;
-            GameControl.dead = true;
+            GameControl.GameActive = true;
+            GameControl.Dead = true;
             HighScoreSLA.totalScoreSLA = 0;
-            GameControl.currentLevel = 0;
+            GameControl.CurrentLevel = 0;
 
             SceneManager.LoadScene("SLA");
         }

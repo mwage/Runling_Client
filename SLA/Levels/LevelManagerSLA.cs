@@ -71,7 +71,7 @@ public class LevelManagerSLA : MonoBehaviour {
     //Load next level or end game
     public void EndLevel(float delay)
     {
-        StartCoroutine((GameControl.currentLevel == _levels.Count) ? EndGameSLA(delay) : NextLevel(delay));
+        StartCoroutine((GameControl.CurrentLevel == _levels.Count) ? EndGameSLA(delay) : NextLevel(delay));
     }
 
     //load in all but the last level

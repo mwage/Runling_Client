@@ -29,10 +29,10 @@ namespace Assets.Scripts.UI.SLA_Menu
 
         public void RestartGame()
         {
-            GameControl.gameActive = true;
-            GameControl.dead = true;
+            GameControl.GameActive = true;
+            GameControl.Dead = true;
             HighScoreSLA.totalScoreSLA = 0;
-            GameControl.currentLevel = 0;
+            GameControl.CurrentLevel = 0;
             Time.timeScale = 1;
 
             SceneManager.LoadScene("SLA");
@@ -47,7 +47,7 @@ namespace Assets.Scripts.UI.SLA_Menu
 
         public void BackToMenu()
         {
-            GameControl.gameActive = false;
+            GameControl.GameActive = false;
             Time.timeScale = 1;
             SceneManager.LoadScene("MainMenu");
         }

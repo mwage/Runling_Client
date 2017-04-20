@@ -75,7 +75,7 @@ namespace Assets.Scripts.Drones
                 }
 
                 yield return new WaitForSeconds(0.02f);
-            } while (!GameControl.dead);
+            } while (!GameControl.Dead);
 
             rb.velocity = Vector3.zero;
             chaserDrone.SetActive(false);

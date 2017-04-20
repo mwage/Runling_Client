@@ -46,16 +46,17 @@ namespace Assets.Scripts.SLA
 
         public void BackToMenu()
         {
-            GameControl.gameActive = false;
+            GameControl.GameActive = false;
             SceneManager.LoadScene("MainMenu");
         }
 
         public void RestartGame()
         {
-            GameControl.gameActive = true;
-            GameControl.dead = true;
+            GameControl.GameActive = true;
+            GameControl.Dead = true;
+            GameControl.AutoClickerActive = false;
             HighScoreSLA.totalScoreSLA = 0;
-            GameControl.currentLevel = 0;
+            GameControl.CurrentLevel = 0;
 
             SceneManager.LoadScene("SLA");
         }

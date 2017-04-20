@@ -14,7 +14,7 @@ namespace Assets.Scripts.SLA.test
         void Start()
         {
             //Set current Level and movespeed
-            GameControl.moveSpeed = 10f;
+            GameControl.MoveSpeed = 10f;
 
             //load drones and spawn immunity
             _droneTestSLA.LoadDrones();

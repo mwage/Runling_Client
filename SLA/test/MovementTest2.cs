@@ -28,7 +28,7 @@ namespace Assets.Scripts.SLA.test
             acceleration = 150f;
             deceleration = 100f;
             currentSpeed = 0;
-            GameControl.moveSpeed = 20;
+            GameControl.MoveSpeed = 20;
             accelerate = false;
             stop = true;
             highestSpeedReached = 0;
@@ -45,7 +45,7 @@ namespace Assets.Scripts.SLA.test
 
             if (!Physics.Raycast(ray, out hit)) return;
 
-            maxSpeed = GameControl.moveSpeed;
+            maxSpeed = GameControl.MoveSpeed;
             clickPos = hit.point;
             clickPos.y = transform.localScale.x/2;
             Debug.Log(clickPos.y);

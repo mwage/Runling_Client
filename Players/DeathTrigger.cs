@@ -3,12 +3,28 @@ using UnityEngine;
 
 public class DeathTrigger : MonoBehaviour
 {
-    //death trigger
-    void OnTriggerEnter(Collider other)
+    // Ttrigger
+    void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Enemy" && !GameControl.IsInvulnerable)
+        // Death Trigger
+        if (other.tag == "Enemy" && !GameControl.IsInvulnerable && !GameControl.GodModeActive)
         {
-            GameControl.dead = true;
+            GameControl.Dead = true;
+        }
+
+        // Enter Safezone
+        if (other.tag == "SafeZone"&& !GameControl.IsInvulnerable)
+        {
+            GameControl.IsInvulnerable = true;
+        }
+    }
+
+    // Leave Safezone
+    void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "SafeZone")
+        {
+            GameControl.IsInvulnerable = false;
         }
     }
 }

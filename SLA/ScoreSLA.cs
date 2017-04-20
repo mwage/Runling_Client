@@ -31,7 +31,7 @@ namespace Assets.Scripts.SLA
     
         IEnumerator AddScore()
         {
-            while (GameControl.dead == false)
+            while (GameControl.Dead == false)
             {
                 CurrentScore += 2;
                 HighScoreSLA.totalScoreSLA += 2;
@@ -52,11 +52,11 @@ namespace Assets.Scripts.SLA
         //Checks for a new highscore and saves it
         public void SetLevelHighScore()
         {
-            if (CurrentScore > HighScoreSLA.highScoreSLA[GameControl.currentLevel])
+            if (CurrentScore > HighScoreSLA.highScoreSLA[GameControl.CurrentLevel])
             {
                 NewHighScoreSLA();
-                HighScoreSLA.highScoreSLA[GameControl.currentLevel] = CurrentScore;
-                PlayerPrefs.SetInt("HighScoreSLA" + GameControl.currentLevel, HighScoreSLA.highScoreSLA[GameControl.currentLevel]);
+                HighScoreSLA.highScoreSLA[GameControl.CurrentLevel] = CurrentScore;
+                PlayerPrefs.SetInt("HighScoreSLA" + GameControl.CurrentLevel, HighScoreSLA.highScoreSLA[GameControl.CurrentLevel]);
             }
         }
 

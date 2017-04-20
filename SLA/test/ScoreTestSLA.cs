@@ -28,7 +28,7 @@ namespace Assets.Scripts.SLA.test
 
         private IEnumerator AddScore()
         {
-            while (GameControl.dead == false)
+            while (GameControl.Dead == false)
             {
                 currentScore += 2;
                 currentScoreText.text = currentScore.ToString();
