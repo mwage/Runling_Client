@@ -1,57 +1,114 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
+using Assets.Scripts.Launcher;
+using Assets.Scripts.SLA;
+
 
 namespace Assets.Scripts.UI.SLA_Menu
 {
     public class HighScoreMenuSLA : MonoBehaviour {
 
-        public GameObject menu;
+        public GameObject Menu;
+        public GameObject ScorePrefab;
+        public GameObject Background;
+        public ScoreSLA ScoreSLA;
+        
 
-        public bool highScoreMenuActive;
-
-        public Text hSTextSLA1;
-        public Text hSTextSLA2;
-        public Text hSTextSLA3;
-        public Text hSTextSLA4;
-        public Text hSTextSLA5;
-        public Text hSTextSLA6;
-        public Text hSTextSLA7;
-        public Text hSTextSLA8;
-        public Text hSTextSLA9;
-        public Text hSTextSLA10;
-        public Text hSTextSLA11;
-        public Text hSTextSLA12;
-        public Text hSTextSLA13;
-
-        public Text hSTextSLAGame;
-        public Text hSTextSLACombined;
+        public bool HighScoreMenuActive;
+        private GameObject _descriptionText;
+        private GameObject[] _levelScore = new GameObject[LevelManagerSLA.NumLevels];
+        private GameObject _gameScore;
+        private GameObject _combinedScore;
 
 
-        public void Awake()
+        private void Awake()
         {
-            hSTextSLA1.text = HighScoreSLA.highScoreSLA[1].ToString();
-            hSTextSLA2.text = HighScoreSLA.highScoreSLA[2].ToString();
-            hSTextSLA3.text = HighScoreSLA.highScoreSLA[3].ToString();
-            hSTextSLA4.text = HighScoreSLA.highScoreSLA[4].ToString();
-            hSTextSLA5.text = HighScoreSLA.highScoreSLA[5].ToString();
-            hSTextSLA6.text = HighScoreSLA.highScoreSLA[6].ToString();
-            hSTextSLA7.text = HighScoreSLA.highScoreSLA[7].ToString();
-            hSTextSLA8.text = HighScoreSLA.highScoreSLA[8].ToString();
-            hSTextSLA9.text = HighScoreSLA.highScoreSLA[9].ToString();
-            hSTextSLA10.text = HighScoreSLA.highScoreSLA[10].ToString();
-            hSTextSLA11.text = HighScoreSLA.highScoreSLA[11].ToString();
-            hSTextSLA12.text = HighScoreSLA.highScoreSLA[12].ToString();
-            hSTextSLA13.text = HighScoreSLA.highScoreSLA[13].ToString();
-
-            hSTextSLAGame.text = HighScoreSLA.highScoreSLA[0].ToString();
-            hSTextSLACombined.text = HighScoreSLA.highScoreSLA[14].ToString();
+            CreateTextObjects(Background);
         }
+
+        private void OnEnable()
+        {
+            SetNumbers();
+        }
+
+        public void CreateTextObjects(GameObject background)
+        {
+
+
+            // Descriptions
+            _descriptionText = Instantiate(ScorePrefab, background.transform);
+            _descriptionText.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Level";
+            _descriptionText.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "Cur:";
+            _descriptionText.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "PB:";
+            _descriptionText.GetComponent<RectTransform>().sizeDelta = new Vector2(50, 20);
+            for (var i = 0; i < 3; i++)
+            {
+                _descriptionText.transform.GetChild(i).GetComponent<RectTransform>().sizeDelta = new Vector2(50, 20);
+            }
+
+            // Level Highscores
+            for (var i = 0; i < LevelManagerSLA.NumLevels; i++)
+            {
+                _levelScore[i] = Instantiate(ScorePrefab, background.transform);
+                _levelScore[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = (i + 1).ToString();
+            }
+
+            // Game Score
+            _gameScore = Instantiate(ScorePrefab, background.transform);
+            _gameScore.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Game";
+            _gameScore.GetComponent<RectTransform>().sizeDelta = new Vector2(60, 20);
+            _gameScore.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(60, 20);
+
+            // Combined Score
+            _combinedScore = Instantiate(ScorePrefab, background.transform);
+            _combinedScore.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Combined";
+            _combinedScore.GetComponent<RectTransform>().sizeDelta = new Vector2(80, 20);
+            _combinedScore.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(80, 20);
+
+            if (!GameControl.GameActive)
+            {
+                _descriptionText.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
+                _descriptionText.transform.GetChild(2).GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 15);
+                _gameScore.transform.GetChild(2).GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 15);
+                _combinedScore.transform.GetChild(2).GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 15);
+                for (var i = 0; i < LevelManagerSLA.NumLevels; i++)
+                {
+                    _levelScore[i].transform.GetChild(2).GetComponent<RectTransform>().anchoredPosition +=
+                        new Vector2(0, 15);
+                }
+            }
+        }
+
+        public void SetNumbers()
+        {
+            // Show ´highscores
+            for (var i = 0; i < LevelManagerSLA.NumLevels; i++)
+            {
+                _levelScore[i].transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = HighScoreSLA.highScoreSLA[i + 1].ToString();
+            }
+
+            _gameScore.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = HighScoreSLA.highScoreSLA[0].ToString();
+            _combinedScore.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = HighScoreSLA.highScoreSLA[14].ToString();
+
+            // current game scores
+            if (GameControl.GameActive)
+            {
+                for (var i = 0; i < LevelManagerSLA.NumLevels; i++)
+                {
+                    _levelScore[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = ScoreSLA.LevelScoreCurGame[i].ToString();
+                }
+
+                _gameScore.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = GameControl.TotalScore.ToString();
+                _combinedScore.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
+            }
+        }
+        
 
         public void Back()
         {
-            highScoreMenuActive = false;
+            HighScoreMenuActive = false;
             gameObject.SetActive(false);
-            menu.gameObject.SetActive(true);
+            Menu.gameObject.SetActive(true);
         }
     }
 }

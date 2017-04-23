@@ -4,15 +4,15 @@ namespace Assets.Scripts.UI
 {
     public class OptionsMenu : MonoBehaviour {
 
-        public GameObject menu;
+        public GameObject Menu;
 
-        public bool optionsMenuActive;
+        public bool OptionsMenuActive;
 
         public void BackToMenu()
         {
-            optionsMenuActive = false;
+            OptionsMenuActive = false;
             gameObject.SetActive(false);
-            menu.gameObject.SetActive(true);
+            Menu.gameObject.SetActive(true);
         }
     }
 }

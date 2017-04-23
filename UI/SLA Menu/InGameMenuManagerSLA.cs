@@ -5,33 +5,33 @@ using UnityEngine;
 
 public class InGameMenuManagerSLA : MonoBehaviour
 {
-    public InGameMenuSLA _inGameMenu;
-    public ControlSLA _controlSLA;
-    public OptionsMenu _optionsMenu;
-    public HighScoreMenuSLA _highScoreMenuSLA;
+    public InGameMenuSLA InGameMenu;
+    public ControlSLA ControlSLA;
+    public OptionsMenu OptionsMenu;
+    public HighScoreMenuSLA HighScoreMenuSLA;
 
-    public GameObject inGameMenu;
-    public GameObject optionsMenu;
-    public GameObject highScoreMenu;
-    public GameObject winScreen;
-    public GameObject pauseScreen;
+    public GameObject InGameMenuObject;
+    public GameObject OptionsMenuObject;
+    public GameObject HighScoreMenuObject;
+    public GameObject WinScreen;
+    public GameObject PauseScreen;
 
-    public bool menuOn;
-    bool pause;
+    public bool MenuOn;
+    private bool _pause;
 
     private void Awake()
     {
-        menuOn = false;
-        _optionsMenu.optionsMenuActive = false;
-        _highScoreMenuSLA.highScoreMenuActive = false;
-        pause = false;
+        MenuOn = false;
+        OptionsMenu.OptionsMenuActive = false;
+        HighScoreMenuSLA.HighScoreMenuActive = false;
+        _pause = false;
     }
 
     public void CloseMenus()
     {
-        inGameMenu.SetActive(false);
-        optionsMenu.SetActive(false);
-        highScoreMenu.SetActive(false);
+        InGameMenuObject.SetActive(false);
+        OptionsMenuObject.SetActive(false);
+        HighScoreMenuObject.SetActive(false);
     }
 
     void Update()
@@ -39,46 +39,46 @@ public class InGameMenuManagerSLA : MonoBehaviour
         // Navigate menu with esc
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (!menuOn && !winScreen.gameObject.activeSelf)
+            if (!MenuOn && !WinScreen.gameObject.activeSelf)
             {
-                inGameMenu.SetActive(true);
+                InGameMenuObject.SetActive(true);
                 Time.timeScale = 0;
-                menuOn = true;
+                MenuOn = true;
             }
-            else if (menuOn == true && _optionsMenu.optionsMenuActive)
+            else if (MenuOn == true && OptionsMenu.OptionsMenuActive)
             {
-                optionsMenu.SetActive(false);
-                _optionsMenu.optionsMenuActive = false;
-                inGameMenu.SetActive(true);
+                OptionsMenuObject.SetActive(false);
+                OptionsMenu.OptionsMenuActive = false;
+                InGameMenuObject.SetActive(true);
             }
-            else if (menuOn == true && _highScoreMenuSLA.highScoreMenuActive)
+            else if (MenuOn == true && HighScoreMenuSLA.HighScoreMenuActive)
             {
-                highScoreMenu.SetActive(false);
-                _highScoreMenuSLA.highScoreMenuActive = false;
-                inGameMenu.SetActive(true);
+                HighScoreMenuObject.SetActive(false);
+                HighScoreMenuSLA.HighScoreMenuActive = false;
+                InGameMenuObject.SetActive(true);
             }
             else
             {
-                inGameMenu.SetActive(false);
+                InGameMenuObject.SetActive(false);
                 Time.timeScale = 1;
-                menuOn = false;
+                MenuOn = false;
             }
         }
 
         //pause game
         if (Input.GetKeyDown(KeyCode.Pause))
         {
-            if (!pause)
+            if (!_pause)
             {
                 Time.timeScale = 0;
-                pause = true;
-                pauseScreen.SetActive(true);
+                _pause = true;
+                PauseScreen.SetActive(true);
             }
-            else if (pause)
+            else if (_pause)
             {
                 Time.timeScale = 1;
-                pause = false;
-                pauseScreen.SetActive(false);
+                _pause = false;
+                PauseScreen.SetActive(false);
             }
         }
     }

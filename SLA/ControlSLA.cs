@@ -17,8 +17,9 @@ namespace Assets.Scripts.SLA
         {
             // Set current Level and movespeed, load drones and spawn immunity
             StopUpdate = true;
+            GameControl.GameActive = true;
+            GameControl.CurrentLevel = 1;
             InitializeGameSla.InitializeGame();
-            //GameControl.currentLevel = 10;
         }
 
         //update when dead
@@ -29,7 +30,7 @@ namespace Assets.Scripts.SLA
                 DeathSla.Death();
 
                 //in case of highscore, save and 
-                ScoreSla.SetLevelHighScore();
+                ScoreSla.SetHighScore();
 
                 //change level
                 LevelManager.EndLevel(3f);

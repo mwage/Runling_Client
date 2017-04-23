@@ -6,33 +6,32 @@ namespace Assets.Scripts.UI.SLA_Menu
 {
     public class InGameMenuSLA : MonoBehaviour {
 
-        public GameObject inGameMenu;
-        public GameObject optionsMenu;
-        public GameObject highScoreMenu;
-        public InGameMenuManagerSLA _inGameMenuManagerSLA;
-        public OptionsMenu _optionsMenu;
-        public HighScoreMenuSLA _highScoreMenuSLA;
+        public GameObject InGameMenuObject;
+        public GameObject OptionsMenuObject;
+        public GameObject HighScoreMenuObject;
+        public InGameMenuManagerSLA InGameMenuManagerSla;
+        public OptionsMenu OptionsMenu;
+        public HighScoreMenuSLA HighScoreMenuSLA;
 
         public void BackToGame()
         {
             gameObject.SetActive(false);
-            _inGameMenuManagerSLA.menuOn = false;
+            InGameMenuManagerSla.MenuOn = false;
             Time.timeScale = 1;
         }
 
         public void HighScores()
         {
             gameObject.SetActive(false);
-            highScoreMenu.gameObject.SetActive(true);
-            _highScoreMenuSLA.highScoreMenuActive = true;
+            HighScoreMenuObject.gameObject.SetActive(true);
+            HighScoreMenuSLA.HighScoreMenuActive = true;
         }
 
         public void RestartGame()
         {
-            GameControl.GameActive = true;
             GameControl.Dead = true;
-            HighScoreSLA.totalScoreSLA = 0;
-            GameControl.CurrentLevel = 0;
+            GameControl.TotalScore = 0;
+            GameControl.AutoClickerActive = false;
             Time.timeScale = 1;
 
             SceneManager.LoadScene("SLA");
@@ -40,9 +39,9 @@ namespace Assets.Scripts.UI.SLA_Menu
 
         public void Options()
         {
-            inGameMenu.gameObject.SetActive(false);
-            optionsMenu.gameObject.SetActive(true);
-            _optionsMenu.optionsMenuActive = true;
+            InGameMenuObject.gameObject.SetActive(false);
+            OptionsMenuObject.gameObject.SetActive(true);
+            OptionsMenu.OptionsMenuActive = true;
         }
 
         public void BackToMenu()

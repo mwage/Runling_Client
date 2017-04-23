@@ -14,16 +14,14 @@ namespace Assets.Scripts.SLA
         public ControlSLA ControlSla;
         public InGameMenuManagerSLA InGameMenuManagerSla;
 
-        public GameObject Player;
+        public GameObject PlayerPrefab;
         public GameObject LevelTextObject;
-        public GameObject Text3;
-        public GameObject Text2;
-        public GameObject Text1;
+        public GameObject CountdownPrefab;
         public GameObject CurrentPrWindow;
-        public GameObject NewPlayer;
+        public GameObject Player;
         public Text CurrentPr;
-        private TextMeshProUGUI _levelText;
 
+        
 
         //set Spawnimmunity once game starts
         public void InitializeGame()
@@ -34,13 +32,12 @@ namespace Assets.Scripts.SLA
         IEnumerator PrepareLevel()
         {
             // Set current Level and movespeed
-            GameControl.CurrentLevel++;
             GameControl.MoveSpeed = LevelManagerSla.GetMovementSpeed(GameControl.CurrentLevel);
             
             // Show level highscore and current level
             CurrentPr.text = HighScoreSLA.highScoreSLA[GameControl.CurrentLevel].ToString();
-            _levelText = LevelTextObject.GetComponent<TextMeshProUGUI>();
-            _levelText.text = "Level " + GameControl.CurrentLevel;
+            var levelText = LevelTextObject.GetComponent<TextMeshProUGUI>();
+            levelText.text = "Level " + GameControl.CurrentLevel;
             LevelTextObject.SetActive(true);
             CurrentPrWindow.SetActive(true);
             yield return new WaitForSeconds(2f);
@@ -50,26 +47,24 @@ namespace Assets.Scripts.SLA
 
             // Load drones and player
 
-            NewPlayer = Instantiate(Player);
+            Player = Instantiate(PlayerPrefab);
             GameControl.Dead = false;
             GameControl.IsInvulnerable = true;
             ControlSla.StopUpdate = false;
             LevelManagerSla.LoadDrones(GameControl.CurrentLevel);
-
+            
             // Countdown
-            Text3.SetActive(true);
-            yield return new WaitForSeconds(1f);
-            Text3.SetActive(false);
-            Text2.SetActive(true);
-            yield return new WaitForSeconds(1f);
-            Text2.SetActive(false);
-            Text1.SetActive(true);
-            yield return new WaitForSeconds(1f);
-            Text1.SetActive(false);
-
+            for (var i = 0; i < 3; i++)
+            {
+                var countdown = Instantiate(CountdownPrefab, GameObject.Find("ScoreCanvas").transform);
+                countdown.GetComponent<TextMeshProUGUI>().text = (3 - i).ToString();
+                yield return new WaitForSeconds(1f);
+                Destroy(countdown);
+            }
+            
             GameControl.IsInvulnerable = false;
             ScoreSla.StartScore();
-
+            
         }
     }
 }

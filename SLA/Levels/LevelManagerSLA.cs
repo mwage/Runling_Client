@@ -85,18 +85,15 @@ public class LevelManagerSLA : MonoBehaviour {
         {
             Destroy(t);
         }
-        Destroy(InitializeGameSLA.NewPlayer);
+        Destroy(InitializeGameSLA.Player);
         Score.CurrentScoreText.text = "0";
+        GameControl.CurrentLevel++;
         InitializeGameSLA.InitializeGame();
     }
 
     //load after the last level
     private IEnumerator EndGameSLA(float delay)
     {                
-        //check/set highscores
-        Score.SetGameHighScore();
-        Score.SetCombinedScore();
-                
         //load win screen
         yield return new WaitForSeconds(delay);
         Score.HighScore.SetActive(false);

@@ -7,19 +7,18 @@ namespace Assets.Scripts.UI.Main_Menu
 {
     public class SLAMenu : MonoBehaviour {
 
-        public HighScoreMenuSLA _highScoreMenuSLA;
+        public HighScoreMenuSLA HighScoreMenuSLA;
 
-        public GameObject mainMenu;
-        public GameObject highScoreMenu;
+        public GameObject MainMenu;
+        public GameObject HighScoreMenu;
 
         public bool SLAMenuActive;
 
         public void StartGame()
         {
-            GameControl.GameActive = true;
             GameControl.Dead = true;
-            HighScoreSLA.totalScoreSLA = 0;
-            GameControl.CurrentLevel = 0;
+            GameControl.TotalScore = 0;
+            GameControl.CurrentLevel = 1;
 
             SceneManager.LoadScene("SLA");
         }
@@ -28,15 +27,15 @@ namespace Assets.Scripts.UI.Main_Menu
         {
             gameObject.SetActive(false);
             SLAMenuActive = false;
-            highScoreMenu.gameObject.SetActive(true);
-            _highScoreMenuSLA.highScoreMenuActive = true;
+            HighScoreMenu.gameObject.SetActive(true);
+            HighScoreMenuSLA.HighScoreMenuActive = true;
         }
 
         public void BackToMenu()
         {
             SLAMenuActive = false;
             gameObject.SetActive(false);
-            mainMenu.gameObject.SetActive(true);
+            MainMenu.gameObject.SetActive(true);
         }
     }
 }

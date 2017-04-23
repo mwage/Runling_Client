@@ -9,7 +9,7 @@ namespace Assets.Scripts.SLA
         //events following Deathtrigger
         public void Death()
         {
-            _initializeGameSLA.NewPlayer.SetActive(false);
+            _initializeGameSLA.Player.SetActive(false);
         }
     }
 }

@@ -3,23 +3,24 @@ using UnityEngine;
 
 namespace Assets.Scripts.UI.Main_Menu
 {
-    public class MainMenuManager : MonoBehaviour {
+    public class MainMenuManager : MonoBehaviour
+    {
 
-        public MainMenu _mainMenu;
-        public OptionsMenu _optionsMenu;
-        public SLAMenu _sLAMenu;
-        public HighScoreMenuSLA _highScoreMenuSLA;
+        public MainMenu MainMenu;
+        public OptionsMenu OptionsMenu;
+        public SLAMenu SLAMenu;
+        public HighScoreMenuSLA HighScoreMenuSLA;
 
-        public GameObject mainMenu;
-        public GameObject optionsMenu;
-        public GameObject sLAMenu;
-        public GameObject highScoreMenu;
+        public GameObject MainMenuObject;
+        public GameObject OptionsMenuObject;
+        public GameObject SLAMenuObject;
+        public GameObject HighScoreMenuObject;
  
         private void Awake()
         {
-            _optionsMenu.optionsMenuActive = false;
-            _sLAMenu.SLAMenuActive = false;
-            _highScoreMenuSLA.highScoreMenuActive = false;
+            OptionsMenu.OptionsMenuActive = false;
+            SLAMenu.SLAMenuActive = false;
+            HighScoreMenuSLA.HighScoreMenuActive = false;
         }
 
         void Update()
@@ -27,24 +28,24 @@ namespace Assets.Scripts.UI.Main_Menu
             if (Input.GetKeyDown(KeyCode.Escape))
             {
 
-                if (_optionsMenu.optionsMenuActive)
+                if (OptionsMenu.OptionsMenuActive)
                 {
-                    optionsMenu.SetActive(false);
-                    _optionsMenu.optionsMenuActive = false;
-                    mainMenu.SetActive(true);
+                    OptionsMenuObject.SetActive(false);
+                    OptionsMenu.OptionsMenuActive = false;
+                    MainMenuObject.SetActive(true);
                 }
-                else if (_sLAMenu.SLAMenuActive)
+                else if (SLAMenu.SLAMenuActive)
                 {
-                    sLAMenu.SetActive(false);
-                    _sLAMenu.SLAMenuActive = false;
-                    mainMenu.SetActive(true);
+                    SLAMenuObject.SetActive(false);
+                    SLAMenu.SLAMenuActive = false;
+                    MainMenuObject.SetActive(true);
                 }
-                else if (_highScoreMenuSLA.highScoreMenuActive)
+                else if (HighScoreMenuSLA.HighScoreMenuActive)
                 {
-                    highScoreMenu.SetActive(false);
-                    _highScoreMenuSLA.highScoreMenuActive = false;
-                    sLAMenu.SetActive(true);
-                    _sLAMenu.SLAMenuActive = true;
+                    HighScoreMenuObject.SetActive(false);
+                    HighScoreMenuSLA.HighScoreMenuActive = false;
+                    SLAMenuObject.SetActive(true);
+                    SLAMenu.SLAMenuActive = true;
                 }
             }
         }

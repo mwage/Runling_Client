@@ -4,7 +4,7 @@ public class HighScoreSLA : MonoBehaviour {
 
     //0 = Game, 1-13 = levels, 14 = combined
     public static int[] highScoreSLA = new int[15];
-    public static int totalScoreSLA = 0;
+
 
     //load old scores
     private void Awake()

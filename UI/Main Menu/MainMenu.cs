@@ -4,23 +4,23 @@ namespace Assets.Scripts.UI.Main_Menu
 {
     public class MainMenu : MonoBehaviour
     {
-        public GameObject optionsMenu;
-        public GameObject SLAMenu;
-        public OptionsMenu _optionsMenu;
-        public SLAMenu _SLAMenu;
+        public GameObject OptionsMenuObject;
+        public GameObject SLAMenuObject;
+        public OptionsMenu OptionsMenu;
+        public SLAMenu SLAMenu;
 
         public void SLA()
         {
             gameObject.SetActive(false);
-            SLAMenu.gameObject.SetActive(true);
-            _SLAMenu.SLAMenuActive = true;
+            SLAMenuObject.gameObject.SetActive(true);
+            SLAMenu.SLAMenuActive = true;
         }
 
         public void Options()
         {
             gameObject.SetActive(false);
-            optionsMenu.gameObject.SetActive(true);
-            _optionsMenu.optionsMenuActive = true;
+            OptionsMenuObject.gameObject.SetActive(true);
+            OptionsMenu.OptionsMenuActive = true;
         }
 
         public void Quit()

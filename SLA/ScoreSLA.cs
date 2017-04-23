@@ -15,17 +15,18 @@ namespace Assets.Scripts.SLA
         public Text CurrentScoreText;
         public Text TotalScoreText;
         public Text NewHighScore;
+        public int[] LevelScoreCurGame = new int[LevelManagerSLA.NumLevels];
 
         private void Awake()
         {
-            TotalScoreText.text = HighScoreSLA.totalScoreSLA.ToString();
+            TotalScoreText.text = GameControl.TotalScore.ToString();
         }
 
         //count current and total score
         public void StartScore()
         {
             CurrentScore = -2;
-            HighScoreSLA.totalScoreSLA -= 2;
+            GameControl.TotalScore -= 2;
             StartCoroutine(AddScore());
         }
     
@@ -34,9 +35,9 @@ namespace Assets.Scripts.SLA
             while (GameControl.Dead == false)
             {
                 CurrentScore += 2;
-                HighScoreSLA.totalScoreSLA += 2;
+                GameControl.TotalScore += 2;
                 CurrentScoreText.text = CurrentScore.ToString();
-                TotalScoreText.text = HighScoreSLA.totalScoreSLA.ToString();
+                TotalScoreText.text = GameControl.TotalScore.ToString();
             
                 yield return new WaitForSeconds(0.25f);
             }
@@ -50,22 +51,28 @@ namespace Assets.Scripts.SLA
         }
 
         //Checks for a new highscore and saves it
-        public void SetLevelHighScore()
+        public void SetHighScore()
         {
+            Debug.Log(GameControl.CurrentLevel);
+            LevelScoreCurGame[GameControl.CurrentLevel - 1] = CurrentScore;
+
             if (CurrentScore > HighScoreSLA.highScoreSLA[GameControl.CurrentLevel])
             {
                 NewHighScoreSLA();
                 HighScoreSLA.highScoreSLA[GameControl.CurrentLevel] = CurrentScore;
                 PlayerPrefs.SetInt("HighScoreSLA" + GameControl.CurrentLevel, HighScoreSLA.highScoreSLA[GameControl.CurrentLevel]);
             }
+
+            SetGameHighScore();
+            SetCombinedScore();
         }
 
         //compare total score to best game and set highscore
         public void SetGameHighScore()
         {
-            if (HighScoreSLA.totalScoreSLA > HighScoreSLA.highScoreSLA[0])
+            if (GameControl.TotalScore > HighScoreSLA.highScoreSLA[0])
             {
-                HighScoreSLA.highScoreSLA[0] = HighScoreSLA.totalScoreSLA;
+                HighScoreSLA.highScoreSLA[0] = GameControl.TotalScore;
             }
             PlayerPrefs.SetInt("HighScoreSLAGame", HighScoreSLA.highScoreSLA[0]);
         }
@@ -80,6 +87,5 @@ namespace Assets.Scripts.SLA
             }
             PlayerPrefs.SetInt("HighScoreSLACombined", HighScoreSLA.highScoreSLA[14]);
         }
-
     }
 }

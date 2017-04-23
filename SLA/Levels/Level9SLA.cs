@@ -21,7 +21,7 @@ namespace Assets.Scripts.SLA.Levels
             DroneFactory.SpawnAndAddDrones(new RandomBouncingDrone(7f, 1.5f, Color.red), 15, 9f, BoundariesSLA.BouncingSla);
 
             // Spawn Chaser Drone
-            var player = Manager.InitializeGameSLA.NewPlayer;
+            var player = Manager.InitializeGameSLA.Player;
             DroneFactory.SpawnDrones(new ChaserDrone(7f, 1.1f, Color.yellow, player));
         
             // Spawn Green Drones

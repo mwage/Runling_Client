@@ -5,12 +5,13 @@ namespace Assets.Scripts.Launcher
 {
     public class GameControl : MonoBehaviour {
 
-        public static GameControl control;
+        public static GameControl Control;
 
         public static bool Dead = true;                 //to set Player to dead/alive 
         public static bool GameActive = false;          //if a game is ongoing
-        public static int CurrentLevel = 0;             //current active level
+        public static int CurrentLevel = 1;             //current active level
         public static float MoveSpeed = 0;              //movespeed of your character
+        public static int TotalScore = 0;
 
         public static bool AutoClickerActive = false;
         public static bool IsInvulnerable = false;
@@ -19,12 +20,12 @@ namespace Assets.Scripts.Launcher
         //Keep Game Manager active and destroy any additional copys
         private void Awake()
         {
-            if (control == null)
+            if (Control == null)
             {
                 DontDestroyOnLoad(gameObject);
-                control = this;
+                Control = this;
             }
-            else if (control != this)
+            else if (Control != this)
             {
                 Destroy(gameObject);
             }
