@@ -4,6 +4,9 @@ namespace Assets.Scripts.SLA.Levels
 {
     public class BoundariesSLA
     {
+
+        // Area declared in Assets.Scripts.Drones.DroneFactory
+        
         public static Area BouncingSla = new Area
         {
             LeftBoundary = -35f,
@@ -20,12 +23,12 @@ namespace Assets.Scripts.SLA.Levels
             BottomBoundary = -20f
         };
 
-        public static Area Test = new Area
+        public static Area BouncingMainMenu = new Area
         {
-            LeftBoundary = -15f,
-            RightBoundary = 15f,
-            TopBoundary = 2f,
-            BottomBoundary = -2f
+            LeftBoundary = -22.5f,
+            RightBoundary = 22.5f,
+            TopBoundary = 10f,
+            BottomBoundary = -10f
         };
     }
 }

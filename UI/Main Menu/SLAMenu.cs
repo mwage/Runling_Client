@@ -1,5 +1,5 @@
 ﻿using Assets.Scripts.Launcher;
-using Assets.Scripts.UI.SLA_Menu;
+using Assets.Scripts.UI.SLA_Menus;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

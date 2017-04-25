@@ -1,9 +1,9 @@
 ﻿using Assets.Scripts.Launcher;
 using UnityEngine;
 
-namespace Assets.Scripts.SLA.test
+namespace Assets.Scripts.Players
 {
-    public class MovementTest2 : MonoBehaviour
+    public class MovementTest : MonoBehaviour
     {
         Vector3 clickPos;
         Vector3 targetPos;
@@ -22,13 +22,13 @@ namespace Assets.Scripts.SLA.test
 
         void Start()
         {
-            rb = this.GetComponent<Rigidbody>();
+            rb = GetComponent<Rigidbody>();
             targetPos = transform.position;
             rotationSpeed = 15f;
-            acceleration = 150f;
+            acceleration = 100f;
             deceleration = 100f;
             currentSpeed = 0;
-            GameControl.MoveSpeed = 20;
+            GameControl.MoveSpeed = 10;
             accelerate = false;
             stop = true;
             highestSpeedReached = 0;
@@ -39,7 +39,6 @@ namespace Assets.Scripts.SLA.test
         {
             // On right mouseclick, set new target location
             if (!Input.GetMouseButtonDown(1)) return;
-
             RaycastHit hit;
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -47,8 +46,7 @@ namespace Assets.Scripts.SLA.test
 
             maxSpeed = GameControl.MoveSpeed;
             clickPos = hit.point;
-            clickPos.y = transform.localScale.x/2;
-            Debug.Log(clickPos.y);
+            clickPos.y = 0;
             if (!((clickPos - transform.position).magnitude > 0.05f)) return;
 
             targetPos = clickPos;

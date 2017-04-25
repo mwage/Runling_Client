@@ -1,10 +1,9 @@
 ﻿using Assets.Scripts.Launcher;
-using Assets.Scripts.UI.SLA_Menu;
+using Assets.Scripts.SLA;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
-namespace Assets.Scripts.SLA
+namespace Assets.Scripts.UI.SLA_Menus
 {
     public class WinSLA : MonoBehaviour
     {

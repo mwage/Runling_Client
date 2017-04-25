@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.UI.SLA_Menu;
+﻿using Assets.Scripts.UI.SLA_Menus;
 using UnityEngine;
 
 namespace Assets.Scripts.UI.Main_Menu

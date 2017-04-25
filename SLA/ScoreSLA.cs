@@ -53,7 +53,6 @@ namespace Assets.Scripts.SLA
         //Checks for a new highscore and saves it
         public void SetHighScore()
         {
-            Debug.Log(GameControl.CurrentLevel);
             LevelScoreCurGame[GameControl.CurrentLevel - 1] = CurrentScore;
 
             if (CurrentScore > HighScoreSLA.highScoreSLA[GameControl.CurrentLevel])

@@ -5,22 +5,19 @@ using Assets.Scripts.Drones;
 using Assets.Scripts.Launcher;
 using Assets.Scripts.SLA;
 using Assets.Scripts.SLA.Levels;
+using Assets.Scripts.UI.SLA_Menus;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
 public class LevelManagerSLA : MonoBehaviour {
 
-    //attach scripts
     public InGameMenuManagerSLA InGameMenuManagerSLA;
     public ScoreSLA Score;
     public InitializeGameSLA InitializeGameSLA;
+    public DroneFactory DroneFactory;
 
     public GameObject Win;
-
-    public DroneFactory DroneFactory;
-    public BoundariesSLA Area;
-
     public static int NumLevels = 13;             //currently last level available in SLA
     private List<ILevelSLA> _levels;
 

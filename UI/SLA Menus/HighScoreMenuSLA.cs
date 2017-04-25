@@ -1,10 +1,9 @@
-﻿using UnityEngine;
-using TMPro;
-using Assets.Scripts.Launcher;
+﻿using Assets.Scripts.Launcher;
 using Assets.Scripts.SLA;
+using TMPro;
+using UnityEngine;
 
-
-namespace Assets.Scripts.UI.SLA_Menu
+namespace Assets.Scripts.UI.SLA_Menus
 {
     public class HighScoreMenuSLA : MonoBehaviour {
 

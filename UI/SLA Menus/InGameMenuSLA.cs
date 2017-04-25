@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Assets.Scripts.UI.SLA_Menu
+namespace Assets.Scripts.UI.SLA_Menus
 {
     public class InGameMenuSLA : MonoBehaviour {
 
