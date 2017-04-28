@@ -6,7 +6,7 @@ namespace Assets.Scripts.UI.Main_Menu
     {
         public GameObject OptionsMenuObject;
         public GameObject SLAMenuObject;
-        public OptionsMenu OptionsMenu;
+        public OptionsMenu.OptionsMenu OptionsMenu;
         public SLAMenu SLAMenu;
 
         public void SLA()

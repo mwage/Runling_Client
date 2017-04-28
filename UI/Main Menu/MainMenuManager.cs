@@ -7,7 +7,7 @@ namespace Assets.Scripts.UI.Main_Menu
     {
 
         public MainMenu MainMenu;
-        public OptionsMenu OptionsMenu;
+        public OptionsMenu.OptionsMenu OptionsMenu;
         public SLAMenu SLAMenu;
         public HighScoreMenuSLA HighScoreMenuSLA;
 

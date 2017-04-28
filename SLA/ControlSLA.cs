@@ -41,27 +41,27 @@ namespace Assets.Scripts.SLA
 
 
             // Press Ctrl to start autoclicking
-            if (Input.GetKeyDown(KeyCode.LeftControl))
+            if (InputManager.GetButtonDown("Activate Autoclicker"))
             {
                 if (!GameControl.AutoClickerActive)
                     GameControl.AutoClickerActive = true;
             }
 
             // Press Alt to stop autoclicking
-            if (Input.GetKeyDown(KeyCode.LeftAlt))
+            if (InputManager.GetButtonDown("Deactivate Autoclicker"))
             {
                 if (GameControl.AutoClickerActive)
                     GameControl.AutoClickerActive = false;
             }
 
-            // Press 1 to be invulnerable
-            if (Input.GetKeyDown(KeyCode.Alpha1) && !GameControl.GodModeActive)
+            // Press 1 to turn on Godmode
+            if (InputManager.GetButtonDown("Activate Godmode") && !GameControl.GodModeActive)
             {
                 GameControl.GodModeActive = true;
             }
 
-            // Press 2 to be vulnerable
-            if (Input.GetKeyDown(KeyCode.Alpha2) && GameControl.GodModeActive)
+            // Press 2 to turn off Godmode
+            if (InputManager.GetButtonDown("Deactivate Autoclicker") && GameControl.GodModeActive)
             {
                 GameControl.GodModeActive = false;
             }

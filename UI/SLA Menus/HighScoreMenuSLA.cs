@@ -80,7 +80,7 @@ namespace Assets.Scripts.UI.SLA_Menus
 
         public void SetNumbers()
         {
-            // Show ´highscores
+            // Show highscores
             for (var i = 0; i < LevelManagerSLA.NumLevels; i++)
             {
                 _levelScore[i].transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = HighScoreSLA.highScoreSLA[i + 1].ToString();
@@ -89,12 +89,18 @@ namespace Assets.Scripts.UI.SLA_Menus
             _gameScore.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = HighScoreSLA.highScoreSLA[0].ToString();
             _combinedScore.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = HighScoreSLA.highScoreSLA[14].ToString();
 
-            // current game scores
+            // Current game scores
             if (GameControl.GameActive)
             {
                 for (var i = 0; i < LevelManagerSLA.NumLevels; i++)
                 {
                     _levelScore[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = ScoreSLA.LevelScoreCurGame[i].ToString();
+
+                    // New records are shown green
+                    if (ScoreSLA.LevelScoreCurGame[i] >= HighScoreSLA.highScoreSLA[i + 1] && ScoreSLA.LevelScoreCurGame[i] != 0)
+                    {
+                        _levelScore[i].transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = Color.green;
+                    }
                 }
 
                 _gameScore.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = GameControl.TotalScore.ToString();

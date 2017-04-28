@@ -64,6 +64,7 @@ namespace Assets.Scripts.SLA
 
             SetGameHighScore();
             SetCombinedScore();
+            PlayerPrefs.Save();
         }
 
         //compare total score to best game and set highscore

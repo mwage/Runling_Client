@@ -1,5 +1,4 @@
 ﻿using Assets.Scripts.SLA;
-using Assets.Scripts.UI.SLA_Menus;
 using UnityEngine;
 
 namespace Assets.Scripts.UI.SLA_Menus
@@ -8,7 +7,7 @@ namespace Assets.Scripts.UI.SLA_Menus
     {
         public InGameMenuSLA InGameMenu;
         public ControlSLA ControlSLA;
-        public OptionsMenu OptionsMenu;
+        public OptionsMenu.OptionsMenu OptionsMenu;
         public HighScoreMenuSLA HighScoreMenuSLA;
 
         public GameObject InGameMenuObject;

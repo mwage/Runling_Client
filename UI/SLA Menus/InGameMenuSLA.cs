@@ -10,7 +10,7 @@ namespace Assets.Scripts.UI.SLA_Menus
         public GameObject OptionsMenuObject;
         public GameObject HighScoreMenuObject;
         public InGameMenuManagerSLA InGameMenuManagerSla;
-        public OptionsMenu OptionsMenu;
+        public OptionsMenu.OptionsMenu OptionsMenu;
         public HighScoreMenuSLA HighScoreMenuSLA;
 
         public void BackToGame()
