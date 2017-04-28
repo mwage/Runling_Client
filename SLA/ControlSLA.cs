@@ -5,6 +5,7 @@ namespace Assets.Scripts.SLA
 {
     public class ControlSLA : MonoBehaviour
     {
+        //attach scripts
         public LevelManagerSLA LevelManager;
         public ScoreSLA ScoreSla;
         public InitializeGameSLA InitializeGameSla;
@@ -17,7 +18,6 @@ namespace Assets.Scripts.SLA
             // Set current Level and movespeed, load drones and spawn immunity
             InputManager.LoadHotkeys();
             StopUpdate = true;
-            GameControl.CameraRange = 15;
             GameControl.GameActive = true;
             GameControl.CurrentLevel = 1;
             InitializeGameSla.InitializeGame();

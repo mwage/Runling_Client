@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
-using Assets.Scripts.Launcher;
 
 public class CameraMovement : MonoBehaviour
 {
 
     public float cameraSpeed;
+
 
 	void Start ()
     {
@@ -22,9 +22,6 @@ public class CameraMovement : MonoBehaviour
         float moveY = inputY * cameraSpeed * Time.deltaTime;
 
         transform.Translate(moveX, moveY, 0f);
-        transform.position = 
-            new Vector3(Mathf.Clamp(transform.position.x, -GameControl.CameraRange, GameControl.CameraRange), 
-            Mathf.Clamp(transform.position.y, 0, 40), 
-            Mathf.Clamp(transform.position.z, -GameControl.CameraRange, GameControl.CameraRange));
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -15, 15), Mathf.Clamp(transform.position.y, 0, 40), Mathf.Clamp(transform.position.z, -15, 15));
     }
 }

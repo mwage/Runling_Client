@@ -66,6 +66,7 @@ namespace Assets.Scripts.UI.OptionsMenu
 
         private void RebindHotkey(string hotkeyName)
         {
+            Debug.Log("Hotkey: " + hotkeyName);
             _hotkeyToRebind = hotkeyName;
         }
 

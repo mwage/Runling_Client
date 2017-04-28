@@ -51,7 +51,6 @@ namespace Assets.Scripts.SLA
             Player = Instantiate(PlayerPrefab);
             GameControl.Dead = false;
             GameControl.IsInvulnerable = true;
-            GameControl.IsImmobile = false;
             ControlSla.StopUpdate = false;
             LevelManagerSla.LoadDrones(GameControl.CurrentLevel);
             
