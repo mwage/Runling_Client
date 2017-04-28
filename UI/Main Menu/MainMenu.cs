@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using Assets.Scripts.Launcher;
+using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts.UI.Main_Menu
 {
@@ -14,6 +16,15 @@ namespace Assets.Scripts.UI.Main_Menu
             gameObject.SetActive(false);
             SLAMenuObject.gameObject.SetActive(true);
             SLAMenu.SLAMenuActive = true;
+        }
+
+        public void RLR()
+        {
+            GameControl.Dead = true;
+            GameControl.TotalScore = 0;
+            GameControl.CurrentLevel = 1;
+
+            SceneManager.LoadScene("RLR");
         }
 
         public void Options()

@@ -1,60 +1,59 @@
 ﻿using System.Collections;
 using Assets.Scripts.Launcher;
-using Assets.Scripts.UI.SLA_Menus;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Assets.Scripts.UI.RLR_Menus;
 
-namespace Assets.Scripts.SLA
+
+namespace Assets.Scripts.RLR
 {
-    public class InitializeGameSLA : MonoBehaviour {
+    public class InitializeGameRLR : MonoBehaviour
+    {
 
         // Attach scripts
-        public LevelManagerSLA LevelManagerSla;
-        public ScoreSLA ScoreSla;
-        public ControlSLA ControlSla;
-        public InGameMenuManagerSLA InGameMenuManagerSla;
+        public LevelManagerRLR LevelManagerRLR;
+        public ControlRLR ControlRLR;
+        public InGameMenuManagerRLR InGameMenuManagerRLR;
+        public GenerateMap GenerateMap;
 
         public GameObject PlayerPrefab;
         public GameObject LevelTextObject;
         public GameObject CountdownPrefab;
-        public GameObject CurrentPrWindow;
         public GameObject Player;
-        public Text CurrentPr;
+        public GameObject MainCamera;
 
-        
 
         //set Spawnimmunity once game starts
         public void InitializeGame()
         {
+            GenerateMap.generateMapRLR();
             StartCoroutine(PrepareLevel());
         }
 
         IEnumerator PrepareLevel()
         {
             // Set current Level and movespeed
-            GameControl.MoveSpeed = LevelManagerSla.GetMovementSpeed(GameControl.CurrentLevel);
-            
-            // Show level highscore and current level
-            CurrentPr.text = HighScoreSLA.highScoreSLA[GameControl.CurrentLevel].ToString();
+            GameControl.MoveSpeed = LevelManagerRLR.GetMovementSpeed(GameControl.CurrentLevel);
+
+            // Load drones and player
+            Player = Instantiate(PlayerPrefab, new Vector3(-49, 0, 42), Quaternion.Euler(0, 90, 0));
+            MainCamera.transform.position = new Vector3(-49, 40, 42);
+            GameControl.Dead = false;
+            GameControl.IsInvulnerable = true;
+            GameControl.IsImmobile = true;
+            ControlRLR.StopUpdate = false;
+            LevelManagerRLR.LoadDrones(GameControl.CurrentLevel);
+
+            // Show current level
             var levelText = LevelTextObject.GetComponent<TextMeshProUGUI>();
             levelText.text = "Level " + GameControl.CurrentLevel;
             LevelTextObject.SetActive(true);
-            CurrentPrWindow.SetActive(true);
             yield return new WaitForSeconds(2f);
             LevelTextObject.SetActive(false);
-            CurrentPrWindow.SetActive(false);
+  
             yield return new WaitForSeconds(1f);
-
-            // Load drones and player
-
-            Player = Instantiate(PlayerPrefab);
-            GameControl.Dead = false;
-            GameControl.IsInvulnerable = true;
-            GameControl.IsImmobile = false;
-            ControlSla.StopUpdate = false;
-            LevelManagerSla.LoadDrones(GameControl.CurrentLevel);
-            
+                   
             // Countdown
             for (var i = 0; i < 3; i++)
             {
@@ -63,10 +62,13 @@ namespace Assets.Scripts.SLA
                 yield return new WaitForSeconds(1f);
                 Destroy(countdown);
             }
-            
+
             GameControl.IsInvulnerable = false;
-            ScoreSla.StartScore();
-            
+            GameControl.IsImmobile = false;
         }
+
+        
+        
+
     }
 }

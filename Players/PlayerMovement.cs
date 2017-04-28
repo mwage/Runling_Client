@@ -82,30 +82,33 @@ namespace Assets.Scripts.Players
 
         private void MoveToPosition(Vector3 position)
         {
-            RaycastHit hit;
-            var ray = Camera.main.ScreenPointToRay(position);
-
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, _defLayer))
+            if (!GameControl.IsImmobile)
             {
-                _maxSpeed = GameControl.MoveSpeed;
-                _clickPos = hit.point;
-                if ((_clickPos - transform.position).magnitude > 0.05f)
+                RaycastHit hit;
+                var ray = Camera.main.ScreenPointToRay(position);
+
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, _defLayer))
                 {
-                    _targetPos = _clickPos;
-                    _direction = (_targetPos - transform.position).normalized;
-                    _accelerate = true;
-                    _stop = false;
-
-                    if ((_targetPos - transform.position).magnitude < 0.5)
+                    _maxSpeed = GameControl.MoveSpeed;
+                    _clickPos = hit.point;
+                    if ((_clickPos - transform.position).magnitude > 0.05f)
                     {
-                        _rb.velocity = _direction * _currentSpeed / 2;
-                    }
-                    else
-                    {
-                        _rb.velocity = _direction * _currentSpeed;
-                    }
+                        _targetPos = _clickPos;
+                        _direction = (_targetPos - transform.position).normalized;
+                        _accelerate = true;
+                        _stop = false;
 
-                    _highestSpeedReached = _rb.velocity.magnitude;
+                        if ((_targetPos - transform.position).magnitude < 0.5)
+                        {
+                            _rb.velocity = _direction * _currentSpeed / 2;
+                        }
+                        else
+                        {
+                            _rb.velocity = _direction * _currentSpeed;
+                        }
+
+                        _highestSpeedReached = _rb.velocity.magnitude;
+                    }
                 }
             }
         }
