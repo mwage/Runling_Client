@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.SLA;
+using Assets.Scripts.Launcher;
 using UnityEngine;
 
 namespace Assets.Scripts.UI.SLA_Menus
@@ -8,6 +9,7 @@ namespace Assets.Scripts.UI.SLA_Menus
         public InGameMenuSLA InGameMenu;
         public ControlSLA ControlSLA;
         public OptionsMenu.OptionsMenu OptionsMenu;
+        public OptionsMenu.SetHotkeys SetHotkeys;
         public HighScoreMenuSLA HighScoreMenuSLA;
 
         public GameObject InGameMenuObject;
@@ -37,7 +39,7 @@ namespace Assets.Scripts.UI.SLA_Menus
         void Update()
         {
             // Navigate menu with esc
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (InputManager.GetButtonDown("Navigate Menu"))
             {
                 if (!MenuOn && !WinScreen.gameObject.activeSelf)
                 {
@@ -47,26 +49,20 @@ namespace Assets.Scripts.UI.SLA_Menus
                 }
                 else if (MenuOn == true && OptionsMenu.OptionsMenuActive)
                 {
-                    OptionsMenuObject.SetActive(false);
-                    OptionsMenu.OptionsMenuActive = false;
-                    InGameMenuObject.SetActive(true);
+                    OptionsMenu.DiscardChanges();
                 }
                 else if (MenuOn == true && HighScoreMenuSLA.HighScoreMenuActive)
                 {
-                    HighScoreMenuObject.SetActive(false);
-                    HighScoreMenuSLA.HighScoreMenuActive = false;
-                    InGameMenuObject.SetActive(true);
+                    HighScoreMenuSLA.Back();
                 }
                 else
                 {
-                    InGameMenuObject.SetActive(false);
-                    Time.timeScale = 1;
-                    MenuOn = false;
+                    InGameMenu.BackToGame();
                 }
             }
 
             //pause game
-            if (Input.GetKeyDown(KeyCode.Pause))
+            if (InputManager.GetButtonDown("Pause"))
             {
                 if (!_pause)
                 {

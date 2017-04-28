@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
+using Assets.Scripts.Launcher;
 
 namespace Assets.Scripts.UI.OptionsMenu
 {
@@ -13,7 +14,7 @@ namespace Assets.Scripts.UI.OptionsMenu
         private string _hotkeyToRebind;
         Dictionary<string, Text> _hotkeyLabel = new Dictionary<string, Text>();
 
-        private void Start()
+        private void OnEnable()
         {
             foreach (string hotkeyName in InputManager.Hotkeys.Keys)
             {
@@ -42,8 +43,19 @@ namespace Assets.Scripts.UI.OptionsMenu
                     {
                         if (Input.GetKeyDown(kc))
                         {
+
+                            
+                            foreach (KeyCode key in InputManager.Hotkeys.Values)
+                            {
+                                if (key == kc)
+                                {
+                                    
+                                }
+                            }
+
                             InputManager.Hotkeys[_hotkeyToRebind] = kc;
                             _hotkeyLabel[_hotkeyToRebind].text = kc.ToString();
+
                             _hotkeyToRebind = null;
                             break;
                         }
@@ -56,6 +68,15 @@ namespace Assets.Scripts.UI.OptionsMenu
         {
             Debug.Log("Hotkey: " + hotkeyName);
             _hotkeyToRebind = hotkeyName;
+        }
+
+
+        public void DeleteHotkeyPrefabs()
+        {
+            foreach (Transform child in HotkeyList.transform)
+            {
+                Destroy(child.gameObject);
+            }
         }
     }
 }

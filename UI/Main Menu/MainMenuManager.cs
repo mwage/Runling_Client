@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.UI.SLA_Menus;
+using Assets.Scripts.Launcher;
 using UnityEngine;
 
 namespace Assets.Scripts.UI.Main_Menu
@@ -11,13 +12,12 @@ namespace Assets.Scripts.UI.Main_Menu
         public SLAMenu SLAMenu;
         public HighScoreMenuSLA HighScoreMenuSLA;
 
-        public GameObject MainMenuObject;
-        public GameObject OptionsMenuObject;
         public GameObject SLAMenuObject;
         public GameObject HighScoreMenuObject;
  
         private void Awake()
         {
+            InputManager.LoadHotkeys();
             OptionsMenu.OptionsMenuActive = false;
             SLAMenu.SLAMenuActive = false;
             HighScoreMenuSLA.HighScoreMenuActive = false;
@@ -25,20 +25,15 @@ namespace Assets.Scripts.UI.Main_Menu
 
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (InputManager.GetButtonDown("Navigate Menu"))
             {
-
                 if (OptionsMenu.OptionsMenuActive)
                 {
-                    OptionsMenuObject.SetActive(false);
-                    OptionsMenu.OptionsMenuActive = false;
-                    MainMenuObject.SetActive(true);
+                    OptionsMenu.DiscardChanges();
                 }
                 else if (SLAMenu.SLAMenuActive)
                 {
-                    SLAMenuObject.SetActive(false);
-                    SLAMenu.SLAMenuActive = false;
-                    MainMenuObject.SetActive(true);
+                    SLAMenu.BackToMenu();
                 }
                 else if (HighScoreMenuSLA.HighScoreMenuActive)
                 {

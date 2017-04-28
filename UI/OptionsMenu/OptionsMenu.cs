@@ -1,23 +1,21 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Launcher;
+using UnityEngine;
 
 namespace Assets.Scripts.UI.OptionsMenu
 {
     public class OptionsMenu : MonoBehaviour {
 
         public GameObject Menu;
+        public SetHotkeys SetHotkeys;
+        
 
         public bool OptionsMenuActive;
 
-        public void BackToMenu()
-        {
-            OptionsMenuActive = false;
-            gameObject.SetActive(false);
-            Menu.gameObject.SetActive(true);
-        }
-
         public void DiscardChanges()
         {
-            InputManager.LoadHotkeys();      
+            SetHotkeys.DeleteHotkeyPrefabs();
+            InputManager.LoadHotkeys(); 
+                 
             OptionsMenuActive = false;
             gameObject.SetActive(false);
             Menu.gameObject.SetActive(true);
@@ -33,10 +31,12 @@ namespace Assets.Scripts.UI.OptionsMenu
                 PlayerPrefs.SetInt(key, intHotkey);
             }
             PlayerPrefs.Save();
+            SetHotkeys.DeleteHotkeyPrefabs();
 
             OptionsMenuActive = false;
             gameObject.SetActive(false);
             Menu.gameObject.SetActive(true);
         }
+
     }
 }

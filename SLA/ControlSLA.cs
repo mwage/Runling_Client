@@ -16,6 +16,7 @@ namespace Assets.Scripts.SLA
         void Start()
         {
             // Set current Level and movespeed, load drones and spawn immunity
+            InputManager.LoadHotkeys();
             StopUpdate = true;
             GameControl.GameActive = true;
             GameControl.CurrentLevel = 1;
