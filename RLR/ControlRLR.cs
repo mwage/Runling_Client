@@ -1,14 +1,13 @@
 ﻿using Assets.Scripts.Launcher;
 using UnityEngine;
 
-namespace Assets.Scripts.SLA
+namespace Assets.Scripts.RLR
 {
-    public class ControlSLA : MonoBehaviour
+    public class ControlRLR : MonoBehaviour
     {
-        public LevelManagerSLA LevelManager;
-        public ScoreSLA ScoreSla;
-        public InitializeGameSLA InitializeGameSla;
-        public DeathSLA DeathSla;
+        public LevelManagerRLR LevelManager;
+        public InitializeGameRLR InitializeGameRLR;
+        public DeathRLR DeathRLR;
 
         public bool StopUpdate;
         
@@ -17,10 +16,10 @@ namespace Assets.Scripts.SLA
             // Set current Level and movespeed, load drones and spawn immunity
             InputManager.LoadHotkeys();
             StopUpdate = true;
-            GameControl.CameraRange = 15;
             GameControl.GameActive = true;
+            GameControl.CameraRange = 60;
             GameControl.CurrentLevel = 1;
-            InitializeGameSla.InitializeGame();
+            InitializeGameRLR.InitializeGame();
         }
 
         //update when dead
@@ -28,10 +27,7 @@ namespace Assets.Scripts.SLA
         {
             if (GameControl.Dead && !StopUpdate)
             {
-                DeathSla.Death();
-
-                //in case of highscore, save and 
-                ScoreSla.SetHighScore();
+                DeathRLR.Death();
 
                 //change level
                 LevelManager.EndLevel(3f);
@@ -42,27 +38,27 @@ namespace Assets.Scripts.SLA
 
 
             // Press Ctrl to start autoclicking
-            if (InputManager.GetButtonDown("Activate Autoclicker"))
+            if (Input.GetKeyDown(KeyCode.LeftControl))
             {
                 if (!GameControl.AutoClickerActive)
                     GameControl.AutoClickerActive = true;
             }
 
             // Press Alt to stop autoclicking
-            if (InputManager.GetButtonDown("Deactivate Autoclicker"))
+            if (Input.GetKeyDown(KeyCode.LeftAlt))
             {
                 if (GameControl.AutoClickerActive)
                     GameControl.AutoClickerActive = false;
             }
 
-            // Press 1 to turn on Godmode
-            if (InputManager.GetButtonDown("Activate Godmode") && !GameControl.GodModeActive)
+            // Press 1 to be invulnerable
+            if (Input.GetKeyDown(KeyCode.Alpha1) && !GameControl.GodModeActive)
             {
                 GameControl.GodModeActive = true;
             }
 
-            // Press 2 to turn off Godmode
-            if (InputManager.GetButtonDown("Deactivate Autoclicker") && GameControl.GodModeActive)
+            // Press 2 to be vulnerable
+            if (Input.GetKeyDown(KeyCode.Alpha2) && GameControl.GodModeActive)
             {
                 GameControl.GodModeActive = false;
             }
