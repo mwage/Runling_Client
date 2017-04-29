@@ -43,18 +43,19 @@ namespace Assets.Scripts.UI.OptionsMenu
                     {
                         if (Input.GetKeyDown(kc))
                         {
-
-                            
-                            foreach (KeyCode key in InputManager.Hotkeys.Values)
+                            foreach (KeyCode key in InputManager.KeyCodes.Keys)
                             {
                                 if (key == kc)
                                 {
-                                    
+                                    InputManager.Hotkeys[InputManager.KeyCodes[key]] = null;
+                                    InputManager.KeyCodes.Remove(key);
                                 }
                             }
 
                             InputManager.Hotkeys[_hotkeyToRebind] = kc;
+                            InputManager.KeyCodes[kc] = _hotkeyToRebind;
                             _hotkeyLabel[_hotkeyToRebind].text = kc.ToString();
+
 
                             _hotkeyToRebind = null;
                             break;

@@ -5,7 +5,8 @@ namespace Assets.Scripts.Launcher
 {
     public class InputManager : MonoBehaviour
     {
-        public static Dictionary<string, KeyCode> Hotkeys = new Dictionary<string, KeyCode>();
+        public static Dictionary<string, KeyCode?> Hotkeys = new Dictionary<string, KeyCode?>();
+        public static Dictionary<KeyCode, string> KeyCodes = new Dictionary<KeyCode, string> ();
 
         // Use this for initialization
         void Start ()
@@ -15,13 +16,13 @@ namespace Assets.Scripts.Launcher
 
         public static bool GetButtonDown(string hotkeyName)
         {
-            if (!Hotkeys.ContainsKey(hotkeyName))
+            if (!Hotkeys.ContainsKey(hotkeyName) || Hotkeys[hotkeyName] == null)
             {
                 Debug.LogError("no hotkey named " + hotkeyName);
                 return false;
             }
 
-            return Input.GetKeyDown(Hotkeys[hotkeyName]);
+            return Input.GetKeyDown(Hotkeys[hotkeyName].Value);
         }
 
         public static void LoadHotkeys()
@@ -45,6 +46,14 @@ namespace Assets.Scripts.Launcher
             Hotkeys["Deactivate Godmode"] = PlayerPrefs.GetInt("Deactivate Godmode") != 0
                 ? (KeyCode)PlayerPrefs.GetInt("Deactivate Godmode")
                 : Hotkeys["Deactivate Godmode"] = KeyCode.Alpha2;
+
+            foreach (var hotkey in Hotkeys.Keys)
+            {
+                if (Hotkeys[hotkey] != null)
+                {
+                    KeyCodes[Hotkeys[hotkey].Value] = hotkey;
+                }
+            }
         }
     }
 }
