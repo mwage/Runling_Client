@@ -5,6 +5,7 @@
 Launcher (Folder): scripts that won't be destroyed on load to hold important variables for different modes
  * GameControl: static variables you always want to have access to (f.e.: dead, gameActive, currentLevel, moveSpeed, etc.)
  * HighScoreSLA: loads highScoreSLA from playerprefs
+ * InputManager: handles player input and hotkeys
     
 UI (Folder): UI related scripts
  * MainMenu (Folder): Main menu related scripts
@@ -12,12 +13,14 @@ UI (Folder): UI related scripts
    * MainMenu: buttons of the main menu
    * SLAMenu: buttons of the sla submenu
    * MainMenuBackground: handles the background of the main menu
- * SLAMenu (Folder): Ingame menu in SLA, also accesses OptionsMenu
+ * SLAMenu (Folder): Ingame menu in SLA
    * InGameMenuManagerSLA: ESC to open menu and navigate back in menus, function to close all open menus
    * InGameMenuSLA: buttons of the initial ingame menu
    * HighscoreMenuSLA: handles the highscores and back button, also accessed from main menu
    * WinSLA: winscreen, shows highscores, winscreen buttons
- * OptionsMenu: buttons of the options menu
+ * OptionsMenu (Folder): scripts for the options menu
+  * OptionsMenu: buttons of the options menu 
+  * SetHotkeys: manages the rebinding of hotkeys
     
 Drones (Folder): different kinds of drone movements
   * IDrone: Drone interface to create/configure drones
@@ -53,4 +56,13 @@ SLA (Folder): All scripts used specifically for SLA
     * Level*X*SLA: spawns drones for Level *X*
     * BoundariesSLA: defines the boundaries for drones in SLA
 
+RLR (Folder): All scripts used specifically for RLR
+  * ControlRLR: script that controls the flow of the game
+  * InitializeGameRLR: spawnimmobility, countdown, leveltexts, instantiates player
+  * DeathRLR: manages what happens after death in RLR
+  * Levels (Folder): everything that happens during the levels (mostly related to drones)
+    * LevelManager: Manages the levels, drone creation, and transactions between levels
+    * ALevel: Abstract class for levels
+    * Level*X*RLR: spawns drones for Level *X*
+    * BoundariesRLR: defines the boundaries for drones in RLR
 
