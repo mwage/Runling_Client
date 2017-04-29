@@ -39,7 +39,7 @@ namespace Assets.Scripts.UI.SLA_Menus
         void Update()
         {
             // Navigate menu with esc
-            if (InputManager.GetButtonDown("Navigate Menu"))
+            if (InputManager.Instance.GetButtonDown(HotkeyAction.NavigateMenu))
             {
                 if (!MenuOn && !WinScreen.gameObject.activeSelf)
                 {
@@ -62,7 +62,7 @@ namespace Assets.Scripts.UI.SLA_Menus
             }
 
             //pause game
-            if (InputManager.GetButtonDown("Pause"))
+            if (InputManager.Instance.GetButtonDown(HotkeyAction.Pause))
             {
                 if (!_pause)
                 {

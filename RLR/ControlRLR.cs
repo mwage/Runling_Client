@@ -10,11 +10,10 @@ namespace Assets.Scripts.RLR
         public DeathRLR DeathRLR;
 
         public bool StopUpdate;
-        
+
         void Start()
         {
             // Set current Level and movespeed, load drones and spawn immunity
-            InputManager.LoadHotkeys();
             StopUpdate = true;
             GameControl.GameActive = true;
             GameControl.CameraRange = 60;
@@ -38,27 +37,27 @@ namespace Assets.Scripts.RLR
 
 
             // Press Ctrl to start autoclicking
-            if (Input.GetKeyDown(KeyCode.LeftControl))
+            if (InputManager.Instance.GetButtonDown(HotkeyAction.ActivateClicker))
             {
                 if (!GameControl.AutoClickerActive)
                     GameControl.AutoClickerActive = true;
             }
 
             // Press Alt to stop autoclicking
-            if (Input.GetKeyDown(KeyCode.LeftAlt))
+            if (InputManager.Instance.GetButtonDown(HotkeyAction.DeactivateClicker))
             {
                 if (GameControl.AutoClickerActive)
                     GameControl.AutoClickerActive = false;
             }
 
             // Press 1 to be invulnerable
-            if (Input.GetKeyDown(KeyCode.Alpha1) && !GameControl.GodModeActive)
+            if (InputManager.Instance.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.GodModeActive)
             {
                 GameControl.GodModeActive = true;
             }
 
             // Press 2 to be vulnerable
-            if (Input.GetKeyDown(KeyCode.Alpha2) && GameControl.GodModeActive)
+            if (InputManager.Instance.GetButtonDown(HotkeyAction.DeactiveGodmode) && GameControl.GodModeActive)
             {
                 GameControl.GodModeActive = false;
             }

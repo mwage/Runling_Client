@@ -11,11 +11,10 @@ namespace Assets.Scripts.SLA
         public DeathSLA DeathSla;
 
         public bool StopUpdate;
-        
+
         void Start()
         {
             // Set current Level and movespeed, load drones and spawn immunity
-            InputManager.LoadHotkeys();
             StopUpdate = true;
             GameControl.CameraRange = 15;
             GameControl.GameActive = true;
@@ -42,27 +41,27 @@ namespace Assets.Scripts.SLA
 
 
             // Press Ctrl to start autoclicking
-            if (InputManager.GetButtonDown("Activate Autoclicker"))
+            if (InputManager.Instance.GetButtonDown(HotkeyAction.ActivateClicker))
             {
                 if (!GameControl.AutoClickerActive)
                     GameControl.AutoClickerActive = true;
             }
 
             // Press Alt to stop autoclicking
-            if (InputManager.GetButtonDown("Deactivate Autoclicker"))
+            if (InputManager.Instance.GetButtonDown(HotkeyAction.DeactivateClicker))
             {
                 if (GameControl.AutoClickerActive)
                     GameControl.AutoClickerActive = false;
             }
 
             // Press 1 to turn on Godmode
-            if (InputManager.GetButtonDown("Activate Godmode") && !GameControl.GodModeActive)
+            if (InputManager.Instance.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.GodModeActive)
             {
                 GameControl.GodModeActive = true;
             }
 
             // Press 2 to turn off Godmode
-            if (InputManager.GetButtonDown("Deactivate Autoclicker") && GameControl.GodModeActive)
+            if (InputManager.Instance.GetButtonDown(HotkeyAction.DeactiveGodmode) && GameControl.GodModeActive)
             {
                 GameControl.GodModeActive = false;
             }

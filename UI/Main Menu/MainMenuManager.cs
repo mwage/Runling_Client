@@ -14,10 +14,9 @@ namespace Assets.Scripts.UI.Main_Menu
 
         public GameObject SLAMenuObject;
         public GameObject HighScoreMenuObject;
- 
+
         private void Awake()
         {
-            InputManager.LoadHotkeys();
             OptionsMenu.OptionsMenuActive = false;
             SLAMenu.SLAMenuActive = false;
             HighScoreMenuSLA.HighScoreMenuActive = false;
@@ -25,7 +24,7 @@ namespace Assets.Scripts.UI.Main_Menu
 
         void Update()
         {
-            if (InputManager.GetButtonDown("Navigate Menu"))
+            if (InputManager.Instance.GetButtonDown(HotkeyAction.NavigateMenu))
             {
                 if (OptionsMenu.OptionsMenuActive)
                 {

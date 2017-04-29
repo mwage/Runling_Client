@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Launcher;
+﻿using System;
+using Assets.Scripts.Launcher;
 using UnityEngine;
 
 namespace Assets.Scripts.UI.OptionsMenu
@@ -7,15 +8,13 @@ namespace Assets.Scripts.UI.OptionsMenu
 
         public GameObject Menu;
         public SetHotkeys SetHotkeys;
-        
 
         public bool OptionsMenuActive;
 
         public void DiscardChanges()
         {
             SetHotkeys.DeleteHotkeyPrefabs();
-            InputManager.LoadHotkeys(); 
-                 
+
             OptionsMenuActive = false;
             gameObject.SetActive(false);
             Menu.gameObject.SetActive(true);
@@ -23,12 +22,11 @@ namespace Assets.Scripts.UI.OptionsMenu
 
         public void SaveChanges()
         {
-            foreach (string key in InputManager.Hotkeys.Keys)
+            foreach (HotkeyAction action in Enum.GetValues(typeof(HotkeyAction)))
             {
-                int intHotkey = (int)InputManager.Hotkeys[key];
-
-                //Save the keybind
-                PlayerPrefs.SetInt(key, intHotkey);
+                var kc = InputManager.Instance.GetHotkey(action);
+                if (kc != null)
+                    PlayerPrefs.SetInt(action.ToString(), (int) kc);
             }
             PlayerPrefs.Save();
             SetHotkeys.DeleteHotkeyPrefabs();

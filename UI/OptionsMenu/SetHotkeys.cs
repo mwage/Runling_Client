@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using Assets.Scripts.Launcher;
 
 namespace Assets.Scripts.UI.OptionsMenu
@@ -11,24 +12,42 @@ namespace Assets.Scripts.UI.OptionsMenu
         public GameObject SetHotkeyPrefab;
         public GameObject HotkeyList;
 
-        private string _hotkeyToRebind;
-        Dictionary<string, Text> _hotkeyLabel = new Dictionary<string, Text>();
+        private HotkeyAction? _hotkeyToRebind;
+        private readonly Dictionary<HotkeyAction, Text> _hotkeyLabel = new Dictionary<HotkeyAction, Text>();
+
+
+        private static string GetFriendlyName(string input)
+        {
+            var sb = new StringBuilder();
+            foreach (var c in input)
+            {
+                if (char.IsUpper(c))
+                    sb.Append(" ");
+                sb.Append(c);
+            }
+
+            if (input.Length > 0 && char.IsUpper(input[0]))
+                sb.Remove(0, 1);
+
+            return sb.ToString();
+        }
 
         private void OnEnable()
         {
-            foreach (string hotkeyName in InputManager.Hotkeys.Keys)
+            foreach (HotkeyAction action in Enum.GetValues(typeof(HotkeyAction)))
             {
                 var hotkey = Instantiate(SetHotkeyPrefab, HotkeyList.transform);
                 hotkey.transform.localScale = Vector3.one;
 
-                hotkey.transform.Find("HotkeyName").GetComponent<Text>().text = hotkeyName;
+                hotkey.transform.Find("HotkeyName").GetComponent<Text>().text = GetFriendlyName(action.ToString());
                 var hotkeyText = hotkey.transform.Find("SetHotkey/KeyPressed").GetComponent<Text>();
-                hotkeyText.text = InputManager.Hotkeys[hotkeyName].ToString();
-                _hotkeyLabel[hotkeyName] = hotkeyText;
+                var kc = InputManager.Instance.GetHotkey(action);
+                hotkeyText.text = kc != null ? kc.ToString() : "<None>";
+                _hotkeyLabel[action] = hotkeyText;
 
                 var setHotkey = hotkey.transform.Find("SetHotkey").GetComponent<Button>();
-                var keyName = hotkeyName;
-                setHotkey.onClick.AddListener(() => {RebindHotkey(keyName);});
+                var keyName = action;
+                setHotkey.onClick.AddListener(() => { RebindHotkey(keyName); });
             }
         }
 
@@ -43,20 +62,10 @@ namespace Assets.Scripts.UI.OptionsMenu
                     {
                         if (Input.GetKeyDown(kc))
                         {
-                            foreach (KeyCode key in InputManager.KeyCodes.Keys)
-                            {
-                                if (key == kc)
-                                {
-                                    InputManager.Hotkeys[InputManager.KeyCodes[key]] = null;
-                                    InputManager.KeyCodes.Remove(key);
-                                }
-                            }
-
-                            InputManager.Hotkeys[_hotkeyToRebind] = kc;
-                            InputManager.KeyCodes[kc] = _hotkeyToRebind;
-                            _hotkeyLabel[_hotkeyToRebind].text = kc.ToString();
-
-
+                            var removed = InputManager.Instance.UpdateHotkey(_hotkeyToRebind.Value, kc);
+                            if (removed != null)
+                                _hotkeyLabel[removed.Value].text = "<None>";
+                            _hotkeyLabel[_hotkeyToRebind.Value].text = kc.ToString();
                             _hotkeyToRebind = null;
                             break;
                         }
@@ -65,11 +74,10 @@ namespace Assets.Scripts.UI.OptionsMenu
             }
         }
 
-        private void RebindHotkey(string hotkeyName)
+        private void RebindHotkey(HotkeyAction action)
         {
-            _hotkeyToRebind = hotkeyName;
+            _hotkeyToRebind = action;
         }
-
 
         public void DeleteHotkeyPrefabs()
         {
