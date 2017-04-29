@@ -41,7 +41,7 @@ namespace Assets.Scripts.Launcher
         {
             if (!_hotkeys.ContainsKey(hotkeyAction))
             {
-                Debug.LogError("no hotkey named " + hotkeyAction);
+                Debug.Log("no hotkey named " + hotkeyAction);
                 return false;
             }
 

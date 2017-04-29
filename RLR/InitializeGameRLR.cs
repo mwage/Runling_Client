@@ -2,7 +2,6 @@
 using Assets.Scripts.Launcher;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using Assets.Scripts.UI.RLR_Menus;
 
 
@@ -15,7 +14,7 @@ namespace Assets.Scripts.RLR
         public LevelManagerRLR LevelManagerRLR;
         public ControlRLR ControlRLR;
         public InGameMenuManagerRLR InGameMenuManagerRLR;
-        public GenerateMap GenerateMap;
+
 
         public GameObject PlayerPrefab;
         public GameObject LevelTextObject;
@@ -27,7 +26,6 @@ namespace Assets.Scripts.RLR
         //set Spawnimmunity once game starts
         public void InitializeGame()
         {
-            GenerateMap.generateMapRLR();
             StartCoroutine(PrepareLevel());
         }
 

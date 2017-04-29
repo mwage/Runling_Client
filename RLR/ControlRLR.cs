@@ -8,6 +8,7 @@ namespace Assets.Scripts.RLR
         public LevelManagerRLR LevelManager;
         public InitializeGameRLR InitializeGameRLR;
         public DeathRLR DeathRLR;
+        public GenerateMap GenerateMap;
 
         public bool StopUpdate;
 
@@ -18,6 +19,7 @@ namespace Assets.Scripts.RLR
             GameControl.GameActive = true;
             GameControl.CameraRange = 60;
             GameControl.CurrentLevel = 1;
+            GenerateMap.GenerateMapRLR();
             InitializeGameRLR.InitializeGame();
         }
 
