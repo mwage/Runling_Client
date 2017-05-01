@@ -26,6 +26,9 @@ namespace Assets.Scripts.Players
         private int _defLayer;
         private Rigidbody _rb;
         private Coroutine _autoClickRoutine;
+        private Animator _anim;
+        private readonly int _speedHash = Animator.StringToHash("Speed");
+
 
         private void Start()
         {
@@ -41,6 +44,7 @@ namespace Assets.Scripts.Players
             _stopSensitivity = 20;
             _defLayer = (1 << 0);
             _isAutoClicking = false;
+            _anim = GetComponent<Animator>();
         }
 
         private void Update()
@@ -69,6 +73,9 @@ namespace Assets.Scripts.Players
             {
                 MoveToPosition(Input.mousePosition);
             }
+
+            // Control animation
+            _anim.SetFloat(_speedHash, _currentSpeed);
         }
 
         private IEnumerator DoAutoclick()

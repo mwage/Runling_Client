@@ -12,7 +12,7 @@ namespace Assets.Scripts.RLR.Levels
 
         public override float GetMovementSpeed()
         {
-            return 15;
+            return 10;
         }
 
         public override void CreateDrones()
