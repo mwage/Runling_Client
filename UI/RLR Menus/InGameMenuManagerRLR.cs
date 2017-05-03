@@ -1,5 +1,5 @@
 ﻿using Assets.Scripts.RLR;
-using Assets.Scripts.UI;
+using Assets.Scripts.Launcher;
 using Assets.Scripts.UI.RLR_Menu;
 using UnityEngine;
 
@@ -35,7 +35,7 @@ namespace Assets.Scripts.UI.RLR_Menus
         void Update()
         {
             // Navigate menu with esc
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (InputManager.Instance.GetButtonDown(HotkeyAction.NavigateMenu))
             {
                 if (!MenuOn && !WinScreen.gameObject.activeSelf)
                 {
@@ -43,22 +43,18 @@ namespace Assets.Scripts.UI.RLR_Menus
                     Time.timeScale = 0;
                     MenuOn = true;
                 }
-                else if (MenuOn == true && OptionsMenu.OptionsMenuActive)
+                else if (MenuOn && OptionsMenu.OptionsMenuActive)
                 {
-                    OptionsMenuObject.SetActive(false);
-                    OptionsMenu.OptionsMenuActive = false;
-                    InGameMenuObject.SetActive(true);
+                    OptionsMenu.DiscardChanges();
                 }
                 else
                 {
-                    InGameMenuObject.SetActive(false);
-                    Time.timeScale = 1;
-                    MenuOn = false;
+                    InGameMenu.BackToGame();
                 }
             }
 
             //pause game
-            if (Input.GetKeyDown(KeyCode.Pause))
+            if (InputManager.Instance.GetButtonDown(HotkeyAction.Pause))
             {
                 if (!_pause)
                 {

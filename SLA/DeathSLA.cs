@@ -4,12 +4,12 @@ namespace Assets.Scripts.SLA
 {
     public class DeathSLA : MonoBehaviour
     {
-        public InitializeGameSLA _initializeGameSLA;
+        public InitializeGameSLA InitializeGameSLA;
 
         //events following Deathtrigger
         public void Death()
         {
-            _initializeGameSLA.Player.SetActive(false);
+            InitializeGameSLA.Player.SetActive(false);
         }
     }
 }

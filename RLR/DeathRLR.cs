@@ -4,12 +4,12 @@ namespace Assets.Scripts.RLR
 {
     public class DeathRLR : MonoBehaviour
     {
-        public InitializeGameRLR _initializeGameRLR;
+        public InitializeGameRLR InitializeGameRLR;
 
         //events following Deathtrigger
         public void Death()
         {
-            _initializeGameRLR.Player.SetActive(false);
+            InitializeGameRLR.Player.SetActive(false);
         }
     }
 }

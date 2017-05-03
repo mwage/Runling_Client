@@ -19,6 +19,7 @@ namespace Assets.Scripts.Launcher
         public static bool GodModeActive = false;
         public static bool IsInvulnerable = false;
         public static bool IsImmobile = false;
+        public static bool FinishedLevel = false;
 
         //Keep Game Manager active and destroy any additional copys
         private void Awake()

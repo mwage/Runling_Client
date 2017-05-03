@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace Assets.Scripts.RLR.Levels
 {
-    public class Level1RLR : ALevelRLR
+    public class Level2RLR : ALevelRLR
     {
-        public Level1RLR(LevelManagerRLR manager) : base(manager)
+        public Level2RLR(LevelManagerRLR manager) : base(manager)
         {
         }
 
@@ -14,9 +14,9 @@ namespace Assets.Scripts.RLR.Levels
             Area[] laneArea = Manager.GenerateMapRLR.GetDroneSpawnArea();
 
             // Spawn bouncing drones
-            for (var i = 1; i < laneArea.Length-2; i++)
+            for (var i = 1; i < laneArea.Length - 2; i++)
             {
-                DroneFactory.SpawnDrones(new RandomBouncingDrone(2f, 1f, Color.grey), (int)(15-i*0.6f), area: laneArea[i]);
+                DroneFactory.SpawnDrones(new RandomBouncingDrone(3f, 1f, Color.grey), (int)(15 - i * 0.6f), area: laneArea[i]);
             }
         }
     }

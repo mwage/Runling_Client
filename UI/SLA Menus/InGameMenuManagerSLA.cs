@@ -47,11 +47,11 @@ namespace Assets.Scripts.UI.SLA_Menus
                     Time.timeScale = 0;
                     MenuOn = true;
                 }
-                else if (MenuOn == true && OptionsMenu.OptionsMenuActive)
+                else if (MenuOn && OptionsMenu.OptionsMenuActive)
                 {
                     OptionsMenu.DiscardChanges();
                 }
-                else if (MenuOn == true && HighScoreMenuSLA.HighScoreMenuActive)
+                else if (MenuOn && HighScoreMenuSLA.HighScoreMenuActive)
                 {
                     HighScoreMenuSLA.Back();
                 }

@@ -19,17 +19,25 @@ public class LevelManagerRLR : MonoBehaviour {
     public GameObject Win;
 
     public DroneFactory DroneFactory;
-    public BoundariesRLR Area;
+    public GenerateMapRLR GenerateMapRLR;
 
-    public static int NumLevels = 13;             //currently last level available in RLR
+    //public static int NumLevels = 9;             //currently last level available in RLR
     private List<ILevelRLR> _levels;
+
 
     private void InitializeLevels()
     {
         _levels = new List<ILevelRLR>
         {
             new Level1RLR(this),
-            //new Level2RLR(this),
+            new Level2RLR(this),
+            new Level3RLR(this),
+            new Level4RLR(this),
+            new Level5RLR(this),
+            new Level6RLR(this),
+            new Level7RLR(this),
+            new Level8RLR(this),
+            new Level9RLR(this)
         };
     }
 
@@ -52,19 +60,26 @@ public class LevelManagerRLR : MonoBehaviour {
         }
     }
 
-    public float GetMovementSpeed(int level)
+    public void GenerateMap(int level)
     {
-        return _levels[level - 1].GetMovementSpeed();
-    }
-    
-    //Load next level or end game
-    public void EndLevel(float delay)
-    {
-        StartCoroutine((GameControl.CurrentLevel == _levels.Count) ? EndGameRLR(delay) : NextLevel(delay));
+        _levels[level - 1].GenerateMap();
     }
 
-    //load in all but the last level
-    private IEnumerator NextLevel(float delay)
+    // Load next level
+    public void EndLevel(float delay)
+    {
+        GameControl.FinishedLevel = false;
+        StartCoroutine((GameControl.CurrentLevel == _levels.Count) ? EndGameRLR(delay) : LoadNextLevel(0));
+    }
+
+    // End game
+    public void EndGame(float delay)
+    {
+        StartCoroutine(EndGameRLR(delay));
+    }
+
+    // Load in all but the last level
+    private IEnumerator LoadNextLevel(float delay)
     {
         yield return new WaitForSeconds(delay);
         DroneFactory.StopAllCoroutines();
@@ -78,10 +93,10 @@ public class LevelManagerRLR : MonoBehaviour {
         InitializeGameRLR.InitializeGame();
     }
 
-    //load after the last level
+    // Load after the last level
     private IEnumerator EndGameRLR(float delay)
-    {                
-        //load win screen
+    {
+        // Load win screen
         yield return new WaitForSeconds(delay);
         InGameMenuManagerRLR.CloseMenus();
         Win.gameObject.SetActive(true);

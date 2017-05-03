@@ -31,12 +31,14 @@ namespace Assets.Scripts.RLR
 
         IEnumerator PrepareLevel()
         {
-            // Set current Level and movespeed
-            GameControl.MoveSpeed = LevelManagerRLR.GetMovementSpeed(GameControl.CurrentLevel);
+            LevelManagerRLR.GenerateMap(GameControl.CurrentLevel);
 
             // Load drones and player
-            Player = Instantiate(PlayerPrefab, new Vector3(-49, 0, 42), Quaternion.Euler(0, 90, 0));
-            MainCamera.transform.position = new Vector3(-49, 40, 42);
+            var startPlatform = GameObject.Find("StartPlatform(Clone)");
+            var airCollider = GameObject.Find("FlyingDroneCollider(Clone)");
+            Player = Instantiate(PlayerPrefab, new Vector3(startPlatform.transform.position.x, 0, startPlatform.transform.position.z), Quaternion.Euler(0, 90, 0));
+            MainCamera.transform.position = new Vector3(Player.transform.localPosition.x, 40, Player.transform.localPosition.z);
+            GameControl.CameraRange = airCollider.transform.localScale.x/2.5f;
             GameControl.Dead = false;
             GameControl.IsInvulnerable = true;
             GameControl.IsImmobile = true;

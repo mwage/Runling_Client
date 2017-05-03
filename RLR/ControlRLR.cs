@@ -8,7 +8,6 @@ namespace Assets.Scripts.RLR
         public LevelManagerRLR LevelManager;
         public InitializeGameRLR InitializeGameRLR;
         public DeathRLR DeathRLR;
-        public GenerateMap GenerateMap;
 
         public bool StopUpdate;
 
@@ -17,9 +16,8 @@ namespace Assets.Scripts.RLR
             // Set current Level and movespeed, load drones and spawn immunity
             StopUpdate = true;
             GameControl.GameActive = true;
-            GameControl.CameraRange = 60;
             GameControl.CurrentLevel = 1;
-            GenerateMap.GenerateMapRLR();
+            GameControl.MoveSpeed = 13;
             InitializeGameRLR.InitializeGame();
         }
 
@@ -31,10 +29,15 @@ namespace Assets.Scripts.RLR
                 DeathRLR.Death();
 
                 //change level
-                LevelManager.EndLevel(3f);
+                LevelManager.EndGame(3f);
 
                 //dont repeat above once player dead
                 StopUpdate = true;
+            }
+
+            if (GameControl.FinishedLevel && !StopUpdate)
+            {
+                LevelManager.EndLevel(0f);
             }
 
 
