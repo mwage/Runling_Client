@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Players
 {
-    public class DeathTrigger : MonoBehaviour
+    public class PlayerTrigger : MonoBehaviour
     {
         private bool _finishedLevel;
         private bool _onPlatform;
@@ -28,7 +28,7 @@ namespace Assets.Scripts.Players
             }
 
             // Death Trigger
-            if (other.tag == "Enemy" && !GameControl.IsInvulnerable && !GameControl.GodModeActive)
+            if ((other.tag == "Enemy" && !GameControl.IsInvulnerable || other.tag == "Strong Enemy") && !GameControl.GodModeActive)
             {
                 GameControl.Dead = true;
             }

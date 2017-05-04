@@ -15,7 +15,6 @@ namespace Assets.Scripts.RLR
         public LevelManagerRLR LevelManagerRLR;
         public ControlRLR ControlRLR;
         public InGameMenuManagerRLR InGameMenuManagerRLR;
-        public RunlingChaser RunlingChaser;
 
 
         public GameObject PlayerPrefab;
@@ -40,8 +39,7 @@ namespace Assets.Scripts.RLR
             var airCollider = GameObject.Find("FlyingDroneCollider(Clone)");
             Player = Instantiate(PlayerPrefab, new Vector3(startPlatform.transform.position.x, 0, startPlatform.transform.position.z), Quaternion.Euler(0, 90, 0));
             MainCamera.transform.position = new Vector3(Player.transform.localPosition.x, 40, Player.transform.localPosition.z);
-            RunlingChaser.GetTriggerInstance(Player.transform.GetChild(2).gameObject);
-            RunlingChaser.GetSafeZones();
+            LevelManagerRLR.GenerateChasers(GameControl.CurrentLevel);
             GameControl.CameraRange = airCollider.transform.localScale.x/2.5f;
             GameControl.Dead = false;
             GameControl.IsInvulnerable = true;
@@ -61,7 +59,7 @@ namespace Assets.Scripts.RLR
             // Countdown
             for (var i = 0; i < 3; i++)
             {
-                var countdown = Instantiate(CountdownPrefab, GameObject.Find("ScoreCanvas").transform);
+                var countdown = Instantiate(CountdownPrefab, GameObject.Find("Canvas").transform);
                 countdown.GetComponent<TextMeshProUGUI>().text = (3 - i).ToString();
                 yield return new WaitForSeconds(1f);
                 Destroy(countdown);

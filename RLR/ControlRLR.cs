@@ -29,7 +29,7 @@ namespace Assets.Scripts.RLR
                 DeathRLR.Death();
 
                 //change level
-                LevelManager.EndGame(3f);
+                LevelManager.EndGame(1f);
 
                 //dont repeat above once player dead
                 StopUpdate = true;

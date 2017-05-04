@@ -10,6 +10,11 @@ namespace Assets.Scripts.RLR.Levels
         {
         }
 
+        public override void SetChasers()
+        {
+            Manager.RunlingChaser.SetChaserPlatforms(new ChaserDrone(5f, 1f, Color.green, Manager.InitializeGameRLR.Player), new int[3] { 1, 8, 16 }, new int[3] { 4, 12, 19 });
+        }
+
         public override void CreateDrones()
         {
             // Spawn blue drones

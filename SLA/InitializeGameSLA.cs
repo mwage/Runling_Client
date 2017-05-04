@@ -36,7 +36,7 @@ namespace Assets.Scripts.SLA
             GameControl.MoveSpeed = LevelManagerSla.GetMovementSpeed(GameControl.CurrentLevel);
             
             // Show level highscore and current level
-            CurrentPr.text = HighScoreSLA.highScoreSLA[GameControl.CurrentLevel].ToString();
+            CurrentPr.text = HighScores.highScoreSLA[GameControl.CurrentLevel].ToString();
             var levelText = LevelTextObject.GetComponent<TextMeshProUGUI>();
             levelText.text = "Level " + GameControl.CurrentLevel;
             LevelTextObject.SetActive(true);

@@ -5,5 +5,6 @@ namespace Assets.Scripts.RLR.Levels
     {
         void CreateDrones();
         void GenerateMap();
+        void SetChasers();
     }
 }

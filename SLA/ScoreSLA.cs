@@ -55,11 +55,11 @@ namespace Assets.Scripts.SLA
         {
             LevelScoreCurGame[GameControl.CurrentLevel - 1] = CurrentScore;
 
-            if (CurrentScore > HighScoreSLA.highScoreSLA[GameControl.CurrentLevel])
+            if (CurrentScore > HighScores.highScoreSLA[GameControl.CurrentLevel])
             {
                 NewHighScoreSLA();
-                HighScoreSLA.highScoreSLA[GameControl.CurrentLevel] = CurrentScore;
-                PlayerPrefs.SetInt("HighScoreSLA" + GameControl.CurrentLevel, HighScoreSLA.highScoreSLA[GameControl.CurrentLevel]);
+                HighScores.highScoreSLA[GameControl.CurrentLevel] = CurrentScore;
+                PlayerPrefs.SetInt("HighScoreSLA" + GameControl.CurrentLevel, HighScores.highScoreSLA[GameControl.CurrentLevel]);
             }
 
             SetGameHighScore();
@@ -70,22 +70,22 @@ namespace Assets.Scripts.SLA
         //compare total score to best game and set highscore
         public void SetGameHighScore()
         {
-            if (GameControl.TotalScore > HighScoreSLA.highScoreSLA[0])
+            if (GameControl.TotalScore > HighScores.highScoreSLA[0])
             {
-                HighScoreSLA.highScoreSLA[0] = GameControl.TotalScore;
+                HighScores.highScoreSLA[0] = GameControl.TotalScore;
             }
-            PlayerPrefs.SetInt("HighScoreSLAGame", HighScoreSLA.highScoreSLA[0]);
+            PlayerPrefs.SetInt("HighScoreSLAGame", HighScores.highScoreSLA[0]);
         }
 
         //add level highscores for combined score
         public void SetCombinedScore()
         {
-            HighScoreSLA.highScoreSLA[14] = 0;
+            HighScores.highScoreSLA[14] = 0;
             for (var i = 1; i <= LevelManagerSLA.NumLevels; i++)
             {
-                HighScoreSLA.highScoreSLA[14] += HighScoreSLA.highScoreSLA[i];
+                HighScores.highScoreSLA[14] += HighScores.highScoreSLA[i];
             }
-            PlayerPrefs.SetInt("HighScoreSLACombined", HighScoreSLA.highScoreSLA[14]);
+            PlayerPrefs.SetInt("HighScoreSLACombined", HighScores.highScoreSLA[14]);
         }
     }
 }

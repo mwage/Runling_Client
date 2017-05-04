@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class HighScoreSLA : MonoBehaviour {
+public class HighScores : MonoBehaviour {
 
     //0 = Game, 1-13 = levels, 14 = combined
     public static int[] highScoreSLA = new int[15];

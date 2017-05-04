@@ -9,6 +9,8 @@ namespace Assets.Scripts.RLR.Levels
         {
         }
 
+
+
         public override void CreateDrones()
         {
             Area[] laneArea = Manager.GenerateMapRLR.GetDroneSpawnArea();

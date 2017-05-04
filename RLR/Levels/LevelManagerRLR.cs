@@ -16,6 +16,7 @@ public class LevelManagerRLR : MonoBehaviour {
     //attach scripts
     public InGameMenuManagerRLR InGameMenuManagerRLR;
     public InitializeGameRLR InitializeGameRLR;
+    public RunlingChaser RunlingChaser;
 
     public GameObject Win;
 
@@ -66,6 +67,13 @@ public class LevelManagerRLR : MonoBehaviour {
         _levels[level - 1].GenerateMap();
     }
 
+    public void GenerateChasers(int level)
+    {
+        RunlingChaser.GetTriggerInstance(InitializeGameRLR.Player.transform.Find("Trigger").gameObject);
+        RunlingChaser.GetSafeZones();
+        _levels[level - 1].SetChasers();
+    }
+
     // Load next level
     public void EndLevel(float delay)
     {
@@ -97,6 +105,12 @@ public class LevelManagerRLR : MonoBehaviour {
     // Load after the last level
     private IEnumerator EndGameRLR(float delay)
     {
+        if (!GameControl.Dead)
+        {
+            Win.transform.Find("Victory").gameObject.SetActive(true);
+            Win.transform.Find("Defeat").gameObject.SetActive(false);
+        }
+
         // Load win screen
         yield return new WaitForSeconds(delay);
         InGameMenuManagerRLR.CloseMenus();
