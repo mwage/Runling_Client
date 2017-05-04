@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections;
-using UnityEngine;
-
+﻿using UnityEngine;
 
 namespace Assets.Scripts.RLR.GenerateMap
 {
-    public abstract class ALane : MonoBehaviour
+    public abstract class ALane
     {
         public Vector3 Pos, Rot, Sc;
         public GameObject PlatformPrefab;
@@ -24,8 +21,8 @@ namespace Assets.Scripts.RLR.GenerateMap
 
         public virtual GameObject InstatiateCompleteLanePrefab(GameObject firstLineOfCenterPrefab, GameObject platformPrefabP, Transform terrain)
         {
-            LanePrefab = Instantiate<GameObject>(firstLineOfCenterPrefab, terrain); // assign prefab to local ref
-            return PlatformPrefab = Instantiate<GameObject>(platformPrefabP, terrain);
+            LanePrefab = Object.Instantiate(firstLineOfCenterPrefab, terrain); // assign prefab to local ref
+            return PlatformPrefab = Object.Instantiate(platformPrefabP, terrain);
         }
 
         public virtual void InstantiateRamp(GameObject ramp, Transform terrain)

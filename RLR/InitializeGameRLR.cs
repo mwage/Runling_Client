@@ -41,7 +41,7 @@ namespace Assets.Scripts.RLR
             Player = Instantiate(PlayerPrefab, new Vector3(startPlatform.transform.position.x, 0, startPlatform.transform.position.z), Quaternion.Euler(0, 90, 0));
             MainCamera.transform.position = new Vector3(Player.transform.localPosition.x, 40, Player.transform.localPosition.z);
             RunlingChaser.GetTriggerInstance(Player.transform.GetChild(2).gameObject);
-            RunlingChaser.GetSaveZones();
+            RunlingChaser.GetSafeZones();
             GameControl.CameraRange = airCollider.transform.localScale.x/2.5f;
             GameControl.Dead = false;
             GameControl.IsInvulnerable = true;

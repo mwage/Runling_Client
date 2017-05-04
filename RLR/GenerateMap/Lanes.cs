@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using UnityEngine;
-using Assets.Scripts.Drones;
+﻿using UnityEngine;
 
 namespace Assets.Scripts.RLR.GenerateMap
 {
@@ -20,18 +15,15 @@ namespace Assets.Scripts.RLR.GenerateMap
             {
                 foreach (Transform ch in child)
                 {
-                    Vector3 localPos = ch.transform.localPosition;
-                    Vector3 localScale = ch.transform.localScale;
-
                     // Scale ground
-                    if (ch.tag == "Right")
+                    switch (ch.tag)
                     {
-                        SetWallOrPlayerCollider(ch, child, (LaneLength + WallSize) / 2, WallSize / 2, WallSize, LaneWidth + WallSize);
-                    }
-
-                    else if (ch.tag == "Bottom")
-                    {
-                        SetWallOrPlayerCollider(ch, child, 0F, -(LaneWidth / 2 + WallSize / 2), LaneLength, WallSize);
+                        case "Right":
+                            SetWallOrPlayerCollider(ch, child, (LaneLength + WallSize) / 2, WallSize / 2, WallSize, LaneWidth + WallSize);
+                            break;
+                        case "Bottom":
+                            SetWallOrPlayerCollider(ch, child, 0F, -(LaneWidth / 2 + WallSize / 2), LaneLength, WallSize);
+                            break;
                     } 
                 }
             }
@@ -49,7 +41,7 @@ namespace Assets.Scripts.RLR.GenerateMap
 
         public override void InstantiateRamp(GameObject ramp, Transform terrain)
         {
-            var thisLane = Instantiate(ramp, terrain);
+            var thisLane = Object.Instantiate(ramp, terrain);
             thisLane.transform.position = Vector3.zero;
             float gap = -(Pos.x + LaneWidth / 2 + _centerSize);
             foreach (Transform child in thisLane.transform)

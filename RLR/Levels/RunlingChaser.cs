@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Drones;
+using Assets.Scripts.Players;
 using Assets.Scripts.RLR.GenerateMap;
 using UnityEngine;
 
@@ -18,14 +19,13 @@ namespace Assets.Scripts.RLR.Levels
         private bool[,] _reachedChaserPlatform;
         private List<GameObject> _safeZones;
         private GameObject _chaser;
-        
 
         void Awake()
         {
             _createdInstance = false;
             SetChaserPlatforms(new[] {1,3}, new[] { 2,4 });
         }
-        
+
         public void SetChaserPlatforms(int[] spawnChaser, int[] destroyChaser)
         {
             _spawnChaser = spawnChaser;
@@ -45,28 +45,23 @@ namespace Assets.Scripts.RLR.Levels
             _createdInstance = true;
         }
 
-        public void GetSaveZones()
+        public void GetSafeZones()
         {
             _safeZones = GenerateMap.GetSafeZones();
             _safeZones.Reverse();
         }
-        
-        private int? GetPlatformIndex(GameObject currentSaveZone)
+
+        private int? GetPlatformIndex(GameObject currentSafeZone)
         {
-            for (var i = 0; i < _safeZones.Count; i++)
-            {
-                if (currentSaveZone == _safeZones[i])
-                {
-                    //Debug.Log(i);
-                    return i;
-                }
-            }
+            if (_safeZones.Contains(currentSafeZone))
+                return _safeZones.IndexOf(currentSafeZone);
+
             return null;
         }
 
-        private void IsChaser(GameObject currentSaveZone)
+        private void IsChaser(GameObject currentSafeZone)
         {
-            int? index = GetPlatformIndex(currentSaveZone);
+            var index = GetPlatformIndex(currentSafeZone);
             if (index == null) return;
 
             for(var i = 0; i < _spawnChaser.Length; i++)
@@ -84,13 +79,12 @@ namespace Assets.Scripts.RLR.Levels
                 if (_destroyChaser[i] == index.Value && !_reachedChaserPlatform[i,1])
                 {
                     DroneFactory.StopCoroutine("MoveChaser");
-                    GameObject.Destroy(_chaser);
+                    Destroy(_chaser);
                     _reachedChaserPlatform[i, 1] = true;
                 }
             }
         }
 
-        
         void Update()
         {
             if (_deathTrigger.EnterSaveZone && _createdInstance)

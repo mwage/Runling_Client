@@ -46,6 +46,10 @@ namespace Assets.Scripts.Drones
 
             do
             {
+                // If the chaser doesn't exist anymore, exit
+                if (rb == null)
+                    yield break;
+
                 _targetPos = Player.transform.position;
                 _targetPos.y += 0.6f;
                 var currentSpeed = rb.velocity.magnitude;
