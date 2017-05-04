@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Drones;
+using Assets.Scripts.RLR.GenerateMap;
 
 namespace Assets.Scripts.RLR.Levels
 {

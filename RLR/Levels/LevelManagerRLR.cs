@@ -5,6 +5,7 @@ using Assets.Scripts.Drones;
 using Assets.Scripts.Launcher;
 using Assets.Scripts.RLR;
 using Assets.Scripts.RLR.Levels;
+using Assets.Scripts.RLR.GenerateMap;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Assets.Scripts.UI.RLR_Menus;
