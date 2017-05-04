@@ -38,9 +38,9 @@ namespace Assets.Scripts.Drones
             }
         }
 
-        public void SpawnAndAddDrones(IDrone drone, int droneCount, float delay, Area area = new Area(), StartPositionDelegate posDelegate = null)
+        public void SpawnAndAddDrones(IDrone drone, int droneCount, float delay, Area area = new Area(), StartPositionDelegate posDelegate = null, DroneMovement.MovementDelegate moveDelegate = null)
         {
-            SpawnDrones(drone, droneCount, area: area, posDelegate: posDelegate);
+            SpawnDrones(drone, droneCount, area: area, posDelegate: posDelegate, moveDelegate: moveDelegate);
             AddDrones(drone, delay, area, posDelegate);
         }
     }

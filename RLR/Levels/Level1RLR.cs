@@ -18,8 +18,7 @@ namespace Assets.Scripts.RLR.Levels
             for (var i = 1; i < laneArea.Length-2; i++)
             {
                 DroneFactory.SpawnDrones(new RandomBouncingDrone(2f, 1f, Color.grey), (int)(15-i*0.6f), area: laneArea[i]);
-                DroneFactory.SpawnDrones(new RandomBouncingDrone(2f, 1f, Color.red), (int)(15 - i * 0.6f), area: laneArea[i], moveDelegate: DroneMovement.DoubleSpeed); 
-                DroneFactory.SpawnDrones(new RandomBouncingDrone(2f, 1f, Color.blue), (int)(15 - i * 0.6f), area: laneArea[i], moveDelegate: DroneMovement.HalfSpeed);
+                DroneFactory.SpawnDrones(new RandomBouncingDrone(2f, 1f, Color.red), (int)(15 - i * 0.6f), area: laneArea[i], moveDelegate: DroneMovement.SinusMovement); 
             }
         }
     }
