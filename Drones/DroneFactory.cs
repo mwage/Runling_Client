@@ -11,14 +11,14 @@ namespace Assets.Scripts.Drones
         public GameObject FlyingOnewayDrone;
         public GameObject MineDrone;
 
-        public GameObject SpawnDrones(IDrone drone, int droneCount = 1, bool isAdded = false, Area area = new Area(), StartPositionDelegate posDelegate = null)
+        public GameObject SpawnDrones(IDrone drone, int droneCount = 1, bool isAdded = false, Area area = new Area(), StartPositionDelegate posDelegate = null, DroneMovement.MovementDelegate moveDelegate = null)
         {
             GameObject newDrone = null;
             for (var i = 0; i < droneCount; i++)
             {
                 newDrone = drone.CreateDroneInstance(this, isAdded, area, posDelegate);
                 if (newDrone != null)
-                    drone.ConfigureDrone(newDrone);
+                    drone.ConfigureDrone(newDrone, moveDelegate);
             }
 
             return newDrone;
@@ -38,9 +38,9 @@ namespace Assets.Scripts.Drones
             }
         }
 
-        public void SpawnAndAddDrones(IDrone drone, int droneCount, float delay, Area area = new Area(), StartPositionDelegate posDelegate = null)
+        public void SpawnAndAddDrones(IDrone drone, int droneCount, float delay, Area area = new Area(), StartPositionDelegate posDelegate = null, DroneMovement.MovementDelegate moveDelegate = null)
         {
-            SpawnDrones(drone, droneCount, area: area, posDelegate: posDelegate);
+            SpawnDrones(drone, droneCount, area: area, posDelegate: posDelegate, moveDelegate: moveDelegate);
             AddDrones(drone, delay, area, posDelegate);
         }
     }

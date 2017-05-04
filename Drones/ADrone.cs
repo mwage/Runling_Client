@@ -17,7 +17,7 @@ namespace Assets.Scripts.Drones
 
         public abstract GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null);
 
-        public void ConfigureDrone(GameObject drone)
+        public void ConfigureDrone(GameObject drone, DroneMovement.MovementDelegate moveDelegate = null)
         {
             // Adjust drone color and size
             var rend = drone.GetComponent<Renderer>();
@@ -28,7 +28,7 @@ namespace Assets.Scripts.Drones
             drone.transform.localScale = scale;
 
             // Move drone
-            MoveDrone.MoveStraight(drone, Speed);
+            DroneMovement.Move(drone, Speed, moveDelegate);
         }
     }
 }
