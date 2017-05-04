@@ -18,6 +18,7 @@ namespace Assets.Scripts.Drones
             }
         }
 
+
         //move drones in a straight line
         public static void MoveStraight(GameObject drone, float droneSpeed)
         {
