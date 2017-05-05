@@ -12,22 +12,26 @@ namespace Assets.Scripts.Drones
             factory.StartCoroutine(GenerateStraightFlying360Drones(droneCount, delay, speed, size, color, mines, factory, reduceDelay));
         }
 
-        public static void AddDelayedStraightFlying360Drones(int droneCount, float delay, int rotations, float speed, float size, Color color, GameObject mine, DroneFactory factory)
+        public static void AddDelayedStraightFlying360Drones(int droneCount, float delay, int rotations, float speed, float size, Color color, GameObject[] mines, DroneFactory factory)
         {
-            factory.StartCoroutine(GenerateDelayedStraightFlying360Drones(droneCount, delay, rotations, speed, size, color, mine, factory));
+            foreach (var mine in mines)
+            {
+                factory.StartCoroutine(GenerateDelayedStraightFlying360Drones(droneCount, delay, rotations, speed, size,
+                    color, mine, factory));
+            }
         }
 
-        private static IEnumerator GenerateStraightFlying360Drones(int droneCount, float delay, float speed, float size, Color color, ICollection<GameObject> mines, DroneFactory factory, float? reduceDelay = null)
+        private static IEnumerator GenerateStraightFlying360Drones(int droneCount, float delay, float speed, float size, Color color, GameObject[] mines, DroneFactory factory, float? reduceDelay = null)
         {
             while (true)
             {
                 foreach (var m in mines)
                 {
                     factory.SpawnDrones(new StraightFlying360Drone(speed, size, color, droneCount), posDelegate: delegate { return m.transform.position; });
-                    yield return new WaitForSeconds(delay / mines.Count);
+                    yield return new WaitForSeconds(delay / mines.Length);
                 }
 
-                if (reduceDelay != null) { delay = delay > mines.Count ? delay - delay * reduceDelay.Value : 3f; }
+                if (reduceDelay != null) { delay = delay > mines.Length ? delay - delay * reduceDelay.Value : 3f; }
             }
         }
 
