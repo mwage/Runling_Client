@@ -4,7 +4,7 @@ namespace Assets.Scripts.Drones
 {
     public class DroneMovement
     {
-        public delegate void MovementDelegate(GameObject drone);
+        public delegate void MovementDelegate(GameObject drone, float droneSpeed);
 
         public static void Move(GameObject drone, float droneSpeed, MovementDelegate moveDelegate = null)
         {
@@ -14,7 +14,7 @@ namespace Assets.Scripts.Drones
             }
             else
             {
-                moveDelegate(drone);
+                moveDelegate(drone, droneSpeed);
             }
         }
 
@@ -26,9 +26,14 @@ namespace Assets.Scripts.Drones
             rb.AddForce(drone.transform.forward * droneSpeed, ForceMode.VelocityChange);
         }
 
-        public static void SinusMovement(GameObject drone)
+        public static void SinusMovement(GameObject drone, float droneSpeed)
         {
+            MoveStraight(drone, droneSpeed);
             drone.AddComponent<MoveSinusoidal>();
+            var instance = drone.GetComponent<MoveSinusoidal>();
+            instance.Frequency = 5;
+            instance.SinForce = 20;
+
         }
     }
 }

@@ -6,25 +6,19 @@ namespace Assets.Scripts.Drones
     {
         private Rigidbody _rb;
         private float _initializationTime;
-        private float _speed;
-        private float _frequency;
-        private float _sinForce;
+        public float Frequency;
+        public float SinForce;
 
         private void Start ()
         {
-            _sinForce = 20;
-            _speed = 4;
-            _frequency = 5;
-
             _initializationTime = Time.timeSinceLevelLoad;
             _rb = GetComponent<Rigidbody>();
-            _rb.AddForce(_rb.transform.forward * _speed, ForceMode.VelocityChange);
         }
 	
 
         private void FixedUpdate()
         {
-            _rb.AddForce(_rb.transform.right * _sinForce * Mathf.Cos( (Time.time- _initializationTime )* _frequency), ForceMode.Acceleration);
+            _rb.AddForce(_rb.transform.right * SinForce * Mathf.Cos( (Time.time- _initializationTime )* Frequency), ForceMode.Acceleration);
         }
     }
 }

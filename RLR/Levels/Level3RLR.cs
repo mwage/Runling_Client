@@ -13,11 +13,11 @@ namespace Assets.Scripts.RLR.Levels
         public override void CreateDrones()
         {
             // Spawn blue drones
-            DroneFactory.StartCoroutine(GenerateBlueDrones(0.1f, 6, 1, Color.blue, DroneMovement.SinusMovement));
+            DroneFactory.StartCoroutine(GenerateBlueDrones(0.1f, 7, 1, Color.blue, DroneMovement.SinusMovement));
 
             Area[] laneArea = Manager.GenerateMapRLR.GetDroneSpawnArea();
             DroneFactory.SpawnDrones(new GridDrones(7f, 1f, Color.magenta, 20, 0.04f, false, DroneMovement.SinusMovement), area: laneArea[0]);
-            DroneFactory.SpawnDrones(new RandomFlyingBouncingDrone(5f, 1f, Color.red), 50, area: laneArea[0], moveDelegate: DroneMovement.SinusMovement);
+            DroneFactory.SpawnDrones(new RandomFlyingBouncingDrone(6f, 1f, Color.red), 50, area: laneArea[0], moveDelegate: DroneMovement.SinusMovement);
             for (var i = 1; i < laneArea.Length - 2; i++)
             {
                 DroneFactory.SpawnDrones(new RandomBouncingDrone(2f, 1f, Color.grey), (int)(6 - i * 0.2f), area: laneArea[i], moveDelegate: DroneMovement.SinusMovement);
@@ -25,9 +25,9 @@ namespace Assets.Scripts.RLR.Levels
             var mines = new GameObject[2];
             for (var i = 0; i < mines.Length; i++)
             {
-                mines[i] = DroneFactory.SpawnDrones(new MineDrone(5f, 3f, Color.black), area: laneArea[0]);
+                mines[i] = DroneFactory.SpawnDrones(new MineDrone(5f, 3f, Color.black), area: laneArea[0], moveDelegate: DroneMovement.SinusMovement);
             }
-            MineVariations.AddDelayedStraightFlying360Drones(32, 2f, 2, 8f, 1f, Color.cyan, mines, DroneFactory);
+            MineVariations.AddDelayedStraightFlying360Drones(32, 2f, 2, 8f, 1f, Color.cyan, mines, DroneFactory, moveDelegate: DroneMovement.SinusMovement);
         }
 
         private IEnumerator GenerateBlueDrones(float delay, float speed, float size, Color color, DroneMovement.MovementDelegate moveDelegate)
