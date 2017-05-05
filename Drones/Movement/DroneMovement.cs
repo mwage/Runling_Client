@@ -35,5 +35,13 @@ namespace Assets.Scripts.Drones
             instance.SinForce = 20;
 
         }
+
+        public static void ChaserMovement(GameObject drone, float droneSpeed, GameObject player)
+        {
+            drone.AddComponent<ChaserMovement>();
+            var instance = drone.GetComponent<ChaserMovement>();
+            instance.Speed = droneSpeed;
+            instance.Player = player;
+        }
     }
 }
