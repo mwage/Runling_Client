@@ -4,19 +4,21 @@ namespace Assets.Scripts.Drones
 {
     public class MoveSinusoidal : MonoBehaviour
     {
-        private Rigidbody rb;
-        private float initializationTime;
-        // Use this for initialization
-        private void Start () {
-            initializationTime = Time.timeSinceLevelLoad;
-            rb = GetComponent<Rigidbody>();
-            rb.AddForce(rb.transform.forward * 5, ForceMode.VelocityChange);
+        private Rigidbody _rb;
+        private float _initializationTime;
+        public float Frequency;
+        public float SinForce;
+
+        private void Start ()
+        {
+            _initializationTime = Time.timeSinceLevelLoad;
+            _rb = GetComponent<Rigidbody>();
         }
 	
 
         private void FixedUpdate()
         {
-            rb.AddForce(rb.transform.right * 10 * Mathf.Sin( (Time.time- initializationTime )* 5), ForceMode.Acceleration);
+            _rb.AddForce(_rb.transform.right * SinForce * Mathf.Cos( (Time.time- _initializationTime )* Frequency), ForceMode.Acceleration);
         }
     }
 }
