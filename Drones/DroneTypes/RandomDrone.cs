@@ -2,15 +2,22 @@
 
 namespace Assets.Scripts.Drones
 {
-    public class RandomBouncingDrone : ADrone
+    public class RandomDrone : ADrone
     {
-        public RandomBouncingDrone(float speed, float size, Color color, DroneType? droneType = null) : base(speed, size, color, droneType)
+        protected float RestrictedZone;
+        protected float? ConeRange;
+        protected float StartDirection;
+
+        public RandomDrone(float speed, float size, Color color, DroneType? droneType = null, float? restrictedZone = null, float? coneRange = null, float? startDirection = null) : base(speed, size, color, droneType)
         {
+            RestrictedZone = restrictedZone ?? 1;
+            ConeRange = coneRange;
+            StartDirection = startDirection ?? 0;
         }
 
         public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null)
         {
-            var newDrone = Object.Instantiate(DroneFactory.GetDroneType[DroneType]);
+            var newDrone = Object.Instantiate(DroneFactory.SetDroneType[DroneType]);
 
             var isGround = newDrone.layer == 11;
 
@@ -34,7 +41,7 @@ namespace Assets.Scripts.Drones
             }
 
             newDrone.transform.position = pos;
-            newDrone.transform.rotation = Quaternion.Euler(0, DroneDirection.RandomDirection(1f), 0);
+            newDrone.transform.rotation = Quaternion.Euler(0, StartDirection + DroneDirection.RandomDirection(RestrictedZone, ConeRange), 0);
 
             return newDrone;
         }

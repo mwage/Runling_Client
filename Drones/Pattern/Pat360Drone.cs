@@ -11,15 +11,27 @@ namespace Assets.Scripts.Drones
         protected readonly bool Repeat;
         protected readonly bool? Clockwise;
         protected readonly float? StartRotation;
+        protected readonly float? MaxRotation;
+        protected readonly int? LoopsToChangeDirection;
+        protected readonly float? ReducePulseDelay;
+        protected readonly float MinPulseDelay;
+        protected float? PulseDelay;
 
+        private int _loopCounter = 0;
 
-        public Pat360Drones(int numRays, float? delay = null, bool? repeat = null, bool? clockwise = null, float? startRotation = null)
+        public Pat360Drones(int numRays, float? delay = null, bool? repeat = null, bool? clockwise = null, 
+            float? startRotation = null, float? maxRotation = null, int? loopsToChangeDirection = null, float? pulseDelay = null, float? reducePulseDelay = null, float? minPulseDelay = null)
         {
             NumRays = numRays;
             Delay = delay;
             Clockwise = clockwise;
             StartRotation = startRotation;
             Repeat = repeat ?? false;
+            PulseDelay = pulseDelay;
+            MaxRotation = maxRotation ?? 360;
+            LoopsToChangeDirection = loopsToChangeDirection;
+            ReducePulseDelay = reducePulseDelay;
+            MinPulseDelay = minPulseDelay ?? 1;
         }
 
         public override void SetPattern(DroneFactory factory, IDrone drone, Area area, StartPositionDelegate posDelegate = null, DroneMovement.MovementDelegate moveDelegate = null)
@@ -41,8 +53,6 @@ namespace Assets.Scripts.Drones
             var clockwise = true;
             var startRotation = 0f;
             var position = posDelegate(drone.GetSize(), area);
-
-
 
             // If delay is not null, the drones will go out in a fan motion.  If it is null, all rays will go out at the same time
             if (Delay != null)
@@ -82,13 +92,32 @@ namespace Assets.Scripts.Drones
                         position = parentDrone.transform.position;
                     }
                     // spawn new drone in set position, direction and dronespeed
-                    var rotation = startRotation + (clockwise ? 1 : -1) * (360f * i / NumRays);
-                    factory.SpawnDrones(new OnewayDrone(drone.GetSpeed(), drone.GetSize(), drone.GetColor(), position, rotation) , moveDelegate: moveDelegate);
+                    var rotation = startRotation + (clockwise ? 1 : -1) * (MaxRotation * i / NumRays);
+                    factory.SpawnDrones(new OnewayDrone(drone.GetSpeed(), drone.GetSize(), drone.GetColor(), position, rotation, drone.GetDroneType()) , moveDelegate: moveDelegate);
 
                     if (Delay != null)
                         yield return new WaitForSeconds(Delay.Value / (NumRays));
                 }
-            } while (Repeat && Delay != null);
+                if (PulseDelay != null)
+                {
+                    yield return new WaitForSeconds(PulseDelay.Value);
+                    if (ReducePulseDelay != null)
+                    {
+                        PulseDelay = PulseDelay > MinPulseDelay ? PulseDelay - PulseDelay * ReducePulseDelay : PulseDelay;
+                    }
+                }
+
+                if (LoopsToChangeDirection != null)
+                {
+                    _loopCounter++;
+                    if (_loopCounter == LoopsToChangeDirection.Value)
+                    {
+                        clockwise = !clockwise;
+                        _loopCounter = 0;
+                    }
+                }
+                
+            } while (Repeat && (Delay != null || PulseDelay != null));
         }
     }
 }

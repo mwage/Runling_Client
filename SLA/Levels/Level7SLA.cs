@@ -17,14 +17,10 @@ namespace Assets.Scripts.SLA.Levels
         public override void CreateDrones()
         {
             // Spawn Bouncing Drones
-            DroneFactory.SpawnAndAddDrones(new RandomBouncingDrone(6f, 1.5f, Color.red), 15, 6f, BoundariesSLA.BouncingSla);
+            DroneFactory.SpawnAndAddDrones(new RandomDrone(6f, 1.5f, Color.red), 15, 6f, BoundariesSLA.BouncingSla);
 
-            // Spawn Mine Drone
-                 GameObject[] mines = new GameObject[1];
-            //mines[0] = DroneFactory.SpawnDrones(new MineDrone(5f, 3f, Color.black), area: BoundariesSLA.FlyingSla);
-
-            // Spawn Green Drones
-            MineVariations.AddDelayed360Drones(32, 2f, 2, 8f, 1.3f, Color.cyan, mines, DroneFactory);
+            DroneFactory.SpawnDrones(new MineDrone(5, 3, Color.black, new Pat360Drones(32, 2, true, false, 0, 360, 2),
+                new OnewayDrone(8, 1.3f, Color.cyan)), area: BoundariesSLA.FlyingSla);
         }
     }
 }

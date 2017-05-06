@@ -12,14 +12,14 @@ namespace Assets.Scripts.Drones
         public GameObject FlyingOnewayDrone;
         public GameObject MineDrone;
 
-        public static Dictionary<DroneType,GameObject> GetDroneType = new Dictionary<DroneType,GameObject>();
+        public static Dictionary<DroneType,GameObject> SetDroneType = new Dictionary<DroneType,GameObject>();
 
         private void Awake()
         {
-            GetDroneType.Add(DroneType.BouncingDrone, BouncingDrone);
-            GetDroneType.Add(DroneType.FlyingBouncingDrone, FlyingBouncingDrone);
-            GetDroneType.Add(DroneType.FlyingOnewayDrone, FlyingOnewayDrone);
-            GetDroneType.Add(DroneType.MineDrone, MineDrone);
+            SetDroneType[DroneType.BouncingDrone] = BouncingDrone;
+            SetDroneType[DroneType.FlyingBouncingDrone] = FlyingBouncingDrone;
+            SetDroneType[DroneType.FlyingOnewayDrone] = FlyingOnewayDrone;
+            SetDroneType[DroneType.MineDrone] = MineDrone;
         }
 
         public List<GameObject> SpawnDrones(IDrone drone, int droneCount = 1, bool isAdded = false, Area area = new Area(), StartPositionDelegate posDelegate = null, DroneMovement.MovementDelegate moveDelegate = null, IPattern pattern = null)
