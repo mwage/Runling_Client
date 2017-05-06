@@ -20,7 +20,7 @@ namespace Assets.Scripts.SLA.Levels
             DroneFactory.SpawnAndAddDrones(new RandomDrone(7f, 1.15f, Color.blue), 7, 5f, BoundariesSLA.BouncingSla);
 
             // Spawn Grid Drones
-            DroneFactory.SetPattern(new PatGridDrones(10, 0.05f), new OnewayDrone(7f, 1f, Color.magenta),
+            DroneFactory.SetPattern(new PatGridDrones(10, 0.05f), new DefaultDrone(7f, 1f, Color.magenta),
                 BoundariesSLA.FlyingSla);
         }        
     }

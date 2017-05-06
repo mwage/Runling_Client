@@ -17,7 +17,7 @@ namespace Assets.Scripts.Drones
 
         public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null)
         {
-            var chaser = factory.SpawnDrones(new OnewayDrone(Speed, Size, Color));
+            var chaser = factory.SpawnDrones(new DefaultDrone(Speed, Size, Color));
 
             DroneMovement.ChaserMovement(chaser[0], Speed, Player);
             return chaser[0];

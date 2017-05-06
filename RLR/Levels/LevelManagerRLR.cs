@@ -94,7 +94,12 @@ public class LevelManagerRLR : MonoBehaviour {
         DroneFactory.StopAllCoroutines();
         Destroy(InitializeGameRLR.Player);
         var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        var strongEnemies = GameObject.FindGameObjectsWithTag("Strong Enemy");
         foreach (var t in enemies)
+        {
+            Destroy(t);
+        }
+        foreach (var t in strongEnemies)
         {
             Destroy(t);
         }

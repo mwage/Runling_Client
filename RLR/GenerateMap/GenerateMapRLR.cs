@@ -17,14 +17,16 @@ namespace Assets.Scripts.RLR.GenerateMap
         public float FlyingDroneColliderOffset;
 
         protected List<ALane> Lanes;
-        protected List<GameObject> SafeZones = new List<GameObject>();
-        protected List<GameObject> AirCollider = new List<GameObject>();
+        protected List<GameObject> SafeZones ;
+        protected List<GameObject> AirCollider ;
 
         public void GenerateMap(int centerSize, float[] lanesWidth, float gapBetweenLines, float wallSize)
         {
             var centerSizeHalf = centerSize / 2;
             FlyingDroneColliderOffset = 20;
 
+            SafeZones = new List<GameObject>();
+            AirCollider = new List<GameObject>();
             // Destroy previous level
             foreach (Transform child in Terrain.transform)
             {

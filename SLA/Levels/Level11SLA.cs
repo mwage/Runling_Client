@@ -23,7 +23,7 @@ namespace Assets.Scripts.SLA.Levels
 
             // Spawn Mine Drones
             MineVariations.Timed360Mines(DroneFactory, 3, new MineDrone(5, 3, Color.black), BoundariesSLA.FlyingSla,
-                new OnewayDrone(10, 1, Color.cyan), 32, 8, 0.1f);
+                new DefaultDrone(10, 1, Color.cyan), 32, 8, 0.1f);
         }
     }
 }

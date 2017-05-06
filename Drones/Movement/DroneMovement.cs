@@ -26,20 +26,26 @@ namespace Assets.Scripts.Drones
             rb.AddForce(drone.transform.forward * droneSpeed, ForceMode.VelocityChange);
         }
 
-        public static void SinusMovement(GameObject drone, float droneSpeed)
+        public static void SinusoidalMovement(GameObject drone, float droneSpeed)
         {
             MoveStraight(drone, droneSpeed);
-            drone.AddComponent<MoveSinusoidal>();
-            var instance = drone.GetComponent<MoveSinusoidal>();
+            var instance = drone.AddComponent<SinusoidalMovement>();
             instance.Frequency = 5;
             instance.SinForce = 20;
+        }
 
+        public static void CurvedMovement(GameObject drone, float droneSpeed)
+        {
+            MoveStraight(drone, droneSpeed);
+            var instance = drone.AddComponent<CurvedMovement>();
+            instance.Curving = -7; // deg/s, changes direction of force
+            instance.Force  = -10; // acceleration along X axis. Drone doesn't overaccelerate
+            instance.DroneSpeed = droneSpeed;
         }
 
         public static void ChaserMovement(GameObject drone, float droneSpeed, GameObject player)
         {
-            drone.AddComponent<ChaserMovement>();
-            var instance = drone.GetComponent<ChaserMovement>();
+            var instance = drone.AddComponent<ChaserMovement>();
             instance.Speed = droneSpeed;
             instance.Player = player;
         }

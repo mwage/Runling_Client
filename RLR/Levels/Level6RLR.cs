@@ -18,16 +18,8 @@ namespace Assets.Scripts.RLR.Levels
         public override void CreateDrones()
         {
             // Spawn blue drones
-            DroneFactory.StartCoroutine(GenerateBlueDrones(0.1f, 7, 2, Color.blue));
-        }
-
-        private IEnumerator GenerateBlueDrones(float delay, float speed, float size, Color color)
-        {
-            while (true)
-            {
-                DroneFactory.SpawnDrones(new OnewayDrone(speed, size, color, direction: DroneDirection.RandomDirection(0)), 2);
-                yield return new WaitForSeconds(delay);
-            }
+            DroneFactory.SetPattern(new PatContinuousSpawn(0.1f, 2),
+                new RandomDrone(7, 2, Color.blue, restrictedZone: 0, droneType: DroneType.FlyingOnewayDrone), moveDelegate: DroneMovement.SinusoidalMovement);
         }
     }
 }

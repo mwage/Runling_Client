@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts.Drones
 {
-    public class MoveSinusoidal : MonoBehaviour
+    public class SinusoidalMovement : MonoBehaviour
     {
         private Rigidbody _rb;
         private float _initializationTime;
@@ -15,10 +15,9 @@ namespace Assets.Scripts.Drones
             _rb = GetComponent<Rigidbody>();
         }
 	
-
         private void FixedUpdate()
         {
-            _rb.AddForce(_rb.transform.right * SinForce * Mathf.Cos( (Time.time- _initializationTime )* Frequency), ForceMode.Acceleration);
+            _rb.AddForce(_rb.transform.right * SinForce * Mathf.Cos( (Time.time - _initializationTime )* Frequency), ForceMode.Acceleration);
         }
     }
 }

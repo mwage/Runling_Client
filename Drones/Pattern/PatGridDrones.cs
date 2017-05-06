@@ -40,14 +40,14 @@ namespace Assets.Scripts.Drones
                     for (var i = 0; i < droneCount; i++)
                     {
                         var startPos = new Vector3(-length, 0.6f, height - i * 2 * height / droneCount);
-                        factory.SpawnDrones(new OnewayDrone(speed, size, color, startPos, direction), moveDelegate: moveDelegate);
+                        factory.SpawnDrones(new DefaultDrone(speed, size, color, startPos, direction), moveDelegate: moveDelegate);
 
                         yield return new WaitForSeconds(delay * 2 * height / droneCount);
                     }
                     for (var i = 0; i < droneCount; i++)
                     {
                         var startPos = new Vector3(-length, 0.6f, -height + i * 2 * height / droneCount);
-                        factory.SpawnDrones(new OnewayDrone(speed, size, color, startPos, direction), moveDelegate: moveDelegate);
+                        factory.SpawnDrones(new DefaultDrone(speed, size, color, startPos, direction), moveDelegate: moveDelegate);
                         yield return new WaitForSeconds(delay * 2 * height / droneCount);
                     }
                 }
@@ -73,13 +73,13 @@ namespace Assets.Scripts.Drones
                 for (var i = 0; i < droneCount; i++)
                 {
                     var startPos = new Vector3(-lenght + i * 2 * lenght / droneCount, 0.6f, height);
-                    factory.SpawnDrones(new OnewayDrone(speed, size, color, startPos, direction), moveDelegate: moveDelegate);
+                    factory.SpawnDrones(new DefaultDrone(speed, size, color, startPos, direction), moveDelegate: moveDelegate);
                     yield return new WaitForSeconds(delay * 2 * lenght / droneCount);
                 }
                 for (var i = 0; i < droneCount; i++)
                 {
                     var startPos = new Vector3(lenght - i * 2 * lenght / droneCount, 0.6f, height);
-                    factory.SpawnDrones(new OnewayDrone(speed, size, color, startPos, direction), moveDelegate: moveDelegate);
+                    factory.SpawnDrones(new DefaultDrone(speed, size, color, startPos, direction), moveDelegate: moveDelegate);
                     yield return new WaitForSeconds(delay * 2 * lenght / droneCount);
                 }
 

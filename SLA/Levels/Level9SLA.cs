@@ -25,7 +25,7 @@ namespace Assets.Scripts.SLA.Levels
             DroneFactory.SpawnDrones(new ChaserDrone(7f, 1.1f, Color.yellow, player));
         
             // Spawn Green Drones
-            DroneFactory.StartCoroutine(GenerateLevel9GreenDrones(4f, 16, 8f, 1.5f, Color.green, 0.1f, 1f, 1, 16));
+            DroneFactory.StartCoroutine(GenerateLevel9GreenDrones(4f, 16, 8f, 1.5f, Color.green, 0.1f, 1f, 1, 32));
         }
 
         IEnumerator GenerateLevel9GreenDrones(float delay, int initialDroneCount, float speed, float size, Color color, float reduceDelay, float minDelay, int droneIncrease, int maxDrones)
@@ -34,12 +34,12 @@ namespace Assets.Scripts.SLA.Levels
             while (true)
             {
                 DroneFactory.SetPattern(new Pat360Drones(initialDroneCount + 2 * droneCount),
-                    new OnewayDrone(speed, size, color), BoundariesSLA.FlyingSla, posDelegate: DroneStartPosition.GetRandomBottomSector);
+                    new DefaultDrone(speed, size, color), BoundariesSLA.FlyingSla, DroneStartPosition.GetRandomBottomSector);
                 yield return new WaitForSeconds(delay);
-                DroneFactory.SetPattern(new Pat360Drones(initialDroneCount + 2 * droneCount), new OnewayDrone(speed, size, color), BoundariesSLA.FlyingSla, posDelegate: DroneStartPosition.GetRandomTopSector);
+                DroneFactory.SetPattern(new Pat360Drones(initialDroneCount + 2 * droneCount), new DefaultDrone(speed, size, color), BoundariesSLA.FlyingSla, DroneStartPosition.GetRandomTopSector);
                 yield return new WaitForSeconds(delay);
                 if (delay > minDelay) { delay -= delay * reduceDelay; }
-                if (droneCount < maxDrones) { droneCount += droneIncrease; }
+                if (droneCount < maxDrones-initialDroneCount) { droneCount += droneIncrease; }
             }
         }
     }
