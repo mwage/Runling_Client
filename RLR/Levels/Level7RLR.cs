@@ -20,7 +20,7 @@ namespace Assets.Scripts.RLR.Levels
             }
 
             // Spawn blue drones
-            DroneFactory.SpawnDrones(new StraightFlying360Drone(6, 2, Color.blue, 16, 8, true, true, 270));
+            DroneFactory.SetPattern(new Pat360Drones(16, 8, true, true, 270), new OnewayDrone(6, 2, Color.blue));
         }
     }
 }

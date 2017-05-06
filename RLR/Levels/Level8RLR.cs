@@ -20,7 +20,7 @@ namespace Assets.Scripts.RLR.Levels
             }
 
             // Spawn red drones
-            DroneFactory.SpawnDrones(new RandomFlyingBouncingDrone(6f, 2f, Color.red), 100, area: laneArea[0]);
+            DroneFactory.SpawnDrones(new RandomBouncingDrone(6f, 2f, Color.red, DroneType.FlyingBouncingDrone), 100, area: laneArea[0]);
         }
     }
 }

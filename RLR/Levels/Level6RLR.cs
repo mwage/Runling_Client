@@ -25,8 +25,7 @@ namespace Assets.Scripts.RLR.Levels
         {
             while (true)
             {
-                DroneFactory.SpawnDrones(new StraightFlyingOnewayDrone(speed, size, color, new Vector3(0, 0.6f, 0),
-                    DroneDirection.RandomDirection(0)), 2);
+                DroneFactory.SpawnDrones(new OnewayDrone(speed, size, color, direction: DroneDirection.RandomDirection(0)), 2);
                 yield return new WaitForSeconds(delay);
             }
         }

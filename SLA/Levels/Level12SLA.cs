@@ -30,8 +30,11 @@ namespace Assets.Scripts.SLA.Levels
 
             while (true)
             {
-                DroneFactory.SpawnDrones(new StraightFlying360Drone(speed, size, color, initialDroneCount + droneCount, 5f), area: BoundariesSLA.FlyingSla, posDelegate: DroneStartPosition.GetRandomBottomSector);
-                DroneFactory.SpawnDrones(new StraightFlying360Drone(speed, size, color, initialDroneCount + droneCount, 5f), area: BoundariesSLA.FlyingSla, posDelegate: DroneStartPosition.GetRandomTopSector);
+                DroneFactory.SetPattern(new Pat360Drones(initialDroneCount + droneCount, 5f),
+                    new OnewayDrone(speed, size, color), BoundariesSLA.FlyingSla, DroneStartPosition.GetRandomBottomSector);
+                DroneFactory.SetPattern(new Pat360Drones(initialDroneCount + droneCount, 5f),
+                    new OnewayDrone(speed, size, color), BoundariesSLA.FlyingSla, DroneStartPosition.GetRandomTopSector);
+
                 yield return new WaitForSeconds(delay);
                 if (delay > minDelay) { delay -= delay * reduceDelay; }
                 if (droneCount < maxDrones) { droneCount += droneIncrease; }

@@ -88,7 +88,7 @@ namespace Assets.Scripts.RLR.GenerateMap
                     else if (ch.tag == "Bottom")
                     {
                         SetDroneCollider(ch, child, 0F, -(LaneWidth  - WallSize ) / 2, nextLineWidth, ColliderWallSize);
-                        SetWallOrPlayerCollider(ch, child, 0F, -(LaneWidth  + WallSize) / 2, nextLineWidth, ColliderWallSize);
+                        SetWallOrPlayerCollider(ch, child, -WallSize/2, -(LaneWidth  + WallSize) / 2, nextLineWidth + WallSize, ColliderWallSize);
                     }
 
                     else if (ch.tag == "Left")

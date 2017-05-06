@@ -53,14 +53,14 @@ namespace Assets.Scripts.SLA.Levels
             for (var i = 0; i < droneCount; i++)
             {
                 rotation = startRotation + 180f * i / droneCount;
-                DroneFactory.SpawnDrones(new StraightFlyingOnewayDrone(speed, size, color, startPos, rotation));
+                DroneFactory.SpawnDrones(new OnewayDrone(speed, size, color, startPos, rotation));
                 yield return new WaitForSeconds(delay);
             }
 
             for (var i = 0; i < droneCount; i++)
             {
                 rotation = startRotation + 180 - 180f * i / droneCount;
-                DroneFactory.SpawnDrones(new StraightFlyingOnewayDrone(speed, size, color, startPos, rotation));
+                DroneFactory.SpawnDrones(new OnewayDrone(speed, size, color, startPos, rotation));
                 yield return new WaitForSeconds(delay);
             }
         }

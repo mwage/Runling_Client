@@ -1,19 +1,19 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Assets.Scripts.Drones
 {
-    public class StraightFlying360Drone : ADrone
+    public class Pat360Drones : APattern
     {
         protected readonly int NumRays;
         protected readonly float? Delay;
+        protected readonly bool Repeat;
         protected readonly bool? Clockwise;
         protected readonly float? StartRotation;
-        protected readonly bool Repeat;
 
 
-        public StraightFlying360Drone(float speed, float size, Color color, int numRays, float? delay = null,
-            bool? repeat = null, bool? clockwise = null, float? startRotation = null) : base(speed, size, color)
+        public Pat360Drones(int numRays, float? delay = null, bool? repeat = null, bool? clockwise = null, float? startRotation = null)
         {
             NumRays = numRays;
             Delay = delay;
@@ -22,21 +22,26 @@ namespace Assets.Scripts.Drones
             Repeat = repeat ?? false;
         }
 
-    
-        public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null)
+        public override void SetPattern(DroneFactory factory, IDrone drone, Area area, StartPositionDelegate posDelegate = null, DroneMovement.MovementDelegate moveDelegate = null)
         {
             if (posDelegate == null)
-                posDelegate = delegate { return new Vector3 (0, 0.6f, 0); };
+                posDelegate = delegate { return new Vector3(0, 0.6f, 0); };
 
-            factory.StartCoroutine(Generate360Drones(factory, area, posDelegate));
-            return null;
+            factory.StartCoroutine(Generate360Drones(factory, drone, area, posDelegate, moveDelegate));
         }
 
-        private IEnumerator Generate360Drones(DroneFactory factory, Area area, StartPositionDelegate posDelegate)
+        public override void AddPattern(DroneFactory factory, GameObject drone, IDrone addedDrone, Area area, DroneMovement.MovementDelegate moveDelegate = null)
+        {
+            factory.StartCoroutine(Generate360Drones(factory, addedDrone, area, delegate { return Vector3.zero; }, moveDelegate, drone));
+        }
+
+
+        private IEnumerator Generate360Drones(DroneFactory factory, IDrone drone, Area area, StartPositionDelegate posDelegate, DroneMovement.MovementDelegate moveDelegate, GameObject parentDrone = null)
         {
             var clockwise = true;
             var startRotation = 0f;
-            var position = posDelegate(Size, area);
+            var position = posDelegate(drone.GetSize(), area);
+
 
 
             // If delay is not null, the drones will go out in a fan motion.  If it is null, all rays will go out at the same time
@@ -72,10 +77,13 @@ namespace Assets.Scripts.Drones
             {
                 for (var i = 0; i < NumRays; i++)
                 {
+                    if (parentDrone != null)
+                    {
+                        position = parentDrone.transform.position;
+                    }
                     // spawn new drone in set position, direction and dronespeed
                     var rotation = startRotation + (clockwise ? 1 : -1) * (360f * i / NumRays);
-                    var drone = Object.Instantiate(factory.FlyingOnewayDrone, position, Quaternion.Euler(0, rotation, 0));
-                    ConfigureDrone(drone);
+                    factory.SpawnDrones(new OnewayDrone(drone.GetSpeed(), drone.GetSize(), drone.GetColor(), position, rotation) , moveDelegate: moveDelegate);
 
                     if (Delay != null)
                         yield return new WaitForSeconds(Delay.Value / (NumRays));

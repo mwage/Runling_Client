@@ -92,12 +92,12 @@ public class LevelManagerRLR : MonoBehaviour {
     {
         yield return new WaitForSeconds(delay);
         DroneFactory.StopAllCoroutines();
+        Destroy(InitializeGameRLR.Player);
         var enemies = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (var t in enemies)
         {
             Destroy(t);
         }
-        Destroy(InitializeGameRLR.Player);
         GameControl.CurrentLevel++;
         InitializeGameRLR.InitializeGame();
     }

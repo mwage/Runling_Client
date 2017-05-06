@@ -16,7 +16,7 @@ namespace Assets.Scripts.RLR
             // Set current Level and movespeed, load drones and spawn immunity
             StopUpdate = true;
             GameControl.GameActive = true;
-            GameControl.CurrentLevel = 3;
+            GameControl.CurrentLevel = 2;
             GameControl.MoveSpeed = 13;
             InitializeGameRLR.InitializeGame();
         }

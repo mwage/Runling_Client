@@ -7,12 +7,12 @@ namespace Assets.Scripts.Drones
 {
     public class MineVariations
     {
-        public static void AddStraightFlying360Drones(int droneCount, float delay, float speed, float size, Color color, GameObject[] mines, DroneFactory factory, float? reduceDelay = null, DroneMovement.MovementDelegate moveDelegate = null)
+        public static void Add360Drones(int droneCount, float delay, float speed, float size, Color color, List<GameObject> mines, DroneFactory factory, float? reduceDelay = null, DroneMovement.MovementDelegate moveDelegate = null)
         {
-            factory.StartCoroutine(GenerateStraightFlying360Drones(droneCount, delay, speed, size, color, mines, factory, reduceDelay, moveDelegate));
+            factory.StartCoroutine(Generate360Drones(droneCount, delay, speed, size, color, mines, factory, reduceDelay, moveDelegate));
         }
 
-        public static void AddDelayedStraightFlying360Drones(int droneCount, float delay, int rotations, float speed, float size, Color color, GameObject[] mines, DroneFactory factory, DroneMovement.MovementDelegate moveDelegate = null)
+        public static void AddDelayed360Drones(int droneCount, float delay, int rotations, float speed, float size, Color color, GameObject[] mines, DroneFactory factory, DroneMovement.MovementDelegate moveDelegate = null)
         {
             foreach (var mine in mines)
             {
@@ -21,17 +21,18 @@ namespace Assets.Scripts.Drones
             }
         }
 
-        private static IEnumerator GenerateStraightFlying360Drones(int droneCount, float delay, float speed, float size, Color color, GameObject[] mines, DroneFactory factory, float? reduceDelay = null, DroneMovement.MovementDelegate moveDelegate = null)
+        private static IEnumerator Generate360Drones(int droneCount, float delay, float speed, float size, Color color, List<GameObject> mines, DroneFactory factory, float? reduceDelay = null, DroneMovement.MovementDelegate moveDelegate = null)
         {
             while (true)
             {
                 foreach (var m in mines)
                 {
-                    factory.SpawnDrones(new StraightFlying360Drone(speed, size, color, droneCount), posDelegate: delegate { return m.transform.position; }, moveDelegate: moveDelegate);
-                    yield return new WaitForSeconds(delay / mines.Length);
+                    factory.SetPattern(new Pat360Drones(droneCount),
+                        new OnewayDrone(speed, size, color), posDelegate: delegate { return m.transform.position; }, moveDelegate: moveDelegate);
+                    yield return new WaitForSeconds(delay / mines.Count);
                 }
 
-                if (reduceDelay != null) { delay = delay > mines.Length ? delay - delay * reduceDelay.Value : 3f; }
+                if (reduceDelay != null) { delay = delay > mines.Count ? delay - delay * reduceDelay.Value : 3f; }
             }
         }
 
@@ -43,7 +44,7 @@ namespace Assets.Scripts.Drones
                 {
                     for (var i = 0; i < droneCount; i++)
                     {
-                        factory.SpawnDrones(new StraightFlyingOnewayDrone(speed, size, color, mine.transform.position, i * 360f / droneCount), moveDelegate: moveDelegate);
+                        factory.SpawnDrones(new OnewayDrone(speed, size, color, mine.transform.position, i * 360f / droneCount), moveDelegate: moveDelegate);
                         yield return new WaitForSeconds(delay / droneCount);
                     }
                 }
@@ -51,7 +52,7 @@ namespace Assets.Scripts.Drones
                 {
                     for (var i = 0; i < droneCount; i++)
                     {
-                        factory.SpawnDrones(new StraightFlyingOnewayDrone(speed, size, color, mine.transform.position, -i * 360f / droneCount), moveDelegate: moveDelegate);
+                        factory.SpawnDrones(new OnewayDrone(speed, size, color, mine.transform.position, -i * 360f / droneCount), moveDelegate: moveDelegate);
                         yield return new WaitForSeconds(delay / droneCount);
                     }
                 }

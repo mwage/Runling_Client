@@ -10,39 +10,42 @@ namespace Assets.Scripts.Drones
         private float _rotationSpeed;
         private Vector3 _targetPos;
         private Vector3 _direction;
-        
+        private Rigidbody _rb;
+        private float _acceleration;
+        private float _maxSpeed;
+
 
         private void Start()
         {
+            _rb = GetComponent<Rigidbody>();
+            _rotationSpeed = 15f;
+            _acceleration = 50f;
+            _maxSpeed = Speed;
         }
 
 
         private void FixedUpdate()
         {
-        var rb = GetComponent<Rigidbody>();
-        _rotationSpeed = 15f;
-        const float acceleration = 50f;
-        var maxSpeed = Speed;
-
+            if (Player == null || _rb == null) { return; }
             _targetPos = Player.transform.position;
             _targetPos.y += 0.6f;
-            var currentSpeed = rb.velocity.magnitude;
+            var currentSpeed = _rb.velocity.magnitude;
             _direction = (_targetPos - transform.position).normalized;
 
             if ((_targetPos - transform.position).magnitude > 0.1f)
             {
-                rb.velocity = _direction * currentSpeed;
+                _rb.velocity = _direction * currentSpeed;
 
-                if (currentSpeed < maxSpeed)
+                if (currentSpeed < _maxSpeed)
                 {
-                    rb.AddForce(_direction * acceleration);
+                    _rb.AddForce(_direction * _acceleration);
                 }
 
                 // Don't accelerate over maxSpeed
                 else
                 {
-                    currentSpeed = maxSpeed;
-                    rb.velocity = _direction * currentSpeed;
+                    currentSpeed = _maxSpeed;
+                    _rb.velocity = _direction * currentSpeed;
                 }
 
                 if (Mathf.Abs(currentSpeed) > 0.00001)
@@ -52,7 +55,7 @@ namespace Assets.Scripts.Drones
             }
             else
             {
-                rb.velocity = Vector3.zero;
+                _rb.velocity = Vector3.zero;
             }
         }
 

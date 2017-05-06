@@ -23,10 +23,10 @@ namespace Assets.Scripts.SLA.Levels
             var mines = new GameObject[3];
             for (var i = 0; i < mines.Length; i++)
             {
-                mines[i] = DroneFactory.SpawnDrones(new MineDrone(5f, 3f, Color.black), area: BoundariesSLA.BouncingSla);
+                //mines[i] = DroneFactory.SpawnDrones(new MineDrone(5f, 3f, Color.black), area: BoundariesSLA.BouncingSla);
             }
 
-            MineVariations.AddStraightFlying360Drones(32, 10f, 8f, 1f, Color.cyan, mines, DroneFactory, 0.1f);
+            //MineVariations.Add360Drones(32, 10f, 8f, 1f, Color.cyan, mines, DroneFactory, 0.1f);
         }
     }
 }

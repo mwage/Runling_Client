@@ -10,26 +10,17 @@ namespace Assets.Scripts.Drones
     {
         protected readonly GameObject Player;
         
-        public ChaserDrone(float speed, float size, Color color, GameObject player) : base(speed, size, color)
+        public ChaserDrone(float speed, float size, Color color, GameObject player, DroneType? droneType = null) : base(speed, size, color, droneType)
         {
             Player = player;
         }
 
         public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null)
         {
-            var chaser = Object.Instantiate(factory.FlyingOnewayDrone, new Vector3(0, 0.6f, 0), Quaternion.identity);
+            var chaser = factory.SpawnDrones(new OnewayDrone(Speed, Size, Color));
 
-            // adjust drone color and size
-            var rend = chaser.GetComponent<Renderer>();
-            rend.material.color = Color;
-            var scale = chaser.transform.localScale;
-            scale.x *= Size;
-            scale.z *= Size;
-            chaser.transform.localScale = scale;
-
-            DroneMovement.ChaserMovement(chaser, Speed, Player);
-            
-            return chaser;
+            DroneMovement.ChaserMovement(chaser[0], Speed, Player);
+            return chaser[0];
         }
     }
 }

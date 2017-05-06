@@ -20,11 +20,11 @@ namespace Assets.Scripts.RLR.Levels
             }
 
             // Spawn red drones
-            DroneFactory.SpawnDrones(new RandomFlyingBouncingDrone(6f, 2f, Color.red), 100, area: laneArea[0]);
+            DroneFactory.SpawnDrones(new RandomBouncingDrone(6f, 2f, Color.red, DroneType.FlyingBouncingDrone), 70, area: laneArea[0]);
 
             // Spawn blue drones
-            DroneFactory.SpawnDrones(new StraightFlying360Drone(7, 2, Color.blue, 16, 8, true, true, 270));
-            DroneFactory.SpawnDrones(new StraightFlying360Drone(7, 2, Color.blue, 16, 8, true, true, 90));
+            DroneFactory.SetPattern(new Pat360Drones(16, 8, true, true, 270), new OnewayDrone(6, 2, Color.blue));
+            DroneFactory.SetPattern(new Pat360Drones(16, 8, true, true, 90), new OnewayDrone(6, 2, Color.blue));
         }
     }
 }

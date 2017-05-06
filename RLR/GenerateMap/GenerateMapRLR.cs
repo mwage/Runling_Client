@@ -18,6 +18,7 @@ namespace Assets.Scripts.RLR.GenerateMap
 
         protected List<ALane> Lanes;
         protected List<GameObject> SafeZones = new List<GameObject>();
+        protected List<GameObject> AirCollider = new List<GameObject>();
 
         public void GenerateMap(int centerSize, float[] lanesWidth, float gapBetweenLines, float wallSize)
         {
@@ -27,7 +28,7 @@ namespace Assets.Scripts.RLR.GenerateMap
             // Destroy previous level
             foreach (Transform child in Terrain.transform)
             {
-                Destroy(child.GetComponent<GameObject>());
+                Destroy(child.gameObject);
             }
 
             Lanes = CalculateLanesParameters(lanesWidth.Length, lanesWidth, gapBetweenLines, centerSizeHalf);
@@ -44,12 +45,22 @@ namespace Assets.Scripts.RLR.GenerateMap
             }
             Lanes[0].InstantiateRamp(LaneStandardPrefab, Terrain.transform); // adding ramp near center
 
-            CreateFlyingDroneColliders(Lanes, FlyingDroneCollider, FlyingDroneColliderOffset, Terrain.transform);
+            AirCollider = CreateFlyingDroneColliders(Lanes, FlyingDroneCollider, FlyingDroneColliderOffset, Terrain.transform);
+        }
+
+        public Vector3 GetStartPlatform()
+        {
+            return SafeZones[SafeZones.Count - 1].transform.position;
         }
 
         public List<GameObject> GetSafeZones()
         {
             return SafeZones;
+        }
+
+        public float GetAirColliderRange()
+        {
+            return AirCollider[0].transform.localScale.x;
         }
 
         public Area[] GetDroneSpawnArea()
@@ -133,7 +144,7 @@ namespace Assets.Scripts.RLR.GenerateMap
             return lanes;
         }
 
-        private void CreateFlyingDroneColliders(IList<ALane> lanes, GameObject flyingDroneCollider, float flyingDroneColliderOffset, Transform terrain)
+        private List<GameObject> CreateFlyingDroneColliders(IList<ALane> lanes, GameObject flyingDroneCollider, float flyingDroneColliderOffset, Transform terrain)
         {
             var flyingDroneColliders = new List<GameObject>();
             var colliderLen = lanes[lanes.Count - 1].Sc + new Vector3(2 * lanes[lanes.Count - 1].LaneWidth + 2 * flyingDroneColliderOffset, 10f, 0f);
@@ -144,6 +155,7 @@ namespace Assets.Scripts.RLR.GenerateMap
                 flyingDroneColliders[i].transform.localEulerAngles = lanes[lanes.Count - 1 - i].Rot;
                 flyingDroneColliders[i].transform.localScale = colliderLen;
             }
+            return flyingDroneColliders;
         }
     }   
 }

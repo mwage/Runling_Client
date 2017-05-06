@@ -6,5 +6,9 @@ namespace Assets.Scripts.Drones
     {
         GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null);
         void ConfigureDrone(GameObject drone, DroneMovement.MovementDelegate moveDelegate = null);
+        float GetSize();
+        float GetSpeed();
+        Color GetColor();
+        DroneType GetDroneType();
     }
 }
