@@ -49,22 +49,21 @@ namespace Assets.Scripts.Drones
             _repeatCounter = LimitedRepeats ?? 0;
         }
 
-        public override void SetPattern(DroneFactory factory, IDrone drone, Area area, StartPositionDelegate posDelegate = null, DroneMovement.MovementDelegate moveDelegate = null)
+        public override void SetPattern(DroneFactory factory, IDrone drone, Area area, StartPositionDelegate posDelegate = null)
         {
             if (posDelegate == null)
                 posDelegate = delegate { return new Vector3(0, 0.6f, 0); };
 
-            factory.StartCoroutine(Generate360Drones(factory, drone, area, posDelegate, moveDelegate));
+            factory.StartCoroutine(Generate360Drones(factory, drone, area, posDelegate));
         }
 
-        public override void AddPattern(DroneFactory factory, GameObject drone, IDrone addedDrone, Area area, DroneMovement.MovementDelegate moveDelegate = null)
+        public override void AddPattern(DroneFactory factory, GameObject drone, IDrone addedDrone, Area area)
         {
-            factory.StartCoroutine(Generate360Drones(factory, addedDrone, area, delegate { return Vector3.zero; }, moveDelegate, drone));
+            factory.StartCoroutine(Generate360Drones(factory, addedDrone, area, delegate { return Vector3.zero; }, drone));
         }
 
 
-        private IEnumerator Generate360Drones(DroneFactory factory, IDrone drone, Area area, StartPositionDelegate posDelegate, 
-            DroneMovement.MovementDelegate moveDelegate, GameObject parentDrone = null)
+        private IEnumerator Generate360Drones(DroneFactory factory, IDrone drone, Area area, StartPositionDelegate posDelegate, GameObject parentDrone = null)
         {
             var clockwise = true;
             var startRotation = 0f;
@@ -122,7 +121,7 @@ namespace Assets.Scripts.Drones
                         var rotation = startRotation + (clockwise ? 1 : -1) * (MaxRotation * i / NumRays);
                         factory.SpawnDrones(
                             new DefaultDrone(drone.GetSpeed(), drone.GetSize(), drone.GetColor(), position, rotation,
-                                drone.GetDroneType()), moveDelegate: moveDelegate);
+                                drone.GetDroneType()));
 
                         if (Delay != null)
                             yield return new WaitForSeconds(Delay.Value / NumRays);

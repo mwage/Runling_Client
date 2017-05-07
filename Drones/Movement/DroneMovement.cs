@@ -4,9 +4,9 @@ namespace Assets.Scripts.Drones
 {
     public class DroneMovement
     {
-        public delegate void MovementDelegate(GameObject drone, float droneSpeed);
+        public delegate void MovementDelegate(GameObject drone, float droneSpeed, GameObject player = null, float? curving = null, float? sinForce = null, float? sinFrequency = null);
 
-        public static void Move(GameObject drone, float droneSpeed, MovementDelegate moveDelegate = null)
+        public static void Move(GameObject drone, float droneSpeed, MovementDelegate moveDelegate = null, GameObject player = null, float? curving = null, float? sinForce = null, float? sinFrequency = null)
         {
             if (moveDelegate == null)
             {
@@ -14,7 +14,7 @@ namespace Assets.Scripts.Drones
             }
             else
             {
-                moveDelegate(drone, droneSpeed);
+                moveDelegate(drone, droneSpeed, player, curving, sinForce, sinFrequency);
             }
         }
 
@@ -26,28 +26,44 @@ namespace Assets.Scripts.Drones
             rb.AddForce(drone.transform.forward * droneSpeed, ForceMode.VelocityChange);
         }
 
-        public static void SinusoidalMovement(GameObject drone, float droneSpeed)
+        public static void SinusoidalMovement(GameObject drone, float droneSpeed, GameObject player = null, float? curving = null, float? sinForce = null, float? sinFrequency = null)
         {
             MoveStraight(drone, droneSpeed);
             var instance = drone.AddComponent<SinusoidalMovement>();
-            instance.Frequency = 5;
-            instance.SinForce = 20;
-        }
-
-        public static void CurvedMovement(GameObject drone, float droneSpeed)
-        {
-            MoveStraight(drone, droneSpeed);
-            var instance = drone.AddComponent<CurvedMovement>();
-            instance.Curving = -7; // deg/s, changes direction of force
-            instance.Force  = -10; // acceleration along X axis. Drone doesn't overaccelerate
+            instance.SinFrequency = sinFrequency ?? 5;
+            instance.SinForce = sinForce ?? 20;
             instance.DroneSpeed = droneSpeed;
         }
 
-        public static void ChaserMovement(GameObject drone, float droneSpeed, GameObject player)
+        public static void CurvedMovement(GameObject drone, float droneSpeed, GameObject player = null, float? curving = null, float? sinForce = null, float? sinFrequency = null)
         {
+            MoveStraight(drone, droneSpeed);
+            var instance = drone.AddComponent<CurvedMovement>();
+            instance.Curving  = curving ?? 1;
+            instance.DroneSpeed = droneSpeed;
+        }
+
+        public static void ChaserMovement(GameObject drone, float droneSpeed, GameObject player = null, float? curving = null, float? sinForce = null, float? sinFrequency = null)
+        {
+            if (player == null)
+            {
+                Debug.Log("No player set! Canceled ChaserMovement.");
+                return;
+            }
             var instance = drone.AddComponent<ChaserMovement>();
             instance.Speed = droneSpeed;
             instance.Player = player;
+        }
+
+        public static void CurvedSinudoidalMovement(GameObject drone, float droneSpeed, GameObject player = null, float? curving = null, float? sinForce = null, float? sinFrequency = null)
+        {
+            MoveStraight(drone, droneSpeed);
+            var sinInstance = drone.AddComponent<SinusoidalMovement>();
+            var curvedInstance = drone.AddComponent<CurvedMovement>();
+            sinInstance.SinFrequency = sinFrequency ?? 5;
+            sinInstance.SinForce = sinForce ?? 20;
+            curvedInstance.Curving = curving ?? 1;
+            curvedInstance.DroneSpeed = droneSpeed;
         }
     }
 }

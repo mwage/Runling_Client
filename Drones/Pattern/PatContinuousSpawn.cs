@@ -14,21 +14,21 @@ namespace Assets.Scripts.Drones {
             DroneCount = droneCount;
         }
 
-        public override void SetPattern(DroneFactory factory, IDrone drone, Area area, StartPositionDelegate posDelegate = null, DroneMovement.MovementDelegate moveDelegate = null)
+        public override void SetPattern(DroneFactory factory, IDrone drone, Area area, StartPositionDelegate posDelegate = null)
         {
             if (posDelegate == null)
                 posDelegate = delegate { return new Vector3(0, 0.6f, 0); };
 
-            factory.StartCoroutine(GenerateDrones(factory, drone, posDelegate, moveDelegate));
+            factory.StartCoroutine(GenerateDrones(factory, drone, posDelegate));
         }
 
-        public override void AddPattern(DroneFactory factory, GameObject drone, IDrone addedDrone, Area area, DroneMovement.MovementDelegate moveDelegate = null)
+        public override void AddPattern(DroneFactory factory, GameObject drone, IDrone addedDrone, Area area)
         {
 
-            factory.StartCoroutine(GenerateDrones(factory, addedDrone, delegate { return Vector3.zero; }, moveDelegate, drone));
+            factory.StartCoroutine(GenerateDrones(factory, addedDrone, delegate { return Vector3.zero; }, drone));
         }
 
-        IEnumerator GenerateDrones(DroneFactory factory, IDrone drone, StartPositionDelegate posDelegate, DroneMovement.MovementDelegate moveDelegate, GameObject parentDrone = null)
+        IEnumerator GenerateDrones(DroneFactory factory, IDrone drone, StartPositionDelegate posDelegate, GameObject parentDrone = null)
         {
             var addPattern = parentDrone != null;
             while (true)
@@ -39,11 +39,11 @@ namespace Assets.Scripts.Drones {
                     factory.SpawnDrones( new RandomDrone(drone.GetSpeed(), drone.GetSize(), drone.GetColor(), drone.GetDroneType()), DroneCount, posDelegate: delegate
                     {
                         return parentDrone.transform.position;
-                    }, moveDelegate: moveDelegate);
+                    });
                 }
                 else
                 {
-                    factory.SpawnDrones(drone, DroneCount, posDelegate: posDelegate, moveDelegate: moveDelegate);
+                    factory.SpawnDrones(drone, DroneCount, posDelegate: posDelegate);
                 }
                 yield return new WaitForSeconds(Delay);
             }

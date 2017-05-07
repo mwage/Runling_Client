@@ -8,23 +8,21 @@ namespace Assets.Scripts.Drones
         protected int DroneCount;
         protected float Delay;
         protected bool AddDrones;
-        protected DroneMovement.MovementDelegate MoveDelegate;
 
-        public PatGridDrones(int droneCount, float delay, bool? addDrones = null, DroneMovement.MovementDelegate moveDelegate = null )
+        public PatGridDrones(int droneCount, float delay, bool? addDrones = null)
         {
             DroneCount = droneCount;
             Delay = delay;
             AddDrones = addDrones ?? false;
-            MoveDelegate = moveDelegate;
         }
 
-        public override void SetPattern(DroneFactory factory, IDrone drone, Area area, StartPositionDelegate posDelegate = null, DroneMovement.MovementDelegate moveDelegate = null)
+        public override void SetPattern(DroneFactory factory, IDrone drone, Area area, StartPositionDelegate posDelegate = null)
         {
-            factory.StartCoroutine(GenerateHorizontalGridDrones(drone, DroneCount, Delay, area, factory, AddDrones, MoveDelegate));
-            factory.StartCoroutine(GenerateVerticalGridDrones(drone, DroneCount, Delay, area, factory, AddDrones, MoveDelegate));
+            factory.StartCoroutine(GenerateHorizontalGridDrones(drone, DroneCount, Delay, area, factory, AddDrones));
+            factory.StartCoroutine(GenerateVerticalGridDrones(drone, DroneCount, Delay, area, factory, AddDrones));
         }
         
-        private static IEnumerator GenerateHorizontalGridDrones(IDrone drone, int droneCount, float delay, Area area, DroneFactory factory, bool addDrones, DroneMovement.MovementDelegate moveDelegate)
+        private static IEnumerator GenerateHorizontalGridDrones(IDrone drone, int droneCount, float delay, Area area, DroneFactory factory, bool addDrones)
         {
             var size = drone.GetSize();
             var speed = drone.GetSpeed();
@@ -40,14 +38,14 @@ namespace Assets.Scripts.Drones
                     for (var i = 0; i < droneCount; i++)
                     {
                         var startPos = new Vector3(-length, 0.6f, height - i * 2 * height / droneCount);
-                        factory.SpawnDrones(new DefaultDrone(speed, size, color, startPos, direction), moveDelegate: moveDelegate);
+                        factory.SpawnDrones(new DefaultDrone(speed, size, color, startPos, direction));
 
                         yield return new WaitForSeconds(delay * 2 * height / droneCount);
                     }
                     for (var i = 0; i < droneCount; i++)
                     {
                         var startPos = new Vector3(-length, 0.6f, -height + i * 2 * height / droneCount);
-                        factory.SpawnDrones(new DefaultDrone(speed, size, color, startPos, direction), moveDelegate: moveDelegate);
+                        factory.SpawnDrones(new DefaultDrone(speed, size, color, startPos, direction));
                         yield return new WaitForSeconds(delay * 2 * height / droneCount);
                     }
                 }
@@ -57,7 +55,7 @@ namespace Assets.Scripts.Drones
             }
         }
 
-        private static IEnumerator GenerateVerticalGridDrones(IDrone drone, int droneCount, float delay, Area area, DroneFactory factory, bool addDrones, DroneMovement.MovementDelegate moveDelegate)
+        private static IEnumerator GenerateVerticalGridDrones(IDrone drone, int droneCount, float delay, Area area, DroneFactory factory, bool addDrones)
         {
             var size = drone.GetSize();
             var speed = drone.GetSpeed();
@@ -73,13 +71,13 @@ namespace Assets.Scripts.Drones
                 for (var i = 0; i < droneCount; i++)
                 {
                     var startPos = new Vector3(-lenght + i * 2 * lenght / droneCount, 0.6f, height);
-                    factory.SpawnDrones(new DefaultDrone(speed, size, color, startPos, direction), moveDelegate: moveDelegate);
+                    factory.SpawnDrones(new DefaultDrone(speed, size, color, startPos, direction));
                     yield return new WaitForSeconds(delay * 2 * lenght / droneCount);
                 }
                 for (var i = 0; i < droneCount; i++)
                 {
                     var startPos = new Vector3(lenght - i * 2 * lenght / droneCount, 0.6f, height);
-                    factory.SpawnDrones(new DefaultDrone(speed, size, color, startPos, direction), moveDelegate: moveDelegate);
+                    factory.SpawnDrones(new DefaultDrone(speed, size, color, startPos, direction));
                     yield return new WaitForSeconds(delay * 2 * lenght / droneCount);
                 }
 
@@ -87,6 +85,5 @@ namespace Assets.Scripts.Drones
                     droneCount += (int)(lenght / height);
             }
         }
-
     }
 }

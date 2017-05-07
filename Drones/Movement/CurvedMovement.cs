@@ -5,7 +5,6 @@ namespace Assets.Scripts.Drones
     public class CurvedMovement : MonoBehaviour
     {
         private Rigidbody _rb;
-        public float Force;
         public float Curving;
         public float DroneSpeed;
 
@@ -16,9 +15,12 @@ namespace Assets.Scripts.Drones
 
         private void FixedUpdate()
         {
-            _rb.AddForce(_rb.transform.right * Force, ForceMode.Acceleration);
-            _rb.transform.Rotate(new Vector3(0F, Curving, 0F)*Time.deltaTime);
-            _rb.velocity = _rb.velocity.normalized * DroneSpeed; // don't accelerate too much. Can add if (currentMaginitude > 1.5 startDroneSpeed) then {normalize} - to make first lanes harder
+            _rb.AddForce(_rb.transform.right * -Curving, ForceMode.Acceleration);
+            if (Vector3.Cross(_rb.velocity, Vector3.up) != Vector3.zero)
+            {
+                _rb.transform.rotation = Quaternion.LookRotation(_rb.velocity, Vector3.up);
+            }
+            _rb.velocity = _rb.velocity.normalized * DroneSpeed;
         }
     }
 }

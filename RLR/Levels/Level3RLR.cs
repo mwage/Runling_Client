@@ -13,8 +13,8 @@ namespace Assets.Scripts.RLR.Levels
         public override void CreateDrones()
         {
             // Spawn blue drones
-            DroneFactory.SetPattern(new PatContinuousSpawn(0.1f, 2),
-                new RandomDrone(6, 1, Color.blue, restrictedZone: 0, droneType: DroneType.FlyingOnewayDrone), moveDelegate: DroneMovement.CurvedMovement);
+            DroneFactory.SetPattern(new PatContinuousSpawn(0.1f, 1),
+                new RandomDrone(6, 1, Color.blue, restrictedZone: 0, droneType: DroneType.FlyingOnewayDrone, moveDelegate: DroneMovement.CurvedMovement));
         }
     }
 }

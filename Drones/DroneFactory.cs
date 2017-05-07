@@ -22,7 +22,7 @@ namespace Assets.Scripts.Drones
             SetDroneType[DroneType.MineDrone] = MineDrone;
         }
 
-        public List<GameObject> SpawnDrones(IDrone drone, int droneCount = 1, bool isAdded = false, Area area = new Area(), StartPositionDelegate posDelegate = null, DroneMovement.MovementDelegate moveDelegate = null)
+        public List<GameObject> SpawnDrones(IDrone drone, int droneCount = 1, bool isAdded = false, Area area = new Area(), StartPositionDelegate posDelegate = null)
         {
             var drones = new List<GameObject>();
 
@@ -30,29 +30,29 @@ namespace Assets.Scripts.Drones
             {
                 var newDrone = drone.CreateDroneInstance(this, isAdded, area, posDelegate);
                 if (newDrone != null)
-                    drone.ConfigureDrone(newDrone, moveDelegate);
+                    drone.ConfigureDrone(newDrone);
                 drones.Add(newDrone);
             }
 
             return drones;
         }
 
-        public void SetPattern(IPattern pattern, IDrone drone, Area area = new Area(), StartPositionDelegate posDelegate = null, DroneMovement.MovementDelegate moveDelegate = null)
+        public void SetPattern(IPattern pattern, IDrone drone, Area area = new Area(), StartPositionDelegate posDelegate = null)
         {
-            pattern.SetPattern(this, drone, area, posDelegate, moveDelegate);
+            pattern.SetPattern(this, drone, area, posDelegate);
         }
 
-        public void AddPattern( IPattern pattern, GameObject parentDrone, IDrone addedDrone, Area area = new Area(), DroneMovement.MovementDelegate moveDelegate = null)
+        public void AddPattern( IPattern pattern, GameObject parentDrone, IDrone addedDrone, Area area = new Area())
         {
-            pattern.AddPattern(this, parentDrone, addedDrone, area, moveDelegate);
+            pattern.AddPattern(this, parentDrone, addedDrone, area);
         }
 
-        public void AddDrones(IDrone drone, float delay, Area area = new Area(), StartPositionDelegate posDelegate = null, DroneMovement.MovementDelegate moveDelegate = null)
+        public void AddDrones(IDrone drone, float delay, Area area = new Area(), StartPositionDelegate posDelegate = null)
         {
-            StartCoroutine(GenerateDrones(drone, delay, area, posDelegate, moveDelegate));
+            StartCoroutine(GenerateDrones(drone, delay, area, posDelegate));
         }
 
-        private IEnumerator GenerateDrones(IDrone drone, float delay, Area area, StartPositionDelegate posDelegate, DroneMovement.MovementDelegate moveDelegate)
+        private IEnumerator GenerateDrones(IDrone drone, float delay, Area area, StartPositionDelegate posDelegate)
         {
             while (true)
             {
@@ -61,10 +61,10 @@ namespace Assets.Scripts.Drones
             }
         }
 
-        public void SpawnAndAddDrones(IDrone drone, int droneCount, float delay, Area area = new Area(), StartPositionDelegate posDelegate = null, DroneMovement.MovementDelegate moveDelegate = null)
+        public void SpawnAndAddDrones(IDrone drone, int droneCount, float delay, Area area = new Area(), StartPositionDelegate posDelegate = null)
         {
-            SpawnDrones(drone, droneCount, area: area, posDelegate: posDelegate, moveDelegate: moveDelegate);
-            AddDrones(drone, delay, area, posDelegate, moveDelegate);
+            SpawnDrones(drone, droneCount, area: area, posDelegate: posDelegate);
+            AddDrones(drone, delay, area, posDelegate);
         }
     }
 
