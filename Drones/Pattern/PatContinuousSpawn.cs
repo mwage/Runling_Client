@@ -30,11 +30,16 @@ namespace Assets.Scripts.Drones {
 
         IEnumerator GenerateDrones(DroneFactory factory, IDrone drone, StartPositionDelegate posDelegate, DroneMovement.MovementDelegate moveDelegate, GameObject parentDrone = null)
         {
+            var addPattern = parentDrone != null;
             while (true)
             {
+                if (parentDrone == null && addPattern) { yield break; }
                 if (parentDrone != null)
                 {
-                    factory.SpawnDrones( new RandomDrone(drone.GetSpeed(), drone.GetSize(), drone.GetColor(), drone.GetDroneType()), DroneCount, moveDelegate: moveDelegate);
+                    factory.SpawnDrones( new RandomDrone(drone.GetSpeed(), drone.GetSize(), drone.GetColor(), drone.GetDroneType()), DroneCount, posDelegate: delegate
+                    {
+                        return parentDrone.transform.position;
+                    }, moveDelegate: moveDelegate);
                 }
                 else
                 {
@@ -43,6 +48,5 @@ namespace Assets.Scripts.Drones {
                 yield return new WaitForSeconds(Delay);
             }
         }
-
     }
 }

@@ -33,7 +33,7 @@ namespace Assets.Scripts.SLA
                 ScoreSla.SetHighScore();
 
                 //change level
-                LevelManager.EndLevel(3f);
+                LevelManager.EndLevel(0.3f);
 
                 //dont repeat above once player dead
                 StopUpdate = true;

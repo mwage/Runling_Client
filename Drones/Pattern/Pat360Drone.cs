@@ -69,6 +69,7 @@ namespace Assets.Scripts.Drones
             var clockwise = true;
             var startRotation = 0f;
             var position = posDelegate(drone.GetSize(), area);
+            var addPattern = parentDrone != null;
 
             // If delay is not null, the drones will go out in a fan motion.  If it is null, all rays will go out at the same time
             if (Delay != null)
@@ -112,12 +113,12 @@ namespace Assets.Scripts.Drones
                 {
                     for (var i = 0; i < NumRays; i++)
                     {
+                        if(parentDrone == null && addPattern) { yield break; }
                         if (parentDrone != null)
                         {
                             position = parentDrone.transform.position;
                         }
                         // spawn new drone in set position, direction and dronespeed
-
                         var rotation = startRotation + (clockwise ? 1 : -1) * (MaxRotation * i / NumRays);
                         factory.SpawnDrones(
                             new DefaultDrone(drone.GetSpeed(), drone.GetSize(), drone.GetColor(), position, rotation,

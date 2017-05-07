@@ -22,25 +22,18 @@ namespace Assets.Scripts.Drones
             SetDroneType[DroneType.MineDrone] = MineDrone;
         }
 
-        public List<GameObject> SpawnDrones(IDrone drone, int droneCount = 1, bool isAdded = false, Area area = new Area(), StartPositionDelegate posDelegate = null, DroneMovement.MovementDelegate moveDelegate = null, IPattern pattern = null)
+        public List<GameObject> SpawnDrones(IDrone drone, int droneCount = 1, bool isAdded = false, Area area = new Area(), StartPositionDelegate posDelegate = null, DroneMovement.MovementDelegate moveDelegate = null)
         {
             var drones = new List<GameObject>();
 
-            if (pattern == null)
+            for (var i = 0; i < droneCount; i++)
             {
-                
-                for (var i = 0; i < droneCount; i++)
-                {
-                    var newDrone = drone.CreateDroneInstance(this, isAdded, area, posDelegate);
-                    if (newDrone != null)
-                        drone.ConfigureDrone(newDrone, moveDelegate);
-                    drones.Add(newDrone);
-                }
+                var newDrone = drone.CreateDroneInstance(this, isAdded, area, posDelegate);
+                if (newDrone != null)
+                    drone.ConfigureDrone(newDrone, moveDelegate);
+                drones.Add(newDrone);
             }
-            else
-            {
-                pattern.SetPattern(this, drone, area, posDelegate, moveDelegate);
-            }
+
             return drones;
         }
 

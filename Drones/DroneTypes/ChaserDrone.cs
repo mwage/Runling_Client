@@ -17,6 +17,7 @@ namespace Assets.Scripts.Drones
 
         public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null)
         {
+            // Not setting dronetype atm, would need to configure manually, chaser should just be a movement pattern and not it's own drone
             var chaser = factory.SpawnDrones(new DefaultDrone(Speed, Size, Color));
 
             DroneMovement.ChaserMovement(chaser[0], Speed, Player);

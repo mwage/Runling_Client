@@ -16,7 +16,7 @@ namespace Assets.Scripts.RLR
             // Set current Level and movespeed, load drones and spawn immunity
             StopUpdate = true;
             GameControl.GameActive = true;
-            GameControl.CurrentLevel = 1;
+            GameControl.CurrentLevel = 2;
             GameControl.MoveSpeed = 13;
             InitializeGameRLR.InitializeGame();
         }
@@ -28,8 +28,8 @@ namespace Assets.Scripts.RLR
             {
                 DeathRLR.Death();
 
-                //change level
-                LevelManager.EndGame(1f);
+                // End Game
+                LevelManager.EndGame(0.1f);
 
                 //dont repeat above once player dead
                 StopUpdate = true;

@@ -23,18 +23,23 @@ namespace Assets.Scripts.RLR.Levels
         private bool[,] _reachedChaserPlatform;
         private List<GameObject> _safeZones;
         private List <GameObject> _chaser;
+        private IDrone _iDrone;
+        private IPattern _pattern;
 
         void Awake()
         {
             _createdInstance = false;
         }
 
-        public void SetChaserPlatforms(IDrone chaserBase, int[] spawnChaser = null, int[] destroyChaser = null, int[] chaserStartPosition = null) 
+        public void SetChaserPlatforms(IDrone chaserBase, int[] spawnChaser = null, int[] destroyChaser = null, int[] chaserStartPosition = null, IPattern pattern = null, IDrone iDrone = null) 
         {
             _spawnChaser = spawnChaser;
             _destroyChaser = destroyChaser;
             _chaserBase = chaserBase;
-            
+            _pattern = pattern;
+            _iDrone = iDrone ?? new DefaultDrone(7, 1, Color.cyan);
+
+
             if (_spawnChaser == null || _destroyChaser == null) return;
 
             _reachedChaserPlatform = new bool[_spawnChaser.Length, 2];
@@ -86,18 +91,20 @@ namespace Assets.Scripts.RLR.Levels
 
             var index = GetPlatformIndex(currentSafeZone);
             if (index == null) return;
-
             for (var i = 0; i < _spawnChaser.Length; i++)
             {
                 if (_spawnChaser[i] == index.Value && !_reachedChaserPlatform[i, 0])
                 {
-
-                    var newDrone = DroneFactory.SpawnDrones(_chaserBase);
-                    _chaser.Add(newDrone[0]);
+                    _chaser.AddRange(DroneFactory.SpawnDrones(_chaserBase));
+                    
                     if (_spawnChaser[i] != 0)
                     {
                         _chaser[i].transform.position = _safeZones[_chaserStartPosition[i]].transform.position +
                                                         new Vector3(0, 0.6f, 0);
+                    }
+                    if (_pattern != null)
+                    {
+                        DroneFactory.AddPattern(_pattern, _chaser[i], _iDrone);
                     }
                     _chaser[i].tag = "Strong Enemy";
                     _reachedChaserPlatform[i, 0] = true;

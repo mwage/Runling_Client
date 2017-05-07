@@ -41,10 +41,10 @@ namespace Assets.Scripts.SLA
             levelText.text = "Level " + GameControl.CurrentLevel;
             LevelTextObject.SetActive(true);
             CurrentPrWindow.SetActive(true);
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(0.2f);
             LevelTextObject.SetActive(false);
             CurrentPrWindow.SetActive(false);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.1f);
 
             // Load drones and player
 

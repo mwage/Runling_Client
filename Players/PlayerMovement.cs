@@ -165,7 +165,7 @@ namespace Assets.Scripts.Players
 
         private void OnCollisionStay(Collision collision)
         {
-            if (collision.collider.tag == "Wall")
+            if (collision.gameObject.layer == 18)
             {
                 transform.position = transform.position + collision.contacts[0].normal * 0.05f;
                 if (Math.Abs(collision.contacts[0].normal.x) < ZeroTolerance)
