@@ -22,13 +22,12 @@ namespace Assets.Scripts.Drones
         protected readonly int MaxRays;
         protected readonly float? ReduceDelay;
         protected readonly float MinDelay;
-        protected readonly int? LimitedRepeats;
-        private int _repeatCounter;
+        protected int? PatternRepeats;
 
         public Pat360Drones(int numRays, float? delay = null, bool? repeat = null, bool? clockwise = null, 
             float? startRotation = null, float? maxRotation = null,float? pulseDelay = null, float? reducePulseDelay = null, 
             float? minPulseDelay = null, float? initialDelay = null, bool? changeDirection = null, int? addRays = null, int? maxRays = null, 
-            int? limitedRepeats = null, float? reduceDelay = null, float? minDelay = null)
+            int? patternRepeats = null, float? reduceDelay = null, float? minDelay = null)
         {
             NumRays = numRays;
             Delay = delay;
@@ -45,8 +44,7 @@ namespace Assets.Scripts.Drones
             MaxRays = maxRays ?? NumRays*2;
             ReduceDelay = reduceDelay;
             MinDelay = minDelay ?? 2;
-            LimitedRepeats = limitedRepeats;
-            _repeatCounter = LimitedRepeats ?? 0;
+            PatternRepeats = patternRepeats;
         }
 
         public override void SetPattern(DroneFactory factory, IDrone drone, Area area, StartPositionDelegate posDelegate = null)
@@ -112,7 +110,10 @@ namespace Assets.Scripts.Drones
                 {
                     for (var i = 0; i < NumRays; i++)
                     {
-                        if(parentDrone == null && addPattern) { yield break; }
+                        if (parentDrone == null && addPattern)
+                        {
+                            yield break;
+                        }
                         if (parentDrone != null)
                         {
                             position = parentDrone.transform.position;
@@ -128,14 +129,18 @@ namespace Assets.Scripts.Drones
                     }
                     if (ChangeDirection)
                     {
-                        startRotation = clockwise ? midRotaion + MaxRotation/2 : midRotaion -MaxRotation/2;
+                        startRotation = clockwise ? midRotaion + MaxRotation / 2 : midRotaion - MaxRotation / 2;
                         clockwise = !clockwise;
                     }
-                    if (LimitedRepeats != null)
+                    if (PatternRepeats != null)
                     {
-                        _repeatCounter--;
+                        PatternRepeats -= 1;
+                        if (PatternRepeats == 0)
+                        {
+                            break;
+                        }
                     }
-                } while (_repeatCounter > 0);
+                } while (PatternRepeats != null);
 
                 if (PulseDelay != null)
                 {
@@ -151,7 +156,6 @@ namespace Assets.Scripts.Drones
                     NumRays += AddRays;
                 }
 
-                _repeatCounter = LimitedRepeats ?? 0;
             } while (Repeat && (Delay != null || PulseDelay != null));
         }
     }

@@ -12,7 +12,7 @@ namespace Assets.Scripts.RLR.Levels
 
         public override void SetChasers()
         {
-            Manager.RunlingChaser.SetChaserPlatforms(new DefaultDrone(5f, 1f, Color.green, moveDelegate: DroneMovement.ChaserMovement, player: Manager.InitializeGameRLR.Player), new int[3] { 1, 8, 16 }, new int[3] { 4, 12, 19 });
+            Manager.RunlingChaser.SetChaserPlatforms(new DefaultDrone(7, 1f, Color.green, moveDelegate: DroneMovement.ChaserMovement, player: Manager.InitializeGameRLR.Player), new int[3] { 1, 8, 16 }, new int[3] { 4, 12, 19 });
         }
 
         public override void CreateDrones()
@@ -24,6 +24,8 @@ namespace Assets.Scripts.RLR.Levels
             {
                 DroneFactory.SpawnDrones(new RandomDrone(3f, 1f, Color.grey), (int)(15 - i * 0.6f), area: laneArea[i]);
             }
+            DroneFactory.SpawnDrones(new RedDrone(500, 1, Color.red, 1000, laneArea[19], 5, true, DroneType.MineDroneBouncing), 5);
+            DroneFactory.SpawnDrones(new RedDrone(500, 1, Color.red, 1000, laneArea[20], 5, true, DroneType.MineDroneBouncing), 4);
         }
     }
 }

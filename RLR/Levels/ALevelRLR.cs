@@ -23,7 +23,7 @@ namespace Assets.Scripts.RLR.Levels
 
         public virtual void GenerateMap()
         {
-            GenerateMapRLR.GenerateMap(10,new float[] {7,5,7,5,7}, 1, 0.2f);
+            GenerateMapRLR.GenerateMap(15,new float[] {8,6,8,6,8}, 1.5f, 0.2f);
         }
 
         public virtual void SetChasers()

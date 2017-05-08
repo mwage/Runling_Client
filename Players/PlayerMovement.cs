@@ -12,6 +12,7 @@ namespace Assets.Scripts.Players
         private Vector3 _clickPos;
         private Vector3 _targetPos;
         private Vector3 _direction;
+        private float _targetRotation;
         private float _rotationSpeed;
         private float _maxSpeed;
         private float _currentSpeed;
@@ -34,7 +35,7 @@ namespace Assets.Scripts.Players
         {
             _rb = GetComponent<Rigidbody>();
             _targetPos = transform.position;
-            _rotationSpeed = 15f;
+            _rotationSpeed = 30;
             _acceleration = 150f;
             _deceleration = 100f;
             _currentSpeed = 0;
@@ -102,6 +103,8 @@ namespace Assets.Scripts.Players
                     {
                         _targetPos = _clickPos;
                         _direction = (_targetPos - transform.position).normalized;
+                        _targetRotation = Quaternion.LookRotation(_direction).eulerAngles.y;
+                        _targetRotation = _targetRotation > 0 ? _targetRotation : 360 - _targetRotation;
                         _accelerate = true;
                         _stop = false;
 
@@ -194,8 +197,28 @@ namespace Assets.Scripts.Players
         // Rotate Player
         void Rotate()
         {
-            var lookrotation = _targetPos - transform.position;
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookrotation), _rotationSpeed * Time.deltaTime);
+            var lookRotation = _rb.transform.rotation.eulerAngles.y;
+            int sign;
+            float difference;
+            lookRotation = lookRotation > 0 ? lookRotation : 360 - lookRotation;
+
+            if (_targetRotation > lookRotation)
+            {
+                difference = Mathf.Abs(_targetRotation - lookRotation) < 360 - Mathf.Abs(_targetRotation - lookRotation)
+                    ? Mathf.Abs(_targetRotation - lookRotation) : 360 - Mathf.Abs(_targetRotation - lookRotation);
+                sign = Mathf.Abs(_targetRotation - lookRotation) < 360 - Mathf.Abs(_targetRotation - lookRotation) ? 1 : -1;
+            }
+            else
+            {
+                difference = Mathf.Abs(lookRotation - _targetRotation) < 360 - Mathf.Abs(lookRotation - _targetRotation)
+                    ? Mathf.Abs(lookRotation - _targetRotation) : 360 - Mathf.Abs(lookRotation - _targetRotation);
+                sign = Mathf.Abs(lookRotation - _targetRotation) < 360 - Mathf.Abs(lookRotation - _targetRotation) ? -1 : 1;
+            }
+
+            if (Mathf.Abs(_targetRotation - lookRotation) > _rotationSpeed * difference / 90)
+            {
+                _rb.transform.Rotate(0, sign * _rotationSpeed * difference / 180, 0);
+            }
         }
     }
 }

@@ -11,6 +11,8 @@ namespace Assets.Scripts.Drones
         public GameObject FlyingBouncingDrone;
         public GameObject FlyingOnewayDrone;
         public GameObject MineDrone;
+        public GameObject MineDroneBouncing;
+        public GameObject MineDroneOneway;
 
         public static Dictionary<DroneType,GameObject> SetDroneType = new Dictionary<DroneType,GameObject>();
 
@@ -20,6 +22,8 @@ namespace Assets.Scripts.Drones
             SetDroneType[DroneType.FlyingBouncingDrone] = FlyingBouncingDrone;
             SetDroneType[DroneType.FlyingOnewayDrone] = FlyingOnewayDrone;
             SetDroneType[DroneType.MineDrone] = MineDrone;
+            SetDroneType[DroneType.MineDroneBouncing] = MineDroneBouncing;
+            SetDroneType[DroneType.MineDroneOneway] = MineDroneOneway;
         }
 
         public List<GameObject> SpawnDrones(IDrone drone, int droneCount = 1, bool isAdded = false, Area area = new Area(), StartPositionDelegate posDelegate = null)
@@ -82,6 +86,9 @@ namespace Assets.Scripts.Drones
         BouncingDrone,
         FlyingBouncingDrone,
         FlyingOnewayDrone,
-        MineDrone
+        MineDrone,
+        MineDroneBouncing,
+        MineDroneOneway
+
     }
 }
