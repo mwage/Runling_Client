@@ -24,6 +24,16 @@ namespace Assets.Scripts.Drones
         protected readonly float MinDelay;
         protected int? PatternRepeats;
 
+        private float _speed;
+        private float _size;
+        private Color _color;
+        private DroneType _droneType;
+        private DroneMovement.MovementDelegate _moveDelegate;
+        private GameObject _player;
+        private float? _curving;
+        private float? _sinForce;
+        private float? _sinFrequency;
+
         public Pat360Drones(int numRays, float? delay = null, bool? repeat = null, bool? clockwise = null, 
             float? startRotation = null, float? maxRotation = null,float? pulseDelay = null, float? reducePulseDelay = null, 
             float? minPulseDelay = null, float? initialDelay = null, bool? changeDirection = null, int? addRays = null, int? maxRays = null, 
@@ -52,11 +62,13 @@ namespace Assets.Scripts.Drones
             if (posDelegate == null)
                 posDelegate = delegate { return new Vector3(0, 0.6f, 0); };
 
+            SetParameters(drone);
             factory.StartCoroutine(Generate360Drones(factory, drone, area, posDelegate));
         }
 
         public override void AddPattern(DroneFactory factory, GameObject drone, IDrone addedDrone, Area area)
         {
+            SetParameters(addedDrone);
             factory.StartCoroutine(Generate360Drones(factory, addedDrone, area, delegate { return Vector3.zero; }, drone));
         }
 
@@ -65,7 +77,7 @@ namespace Assets.Scripts.Drones
         {
             var clockwise = true;
             var startRotation = 0f;
-            var position = posDelegate(drone.GetSize(), area);
+            var position = posDelegate(_size, area);
             var addPattern = parentDrone != null;
 
             // If delay is not null, the drones will go out in a fan motion.  If it is null, all rays will go out at the same time
@@ -120,9 +132,8 @@ namespace Assets.Scripts.Drones
                         }
                         // spawn new drone in set position, direction and dronespeed
                         var rotation = startRotation + (clockwise ? 1 : -1) * (MaxRotation * i / NumRays);
-                        factory.SpawnDrones(
-                            new DefaultDrone(drone.GetSpeed(), drone.GetSize(), drone.GetColor(), position, rotation,
-                                drone.GetDroneType()));
+                        factory.SpawnDrones(new DefaultDrone(_speed, _size, _color, position, rotation,
+                                _droneType, _moveDelegate, _player, _curving, _sinForce, _sinFrequency));
 
                         if (Delay != null)
                             yield return new WaitForSeconds(Delay.Value / NumRays);
@@ -157,6 +168,19 @@ namespace Assets.Scripts.Drones
                 }
 
             } while (Repeat && (Delay != null || PulseDelay != null));
+        }
+
+        private void SetParameters(IDrone drone)
+        {
+            _speed = (float)drone.GetParameters()[0];
+            _size = (float) drone.GetParameters()[1];
+            _color = (Color)drone.GetParameters()[2];
+            _droneType = (DroneType)drone.GetParameters()[3];
+            _moveDelegate = (DroneMovement.MovementDelegate)drone.GetParameters()[4];
+            _player = (GameObject)drone.GetParameters()[5];
+            _curving = (float?)drone.GetParameters()[6];
+            _sinForce = (float?)drone.GetParameters()[7];
+            _sinFrequency = (float?)drone.GetParameters()[8];
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Assets.Scripts.RLR.Levels
             }
 
             // Spawn blue drones
-            DroneFactory.SetPattern(new PatContinuousSpawn(0.1f, 1),
+            DroneFactory.SetPattern(new PatContinuousSpawn(0.1f, 2),
                 new RandomDrone(10, 1, Color.blue, restrictedZone: 0, droneType: DroneType.FlyingOnewayDrone, moveDelegate: DroneMovement.CurvedMovement));
 
             // Middle reds

@@ -20,7 +20,7 @@ namespace Assets.Scripts.RLR.Levels
             Area[] laneArea = Manager.GenerateMapRLR.GetDroneSpawnArea();
 
             // Spawn blue drones
-            DroneFactory.SetPattern(new PatContinuousSpawn(0.1f, 1),
+            DroneFactory.SetPattern(new PatContinuousSpawn(0.1f, 2),
                 new RandomDrone(10, 1, Color.blue, restrictedZone: 0, droneType: DroneType.FlyingOnewayDrone));
 
             // Spawn red drones

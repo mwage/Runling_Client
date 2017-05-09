@@ -69,9 +69,6 @@ namespace Assets.Scripts.RLR.GenerateMap
             {
                 foreach (Transform ch in child)
                 {
-                    Vector3 localPos = ch.transform.localPosition;
-                    Vector3 localScale = ch.transform.localScale;
-
                     // Scale walls and colliders
                     if (ch.tag == "Top") 
                     {
@@ -102,6 +99,13 @@ namespace Assets.Scripts.RLR.GenerateMap
                     if (ch.tag == "Ground" || ch.tag == "SafeZone")
                     {
                         SetWallOrPlayerCollider(ch, child, 0F, 0F, nextLineWidth, LaneWidth);
+                    }
+
+                    // Set material tiling
+                    if (ch.tag == "Ground")
+                    {
+                        ch.GetComponent<Renderer>().material.mainTextureScale = new Vector2(ch.localScale.x / 2, ch.localScale.z / 2);
+                        ch.GetComponent<Renderer>().material.SetTextureScale("_BumpMap", new Vector2(ch.localScale.x / 2, ch.localScale.z / 2));
                     }
                 }
             }

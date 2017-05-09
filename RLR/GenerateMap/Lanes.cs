@@ -110,7 +110,6 @@ namespace Assets.Scripts.RLR.GenerateMap
             {
                 foreach (Transform ch in child)
                 {
-                    Vector3 localPos = ch.transform.localPosition;
                     Vector3 localScale = ch.transform.localScale;
                     if (ch.tag == "Top")
                     {
@@ -138,6 +137,13 @@ namespace Assets.Scripts.RLR.GenerateMap
                     else if (ch.tag == "Bottom")
                     {
                         SetWallOrPlayerCollider(ch, child, 0F, -(_centerSize+WallSize/2), 2*_centerSize, WallSize);
+                    }
+
+                    // Set material tiling
+                    if (ch.tag == "Ground")
+                    {
+                        ch.GetComponent<Renderer>().material.mainTextureScale = new Vector2(ch.localScale.x / 2, ch.localScale.z / 2);
+                        ch.GetComponent<Renderer>().material.SetTextureScale("_BumpMap", new Vector2(ch.localScale.x / 2, ch.localScale.z / 2));
                     }
                 }
             }

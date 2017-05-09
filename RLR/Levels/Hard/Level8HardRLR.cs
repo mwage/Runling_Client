@@ -20,11 +20,11 @@ namespace Assets.Scripts.RLR.Levels
             Area[] laneArea = Manager.GenerateMapRLR.GetDroneSpawnArea();
 
             // Spawn red drones
-            DroneFactory.SpawnDrones(new RedDrone(17, 2, Color.red, 3, laneArea[0]), 70);
+            DroneFactory.SpawnDrones(new RedDrone(17, 2, Color.red, 3, laneArea[0]), 80);
 
             // Spawn yellow drones
             DroneFactory.SetPattern(new Pat360Drones(32, repeat: true, pulseDelay: 4),
-                new DefaultDrone(15, 2, Color.yellow, moveDelegate: DroneMovement.SinusoidalMovement));
+                new DefaultDrone(15, 2, Color.yellow, moveDelegate: DroneMovement.SinusoidalMovement, sinForce: 80, sinFrequency: 4));
         }
     }
 }

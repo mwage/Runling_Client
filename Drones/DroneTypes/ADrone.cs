@@ -44,24 +44,10 @@ namespace Assets.Scripts.Drones
             DroneMovement.Move(drone, Speed, MoveDelegate, Player, Curving, SinForce, SinFrequency);
         }
 
-        public float GetSpeed()
+        public object[] GetParameters()
         {
-            return Speed;
-        }
-
-        public float GetSize()
-        {
-            return Size;
-        }
-
-        public Color GetColor()
-        {
-            return Color;
-        }
-
-        public DroneType GetDroneType()
-        {
-            return DroneType;
+            return new object[]
+                {Speed, Size, Color, DroneType, MoveDelegate, Player, Curving, SinForce, SinFrequency};
         }
     }
 }

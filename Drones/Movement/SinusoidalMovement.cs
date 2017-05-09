@@ -19,7 +19,7 @@ namespace Assets.Scripts.Drones
         private void FixedUpdate()
         {
             _rb.AddForce(_rb.transform.right * SinForce * Mathf.Cos( (Time.time - _initializationTime )* SinFrequency), ForceMode.Acceleration);
-            //_rb.velocity = _rb.velocity.normalized * DroneSpeed;   // not sure how it is in runling
+            _rb.velocity = _rb.velocity.normalized * DroneSpeed;   // not sure how it is in runling
         }
     }
 }
