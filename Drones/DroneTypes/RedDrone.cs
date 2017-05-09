@@ -16,7 +16,7 @@ namespace Assets.Scripts.Drones
             Acceleration = acceleration;
             Area = area;
             Synchronized = synchronized ?? false;
-            WaitTime = waitTime ?? 1;
+            WaitTime = waitTime ?? 0.5f;
             MoveDelegate = delegate {};
         }
 
