@@ -21,6 +21,22 @@ namespace Assets.Scripts.Launcher
         public static bool IsImmobile = false;
         public static bool FinishedLevel = false;
 
+        public static Difficulty SetDifficulty = Difficulty.Normal;
+        public static Gamemode SetGameMode = Gamemode.Classic;
+
+        public enum Difficulty
+        {
+            Normal, 
+            Hard
+        }
+
+        public enum Gamemode
+        {
+            Classic,
+            TimeMode,
+            Practice
+        }
+
         //Keep Game Manager active and destroy any additional copys
         private void Awake()
         {

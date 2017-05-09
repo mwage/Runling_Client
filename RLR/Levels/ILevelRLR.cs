@@ -1,7 +1,7 @@
 ﻿
 namespace Assets.Scripts.RLR.Levels
 {
-    internal interface ILevelRLR
+    public interface ILevelRLR
     {
         void CreateDrones();
         void GenerateMap();

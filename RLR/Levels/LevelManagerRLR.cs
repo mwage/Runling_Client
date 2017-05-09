@@ -17,35 +17,20 @@ public class LevelManagerRLR : MonoBehaviour {
     public InGameMenuManagerRLR InGameMenuManagerRLR;
     public InitializeGameRLR InitializeGameRLR;
     public RunlingChaser RunlingChaser;
-
     public GameObject Win;
-
     public DroneFactory DroneFactory;
     public GenerateMapRLR GenerateMapRLR;
+
+    private readonly InitializeLevelsRLR _initializeLevelsRLR = new InitializeLevelsRLR();
 
     //public static int NumLevels = 9;             //currently last level available in RLR
     private List<ILevelRLR> _levels;
 
 
-    private void InitializeLevels()
-    {
-        _levels = new List<ILevelRLR>
-        {
-            new Level1RLR(this),
-            new Level2RLR(this),
-            new Level3RLR(this),
-            new Level4RLR(this),
-            new Level5RLR(this),
-            new Level6RLR(this),
-            new Level7RLR(this),
-            new Level8RLR(this),
-            new Level9RLR(this)
-        };
-    }
-
     public void Awake()
     {
-        InitializeLevels();
+        GameControl.SetDifficulty = GameControl.Difficulty.Hard;
+        _levels = _initializeLevelsRLR.SetDifficulty(this);
     }
 
     //Spawn Drones according to what level is active
