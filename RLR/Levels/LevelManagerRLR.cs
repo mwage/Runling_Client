@@ -29,7 +29,7 @@ public class LevelManagerRLR : MonoBehaviour {
 
     public void Awake()
     {
-        GameControl.SetDifficulty = GameControl.Difficulty.Hard;
+        //GameControl.SetDifficulty = GameControl.Difficulty.Hard;
         _levels = _initializeLevelsRLR.SetDifficulty(this);
     }
 

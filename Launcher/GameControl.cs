@@ -9,7 +9,7 @@ namespace Assets.Scripts.Launcher
 
         public static bool Dead = true;                 //to set Player to dead/alive 
         public static bool GameActive = false;          //if a game is ongoing
-        public static int CurrentLevel = 1;             //current active level
+        public static int CurrentLevel = 4;             //current active level
         public static float MoveSpeed = 0;              //movespeed of your character
         public static float CameraRange = 0;            //how far camera can go away from the middle
         public static int TotalScore = 0;               //track total score of multiple levels
@@ -21,7 +21,7 @@ namespace Assets.Scripts.Launcher
         public static bool IsImmobile = false;
         public static bool FinishedLevel = false;
 
-        public static Difficulty SetDifficulty = Difficulty.Normal;
+        public static Difficulty SetDifficulty;
         public static Gamemode SetGameMode = Gamemode.Classic;
 
         public enum Difficulty

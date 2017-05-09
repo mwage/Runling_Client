@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Assets.Scripts.Drones
 {
     public class DroneFactory : MonoBehaviour
-    {
+    { 
         //attach gameobjects
         public GameObject BouncingDrone;
         public GameObject FlyingBouncingDrone;
