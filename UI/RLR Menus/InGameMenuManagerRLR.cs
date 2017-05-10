@@ -10,11 +10,14 @@ namespace Assets.Scripts.UI.RLR_Menus
         public InGameMenuRLR InGameMenu;
         public ControlRLR ControlRLR;
         public OptionsMenu.OptionsMenu OptionsMenu;
+        public ChooseLevelMenu ChooseLevelMenu;
 
         public GameObject InGameMenuObject;
         public GameObject OptionsMenuObject;
+        public GameObject ChooseLevelMenuObject;
         public GameObject WinScreen;
         public GameObject PauseScreen;
+        public GameObject ChooseLevel;
 
         public bool MenuOn;
         private bool _pause;
@@ -30,6 +33,7 @@ namespace Assets.Scripts.UI.RLR_Menus
         {
             InGameMenuObject.SetActive(false);
             OptionsMenuObject.SetActive(false);
+            ChooseLevelMenuObject.SetActive(false);
         }
 
         void Update()
@@ -42,10 +46,18 @@ namespace Assets.Scripts.UI.RLR_Menus
                     InGameMenuObject.SetActive(true);
                     Time.timeScale = 0;
                     MenuOn = true;
+                    if (GameControl.SetGameMode == GameControl.Gamemode.Practice)
+                    {
+                        ChooseLevel.SetActive(true);
+                    }
                 }
                 else if (MenuOn && OptionsMenu.OptionsMenuActive)
                 {
                     OptionsMenu.DiscardChanges();
+                }
+                else if (MenuOn && ChooseLevelMenu.ChooseLevelMenuActive)
+                {
+                    ChooseLevelMenu.Back();
                 }
                 else
                 {

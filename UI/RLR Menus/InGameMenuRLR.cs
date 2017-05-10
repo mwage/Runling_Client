@@ -10,8 +10,10 @@ namespace Assets.Scripts.UI.RLR_Menu
         public GameObject InGameMenuObject;
         public GameObject OptionsMenuObject;
         public GameObject HighScoreMenuObject;
+        public GameObject ChooseLevelObject;
         public InGameMenuManagerRLR InGameMenuManagerSla;
         public OptionsMenu.OptionsMenu OptionsMenu;
+        public ChooseLevelMenu ChooseLevelMenu;
 
         public void BackToGame()
         {
@@ -22,7 +24,7 @@ namespace Assets.Scripts.UI.RLR_Menu
 
         public void RestartGame()
         {
-            GameControl.Dead = true;
+            GameControl.IsDead = true;
             GameControl.TotalScore = 0;
             GameControl.AutoClickerActive = false;
             Time.timeScale = 1;
@@ -42,6 +44,13 @@ namespace Assets.Scripts.UI.RLR_Menu
             GameControl.GameActive = false;
             Time.timeScale = 1;
             SceneManager.LoadScene("MainMenu");
+        }
+
+        public void ChooseLevel()
+        {
+            InGameMenuObject.gameObject.SetActive(false);
+            ChooseLevelObject.gameObject.SetActive(true);
+            ChooseLevelMenu.ChooseLevelMenuActive = true;
         }
     }
 }

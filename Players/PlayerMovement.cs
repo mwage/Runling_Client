@@ -23,7 +23,7 @@ namespace Assets.Scripts.Players
         private float _stopSensitivity;
         private bool _accelerate;
         private bool _stop;
-        private bool _isAutoClicking;
+        public bool IsAutoClicking;
         private int _defLayer;
         private Rigidbody _rb;
         private Coroutine _autoClickRoutine;
@@ -44,27 +44,29 @@ namespace Assets.Scripts.Players
             _highestSpeedReached = 0;
             _stopSensitivity = 20;
             _defLayer = (1 << 0);
-            _isAutoClicking = false;
+            IsAutoClicking = false;
             _anim = GetComponent<Animator>();
         }
 
         private void Update()
         {
+
+            Debug.Log(IsAutoClicking);
             if (GameControl.AutoClickerActive)
             {
-                if (!_isAutoClicking)
+                if (!IsAutoClicking)
                 {
                     _autoClickRoutine = StartCoroutine(DoAutoclick());
-                    _isAutoClicking = true;
+                    IsAutoClicking = true;
                 }
             }
 
             if (!GameControl.AutoClickerActive)
             {
-                if (_isAutoClicking)
+                if (IsAutoClicking)
                 {
                     StopCoroutine(_autoClickRoutine);
-                    _isAutoClicking = false;
+                    IsAutoClicking = false;
                 }
             }
 
@@ -125,6 +127,10 @@ namespace Assets.Scripts.Players
 
         private void FixedUpdate()
         {
+            if (GameControl.IsImmobile)
+            {
+                _targetPos = _rb.transform.position;
+            }
             _distance = (_targetPos - transform.position).magnitude;
             _currentSpeed = _rb.velocity.magnitude;
 

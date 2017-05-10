@@ -16,7 +16,7 @@ namespace Assets.Scripts.RLR
 
         public void RestartGame()
         {
-            GameControl.Dead = true;
+            GameControl.IsDead = true;
             GameControl.AutoClickerActive = false;
 
             SceneManager.LoadScene("RLR");

@@ -41,7 +41,7 @@ namespace Assets.Scripts.RLR
             MainCamera.transform.position = new Vector3(Player.transform.localPosition.x, 40, Player.transform.localPosition.z);
             LevelManagerRLR.GenerateChasers(GameControl.CurrentLevel);
             GameControl.CameraRange = airColliderRange / 2.5f;
-            GameControl.Dead = false;
+            GameControl.IsDead = false;
             GameControl.IsInvulnerable = true;
             GameControl.IsImmobile = true;
             ControlRLR.StopUpdate = false;

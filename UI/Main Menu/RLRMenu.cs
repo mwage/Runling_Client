@@ -23,7 +23,7 @@ namespace Assets.Scripts.UI.Main_Menu
         
         public void StartGame()
         {
-            GameControl.Dead = true;
+            GameControl.IsDead = true;
             GameControl.TotalScore = 0;
             GameControl.CurrentLevel = 1;
             SetModes();

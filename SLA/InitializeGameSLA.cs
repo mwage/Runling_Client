@@ -49,7 +49,7 @@ namespace Assets.Scripts.SLA
             // Load drones and player
 
             Player = Instantiate(PlayerPrefab);
-            GameControl.Dead = false;
+            GameControl.IsDead = false;
             GameControl.IsInvulnerable = true;
             GameControl.IsImmobile = false;
             ControlSla.StopUpdate = false;

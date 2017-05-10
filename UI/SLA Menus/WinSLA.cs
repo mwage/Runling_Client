@@ -25,7 +25,7 @@ namespace Assets.Scripts.UI.SLA_Menus
 
         public void RestartGame()
         {
-            GameControl.Dead = true;
+            GameControl.IsDead = true;
             GameControl.AutoClickerActive = false;
             GameControl.TotalScore = 0;
 

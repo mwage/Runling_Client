@@ -95,7 +95,7 @@ public class LevelManagerRLR : MonoBehaviour {
     // Load after the last level
     private IEnumerator EndGameRLR(float delay)
     {
-        if (!GameControl.Dead)
+        if (!GameControl.IsDead)
         {
             Win.transform.Find("Victory").gameObject.SetActive(true);
             Win.transform.Find("Defeat").gameObject.SetActive(false);

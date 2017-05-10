@@ -62,7 +62,7 @@ namespace Assets.Scripts.RLR.GenerateMap
 
         public float GetAirColliderRange()
         {
-            return AirCollider[0].transform.localScale.x;
+            return AirCollider[0].transform.localScale.x - _flyingDroneColliderOffset;
         }
 
         public Area[] GetDroneSpawnArea()

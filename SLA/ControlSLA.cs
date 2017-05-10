@@ -25,7 +25,7 @@ namespace Assets.Scripts.SLA
         //update when dead
         private void Update()
         {
-            if (GameControl.Dead && !StopUpdate)
+            if (GameControl.IsDead && !StopUpdate)
             {
                 DeathSla.Death();
 

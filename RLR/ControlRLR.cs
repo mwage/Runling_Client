@@ -8,6 +8,7 @@ namespace Assets.Scripts.RLR
         public LevelManagerRLR LevelManager;
         public InitializeGameRLR InitializeGameRLR;
         public DeathRLR DeathRLR;
+        public GameObject PracticeMode;
 
         public bool StopUpdate;
 
@@ -16,23 +17,22 @@ namespace Assets.Scripts.RLR
             // Set current Level and movespeed, load drones and spawn immunity
             StopUpdate = true;
             GameControl.GameActive = true;
-            GameControl.CurrentLevel = 1;
             GameControl.MoveSpeed = 13;
+            if (GameControl.SetGameMode == GameControl.Gamemode.Practice)
+            {
+                PracticeMode.SetActive(true);
+            }
+
             InitializeGameRLR.InitializeGame();
         }
 
         //update when dead
         private void Update()
         {
-            if (GameControl.Dead && !StopUpdate)
+            if (GameControl.IsDead && !StopUpdate)
             {
-                DeathRLR.Death();
-
-                // End Game
-                LevelManager.EndGame(0.1f);
-
-                //dont repeat above once player dead
                 StopUpdate = true;
+                DeathRLR.Death(LevelManager, InitializeGameRLR, this);
             }
 
             if (GameControl.FinishedLevel && !StopUpdate)

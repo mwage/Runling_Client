@@ -32,7 +32,7 @@ namespace Assets.Scripts.SLA
     
         IEnumerator AddScore()
         {
-            while (GameControl.Dead == false)
+            while (GameControl.IsDead == false)
             {
                 CurrentScore += 2;
                 GameControl.TotalScore += 2;

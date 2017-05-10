@@ -30,7 +30,7 @@ namespace Assets.Scripts.Players
             // Death Trigger
             if ((other.tag == "Enemy" && !GameControl.IsInvulnerable || other.tag == "Strong Enemy") && !GameControl.GodModeActive)
             {
-                GameControl.Dead = true;
+                GameControl.IsDead = true;
             }
         }
 
