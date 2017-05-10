@@ -24,7 +24,7 @@ namespace Assets.Scripts.RLR.Levels
 
             // Spawn yellow drones
             DroneFactory.SetPattern(new Pat360Drones(32, repeat: true, pulseDelay: 4),
-                new DefaultDrone(15, 2, Color.yellow, moveDelegate: DroneMovement.SinusoidalMovement, sinForce: 80, sinFrequency: 4));
+                new DefaultDrone(15, 2, Color.yellow, moveDelegate: DroneMovement.SinusoidalMovement, sinForce: 70, sinFrequency: 4));
         }
     }
 }

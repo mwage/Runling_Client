@@ -39,7 +39,7 @@ namespace Assets.Scripts.Drones
         {
             MoveStraight(drone, droneSpeed);
             var instance = drone.AddComponent<CurvedMovement>();
-            instance.Curving  = curving ?? 0.8f;
+            instance.Curving  = curving ?? 1;
             instance.DroneSpeed = droneSpeed;
         }
 

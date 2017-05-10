@@ -49,11 +49,13 @@ namespace Assets.Scripts.RLR.GenerateMap
                     {
                         ch.transform.localScale = new Vector3(LaneLength, localScale.y, WallSize);
                         ch.transform.localPosition = new Vector3(0, localPos.y, (LaneWidth + WallSize) / 2);
+                        SetWallTexture(ch);
                     }
                     else if (ch.tag == "Bottom")
                     {
                         ch.transform.localScale = new Vector3(LaneLength, localScale.y, WallSize);
                         ch.transform.localPosition = new Vector3(0, localPos.y, -(LaneWidth + WallSize) / 2);
+                        SetWallTexture(ch);
                     }
                 }
             }
@@ -86,6 +88,7 @@ namespace Assets.Scripts.RLR.GenerateMap
                     {
                         SetDroneCollider(ch, child, 0F, -(LaneWidth  - WallSize ) / 2, nextLineWidth, ColliderWallSize);
                         SetWallOrPlayerCollider(ch, child, -WallSize/2, -(LaneWidth  + WallSize) / 2, nextLineWidth + WallSize, ColliderWallSize);
+
                     }
 
                     else if (ch.tag == "Left")
@@ -104,8 +107,7 @@ namespace Assets.Scripts.RLR.GenerateMap
                     // Set material tiling
                     if (ch.tag == "Ground")
                     {
-                        ch.GetComponent<Renderer>().material.mainTextureScale = new Vector2(ch.localScale.x / 2, ch.localScale.z / 2);
-                        ch.GetComponent<Renderer>().material.SetTextureScale("_BumpMap", new Vector2(ch.localScale.x / 2, ch.localScale.z / 2));
+                       // SetPlatformTexture(ch);
                     }
                 }
             }
@@ -130,6 +132,37 @@ namespace Assets.Scripts.RLR.GenerateMap
             {
                 obj.transform.localScale = new Vector3(scX, obj.transform.localScale.y, scZ);
                 obj.transform.localPosition = new Vector3(posX, obj.transform.localPosition.y, posZ);
+                SetWallTexture(obj);
+            }
+        }
+
+        protected void SetTexture(Transform ch)
+        {
+            if (ch.parent.name == "VisibleObjects" && ch.name != "Ground")
+            {
+                SetWallTexture(ch);
+            }
+            else if (ch.name == "Ground")
+            {
+                SetPlatformTexture(ch);
+            }
+        }
+
+        protected void SetPlatformTexture(Transform ch)
+        {
+            if (ch.parent.name == "VisibleObjects")
+            {
+                ch.GetComponent<Renderer>().material.mainTextureScale = new Vector2(ch.localScale.x / 2, ch.localScale.z / 2);
+                ch.GetComponent<Renderer>().material.SetTextureScale("_BumpMap", new Vector2(ch.localScale.x / 2, ch.localScale.z / 2));
+            }
+        }
+
+        protected void SetWallTexture(Transform ch)
+        {
+            if (ch.parent.name == "VisibleObjects")
+            {
+                ch.GetComponent<Renderer>().material.mainTextureScale = new Vector2(ch.localScale.x/2 , ch.localScale.z/2);
+                ch.GetComponent<Renderer>().material.SetTextureScale("_BumpMap", new Vector2(ch.localScale.x/2, ch.localScale.z/2));
             }
         }
     }

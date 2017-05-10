@@ -10,6 +10,11 @@ namespace Assets.Scripts.RLR.Levels
         {
         }
 
+        protected override float SetAirCollider()
+        {
+            return 10;
+        }
+
         public override void CreateDrones()
         {
             // Spawn blue drones

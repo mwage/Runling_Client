@@ -14,16 +14,16 @@ namespace Assets.Scripts.RLR.GenerateMap
         public GameObject SecondLineOfCenterPrefab;
         public GameObject StartPlatform;
         public GameObject FlyingDroneCollider;
-        public float FlyingDroneColliderOffset;
+        private float _flyingDroneColliderOffset;
 
         protected List<ALane> Lanes;
         protected List<GameObject> SafeZones ;
         protected List<GameObject> AirCollider ;
 
-        public void GenerateMap(int centerSize, float[] lanesWidth, float gapBetweenLines, float wallSize)
+        public void GenerateMap(int centerSize, float[] lanesWidth, float gapBetweenLines, float wallSize, float AirColliderOffset)
         {
             var centerSizeHalf = centerSize / 2;
-            FlyingDroneColliderOffset = 20;
+            _flyingDroneColliderOffset = AirColliderOffset;
 
             SafeZones = new List<GameObject>();
             AirCollider = new List<GameObject>();
@@ -47,7 +47,7 @@ namespace Assets.Scripts.RLR.GenerateMap
             }
             Lanes[0].InstantiateRamp(LaneStandardPrefab, Terrain.transform); // adding ramp near center
 
-            AirCollider = CreateFlyingDroneColliders(Lanes, FlyingDroneCollider, FlyingDroneColliderOffset, Terrain.transform);
+            AirCollider = CreateFlyingDroneColliders(Lanes, FlyingDroneCollider, _flyingDroneColliderOffset, Terrain.transform);
         }
 
         public Vector3 GetStartPlatform()
@@ -68,10 +68,10 @@ namespace Assets.Scripts.RLR.GenerateMap
         public Area[] GetDroneSpawnArea()
         {
             var lanes = new Area[Lanes.Count+1];
-            lanes[0].LeftBoundary = -(Lanes[Lanes.Count-1].Pos.z + FlyingDroneColliderOffset / 2);
-            lanes[0].RightBoundary = Lanes[Lanes.Count-1].Pos.z + FlyingDroneColliderOffset / 2;
-            lanes[0].TopBoundary = Lanes[Lanes.Count-1].Pos.z + FlyingDroneColliderOffset / 2;
-            lanes[0].BottomBoundary = -(Lanes[Lanes.Count-1].Pos.z + FlyingDroneColliderOffset / 2);
+            lanes[0].LeftBoundary = -(Lanes[Lanes.Count-1].Pos.z + _flyingDroneColliderOffset / 2);
+            lanes[0].RightBoundary = Lanes[Lanes.Count-1].Pos.z + _flyingDroneColliderOffset / 2;
+            lanes[0].TopBoundary = Lanes[Lanes.Count-1].Pos.z + _flyingDroneColliderOffset / 2;
+            lanes[0].BottomBoundary = -(Lanes[Lanes.Count-1].Pos.z + _flyingDroneColliderOffset / 2);
             
             for (var i = 0; i < Lanes.Count; i++)
             {

@@ -43,7 +43,7 @@ namespace Assets.Scripts.RLR.GenerateMap
         {
             var thisLane = Object.Instantiate(ramp, terrain);
             thisLane.transform.position = Vector3.zero;
-            float gap = -(Pos.x + LaneWidth / 2 + _centerSize);
+            var gap = -(Pos.x + LaneWidth / 2 + _centerSize);
             foreach (Transform child in thisLane.transform)
             {
                 foreach (Transform ch in child)
@@ -124,7 +124,7 @@ namespace Assets.Scripts.RLR.GenerateMap
                     else if (ch.tag == "Left")
                     {
                         SetWallOrPlayerCollider(ch, child, -(_centerSize + WallSize / 2) , -(LaneWidth / 2 + WallSize), WallSize, 2 * _centerSize - LaneWidth );
-                        SetDroneCollider(ch, child, (LanePrefab.transform.position.x + LaneWidth / 2), _centerSize-LaneWidth/2, WallSize, LaneWidth);
+                        SetDroneCollider(ch, child, (LanePrefab.transform.position.x + LaneWidth / 2 - (Pos.x + LaneWidth / 2 + _centerSize) + WallSize/2), _centerSize-LaneWidth/2 - WallSize/2, WallSize, LaneWidth + WallSize);
                     }
 
                     // Scale ground and safezone
@@ -142,8 +142,7 @@ namespace Assets.Scripts.RLR.GenerateMap
                     // Set material tiling
                     if (ch.tag == "Ground")
                     {
-                        ch.GetComponent<Renderer>().material.mainTextureScale = new Vector2(ch.localScale.x / 2, ch.localScale.z / 2);
-                        ch.GetComponent<Renderer>().material.SetTextureScale("_BumpMap", new Vector2(ch.localScale.x / 2, ch.localScale.z / 2));
+                        SetPlatformTexture(ch);
                     }
                 }
             }
