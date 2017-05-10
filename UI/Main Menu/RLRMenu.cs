@@ -14,11 +14,10 @@ namespace Assets.Scripts.UI.Main_Menu
 
         public GameObject MainMenu;
         public GameObject HighScoreMenu;
-        public GameObject DifficultyHard;
-        public GameObject DifficultyEasy;
+        public GameObject LaunchRLR;
 
-        private GameControl.Difficulty voteDifficulty;
-        private GameControl.Gamemode voteGameMode;
+        private GameControl.Difficulty? voteDifficulty = null;
+        private GameControl.Gamemode? voteGameMode = null;
 
         public bool RLRMenuActive;
         
@@ -58,8 +57,8 @@ namespace Assets.Scripts.UI.Main_Menu
 
         public void SetModes()
         {
-            GameControl.SetDifficulty = voteDifficulty;
-            GameControl.SetGameMode = voteGameMode;
+            GameControl.SetDifficulty = (GameControl.Difficulty)voteDifficulty;
+            GameControl.SetGameMode = (GameControl.Gamemode)voteGameMode;
         }
 
         public void HighScores()
@@ -75,6 +74,20 @@ namespace Assets.Scripts.UI.Main_Menu
             RLRMenuActive = false;
             gameObject.SetActive(false);
             MainMenu.gameObject.SetActive(true);
+        }
+
+        public void Update()
+        {
+            if (!voteDifficulty.Equals(null) && !voteGameMode.Equals(null))
+            {
+                LaunchRLR.GetComponentInChildren<Text>().text = "__________ R U N __________";
+                LaunchRLR.GetComponent<Button>().interactable = true;
+            }
+            else
+            {
+                LaunchRLR.GetComponentInChildren<Text>().text = "Select Modes";
+                LaunchRLR.GetComponent<Button>().interactable = false;
+            }
         }
     }
 }
