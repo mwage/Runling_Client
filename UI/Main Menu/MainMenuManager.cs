@@ -11,9 +11,11 @@ namespace Assets.Scripts.UI.Main_Menu
         public OptionsMenu.OptionsMenu OptionsMenu;
         public SLAMenu SLAMenu;
         public HighScoreMenuSLA HighScoreMenuSLA;
+        public RLRMenu RLRMenu;
 
         public GameObject SLAMenuObject;
         public GameObject HighScoreMenuObject;
+
 
         private void Awake()
         {
@@ -33,6 +35,10 @@ namespace Assets.Scripts.UI.Main_Menu
                 else if (SLAMenu.SLAMenuActive)
                 {
                     SLAMenu.BackToMenu();
+                }
+                else if (RLRMenu.RLRMenuActive)
+                {
+                    RLRMenu.BackToMenu();
                 }
                 else if (HighScoreMenuSLA.HighScoreMenuActive)
                 {

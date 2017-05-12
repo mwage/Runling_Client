@@ -23,8 +23,8 @@ namespace Assets.Scripts.RLR.Levels
             DroneFactory.SpawnDrones(new RedDrone(17, 2, Color.red, 3, laneArea[0]), 80);
 
             // Spawn yellow drones
-            DroneFactory.SetPattern(new Pat360Drones(32, repeat: true, pulseDelay: 4),
-                new DefaultDrone(15, 2, Color.yellow, moveDelegate: DroneMovement.SinusoidalMovement, sinForce: 70, sinFrequency: 4));
+            DroneFactory.SetPattern(new Pat360Drones(32, 3, true),
+                new DefaultDrone(13, 2, Color.yellow, moveDelegate: DroneMovement.FixedSinusoidalMovement, sinForce: 100, sinFrequency: 4));
         }
     }
 }

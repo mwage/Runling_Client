@@ -27,8 +27,16 @@ namespace Assets.Scripts.SLA.Levels
         {
             LeftBoundary = -22.5f,
             RightBoundary = 22.5f,
-            TopBoundary = 10f,
-            BottomBoundary = -10f
+            TopBoundary = 105f,
+            BottomBoundary = 95f
+        };
+
+        public static Area FlyingMainMenu = new Area
+        {
+            LeftBoundary = -40f,
+            RightBoundary = 40f,
+            TopBoundary = 120f,
+            BottomBoundary = 80f
         };
     }
 }

@@ -23,7 +23,7 @@ namespace Assets.Scripts.RLR.Levels
 
         public virtual void GenerateMap()
         {
-            GenerateMapRLR.GenerateMap(20,new float[] {8,6,8,6,8}, 1.5f, 0.4f, SetAirCollider());
+            GenerateMapRLR.GenerateMap(15,new float[] {8,6,8,6,8}, 1.2f, 0.3f, SetAirCollider());
         }
 
         protected virtual float SetAirCollider()

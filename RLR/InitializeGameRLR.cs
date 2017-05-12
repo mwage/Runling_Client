@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using Assets.Scripts.Launcher;
-using Assets.Scripts.RLR.Levels;
+using Assets.Scripts.Players;
 using TMPro;
 using UnityEngine;
 using Assets.Scripts.UI.RLR_Menus;
@@ -21,7 +21,7 @@ namespace Assets.Scripts.RLR
         public GameObject LevelTextObject;
         public GameObject CountdownPrefab;
         public GameObject Player;
-        public GameObject MainCamera;
+        public CameraMovement CameraMovement;
 
 
         //set Spawnimmunity once game starts
@@ -38,9 +38,14 @@ namespace Assets.Scripts.RLR
             var startPlatform = LevelManagerRLR.GenerateMapRLR.GetStartPlatform();
             var airColliderRange = LevelManagerRLR.GenerateMapRLR.GetAirColliderRange();
             Player = Instantiate(PlayerPrefab, new Vector3(startPlatform.x, 0, startPlatform.z), Quaternion.Euler(0, 90, 0));
-            MainCamera.transform.position = new Vector3(Player.transform.localPosition.x, 40, Player.transform.localPosition.z);
-            LevelManagerRLR.GenerateChasers(GameControl.CurrentLevel);
+            Player.GetComponent<PlayerMovement>().Acceleration = 80;
+            if (GameControl.GodModeActive && !Player.transform.Find("GodMode").gameObject.activeSelf)
+            {
+                Player.transform.Find("GodMode").gameObject.SetActive(true);
+            }
             GameControl.CameraRange = airColliderRange / 2.5f;
+            CameraMovement.SetCameraPosition(Player.transform.localPosition.x, 0, Player.transform.localPosition.z);
+            LevelManagerRLR.GenerateChasers(GameControl.CurrentLevel);
             GameControl.IsDead = false;
             GameControl.IsInvulnerable = true;
             GameControl.IsImmobile = true;

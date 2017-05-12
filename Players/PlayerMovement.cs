@@ -18,7 +18,7 @@ namespace Assets.Scripts.Players
         private float _currentSpeed;
         private float _highestSpeedReached;
         private float _distance;
-        private float _acceleration;
+        public float Acceleration = 50;
         private float _deceleration;
         private float _stopSensitivity;
         private bool _accelerate;
@@ -36,8 +36,7 @@ namespace Assets.Scripts.Players
             _rb = GetComponent<Rigidbody>();
             _targetPos = transform.position;
             _rotationSpeed = 30;
-            _acceleration = 150f;
-            _deceleration = 100f;
+            _deceleration = 100;
             _currentSpeed = 0;
             _accelerate = false;
             _stop = true;
@@ -50,8 +49,6 @@ namespace Assets.Scripts.Players
 
         private void Update()
         {
-
-            Debug.Log(IsAutoClicking);
             if (GameControl.AutoClickerActive)
             {
                 if (!IsAutoClicking)
@@ -148,7 +145,7 @@ namespace Assets.Scripts.Players
             {
                 if (_currentSpeed < _maxSpeed)
                 {
-                    _rb.AddForce(_direction * _acceleration, ForceMode.Acceleration);
+                    _rb.AddForce(_direction * Acceleration, ForceMode.Acceleration);
                     _currentSpeed = _rb.velocity.magnitude;
                     _highestSpeedReached = _currentSpeed;
                 }

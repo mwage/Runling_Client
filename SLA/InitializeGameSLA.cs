@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Assets.Scripts.Launcher;
+using Assets.Scripts.Players;
 using Assets.Scripts.UI.SLA_Menus;
 using TMPro;
 using UnityEngine;
@@ -21,7 +22,7 @@ namespace Assets.Scripts.SLA
         public GameObject CurrentPrWindow;
         public GameObject Player;
         public Text CurrentPr;
-
+        public CameraMovement CameraMovement;
         
 
         //set Spawnimmunity once game starts
@@ -49,8 +50,14 @@ namespace Assets.Scripts.SLA
             // Load drones and player
 
             Player = Instantiate(PlayerPrefab);
+            CameraMovement.SetCameraPosition(0, 0, 0);
             GameControl.IsDead = false;
             GameControl.IsInvulnerable = true;
+            Player.transform.Find("Shield").gameObject.SetActive(true);
+            if (GameControl.GodModeActive && !Player.transform.Find("GodMode").gameObject.activeSelf)
+            {
+                Player.transform.Find("GodMode").gameObject.SetActive(true);
+            }
             GameControl.IsImmobile = false;
             ControlSla.StopUpdate = false;
             LevelManagerSla.LoadDrones(GameControl.CurrentLevel);
@@ -63,7 +70,8 @@ namespace Assets.Scripts.SLA
                 yield return new WaitForSeconds(1f);
                 Destroy(countdown);
             }
-            
+
+            Player.transform.Find("Shield").gameObject.SetActive(false);
             GameControl.IsInvulnerable = false;
             ScoreSla.StartScore();
             

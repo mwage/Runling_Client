@@ -12,71 +12,24 @@ namespace Assets.Scripts.UI.OptionsMenu
         public GameObject SetHotkeyPrefab;
         public GameObject HotkeyList;
 
-        private HotkeyAction? _hotkeyToRebind;
-        private readonly Dictionary<HotkeyAction, Text> _hotkeyLabel = new Dictionary<HotkeyAction, Text>();
-
-
-        private static string GetFriendlyName(string input)
-        {
-            var sb = new StringBuilder();
-            foreach (var c in input)
-            {
-                if (char.IsUpper(c))
-                    sb.Append(" ");
-                sb.Append(c);
-            }
-
-            if (input.Length > 0 && char.IsUpper(input[0]))
-                sb.Remove(0, 1);
-
-            return sb.ToString();
-        }
 
         private void OnEnable()
         {
-            foreach (HotkeyAction action in Enum.GetValues(typeof(HotkeyAction)))
+            if (HotkeyList.transform.childCount == 0) // dont add the same buttons when switching between submenus
             {
-                var hotkey = Instantiate(SetHotkeyPrefab, HotkeyList.transform);
-                hotkey.transform.localScale = Vector3.one;
-
-                hotkey.transform.Find("HotkeyName").GetComponent<Text>().text = GetFriendlyName(action.ToString());
-                var hotkeyText = hotkey.transform.Find("SetHotkey/KeyPressed").GetComponent<Text>();
-                var kc = InputManager.Instance.GetHotkey(action);
-                hotkeyText.text = kc != null ? kc.ToString() : "<None>";
-                _hotkeyLabel[action] = hotkeyText;
-
-                var setHotkey = hotkey.transform.Find("SetHotkey").GetComponent<Button>();
-                var keyName = action;
-                setHotkey.onClick.AddListener(() => { RebindHotkey(keyName); });
+                SubmenuBuilder.AddButton(HotkeyAction.ActivateClicker, SetHotkeyPrefab, HotkeyList);
+                SubmenuBuilder.AddButton(HotkeyAction.DeactivateClicker, SetHotkeyPrefab, HotkeyList);
+                SubmenuBuilder.AddButton(HotkeyAction.NavigateMenu, SetHotkeyPrefab, HotkeyList);
+                SubmenuBuilder.AddButton(HotkeyAction.Pause, SetHotkeyPrefab, HotkeyList);
+                SubmenuBuilder.AddButton(HotkeyAction.ActivateGodmode, SetHotkeyPrefab, HotkeyList);
+                SubmenuBuilder.AddButton(HotkeyAction.DeactiveGodmode, SetHotkeyPrefab, HotkeyList);
             }
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (_hotkeyToRebind != null)
-            {
-                if (Input.anyKeyDown)
-                {
-                    foreach (KeyCode kc in Enum.GetValues(typeof(KeyCode)))
-                    {
-                        if (Input.GetKeyDown(kc))
-                        {
-                            var removed = InputManager.Instance.UpdateHotkey(_hotkeyToRebind.Value, kc);
-                            if (removed != null)
-                                _hotkeyLabel[removed.Value].text = "<None>";
-                            _hotkeyLabel[_hotkeyToRebind.Value].text = kc.ToString();
-                            _hotkeyToRebind = null;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        private void RebindHotkey(HotkeyAction action)
-        {
-            _hotkeyToRebind = action;
+            InputManager.RebindHotkeyIfNeed();
         }
 
         public void DeleteHotkeyPrefabs()
@@ -88,3 +41,4 @@ namespace Assets.Scripts.UI.OptionsMenu
         }
     }
 }
+

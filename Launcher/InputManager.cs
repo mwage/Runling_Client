@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Text;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.Launcher
 {
@@ -11,8 +13,13 @@ namespace Assets.Scripts.Launcher
         NavigateMenu,
         Pause,
         ActivateGodmode,
-        DeactiveGodmode
+        DeactiveGodmode,
+        CameraUp,
+        CameraDown,
+        CameraRight,
+        CameraLeft
     }
+    
 
     public class InputManager
     {
@@ -28,66 +35,71 @@ namespace Assets.Scripts.Launcher
             }
         }
 
-        private readonly Dictionary<HotkeyAction, KeyCode> _hotkeys = new Dictionary<HotkeyAction, KeyCode>();
-        private readonly Dictionary<KeyCode, HotkeyAction> _keyCodes = new Dictionary<KeyCode, HotkeyAction> ();
+
+        private static HotkeyAction? _hotkeyToRebind;
+        public static readonly Dictionary<HotkeyAction, Text> HotkeyLabel = new Dictionary<HotkeyAction, Text>();
+
+        private static readonly Dictionary<HotkeyAction, KeyCode> Hotkeys = new Dictionary<HotkeyAction, KeyCode>();
+        private static readonly Dictionary<KeyCode, HotkeyAction> KeyCodes = new Dictionary<KeyCode, HotkeyAction>();
 
         private InputManager()
         {
             LoadHotkeys();
-            Console.WriteLine(_hotkeys.Count);
+            Console.WriteLine(Hotkeys.Count);
         }
 
         public bool GetButtonDown(HotkeyAction hotkeyAction)
         {
-            if (!_hotkeys.ContainsKey(hotkeyAction))
+            if (!Hotkeys.ContainsKey(hotkeyAction))
             {
                 Debug.Log("no hotkey named " + hotkeyAction);
                 return false;
             }
 
-            return Input.GetKeyDown(_hotkeys[hotkeyAction]);
+            return Input.GetKeyDown(Hotkeys[hotkeyAction]);
         }
 
         public KeyCode? GetHotkey(HotkeyAction action)
         {
-            if (_hotkeys.ContainsKey(action))
-                return _hotkeys[action];
+            if (Hotkeys.ContainsKey(action))
+                return Hotkeys[action];
 
             return null;
         }
 
-        public HotkeyAction? UpdateHotkey(HotkeyAction action, KeyCode keyCode)
+        private static HotkeyAction? UpdateHotkey(HotkeyAction action, KeyCode keyCode)
         {
             HotkeyAction? removed = null;
-            
+
             // Remove old hotkey mapping
-            if (_keyCodes.ContainsKey(keyCode))
+            if (KeyCodes.ContainsKey(keyCode))
             {
-                var oldAction = _keyCodes[keyCode];
-                _keyCodes.Remove(keyCode);
-                _hotkeys.Remove(oldAction);
+                var oldAction = KeyCodes[keyCode];
+                KeyCodes.Remove(keyCode);
+                Hotkeys.Remove(oldAction);
                 removed = oldAction;
             }
 
             // Remove old keycode mapping
-            if (_hotkeys.ContainsKey(action))
-                _keyCodes.Remove(_hotkeys[action]);
+            if (Hotkeys.ContainsKey(action))
+                KeyCodes.Remove(Hotkeys[action]);
 
-            _hotkeys[action] = keyCode;
-            _keyCodes[keyCode] = action;
+            Hotkeys[action] = keyCode;
+            KeyCodes[keyCode] = action;
 
             return removed;
         }
 
-        private void LoadHotkey(HotkeyAction action, KeyCode defaultKeyCode)
+        public static void LoadHotkey(HotkeyAction action, KeyCode defaultKeyCode)
         {
             var kc = PlayerPrefs.GetInt(action.ToString());
             if (kc != 0)
-                UpdateHotkey(action, (KeyCode) kc);
+                UpdateHotkey(action, (KeyCode)kc);
             else
                 UpdateHotkey(action, defaultKeyCode);
         }
-        private void LoadHotkeys()
+
+        public static void LoadHotkeys()
         {
             LoadHotkey(HotkeyAction.ActivateClicker, KeyCode.LeftControl);
             LoadHotkey(HotkeyAction.DeactivateClicker, KeyCode.LeftAlt);
@@ -95,6 +107,56 @@ namespace Assets.Scripts.Launcher
             LoadHotkey(HotkeyAction.Pause, KeyCode.Pause);
             LoadHotkey(HotkeyAction.ActivateGodmode, KeyCode.Alpha1);
             LoadHotkey(HotkeyAction.DeactiveGodmode, KeyCode.Alpha2);
+            LoadHotkey(HotkeyAction.CameraDown, KeyCode.S);
+            LoadHotkey(HotkeyAction.CameraUp, KeyCode.W);
+            LoadHotkey(HotkeyAction.CameraLeft, KeyCode.A);
+            LoadHotkey(HotkeyAction.CameraRight, KeyCode.D);
+            // write lacking hotkeys if need to have them chosen
+        }
+
+        public static void RebindHotkey(HotkeyAction action)
+        {
+            _hotkeyToRebind = action;
+        }
+
+        public static void RebindHotkeyIfNeed()
+        {
+            if (_hotkeyToRebind != null)
+            {
+                if (Input.anyKeyDown)
+                {
+                    foreach (KeyCode kc in Enum.GetValues(typeof(KeyCode)))
+                    {
+                        if (Input.GetKeyDown(kc))
+                        {
+                            var removed = UpdateHotkey(_hotkeyToRebind.Value, kc);
+                            if (removed != null)
+                                HotkeyLabel[removed.Value].text = "<None>";
+                            HotkeyLabel[_hotkeyToRebind.Value].text = kc.ToString();
+                            _hotkeyToRebind = null;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        public static string GetFriendlyName(string input)
+        {
+            var sb = new StringBuilder();
+            foreach (var c in input)
+            {
+                if (char.IsUpper(c))
+                    sb.Append(" ");
+                sb.Append(c);
+            }
+
+            if (input.Length > 0 && char.IsUpper(input[0]))
+                sb.Remove(0, 1);
+
+            return sb.ToString();
         }
     }
 }
+
+

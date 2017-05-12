@@ -40,7 +40,6 @@ namespace Assets.Scripts.RLR
                 LevelManager.EndLevel(0f);
             }
 
-
             // Press Ctrl to start autoclicking
             if (InputManager.Instance.GetButtonDown(HotkeyAction.ActivateClicker))
             {
@@ -59,12 +58,20 @@ namespace Assets.Scripts.RLR
             if (InputManager.Instance.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.GodModeActive)
             {
                 GameControl.GodModeActive = true;
+                if (InitializeGameRLR.Player != null)
+                {
+                    InitializeGameRLR.Player.transform.Find("GodMode").gameObject.SetActive(true);
+                }
             }
 
             // Press 2 to be vulnerable
             if (InputManager.Instance.GetButtonDown(HotkeyAction.DeactiveGodmode) && GameControl.GodModeActive)
             {
                 GameControl.GodModeActive = false;
+                if (InitializeGameRLR.Player != null)
+                {
+                    InitializeGameRLR.Player.transform.Find("GodMode").gameObject.SetActive(false);
+                }
             }
         }
     }

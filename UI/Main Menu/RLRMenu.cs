@@ -16,8 +16,8 @@ namespace Assets.Scripts.UI.Main_Menu
         public GameObject HighScoreMenu;
         public GameObject LaunchRLR;
 
-        private GameControl.Difficulty? voteDifficulty = null;
-        private GameControl.Gamemode? voteGameMode = null;
+        private GameControl.Difficulty? _voteDifficulty;
+        private GameControl.Gamemode? _voteGameMode;
 
         public bool RLRMenuActive;
         
@@ -30,35 +30,41 @@ namespace Assets.Scripts.UI.Main_Menu
             SceneManager.LoadScene("RLR");
         }
 
+        private void OnDisable()
+        {
+            _voteDifficulty = null;
+            _voteGameMode = null;
+        }
+
         public void VoteDifficultyNormal()
         {
-            voteDifficulty = GameControl.Difficulty.Normal;
+            _voteDifficulty = GameControl.Difficulty.Normal;
         }
 
         public void VoteDifficultyHard()
         {
-            voteDifficulty = GameControl.Difficulty.Hard;
+            _voteDifficulty = GameControl.Difficulty.Hard;
         }
 
         public void VoteModeClassic()
         {
-            voteGameMode = GameControl.Gamemode.Classic;
+            _voteGameMode = GameControl.Gamemode.Classic;
         }
 
         public void VoteModeTime()
         {
-            voteGameMode = GameControl.Gamemode.TimeMode;
+            _voteGameMode = GameControl.Gamemode.TimeMode;
         }
 
         public void VoteModePractice()
         {
-            voteGameMode = GameControl.Gamemode.Practice;
+            _voteGameMode = GameControl.Gamemode.Practice;
         }
 
         public void SetModes()
         {
-            GameControl.SetDifficulty = (GameControl.Difficulty)voteDifficulty;
-            GameControl.SetGameMode = (GameControl.Gamemode)voteGameMode;
+            GameControl.SetDifficulty = (GameControl.Difficulty)_voteDifficulty;
+            GameControl.SetGameMode = (GameControl.Gamemode)_voteGameMode;
         }
 
         public void HighScores()
@@ -78,7 +84,7 @@ namespace Assets.Scripts.UI.Main_Menu
 
         public void Update()
         {
-            if (!voteDifficulty.Equals(null) && !voteGameMode.Equals(null))
+            if (_voteDifficulty != null && _voteGameMode != null)
             {
                 LaunchRLR.GetComponentInChildren<Text>().text = "__________ R U N __________";
                 LaunchRLR.GetComponent<Button>().interactable = true;

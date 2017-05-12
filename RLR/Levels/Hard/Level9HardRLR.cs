@@ -34,8 +34,8 @@ namespace Assets.Scripts.RLR.Levels
             DroneFactory.SpawnDrones(new RandomDrone(7, 2f, Color.grey), 3, area: laneArea[20]);
 
             // Spawn blue drones
-            DroneFactory.SetPattern(new Pat360Drones(48, 12.3f, true, true, 270), new DefaultDrone(15, 2, Color.blue));
-            DroneFactory.SetPattern(new Pat360Drones(48, 12.3f, true, true, 90), new DefaultDrone(15, 2, Color.blue));
+            DroneFactory.SetPattern(new Pat360Drones(48, 10, true, true, 270), new DefaultDrone(15, 2, Color.blue));
+            DroneFactory.SetPattern(new Pat360Drones(48, 10, true, true, 90), new DefaultDrone(15, 2, Color.blue));
 
             // Spawn yellow drones
             DroneFactory.SetPattern(new Pat360Drones(32, repeat: true, pulseDelay: 6),

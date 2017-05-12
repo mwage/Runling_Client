@@ -24,7 +24,7 @@ namespace Assets.Scripts.RLR
             }
             else if (GameControl.SetGameMode == GameControl.Gamemode.Practice)
             {
-                StartCoroutine(Respawn(0.5f, initializeGame, control));
+                StartCoroutine(Respawn(1, initializeGame, control));
             }
         }
 
@@ -32,6 +32,7 @@ namespace Assets.Scripts.RLR
         {
             yield return new WaitForSeconds(2f);
             initializeGame.Player.SetActive(true);
+            initializeGame.Player.transform.Find("Shield").gameObject.SetActive(true);
             GameControl.IsInvulnerable = true;
             GameControl.IsDead = false;
             control.StopUpdate = false;
@@ -54,6 +55,7 @@ namespace Assets.Scripts.RLR
 
             GameControl.IsImmobile = false;
             yield return new WaitForSeconds(delay);
+            initializeGame.Player.transform.Find("Shield").gameObject.SetActive(false);
             GameControl.IsInvulnerable = false;
         }
     }

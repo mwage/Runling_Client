@@ -21,8 +21,8 @@ namespace Assets.Scripts.SLA.Levels
             DroneFactory.SpawnAndAddDrones(new RandomDrone(7f, 1f, Color.blue), 15, 6f, BoundariesSLA.BouncingSla);
 
             // Spawn Green Drones
-            DroneFactory.StartCoroutine(GenerateLevel6GreenDrones(4f, 24, 7f, 1.5f, Color.green, 0.03f, 1.5f, 2, 48, DroneStartPosition.GetRandomBottomSector));
-            DroneFactory.StartCoroutine(GenerateLevel6GreenDrones(5f, 24, 7f, 1.5f, Color.green, 0.04f, 1.5f, 2, 48, DroneStartPosition.GetRandomTopSector));
+            DroneFactory.StartCoroutine(GenerateLevel6GreenDrones(4f, 24, 7f, 1.5f, Color.green, 0.02f, 1.5f, 2, 48, DroneStartPosition.GetRandomBottomSector));
+            DroneFactory.StartCoroutine(GenerateLevel6GreenDrones(5f, 24, 7f, 1.5f, Color.green, 0.03f, 1.5f, 2, 48, DroneStartPosition.GetRandomTopSector));
         }
 
         private IEnumerator GenerateLevel6GreenDrones(float delay, int initialDroneCount, float speed, float size, Color color,

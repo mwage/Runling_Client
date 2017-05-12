@@ -23,12 +23,12 @@ namespace Assets.Scripts.Players
             // Enter Safezone
             if (other.tag == "SafeZone" && !GameControl.IsInvulnerable)
             {
-                GameControl.IsInvulnerable = true;
+                GameControl.IsSafe = true;
 
             }
 
             // Death Trigger
-            if ((other.tag == "Enemy" && !GameControl.IsInvulnerable || other.tag == "Strong Enemy") && !GameControl.GodModeActive)
+            if (((other.tag == "Enemy" && !GameControl.IsSafe || other.tag == "Strong Enemy") && !GameControl.IsInvulnerable) && !GameControl.GodModeActive)
             {
                 GameControl.IsDead = true;
             }
@@ -50,7 +50,7 @@ namespace Assets.Scripts.Players
         {
             if (other.tag == "SafeZone")
             {
-                GameControl.IsInvulnerable = false;
+                GameControl.IsSafe = false;
                 _onPlatform = false;
             }
         }

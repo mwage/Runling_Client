@@ -7,7 +7,7 @@ namespace Assets.Scripts.SLA
     {
         public LevelManagerSLA LevelManager;
         public ScoreSLA ScoreSla;
-        public InitializeGameSLA InitializeGameSla;
+        public InitializeGameSLA InitializeGameSLA;
         public DeathSLA DeathSla;
 
         public bool StopUpdate;
@@ -19,7 +19,7 @@ namespace Assets.Scripts.SLA
             GameControl.CameraRange = 15;
             GameControl.GameActive = true;
             GameControl.CurrentLevel = 1;
-            InitializeGameSla.InitializeGame();
+            InitializeGameSLA.InitializeGame();
         }
 
         //update when dead
@@ -58,12 +58,20 @@ namespace Assets.Scripts.SLA
             if (InputManager.Instance.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.GodModeActive)
             {
                 GameControl.GodModeActive = true;
+                if (InitializeGameSLA.Player != null)
+                {
+                    InitializeGameSLA.Player.transform.Find("GodMode").gameObject.SetActive(true);
+                }
             }
 
             // Press 2 to turn off Godmode
             if (InputManager.Instance.GetButtonDown(HotkeyAction.DeactiveGodmode) && GameControl.GodModeActive)
             {
                 GameControl.GodModeActive = false;
+                if (InitializeGameSLA.Player != null)
+                {
+                    InitializeGameSLA.Player.transform.Find("GodMode").gameObject.SetActive(false);
+                }
             }
         }
     }

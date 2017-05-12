@@ -7,23 +7,31 @@ namespace Assets.Scripts.Launcher
 
         public static GameControl Control;
 
-        public static bool GameActive = false;          //if a game is ongoing
-        public static int CurrentLevel = 1;             //current active level
-        public static float MoveSpeed = 0;              //movespeed of your character
-        public static float CameraRange = 0;            //how far camera can go away from the middle
-        public static int TotalScore = 0;               //track total score of multiple levels
+        // Level/Game management
+        public static bool GameActive = false;
+        public static int CurrentLevel = 1;
+        public static int TotalScore = 0;
+        public static bool FinishedLevel = false;
+        public static Difficulty SetDifficulty = Difficulty.Hard;
+        public static Gamemode SetGameMode = Gamemode.Practice;
 
-
+        // Camera
+        public static float CameraRange = 0;
+        public static float CameraZoom = 30;
+        public static float CameraAngle = 90;
+        public static float CameraSpeed = 20;
+        
+        // Toggles
         public static bool AutoClickerActive = false;
         public static bool GodModeActive = false;
 
+        // Player
+        public static float MoveSpeed = 0;
         public static bool IsDead = true;
         public static bool IsInvulnerable = false;
+        public static bool IsSafe = false;
         public static bool IsImmobile = false;
-        public static bool FinishedLevel = false;
-
-        public static Difficulty SetDifficulty;
-        public static Gamemode SetGameMode = Gamemode.Practice;
+        
 
         public enum Difficulty
         {
@@ -55,6 +63,10 @@ namespace Assets.Scripts.Launcher
         //Start Game
         private void Start()
         {
+            var zoom = PlayerPrefs.GetFloat("CameraZoom");
+            CameraZoom = zoom != 0 ? zoom : 30;
+            var angle = PlayerPrefs.GetFloat("CameraAngle");
+            CameraAngle = angle != 0 ? angle : 90;
             SceneManager.LoadSceneAsync("MainMenu");
         }
     }
