@@ -8,15 +8,6 @@ namespace Assets.Scripts.Drones {
         protected readonly float Delay;
         protected readonly int DroneCount;
 
-        private float _speed;
-        private float _size;
-        private Color _color;
-        private DroneType _droneType;
-        private DroneMovement.MovementDelegate _moveDelegate;
-        private GameObject _player;
-        private float? _curving;
-        private float? _sinForce;
-        private float? _sinFrequency;
 
         public PatContinuousSpawn(float delay, int droneCount)
         {
@@ -26,6 +17,7 @@ namespace Assets.Scripts.Drones {
 
         public override void SetPattern(DroneFactory factory, IDrone drone, Area area, StartPositionDelegate posDelegate = null)
         {
+            SetParameters(drone);
             if (posDelegate == null)
                 posDelegate = delegate { return new Vector3(0, 0.6f, 0); };
 
@@ -46,7 +38,7 @@ namespace Assets.Scripts.Drones {
                 if (parentDrone == null && addPattern) { yield break; }
                 if (parentDrone != null)
                 {
-                    factory.SpawnDrones( new RandomDrone(_speed, _size, _color, _droneType, moveDelegate: _moveDelegate, player: _player, curving: _curving, sinForce: _sinForce, sinFrequency: _sinFrequency), DroneCount, posDelegate: delegate
+                    factory.SpawnDrones( new RandomDrone(Speed, Size, Color, DroneType, moveDelegate: MoveDelegate, player: Player, curving: Curving, sinForce: SinForce, sinFrequency: SinFrequency), DroneCount, posDelegate: delegate
                     {
                         return parentDrone.transform.position;
                     });
@@ -57,19 +49,6 @@ namespace Assets.Scripts.Drones {
                 }
                 yield return new WaitForSeconds(Delay);
             }
-        }
-
-        private void SetParameters(IDrone drone)
-        {
-            _speed = (float)drone.GetParameters()[0];
-            _size = (float)drone.GetParameters()[1];
-            _color = (Color)drone.GetParameters()[2];
-            _droneType = (DroneType)drone.GetParameters()[3];
-            _moveDelegate = (DroneMovement.MovementDelegate)drone.GetParameters()[4];
-            _player = (GameObject)drone.GetParameters()[5];
-            _curving = (float?)drone.GetParameters()[6];
-            _sinForce = (float?)drone.GetParameters()[7];
-            _sinFrequency = (float?)drone.GetParameters()[8];
         }
     }
 }
