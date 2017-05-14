@@ -33,9 +33,10 @@ namespace Assets.Scripts.SLA
 
         IEnumerator PrepareLevel()
         {
-            // Set current Level and movespeed
+            // Set current movespeed and cameraposition
             GameControl.MoveSpeed = LevelManagerSla.GetMovementSpeed(GameControl.CurrentLevel);
-            
+            CameraMovement.SetCameraPosition(0, 0, 0);
+
             // Show level highscore and current level
             CurrentPr.text = HighScores.highScoreSLA[GameControl.CurrentLevel].ToString();
             var levelText = LevelTextObject.GetComponent<TextMeshProUGUI>();
@@ -50,7 +51,6 @@ namespace Assets.Scripts.SLA
             // Load drones and player
 
             Player = Instantiate(PlayerPrefab);
-            CameraMovement.SetCameraPosition(0, 0, 0);
             GameControl.IsDead = false;
             GameControl.IsInvulnerable = true;
             Player.transform.Find("Shield").gameObject.SetActive(true);

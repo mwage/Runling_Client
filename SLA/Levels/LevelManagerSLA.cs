@@ -84,7 +84,11 @@ public class LevelManagerSLA : MonoBehaviour {
         }
         Destroy(InitializeGameSLA.Player);
         Score.CurrentScoreText.text = "0";
-        GameControl.CurrentLevel++;
+        if (GameControl.SetGameMode != GameControl.Gamemode.Practice)
+        {
+            GameControl.CurrentLevel++;
+        }
+
         InitializeGameSLA.InitializeGame();
     }
 

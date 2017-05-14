@@ -1,9 +1,8 @@
 ﻿using Assets.Scripts.Launcher;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Assets.Scripts.UI.RLR_Menus;
 
-namespace Assets.Scripts.UI.RLR_Menu
+namespace Assets.Scripts.UI.RLR_Menus
 {
     public class InGameMenuRLR : MonoBehaviour {
 
@@ -13,7 +12,7 @@ namespace Assets.Scripts.UI.RLR_Menu
         public GameObject ChooseLevelObject;
         public InGameMenuManagerRLR InGameMenuManagerSla;
         public OptionsMenu.OptionsMenu OptionsMenu;
-        public ChooseLevelMenu ChooseLevelMenu;
+        public ChooseLevelMenuRLR ChooseLevelMenu;
 
         public void BackToGame()
         {

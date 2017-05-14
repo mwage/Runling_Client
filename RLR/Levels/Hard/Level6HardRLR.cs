@@ -22,13 +22,13 @@ namespace Assets.Scripts.RLR.Levels
             // Spawn bouncing drones
             for (var i = 1; i < laneArea.Length - 2; i++)
             {
-                DroneFactory.SpawnDrones(new RandomDrone(6, 2f, Color.grey), (int)(12 - i * 0.4f), area: laneArea[i]);
+                DroneFactory.SpawnDrones(new RandomDrone(6, 2f, Color.grey), (int)(11 - i * 0.4f), area: laneArea[i]);
             }
             DroneFactory.SpawnDrones(new RandomDrone(6, 2f, Color.grey), 4, area: laneArea[19]);
             DroneFactory.SpawnDrones(new RandomDrone(6, 2f, Color.grey), 3, area: laneArea[20]);
 
             // Spawn yellow drones
-            DroneFactory.SetPattern(new Pat360Drones(32, repeat: true, pulseDelay: 6),
+            DroneFactory.SetPattern(new Pat360Drones(40, repeat: true, pulseDelay: 6),
                 new DefaultDrone(15, 2, Color.yellow, moveDelegate: DroneMovement.CurvedMovement, curving: 7));
         }
     }

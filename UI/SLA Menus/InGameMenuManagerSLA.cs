@@ -11,12 +11,15 @@ namespace Assets.Scripts.UI.SLA_Menus
         public OptionsMenu.OptionsMenu OptionsMenu;
         public OptionsMenu.SetHotkeys SetHotkeys;
         public HighScoreMenuSLA HighScoreMenuSLA;
+        public ChooseLevelMenuSLA ChooseLevelMenu;
 
         public GameObject InGameMenuObject;
         public GameObject OptionsMenuObject;
         public GameObject HighScoreMenuObject;
+        public GameObject ChooseLevelMenuObject;
         public GameObject WinScreen;
         public GameObject PauseScreen;
+        public GameObject ChooseLevel;
 
         public bool MenuOn;
         private bool _pause;
@@ -25,6 +28,7 @@ namespace Assets.Scripts.UI.SLA_Menus
         {
             MenuOn = false;
             OptionsMenu.OptionsMenuActive = false;
+            ChooseLevelMenu.ChooseLevelMenuActive = false;
             HighScoreMenuSLA.HighScoreMenuActive = false;
             _pause = false;
         }
@@ -46,6 +50,10 @@ namespace Assets.Scripts.UI.SLA_Menus
                     InGameMenuObject.SetActive(true);
                     Time.timeScale = 0;
                     MenuOn = true;
+                    if (GameControl.SetGameMode == GameControl.Gamemode.Practice)
+                    {
+                        ChooseLevel.SetActive(true);
+                    }
                 }
                 else if (MenuOn && OptionsMenu.OptionsMenuActive)
                 {
@@ -54,6 +62,10 @@ namespace Assets.Scripts.UI.SLA_Menus
                 else if (MenuOn && HighScoreMenuSLA.HighScoreMenuActive)
                 {
                     HighScoreMenuSLA.Back();
+                }
+                else if (MenuOn && ChooseLevelMenu.ChooseLevelMenuActive)
+                {
+                    ChooseLevelMenu.Back();
                 }
                 else
                 {

@@ -1,9 +1,7 @@
 ﻿using Assets.Scripts.Launcher;
-using Assets.Scripts.UI.SLA_Menus;
+using Assets.Scripts.UI.RLR_Menus;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.UI.Main_Menu
 {
@@ -11,10 +9,12 @@ namespace Assets.Scripts.UI.Main_Menu
     {
 
         public HighScoreMenuRLR HighScoreMenuSLA;
+        public SceneLoader SceneLoader;
 
         public GameObject MainMenu;
         public GameObject HighScoreMenu;
         public GameObject LaunchRLR;
+        public GameObject Menus;
 
         private GameControl.Difficulty? _voteDifficulty;
         private GameControl.Gamemode? _voteGameMode;
@@ -27,7 +27,9 @@ namespace Assets.Scripts.UI.Main_Menu
             GameControl.TotalScore = 0;
             GameControl.CurrentLevel = 1;
             SetModes();
-            SceneManager.LoadScene("RLR");
+
+            SceneLoader.LoadScene("RLR", 1);
+            Menus.SetActive(false);
         }
 
         private void OnDisable()

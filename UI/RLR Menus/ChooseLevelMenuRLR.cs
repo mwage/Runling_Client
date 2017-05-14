@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Assets.Scripts.Launcher;
-using UnityEngine.SceneManagement;
+﻿using Assets.Scripts.Launcher;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-namespace Assets.Scripts.UI.RLR_Menu
+namespace Assets.Scripts.UI.RLR_Menus
 {
-    public class ChooseLevelMenu : MonoBehaviour
+    public class ChooseLevelMenuRLR : MonoBehaviour
     {
         public bool ChooseLevelMenuActive;
         public GameObject Menu;

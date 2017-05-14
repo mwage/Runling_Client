@@ -9,6 +9,7 @@ namespace Assets.Scripts.SLA
         public ScoreSLA ScoreSla;
         public InitializeGameSLA InitializeGameSLA;
         public DeathSLA DeathSla;
+        public GameObject PracticeMode;
 
         public bool StopUpdate;
 
@@ -18,11 +19,15 @@ namespace Assets.Scripts.SLA
             StopUpdate = true;
             GameControl.CameraRange = 15;
             GameControl.GameActive = true;
-            GameControl.CurrentLevel = 1;
+            GameControl.TotalScore = 0;
+            if (GameControl.SetGameMode == GameControl.Gamemode.Practice)
+            {
+                PracticeMode.SetActive(true);
+            }
             InitializeGameSLA.InitializeGame();
         }
 
-        //update when dead
+
         private void Update()
         {
             if (GameControl.IsDead && !StopUpdate)
@@ -30,8 +35,11 @@ namespace Assets.Scripts.SLA
                 DeathSla.Death();
 
                 //in case of highscore, save and 
-                ScoreSla.SetHighScore();
-
+                if (GameControl.SetGameMode != GameControl.Gamemode.Practice)
+                {
+                    ScoreSla.SetHighScore();
+                }
+                
                 //change level
                 LevelManager.EndLevel(0.3f);
 

@@ -9,9 +9,12 @@ namespace Assets.Scripts.UI.SLA_Menus
         public GameObject InGameMenuObject;
         public GameObject OptionsMenuObject;
         public GameObject HighScoreMenuObject;
+        public GameObject ChooseLevelObject;
+
         public InGameMenuManagerSLA InGameMenuManagerSla;
         public OptionsMenu.OptionsMenu OptionsMenu;
         public HighScoreMenuSLA HighScoreMenuSLA;
+        public ChooseLevelMenuSLA ChooseLevelMenu;
 
         public void BackToGame()
         {
@@ -49,6 +52,13 @@ namespace Assets.Scripts.UI.SLA_Menus
             GameControl.GameActive = false;
             Time.timeScale = 1;
             SceneManager.LoadScene("MainMenu");
+        }
+
+        public void ChooseLevel()
+        {
+            InGameMenuObject.gameObject.SetActive(false);
+            ChooseLevelObject.gameObject.SetActive(true);
+            ChooseLevelMenu.ChooseLevelMenuActive = true;
         }
     }
 }

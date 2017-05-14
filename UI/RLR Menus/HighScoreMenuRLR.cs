@@ -3,7 +3,7 @@ using Assets.Scripts.SLA;
 using TMPro;
 using UnityEngine;
 
-namespace Assets.Scripts.UI.SLA_Menus
+namespace Assets.Scripts.UI.RLR_Menus
 {
     public class HighScoreMenuRLR : MonoBehaviour {
 

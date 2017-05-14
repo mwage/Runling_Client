@@ -1,6 +1,5 @@
 ﻿using Assets.Scripts.RLR;
 using Assets.Scripts.Launcher;
-using Assets.Scripts.UI.RLR_Menu;
 using UnityEngine;
 
 namespace Assets.Scripts.UI.RLR_Menus
@@ -10,7 +9,7 @@ namespace Assets.Scripts.UI.RLR_Menus
         public InGameMenuRLR InGameMenu;
         public ControlRLR ControlRLR;
         public OptionsMenu.OptionsMenu OptionsMenu;
-        public ChooseLevelMenu ChooseLevelMenu;
+        public ChooseLevelMenuRLR ChooseLevelMenu;
 
         public GameObject InGameMenuObject;
         public GameObject OptionsMenuObject;
@@ -26,6 +25,7 @@ namespace Assets.Scripts.UI.RLR_Menus
         {
             MenuOn = false;
             OptionsMenu.OptionsMenuActive = false;
+            ChooseLevelMenu.ChooseLevelMenuActive = false;
             _pause = false;
         }
 

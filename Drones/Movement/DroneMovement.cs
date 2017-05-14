@@ -51,7 +51,7 @@ namespace Assets.Scripts.Drones
             MoveStraight(drone, droneSpeed);
             var instance = drone.AddComponent<SinusoidalMovement>();
             instance.SinFrequency = sinFrequency ?? 5;
-            instance.SinForce = sinForce ?? 20;
+            instance.SinForce = sinForce ?? 40;
             instance.DroneSpeed = droneSpeed;
         }
 

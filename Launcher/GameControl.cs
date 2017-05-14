@@ -6,6 +6,7 @@ namespace Assets.Scripts.Launcher
     public class GameControl : MonoBehaviour {
 
         public static GameControl Control;
+        public SceneLoader SceneLoader;
 
         // Level/Game management
         public static bool GameActive = false;
@@ -64,10 +65,11 @@ namespace Assets.Scripts.Launcher
         private void Start()
         {
             var zoom = PlayerPrefs.GetFloat("CameraZoom");
-            CameraZoom = zoom != 0 ? zoom : 30;
+            CameraZoom = zoom != 0 ? zoom : 40;
             var angle = PlayerPrefs.GetFloat("CameraAngle");
             CameraAngle = angle != 0 ? angle : 90;
-            SceneManager.LoadSceneAsync("MainMenu");
+
+            SceneLoader.LoadScene("Mainmenu", 0.5f);
         }
     }
 }

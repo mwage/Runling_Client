@@ -1,26 +1,38 @@
 ﻿using Assets.Scripts.Launcher;
 using Assets.Scripts.UI.SLA_Menus;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts.UI.Main_Menu
 {
     public class SLAMenu : MonoBehaviour {
 
         public HighScoreMenuSLA HighScoreMenuSLA;
+        public SceneLoader SceneLoader;
 
         public GameObject MainMenu;
         public GameObject HighScoreMenu;
+        public GameObject Menus;
 
         public bool SLAMenuActive;
 
         public void StartGame()
         {
             GameControl.IsDead = true;
-            GameControl.TotalScore = 0;
             GameControl.CurrentLevel = 1;
+            GameControl.SetGameMode = GameControl.Gamemode.Classic;
 
-            SceneManager.LoadScene("SLA");
+            SceneLoader.LoadScene("SLA", 1);
+            Menus.SetActive(false);
+        }
+
+        public void Practice()
+        {
+            GameControl.IsDead = true;
+            GameControl.CurrentLevel = 1;
+            GameControl.SetGameMode = GameControl.Gamemode.Practice;
+
+            SceneLoader.LoadScene("SLA", 1);
+            Menus.SetActive(false);
         }
 
         public void HighScores()

@@ -17,7 +17,7 @@ namespace Assets.Scripts.RLR.Levels
             // Spawn bouncing drones
             for (var i = 1; i < laneArea.Length - 2; i++)
             {
-                DroneFactory.SpawnDrones(new RandomDrone(6, 2, Color.grey), (int)(12 - i * 0.4f), area: laneArea[i]);
+                DroneFactory.SpawnDrones(new RandomDrone(6, 2, Color.grey), (int)(11 - i * 0.4f), area: laneArea[i]);
             }
             DroneFactory.SpawnDrones(new RandomDrone(6, 2, Color.grey), 4, area: laneArea[19]);
             DroneFactory.SpawnDrones(new RandomDrone(6, 2, Color.grey), 3, area: laneArea[20]);
