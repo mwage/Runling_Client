@@ -7,7 +7,7 @@ namespace Assets.Scripts.Players
 {
     public class PlayerMovement : MonoBehaviour
     {
-        public static float ZeroTolerance = 0.0001f;
+        public static float ZeroTolerance = 0.001f;
 
         private Vector3 _clickPos;
         private Vector3 _targetPos;
@@ -92,7 +92,7 @@ namespace Assets.Scripts.Players
             if (!GameControl.IsImmobile)
             {
                 RaycastHit hit;
-                var ray = Camera.main.ScreenPointToRay(position);
+                var ray = UnityEngine.Camera.main.ScreenPointToRay(position);
 
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity, _defLayer))
                 {

@@ -14,6 +14,8 @@ namespace Assets.Scripts.RLR
 
         void Start()
         {
+            Settings.Instance.LoadSettings(); // unnecessary when starting from launcher
+
             // Set current Level and movespeed, load drones and spawn immunity
             StopUpdate = true;
             GameControl.GameActive = true;

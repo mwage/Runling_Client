@@ -1,5 +1,6 @@
 ﻿using System;
 using Assets.Scripts.Launcher;
+using Assets.Scripts.Players.Camera;
 using UnityEngine;
 
 namespace Assets.Scripts.UI.OptionsMenu
@@ -10,6 +11,8 @@ namespace Assets.Scripts.UI.OptionsMenu
         public GameObject Menu;
         public SetHotkeys SetHotkeys;
         public SetCamera SetCamera;
+        public CameraHandleMovement CameraHandleMovement;
+        public CameraMovement CameraMovement;
 
         public GameObject GeneralHotkeysSubmenu;
         public GameObject CameraSubmenu;
@@ -22,7 +25,9 @@ namespace Assets.Scripts.UI.OptionsMenu
             SubmenuBuilder.DeleteHotkeyPrefabs(SetCamera.HotkeyList); 
             SubmenuBuilder.DeleteHotkeyPrefabs(SetHotkeys.HotkeyList);
             InputManager.LoadHotkeys();
-            SetCamera.SetSliderValuesFromGameControl();
+            Settings.Instance.LoadSettings();
+            CameraHandleMovement.SetCameraHandlePosition(CameraHandleMovement.GetWatchedPoint());
+            CameraMovement.SetCameraPitch(Settings.CameraAngle.Val);
             OptionsMenuActive = false;
             gameObject.SetActive(false);
             Menu.gameObject.SetActive(true);
@@ -39,7 +44,6 @@ namespace Assets.Scripts.UI.OptionsMenu
                     PlayerPrefs.SetInt(action.ToString(), (int)kc);
             }
             SetCamera.SaveCameraOptions();
-            //SetHotkeys.DeleteHotkeyPrefabs(); // noneed i think
 
             OptionsMenuActive = false;
             gameObject.SetActive(false);

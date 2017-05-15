@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using Assets.Scripts.Launcher;
-using Assets.Scripts.Players.Cameras;
+using Assets.Scripts.Players.Camera;
 using Assets.Scripts.UI.SLA_Menus;
 using TMPro;
 using UnityEngine;

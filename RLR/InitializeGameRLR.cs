@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using Assets.Scripts.Launcher;
 using Assets.Scripts.Players;
-using Assets.Scripts.Players.Cameras;
+using Assets.Scripts.Players.Camera;
 using TMPro;
 using UnityEngine;
 using Assets.Scripts.UI.RLR_Menus;
@@ -44,7 +44,7 @@ namespace Assets.Scripts.RLR
             {
                 Player.transform.Find("GodMode").gameObject.SetActive(true);
             }
-            GameControl.CameraRange = airColliderRange / 2.5f;
+            Settings.CameraRange = airColliderRange / 2.5f;
             CameraHandleMovement.SetCameraHandlePosition(new Vector3(Player.transform.localPosition.x, 0, Player.transform.localPosition.z));
             LevelManagerRLR.GenerateChasers(GameControl.CurrentLevel);
             GameControl.IsDead = false;

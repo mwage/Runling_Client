@@ -1,8 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Assets.Scripts.Launcher;
 
 namespace Assets.Scripts.UI.OptionsMenu

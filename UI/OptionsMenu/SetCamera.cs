@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Assets.Scripts.Launcher;
-using Assets.Scripts.Players.Cameras;
+using Assets.Scripts.Players.Camera;
 
 namespace Assets.Scripts.UI.OptionsMenu
 {
@@ -28,7 +28,7 @@ namespace Assets.Scripts.UI.OptionsMenu
 
         private void OnEnable()
         {
-            if (_camera != null)
+            if (CameraHandle != null)
             {
                 _camera = CameraHandle.GetComponentInChildren<Camera>();
                 _cameraMovement = _camera.GetComponent<CameraMovement>();
@@ -37,22 +37,17 @@ namespace Assets.Scripts.UI.OptionsMenu
             }
             if (HotkeyList.transform.childCount == 0) // dont add the same buttons when switching between submenus
             {
-                //SubmenuBuilder.AddButton(HotkeyAction.CameraUp, SetHotkeyPrefab, HotkeyList); // need to change "horizontal/vertical" axes to Input.... to use it, but everyone uses wasd...
-                //SubmenuBuilder.AddButton(HotkeyAction.CameraDown, SetHotkeyPrefab, HotkeyList);
-                //SubmenuBuilder.AddButton(HotkeyAction.CameraLeft, SetHotkeyPrefab, HotkeyList);
-                //SubmenuBuilder.AddButton(HotkeyAction.CameraRight, SetHotkeyPrefab, HotkeyList);
                 SubmenuBuilder.AddButton(HotkeyAction.ZoomMore, SetHotkeyPrefab, HotkeyList);
                 SubmenuBuilder.AddButton(HotkeyAction.ZoomLess, SetHotkeyPrefab, HotkeyList);
                 SubmenuBuilder.AddButton(HotkeyAction.RotateLeft, SetHotkeyPrefab, HotkeyList);
                 SubmenuBuilder.AddButton(HotkeyAction.RotateRight, SetHotkeyPrefab, HotkeyList);
 
-                _cameraZoomSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Zoom", 50, 10, 100, SetCameraZoom);
-                _cameraAngleSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Angle", 90, 20, 90, SetCameraAngle);
-                _cameraSpeedSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Speed", 10, 5, 50, SetCameraSpeed);
-
+                _cameraZoomSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Zoom", Settings.CameraZoom.Val, Settings.CameraZoom.Min, Settings.CameraZoom.Max, SetCameraZoom);
+                _cameraAngleSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Angle", Settings.CameraAngle.Val, Settings.CameraAngle.Min, Settings.CameraAngle.Max, SetCameraAngle);
+                _cameraSpeedSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Speed", Settings.CameraSpeed.Val, Settings.CameraSpeed.Min, Settings.CameraSpeed.Max, SetCameraSpeed);
                 _cameraFollowSelection = SubmenuBuilder.AddSelection(SelectionPrefab, HotkeyList, "Follow", FollowCameraSelection);
 
-                SetSliderValuesFromGameControl();
+                SetSliderValuesFromSettings();
             }
         }
 
@@ -62,41 +57,36 @@ namespace Assets.Scripts.UI.OptionsMenu
             InputManager.RebindHotkeyIfNeed();
         }
 
-        void LateUpdate()
-        {
-
-        }
-
         public void FollowCameraSelection(bool on)
         {
             if (_cameraFollowSelection.isOn )
             {
-                GameControl.CameraFollow = 1; // tru
+                Settings.CameraFollow = 1; // tru
             }
             else
             {
-                GameControl.CameraFollow = 0;
+                Settings.CameraFollow = 0;
             }
         }
-
-        public void SetSliderValuesFromGameControl()
+        
+        public void SetSliderValuesFromSettings()
         {
             if (_cameraZoomSlider != null)
             {
-                _cameraZoomSlider.value = GameControl.CameraZoom.Val;
-                _cameraAngleSlider.value = GameControl.CameraAngle.Val;
-                _cameraSpeedSlider.value = GameControl.CameraSpeed.Val;
+                _cameraZoomSlider.value = Settings.CameraZoom.Val;
+                _cameraAngleSlider.value = Settings.CameraAngle.Val;
+                _cameraSpeedSlider.value = Settings.CameraSpeed.Val;
+                _cameraFollowSelection.isOn = Settings.CameraFollow == 1;
             }
         }
-
+        
         public void SaveCameraOptions()
         {
              /////// change it before
-            PlayerPrefs.SetFloat("CameraZoom", GameControl.CameraZoom.Val);
-            PlayerPrefs.SetFloat("CameraAngle", GameControl.CameraAngle.Val);
-            PlayerPrefs.SetFloat("CameraSpeed", GameControl.CameraSpeed.Val);
-            PlayerPrefs.SetInt("CameraFollow", GameControl.CameraFollow);
-
+            PlayerPrefs.SetFloat("CameraZoom", Settings.CameraZoom.Val);
+            PlayerPrefs.SetFloat("CameraAngle", Settings.CameraAngle.Val);
+            PlayerPrefs.SetFloat("CameraSpeed", Settings.CameraSpeed.Val);
+            PlayerPrefs.SetInt("CameraFollow", Settings.CameraFollow);
             PlayerPrefs.Save();
         }
 
@@ -104,9 +94,9 @@ namespace Assets.Scripts.UI.OptionsMenu
         {
             if (_camera != null)
             {
-                GameControl.CameraZoom.Val = zoom;
+                Settings.CameraZoom.Val = zoom;
                 _cameraHandleMovement.SetCameraHandlePosition(_currentPosition);
-                _camera.GetComponent<CameraMovement>().SetCameraPitch(GameControl.CameraAngle.Val);
+                _camera.GetComponent<CameraMovement>().SetCameraPitch(Settings.CameraAngle.Val);
             }
         }
 
@@ -114,9 +104,9 @@ namespace Assets.Scripts.UI.OptionsMenu
         {
             if (_camera != null)
             {
-                GameControl.CameraAngle.Val = angle;
+                Settings.CameraAngle.Val = angle;
                 _cameraHandleMovement.SetCameraHandlePosition(_currentPosition);
-                _cameraMovement.SetCameraPitch(GameControl.CameraAngle.Val);
+                _cameraMovement.SetCameraPitch(Settings.CameraAngle.Val);
             }
         }
 
@@ -124,9 +114,8 @@ namespace Assets.Scripts.UI.OptionsMenu
         {
             if (_camera != null)
             {
-                GameControl.CameraSpeed.Val = speed;
+                Settings.CameraSpeed.Val = speed;
             }
         }
-        
     }
 }

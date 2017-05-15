@@ -1,19 +1,14 @@
 ﻿using Assets.Scripts.Launcher;
 using UnityEngine;
 
-namespace Assets.Scripts.Players.Cameras
+namespace Assets.Scripts.Players.Camera
 {
     public class CameraMovement : MonoBehaviour
     {
 
         void Start ()
         {
-            SetCameraPitch(GameControl.CameraAngle.Val);
-        }
-	
-        void LateUpdate ()
-        {
-         
+            SetCameraPitch(Settings.CameraAngle.Val);
         }
 
         public void SetCameraPitch(float pitchAngle)

@@ -15,9 +15,11 @@ namespace Assets.Scripts.SLA
 
         void Start()
         {
+            Settings.Instance.LoadSettings(); // unnecessary when starting from launcher
+
             // Set current Level and movespeed, load drones and spawn immunity
             StopUpdate = true;
-            GameControl.CameraRange = 15;
+            Settings.CameraRange = 15;
             GameControl.GameActive = true;
             GameControl.TotalScore = 0;
             if (GameControl.SetGameMode == GameControl.Gamemode.Practice)
