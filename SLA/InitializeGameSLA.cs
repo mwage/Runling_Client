@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using Assets.Scripts.Launcher;
-using Assets.Scripts.Players;
+using Assets.Scripts.Players.Cameras;
 using Assets.Scripts.UI.SLA_Menus;
 using TMPro;
 using UnityEngine;
@@ -22,8 +22,8 @@ namespace Assets.Scripts.SLA
         public GameObject CurrentPrWindow;
         public GameObject Player;
         public Text CurrentPr;
-        public CameraMovement CameraMovement;
-        
+        public CameraHandleMovement CameraHandleMovement;
+
 
         //set Spawnimmunity once game starts
         public void InitializeGame()
@@ -35,7 +35,7 @@ namespace Assets.Scripts.SLA
         {
             // Set current movespeed and cameraposition
             GameControl.MoveSpeed = LevelManagerSla.GetMovementSpeed(GameControl.CurrentLevel);
-            CameraMovement.SetCameraPosition(0, 0, 0);
+            CameraHandleMovement.SetCameraHandlePosition(Vector3.zero);
 
             // Show level highscore and current level
             CurrentPr.text = HighScores.highScoreSLA[GameControl.CurrentLevel].ToString();

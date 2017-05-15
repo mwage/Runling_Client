@@ -25,7 +25,7 @@ namespace Assets.Scripts.UI.OptionsMenu
             setHotkey.onClick.AddListener(() => { InputManager.RebindHotkey(keyName);});
         }
 
-        public static Slider AddSlider(GameObject sliderPrefab, GameObject hotkeyList, string name)
+        public static Slider AddSlider(GameObject sliderPrefab, GameObject hotkeyList, string name, float defaultValue, float minValue, float maxValue, UnityEngine.Events.UnityAction<float> sliderFunction)
         {
             GameObject hotkey = Instantiate(sliderPrefab, hotkeyList.transform);
             hotkey.transform.localScale = Vector3.one;
@@ -33,6 +33,9 @@ namespace Assets.Scripts.UI.OptionsMenu
             hotkey.transform.Find("HotkeyName").GetComponent<Text>().text = name;
 
             Slider slider =  hotkey.transform.FindChild("Slider").gameObject.GetComponent<Slider>();
+            slider.minValue = minValue;
+            slider.maxValue = maxValue;
+            slider.onValueChanged.AddListener(sliderFunction);
             return slider;
         }
 
@@ -42,6 +45,18 @@ namespace Assets.Scripts.UI.OptionsMenu
             {
                 Destroy(child.gameObject);
             }
+        }
+
+        public static Toggle AddSelection(GameObject selectionPrefab, GameObject hotkeyList, string name, UnityEngine.Events.UnityAction<bool> selectionFunction)
+        {
+            GameObject hotkey = Instantiate(selectionPrefab, hotkeyList.transform);
+            hotkey.transform.localScale = Vector3.one;
+
+            hotkey.transform.Find("HotkeyName").GetComponent<Text>().text = name;
+
+            Toggle selection = hotkey.transform.FindChild("Toggle").gameObject.GetComponent<Toggle>();
+            selection.onValueChanged.AddListener(selectionFunction);
+            return selection;
         }
     }
 }

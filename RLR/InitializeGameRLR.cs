@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Assets.Scripts.Launcher;
 using Assets.Scripts.Players;
+using Assets.Scripts.Players.Cameras;
 using TMPro;
 using UnityEngine;
 using Assets.Scripts.UI.RLR_Menus;
@@ -21,7 +22,7 @@ namespace Assets.Scripts.RLR
         public GameObject LevelTextObject;
         public GameObject CountdownPrefab;
         public GameObject Player;
-        public CameraMovement CameraMovement;
+        public CameraHandleMovement CameraHandleMovement;
 
 
         //set Spawnimmunity once game starts
@@ -44,7 +45,7 @@ namespace Assets.Scripts.RLR
                 Player.transform.Find("GodMode").gameObject.SetActive(true);
             }
             GameControl.CameraRange = airColliderRange / 2.5f;
-            CameraMovement.SetCameraPosition(Player.transform.localPosition.x, 0, Player.transform.localPosition.z);
+            CameraHandleMovement.SetCameraHandlePosition(new Vector3(Player.transform.localPosition.x, 0, Player.transform.localPosition.z));
             LevelManagerRLR.GenerateChasers(GameControl.CurrentLevel);
             GameControl.IsDead = false;
             GameControl.IsInvulnerable = true;

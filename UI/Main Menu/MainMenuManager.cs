@@ -19,6 +19,7 @@ namespace Assets.Scripts.UI.Main_Menu
 
         private void Awake()
         {
+            InputManager.LoadHotkeys(); ////////////
             OptionsMenu.OptionsMenuActive = false;
             SLAMenu.SLAMenuActive = false;
             HighScoreMenuSLA.HighScoreMenuActive = false;

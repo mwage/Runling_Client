@@ -18,10 +18,11 @@ namespace Assets.Scripts.Launcher
 
         // Camera
         public static float CameraRange = 0;
-        public static float CameraZoom = 30;
-        public static float CameraAngle = 90;
-        public static float CameraSpeed = 20;
-        
+        public static Limits CameraZoom = new Limits(10, 100, def: 50);
+        public static Limits CameraAngle = new Limits(10, 90, def: 90);
+        public static Limits CameraSpeed = new Limits(5, 50, def: 10);
+        public static int CameraFollow = 0;
+
         // Toggles
         public static bool AutoClickerActive = false;
         public static bool GodModeActive = false;
@@ -64,12 +65,31 @@ namespace Assets.Scripts.Launcher
         //Start Game
         private void Start()
         {
-            var zoom = PlayerPrefs.GetFloat("CameraZoom");
-            CameraZoom = zoom != 0 ? zoom : 40;
-            var angle = PlayerPrefs.GetFloat("CameraAngle");
-            CameraAngle = angle != 0 ? angle : 90;
-
             SceneLoader.LoadScene("Mainmenu", 0.5f);
+        }
+    }
+    public class Limits
+    {
+        public float Min;
+        public float Max;
+        public float Val;
+        public float Def;
+
+        public Limits(float min, float max, float val = 10, float def = 10)
+        {
+            Min = min;
+            Max = max;
+            //Val = val;
+            Def = def;
+        }
+
+        public void Decrease(float v)
+        {
+            Val = Val - v > Min ? Val - v : Min;
+        }
+        public void Increase(float v)
+        {
+            Val = Val + v < Max ? Val + v : Max;
         }
     }
 }

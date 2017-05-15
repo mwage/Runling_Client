@@ -8,16 +8,22 @@ namespace Assets.Scripts.Launcher
 {
     public enum HotkeyAction
     {
-        ActivateClicker,
+        ActivateClicker, // general hotkeys
         DeactivateClicker,
         NavigateMenu,
         Pause,
         ActivateGodmode,
         DeactiveGodmode,
-        CameraUp,
+        CameraUp, // camera hotkeys
         CameraDown,
         CameraRight,
-        CameraLeft
+        CameraLeft,
+        ZoomMore,
+        ZoomLess,
+        RotateRight,
+        RotateLeft
+        // graphics hotkeys
+
     }
     
 
@@ -52,7 +58,7 @@ namespace Assets.Scripts.Launcher
         {
             if (!Hotkeys.ContainsKey(hotkeyAction))
             {
-                Debug.Log("no hotkey named " + hotkeyAction);
+               // Debug.Log("no hotkey named " + hotkeyAction);
                 return false;
             }
 
@@ -99,6 +105,15 @@ namespace Assets.Scripts.Launcher
                 UpdateHotkey(action, defaultKeyCode);
         }
 
+        //public static void LoadSliderValue(HotkeyAction action, float defaultValue)
+        //{
+        //    float kc = PlayerPrefs.GetFloat(action.ToString());
+        //    if (kc != 0)
+        //        UpdateHotkey(action, (float)kc);
+        //    else
+        //        UpdateHotkey(action, defaultValue);
+        //}
+
         public static void LoadHotkeys()
         {
             LoadHotkey(HotkeyAction.ActivateClicker, KeyCode.LeftControl);
@@ -111,6 +126,11 @@ namespace Assets.Scripts.Launcher
             LoadHotkey(HotkeyAction.CameraUp, KeyCode.W);
             LoadHotkey(HotkeyAction.CameraLeft, KeyCode.A);
             LoadHotkey(HotkeyAction.CameraRight, KeyCode.D);
+            LoadHotkey(HotkeyAction.ZoomMore, KeyCode.O);
+            LoadHotkey(HotkeyAction.ZoomLess, KeyCode.P);
+            LoadHotkey(HotkeyAction.RotateRight, KeyCode.K);
+            LoadHotkey(HotkeyAction.RotateLeft, KeyCode.L);
+        
             // write lacking hotkeys if need to have them chosen
         }
 

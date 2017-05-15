@@ -22,7 +22,7 @@ namespace Assets.Scripts.UI.OptionsMenu
             SubmenuBuilder.DeleteHotkeyPrefabs(SetCamera.HotkeyList); 
             SubmenuBuilder.DeleteHotkeyPrefabs(SetHotkeys.HotkeyList);
             InputManager.LoadHotkeys();
-            SetCamera.LoadCameraOptions();
+            SetCamera.SetSliderValuesFromGameControl();
             OptionsMenuActive = false;
             gameObject.SetActive(false);
             Menu.gameObject.SetActive(true);
