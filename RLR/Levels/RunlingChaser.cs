@@ -93,7 +93,7 @@ namespace Assets.Scripts.RLR.Levels
             if (index == null) return;
             for (var i = 0; i < _spawnChaser.Length; i++)
             {
-                if (_spawnChaser[i] == index.Value && !_reachedChaserPlatform[i, 0])
+                if (_spawnChaser[i] == index.Value && !_reachedChaserPlatform[i, 0] && (i == 0 || _reachedChaserPlatform[i-1, 0]))
                 {
                     _chaser.AddRange(DroneFactory.SpawnDrones(_chaserBase));
                     
@@ -132,6 +132,7 @@ namespace Assets.Scripts.RLR.Levels
         IEnumerator DestroyChaserText(float duration)
         {
             var chaserText = Instantiate(ChaserText, GameObject.Find("Canvas").transform);
+            chaserText.GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 50);
             chaserText.GetComponent<TextMeshProUGUI>().text = "Chaser Drone destroyed!";
             yield return new WaitForSeconds(duration);
             Destroy(chaserText);

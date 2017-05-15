@@ -34,7 +34,7 @@ namespace Assets.Scripts.Drones {
                 if (parentDrone == null && addPattern) { yield break; }
                 if (parentDrone != null)
                 {
-                    factory.SpawnDrones(new RandomDrone(drone), DroneCount, posDelegate: delegate
+                    factory.SpawnDrones(drone, DroneCount, posDelegate: delegate
                     {
                         return parentDrone.transform.position;
                     });

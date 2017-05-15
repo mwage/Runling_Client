@@ -88,7 +88,7 @@ namespace Assets.Scripts.UI.Main_Menu
         {
             if (_voteDifficulty != null && _voteGameMode != null)
             {
-                LaunchRLR.GetComponentInChildren<Text>().text = "__________ R U N __________";
+                LaunchRLR.GetComponentInChildren<Text>().text = "R U N";
                 LaunchRLR.GetComponent<Button>().interactable = true;
             }
             else
