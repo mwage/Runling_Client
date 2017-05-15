@@ -16,8 +16,8 @@ namespace Assets.Scripts.Drones
         }
 
         public DefaultDrone(float speed, float size, Color color, Vector3? position = null, float? direction = null, DroneType? droneType = null, 
-            DroneMovement.MovementDelegate moveDelegate = null, GameObject player = null, float? curving = null, float? sinForce = null, float? sinFrequency = null) : 
-            base(speed, size, color, droneType, moveDelegate, player, curving, sinForce, sinFrequency)
+            DroneMovement.MovementDelegate moveDelegate = null, float? curving = null, float? sinForce = null, float? sinFrequency = null) : 
+            base(speed, size, color, droneType, moveDelegate, curving, sinForce, sinFrequency)
         {
             Position = position ?? new Vector3(0, 0.6f, 0);
             Direction = direction ?? 0;

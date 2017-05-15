@@ -17,8 +17,8 @@ namespace Assets.Scripts.Drones
         }
 
         public RandomDrone(float speed, float size, Color color, DroneType? droneType = null, float? restrictedZone = null, float? coneRange = null, float? startDirection = null,
-            DroneMovement.MovementDelegate moveDelegate = null, GameObject player = null, float? curving = null, float? sinForce = null, float? sinFrequency = null) : 
-            base(speed, size, color, droneType, moveDelegate, player, curving, sinForce, sinFrequency)
+            DroneMovement.MovementDelegate moveDelegate = null, float? curving = null, float? sinForce = null, float? sinFrequency = null) : 
+            base(speed, size, color, droneType, moveDelegate, curving, sinForce, sinFrequency)
         {
             RestrictedZone = restrictedZone ?? 1;
             ConeRange = coneRange;

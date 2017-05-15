@@ -13,7 +13,7 @@ namespace Assets.Scripts.RLR.Levels
 
         public override void SetChasers()
         {
-            Manager.RunlingChaser.SetChaserPlatforms(new DefaultDrone(9f, 1f, Color.green, moveDelegate: DroneMovement.ChaserMovement, player: GameControl.Player), new int[2] { 1, 8}, new int[2] { 4, 12});
+            Manager.RunlingChaser.SetChaserPlatforms(new DefaultDrone(9f, 1f, Color.green, moveDelegate: DroneMovement.ChaserMovement), new int[2] { 1, 8}, new int[2] { 4, 12});
         }
 
         public override void CreateDrones()

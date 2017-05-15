@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Drones;
+using Assets.Scripts.Launcher;
 using Assets.Scripts.Players;
 using Assets.Scripts.RLR.GenerateMap;
 using TMPro;
@@ -65,9 +66,9 @@ namespace Assets.Scripts.RLR.Levels
             }
         }
 
-        public void GetTriggerInstance(GameObject player)
+        public void GetTriggerInstance()
         {
-            _playerTrigger = player.GetComponent<PlayerTrigger>();
+            _playerTrigger = GameControl.Player.transform.Find("Trigger").gameObject.GetComponent<PlayerTrigger>();
             _createdInstance = true;
         }
 

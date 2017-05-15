@@ -54,7 +54,7 @@ public class LevelManagerRLR : MonoBehaviour {
 
     public void GenerateChasers(int level)
     {
-        RunlingChaser.GetTriggerInstance(GameControl.Player.transform.Find("Trigger").gameObject);
+        RunlingChaser.GetTriggerInstance();
         RunlingChaser.GetSafeZones();
         _levels[level - 1].SetChasers();
     }

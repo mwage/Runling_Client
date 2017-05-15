@@ -8,8 +8,8 @@ namespace Assets.Scripts.Drones
         protected readonly IDrone SpawnedDrones;
                 
         public MineDrone(float speed, float size, Color color, IPattern pattern = null, IDrone spawnedDrones = null, DroneType? droneType = null, 
-            DroneMovement.MovementDelegate moveDelegate = null, GameObject player = null, float? curving = null, float? sinForce = null, float? sinFrequency = null) : 
-            base(speed, size, color, droneType, moveDelegate, player, curving, sinForce, sinFrequency)
+            DroneMovement.MovementDelegate moveDelegate = null, float? curving = null, float? sinForce = null, float? sinFrequency = null) : 
+            base(speed, size, color, droneType, moveDelegate, curving, sinForce, sinFrequency)
         {
             DroneType = droneType ?? DroneType.MineDrone;
             Pattern = pattern;

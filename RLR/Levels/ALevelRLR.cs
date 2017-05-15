@@ -34,7 +34,7 @@ namespace Assets.Scripts.RLR.Levels
 
         public virtual void SetChasers()
         {
-            RunlingChaser.SetChaserPlatforms(new DefaultDrone(5f, 1f, Color.green, moveDelegate: DroneMovement.ChaserMovement, player: GameControl.Player));
+            RunlingChaser.SetChaserPlatforms(new DefaultDrone(5f, 1f, Color.green, moveDelegate: DroneMovement.ChaserMovement));
         }
     }
 }
