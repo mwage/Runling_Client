@@ -60,9 +60,9 @@ namespace Assets.Scripts.RLR
             if (InputManager.Instance.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.GodModeActive)
             {
                 GameControl.GodModeActive = true;
-                if (InitializeGameRLR.Player != null)
+                if (GameControl.Player != null)
                 {
-                    InitializeGameRLR.Player.transform.Find("GodMode").gameObject.SetActive(true);
+                    GameControl.Player.transform.Find("GodMode").gameObject.SetActive(true);
                 }
             }
 
@@ -70,9 +70,9 @@ namespace Assets.Scripts.RLR
             if (InputManager.Instance.GetButtonDown(HotkeyAction.DeactiveGodmode) && GameControl.GodModeActive)
             {
                 GameControl.GodModeActive = false;
-                if (InitializeGameRLR.Player != null)
+                if (GameControl.Player != null)
                 {
-                    InitializeGameRLR.Player.transform.Find("GodMode").gameObject.SetActive(false);
+                    GameControl.Player.transform.Find("GodMode").gameObject.SetActive(false);
                 }
             }
         }

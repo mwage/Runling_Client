@@ -1,15 +1,14 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Launcher;
+using UnityEngine;
 
 namespace Assets.Scripts.SLA
 {
     public class DeathSLA : MonoBehaviour
     {
-        public InitializeGameSLA InitializeGameSLA;
-
         //events following Deathtrigger
         public void Death()
         {
-            InitializeGameSLA.Player.SetActive(false);
+            GameControl.Player.SetActive(false);
         }
     }
 }

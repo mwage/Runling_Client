@@ -9,7 +9,6 @@ namespace Assets.Scripts.Players.Camera
         // CameraHandle Object allows to use arrows to move properly with Camera with any Y-axis rotation.
     {
         public SetCamera SetCamera;
-        private GameObject _player;
 
 
         void Start()
@@ -49,10 +48,9 @@ namespace Assets.Scripts.Players.Camera
             }
             if (Settings.CameraFollow == 1)
             {
-                _player = GameObject.Find("Manticore(Clone)");
-                if (_player != null) // maybe be bad for multiplayer)     need refactor of player
+                if (GameControl.Player != null)
                 {
-                    SetCameraHandlePosition(_player.transform.position);
+                    SetCameraHandlePosition(GameControl.Player.transform.position);
                 }
             }
         }

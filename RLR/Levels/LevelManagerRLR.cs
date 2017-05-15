@@ -54,7 +54,7 @@ public class LevelManagerRLR : MonoBehaviour {
 
     public void GenerateChasers(int level)
     {
-        RunlingChaser.GetTriggerInstance(InitializeGameRLR.Player.transform.Find("Trigger").gameObject);
+        RunlingChaser.GetTriggerInstance(GameControl.Player.transform.Find("Trigger").gameObject);
         RunlingChaser.GetSafeZones();
         _levels[level - 1].SetChasers();
     }
@@ -77,7 +77,7 @@ public class LevelManagerRLR : MonoBehaviour {
     {
         yield return new WaitForSeconds(delay);
         DroneFactory.StopAllCoroutines();
-        Destroy(InitializeGameRLR.Player);
+        Destroy(GameControl.Player);
         var enemies = GameObject.FindGameObjectsWithTag("Enemy");
         var strongEnemies = GameObject.FindGameObjectsWithTag("Strong Enemy");
         foreach (var t in enemies)

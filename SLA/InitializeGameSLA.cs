@@ -20,7 +20,6 @@ namespace Assets.Scripts.SLA
         public GameObject LevelTextObject;
         public GameObject CountdownPrefab;
         public GameObject CurrentPrWindow;
-        public GameObject Player;
         public Text CurrentPr;
         public CameraHandleMovement CameraHandleMovement;
 
@@ -50,13 +49,13 @@ namespace Assets.Scripts.SLA
 
             // Load drones and player
 
-            Player = Instantiate(PlayerPrefab);
+            GameControl.Player = Instantiate(PlayerPrefab);
             GameControl.IsDead = false;
             GameControl.IsInvulnerable = true;
-            Player.transform.Find("Shield").gameObject.SetActive(true);
-            if (GameControl.GodModeActive && !Player.transform.Find("GodMode").gameObject.activeSelf)
+            GameControl.Player.transform.Find("Shield").gameObject.SetActive(true);
+            if (GameControl.GodModeActive && !GameControl.Player.transform.Find("GodMode").gameObject.activeSelf)
             {
-                Player.transform.Find("GodMode").gameObject.SetActive(true);
+                transform.Find("GodMode").gameObject.SetActive(true);
             }
             GameControl.IsImmobile = false;
             ControlSla.StopUpdate = false;
@@ -71,7 +70,7 @@ namespace Assets.Scripts.SLA
                 Destroy(countdown);
             }
 
-            Player.transform.Find("Shield").gameObject.SetActive(false);
+            GameControl.Player.transform.Find("Shield").gameObject.SetActive(false);
             GameControl.IsInvulnerable = false;
             ScoreSla.StartScore();
             

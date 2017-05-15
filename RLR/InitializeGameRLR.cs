@@ -21,7 +21,6 @@ namespace Assets.Scripts.RLR
         public GameObject PlayerPrefab;
         public GameObject LevelTextObject;
         public GameObject CountdownPrefab;
-        public GameObject Player;
         public CameraHandleMovement CameraHandleMovement;
 
 
@@ -38,14 +37,14 @@ namespace Assets.Scripts.RLR
             // Load drones and player
             var startPlatform = LevelManagerRLR.GenerateMapRLR.GetStartPlatform();
             var airColliderRange = LevelManagerRLR.GenerateMapRLR.GetAirColliderRange();
-            Player = Instantiate(PlayerPrefab, new Vector3(startPlatform.x, 0, startPlatform.z), Quaternion.Euler(0, 90, 0));
-            Player.GetComponent<PlayerMovement>().Acceleration = 80;
-            if (GameControl.GodModeActive && !Player.transform.Find("GodMode").gameObject.activeSelf)
+            GameControl.Player = Instantiate(PlayerPrefab, new Vector3(startPlatform.x, 0, startPlatform.z), Quaternion.Euler(0, 90, 0));
+            GameControl.Player.GetComponent<PlayerMovement>().Acceleration = 80;
+            if (GameControl.GodModeActive && !GameControl.Player.transform.Find("GodMode").gameObject.activeSelf)
             {
-                Player.transform.Find("GodMode").gameObject.SetActive(true);
+                GameControl.Player.transform.Find("GodMode").gameObject.SetActive(true);
             }
             Settings.CameraRange = airColliderRange / 2.5f;
-            CameraHandleMovement.SetCameraHandlePosition(new Vector3(Player.transform.localPosition.x, 0, Player.transform.localPosition.z));
+            CameraHandleMovement.SetCameraHandlePosition(new Vector3(GameControl.Player.transform.localPosition.x, 0, GameControl.Player.transform.localPosition.z));
             LevelManagerRLR.GenerateChasers(GameControl.CurrentLevel);
             GameControl.IsDead = false;
             GameControl.IsInvulnerable = true;

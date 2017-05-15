@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Assets.Scripts.Drones;
+using Assets.Scripts.Launcher;
 using UnityEngine;
 
 namespace Assets.Scripts.SLA.Levels
@@ -21,7 +22,7 @@ namespace Assets.Scripts.SLA.Levels
             DroneFactory.SpawnAndAddDrones(new RandomDrone(7f, 1.5f, Color.red), 15, 9f, BoundariesSLA.BouncingSla);
 
             // Spawn Chaser Drone
-            DroneFactory.SpawnDrones(new DefaultDrone(7f, 1.1f, Color.yellow, moveDelegate: DroneMovement.ChaserMovement, player: Manager.InitializeGameSLA.Player));
+            DroneFactory.SpawnDrones(new DefaultDrone(7f, 1.1f, Color.yellow, moveDelegate: DroneMovement.ChaserMovement, player: GameControl.Player));
         
             // Spawn Green Drones
             DroneFactory.StartCoroutine(GenerateLevel9GreenDrones(4f, 16, 8f, 1.5f, Color.green, 0.1f, 1f, 1, 32));

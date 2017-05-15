@@ -8,14 +8,13 @@ namespace Assets.Scripts.RLR
 {
     public class DeathRLR : MonoBehaviour
     {
-        public InitializeGameRLR InitializeGameRLR;
 
         //events following Deathtrigger
         public void Death(LevelManagerRLR manager, InitializeGameRLR initializeGame, ControlRLR control)
         {
             GameControl.IsImmobile = true;
-            initializeGame.Player.GetComponent<PlayerMovement>().IsAutoClicking = false;
-            InitializeGameRLR.Player.SetActive(false);
+            GameControl.Player.GetComponent<PlayerMovement>().IsAutoClicking = false;
+            GameControl.Player.SetActive(false);
 
 
             if (GameControl.SetGameMode == GameControl.Gamemode.Classic)
@@ -31,8 +30,8 @@ namespace Assets.Scripts.RLR
         IEnumerator Respawn(float delay, InitializeGameRLR initializeGame, ControlRLR control)
         {
             yield return new WaitForSeconds(2f);
-            initializeGame.Player.SetActive(true);
-            initializeGame.Player.transform.Find("Shield").gameObject.SetActive(true);
+            GameControl.Player.SetActive(true);
+            GameControl.Player.transform.Find("Shield").gameObject.SetActive(true);
             GameControl.IsInvulnerable = true;
             GameControl.IsDead = false;
             control.StopUpdate = false;
@@ -55,7 +54,7 @@ namespace Assets.Scripts.RLR
 
             GameControl.IsImmobile = false;
             yield return new WaitForSeconds(delay);
-            initializeGame.Player.transform.Find("Shield").gameObject.SetActive(false);
+            GameControl.Player.transform.Find("Shield").gameObject.SetActive(false);
             GameControl.IsInvulnerable = false;
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Drones;
+using Assets.Scripts.Launcher;
 using UnityEngine;
 
 namespace Assets.Scripts.RLR.Levels
@@ -17,7 +18,7 @@ namespace Assets.Scripts.RLR.Levels
 
         public override void SetChasers()
         {
-            Manager.RunlingChaser.SetChaserPlatforms(new DefaultDrone(9, 1f, Color.green, moveDelegate: DroneMovement.ChaserMovement, player: Manager.InitializeGameRLR.Player), new int[1] { 1}, new int[1] { 4});
+            Manager.RunlingChaser.SetChaserPlatforms(new DefaultDrone(9, 1f, Color.green, moveDelegate: DroneMovement.ChaserMovement, player: GameControl.Player), new int[1] { 1}, new int[1] { 4});
         }
 
 

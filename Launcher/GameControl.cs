@@ -22,6 +22,7 @@ namespace Assets.Scripts.Launcher
         public static bool GodModeActive = false;
 
         // Player
+        public static GameObject Player;
         public static float MoveSpeed = 0;
         public static bool IsDead = true;
         public static bool IsInvulnerable = false;
