@@ -4,8 +4,10 @@ namespace Assets.Scripts.Drones
 {
     public abstract class ADrone : IDrone
     {
+        public float Size { get; private set; }
+
+
         protected float Speed;
-        protected float Size;
         protected Color Color;
         protected DroneType DroneType;
         protected DroneMovement.MovementDelegate MoveDelegate;
@@ -13,6 +15,10 @@ namespace Assets.Scripts.Drones
         protected float? Curving;
         protected float? SinForce;
         protected float? SinFrequency;
+
+        protected ADrone()
+        {
+        }
 
         protected ADrone(float speed, float size, Color color, DroneType? droneType = null, DroneMovement.MovementDelegate moveDelegate = null,
             GameObject player = null, float? curving = null, float? sinForce = null, float? sinFrequency = null)
@@ -44,10 +50,21 @@ namespace Assets.Scripts.Drones
             DroneMovement.Move(drone, Speed, MoveDelegate, Player, Curving, SinForce, SinFrequency);
         }
 
-        public object[] GetParameters()
+        protected void CopyFrom(IDrone sourceDrone)
         {
-            return new object[]
-                {Speed, Size, Color, DroneType, MoveDelegate, Player, Curving, SinForce, SinFrequency};
+            var rhs = sourceDrone as ADrone;
+            if (rhs != null)
+            {
+                Speed = rhs.Speed;
+                Size = rhs.Size;
+                Color = rhs.Color;
+                DroneType = rhs.DroneType;
+                MoveDelegate = rhs.MoveDelegate;
+                Player = rhs.Player;
+                Curving = rhs.Curving;
+                SinForce = rhs.SinForce;
+                SinFrequency = rhs.SinFrequency;
+            }
         }
     }
 }

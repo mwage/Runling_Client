@@ -24,7 +24,6 @@ namespace Assets.Scripts.Drones
         protected readonly float MinDelay;
         protected int? PatternRepeats;
 
-
         public Pat360Drones(int numRays, float? delay = null, bool? repeat = null, bool? clockwise = null, 
             float? startRotation = null, float? maxRotation = null,float? pulseDelay = null, float? reducePulseDelay = null, 
             float? minPulseDelay = null, float? initialDelay = null, bool? changeDirection = null, int? addRays = null, int? maxRays = null, 
@@ -53,13 +52,11 @@ namespace Assets.Scripts.Drones
             if (posDelegate == null)
                 posDelegate = delegate { return new Vector3(0, 0.6f, 0); };
 
-            SetParameters(drone);
             factory.StartCoroutine(Generate360Drones(factory, drone, area, posDelegate));
         }
 
         public override void AddPattern(DroneFactory factory, GameObject drone, IDrone addedDrone, Area area)
         {
-            SetParameters(addedDrone);
             factory.StartCoroutine(Generate360Drones(factory, addedDrone, area, delegate { return Vector3.zero; }, drone));
         }
 
@@ -68,7 +65,7 @@ namespace Assets.Scripts.Drones
         {
             var clockwise = true;
             var startRotation = 0f;
-            var position = posDelegate(Size, area);
+            var position = posDelegate(drone.Size, area);
             var addPattern = parentDrone != null;
 
             // If delay is not null, the drones will go out in a fan motion.  If it is null, all rays will go out at the same time
@@ -123,8 +120,7 @@ namespace Assets.Scripts.Drones
                         }
                         // spawn new drone in set position, direction and dronespeed
                         var rotation = startRotation + (clockwise ? 1 : -1) * (MaxRotation * i / NumRays);
-                        factory.SpawnDrones(new DefaultDrone(Speed, Size, Color, position, rotation,
-                                DroneType, MoveDelegate, Player, Curving, SinForce, SinFrequency));
+                        factory.SpawnDrones(new DefaultDrone(drone, position, rotation));
 
                         if (Delay != null)
                             yield return new WaitForSeconds(Delay.Value / NumRays);

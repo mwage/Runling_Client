@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts.Drones {
@@ -7,7 +6,6 @@ namespace Assets.Scripts.Drones {
     {
         protected readonly float Delay;
         protected readonly int DroneCount;
-
 
         public PatContinuousSpawn(float delay, int droneCount)
         {
@@ -17,7 +15,6 @@ namespace Assets.Scripts.Drones {
 
         public override void SetPattern(DroneFactory factory, IDrone drone, Area area, StartPositionDelegate posDelegate = null)
         {
-            SetParameters(drone);
             if (posDelegate == null)
                 posDelegate = delegate { return new Vector3(0, 0.6f, 0); };
 
@@ -26,7 +23,6 @@ namespace Assets.Scripts.Drones {
 
         public override void AddPattern(DroneFactory factory, GameObject drone, IDrone addedDrone, Area area)
         {
-            SetParameters(addedDrone);
             factory.StartCoroutine(GenerateDrones(factory, addedDrone, delegate { return Vector3.zero; }, drone));
         }
 
@@ -38,7 +34,7 @@ namespace Assets.Scripts.Drones {
                 if (parentDrone == null && addPattern) { yield break; }
                 if (parentDrone != null)
                 {
-                    factory.SpawnDrones( new RandomDrone(Speed, Size, Color, DroneType, moveDelegate: MoveDelegate, player: Player, curving: Curving, sinForce: SinForce, sinFrequency: SinFrequency), DroneCount, posDelegate: delegate
+                    factory.SpawnDrones(new RandomDrone(drone), DroneCount, posDelegate: delegate
                     {
                         return parentDrone.transform.position;
                     });
