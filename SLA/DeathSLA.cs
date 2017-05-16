@@ -8,7 +8,7 @@ namespace Assets.Scripts.SLA
         //events following Deathtrigger
         public void Death()
         {
-            GameControl.Instance.State.Player.SetActive(false);
+            GameControl.State.Player.SetActive(false);
         }
     }
 }

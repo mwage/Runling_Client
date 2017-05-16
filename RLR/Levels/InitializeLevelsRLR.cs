@@ -10,7 +10,7 @@ namespace Assets.Scripts.RLR.Levels
         {
             List<ILevelRLR> levels;
 
-            if (GameControl.Instance.State.SetDifficulty == Difficulty.Hard)
+            if (GameControl.State.SetDifficulty == Difficulty.Hard)
             {
                 levels = SetHard(manager);
             }

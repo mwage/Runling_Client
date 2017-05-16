@@ -13,13 +13,13 @@ namespace Assets.Scripts.UI.OptionsMenu
 
             hotkey.transform.Find("HotkeyName").GetComponent<Text>().text = InputManager.GetFriendlyName(action.ToString());
             var hotkeyText = hotkey.transform.Find("SetHotkey/KeyPressed").GetComponent<Text>();
-            var kc = GameControl.Instance.InputManager.GetHotkey(action);
+            var kc = GameControl.InputManager.GetHotkey(action);
             hotkeyText.text = kc != null ? kc.ToString() : "<None>";
-            GameControl.Instance.InputManager.HotkeyLabel[action] = hotkeyText;
+            GameControl.InputManager.HotkeyLabel[action] = hotkeyText;
 
             var setHotkey = hotkey.transform.Find("SetHotkey").GetComponent<Button>();
             var keyName = action;
-            setHotkey.onClick.AddListener(() => { GameControl.Instance.InputManager.RebindHotkey(keyName);});
+            setHotkey.onClick.AddListener(() => { GameControl.InputManager.RebindHotkey(keyName);});
         }
 
         public static Slider AddSlider(GameObject sliderPrefab, GameObject hotkeyList, string name, float defaultValue, float minValue, float maxValue, UnityEngine.Events.UnityAction<float> sliderFunction)

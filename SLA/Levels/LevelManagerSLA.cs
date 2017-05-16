@@ -68,7 +68,7 @@ public class LevelManagerSLA : MonoBehaviour {
     //Load next level or end game
     public void EndLevel(float delay)
     {
-        StartCoroutine((GameControl.Instance.State.CurrentLevel == _levels.Count) ? EndGameSLA(delay) : NextLevel(delay));
+        StartCoroutine((GameControl.State.CurrentLevel == _levels.Count) ? EndGameSLA(delay) : NextLevel(delay));
     }
 
     //load in all but the last level
@@ -82,11 +82,11 @@ public class LevelManagerSLA : MonoBehaviour {
         {
             Destroy(t);
         }
-        Destroy(GameControl.Instance.State.Player);
+        Destroy(GameControl.State.Player);
         Score.CurrentScoreText.text = "0";
-        if (GameControl.Instance.State.SetGameMode != Gamemode.Practice)
+        if (GameControl.State.SetGameMode != Gamemode.Practice)
         {
-            GameControl.Instance.State.CurrentLevel++;
+            GameControl.State.CurrentLevel++;
         }
 
         InitializeGameSLA.InitializeGame();

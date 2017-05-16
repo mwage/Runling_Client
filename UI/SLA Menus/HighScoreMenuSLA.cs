@@ -64,7 +64,7 @@ namespace Assets.Scripts.UI.SLA_Menus
             _combinedScore.GetComponent<RectTransform>().sizeDelta = new Vector2(80, 20);
             _combinedScore.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(80, 20);
 
-            if (!GameControl.Instance.State.GameActive)
+            if (!GameControl.State.GameActive)
             {
                 _descriptionText.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
                 _descriptionText.transform.GetChild(2).GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 15);
@@ -83,27 +83,27 @@ namespace Assets.Scripts.UI.SLA_Menus
             // Show highscores
             for (var i = 0; i < LevelManagerSLA.NumLevels; i++)
             {
-                _levelScore[i].transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = GameControl.Instance.HighScores.HighScoreSLA[i + 1].ToString();
+                _levelScore[i].transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = GameControl.HighScores.HighScoreSLA[i + 1].ToString();
             }
 
-            _gameScore.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = GameControl.Instance.HighScores.HighScoreSLA[0].ToString();
-            _combinedScore.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = GameControl.Instance.HighScores.HighScoreSLA[14].ToString();
+            _gameScore.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = GameControl.HighScores.HighScoreSLA[0].ToString();
+            _combinedScore.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = GameControl.HighScores.HighScoreSLA[14].ToString();
 
             // Current game scores
-            if (GameControl.Instance.State.GameActive)
+            if (GameControl.State.GameActive)
             {
                 for (var i = 0; i < LevelManagerSLA.NumLevels; i++)
                 {
                     _levelScore[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = ScoreSLA.LevelScoreCurGame[i].ToString();
 
                     // New records are shown green
-                    if (ScoreSLA.LevelScoreCurGame[i] >= GameControl.Instance.HighScores.HighScoreSLA[i + 1] && ScoreSLA.LevelScoreCurGame[i] != 0)
+                    if (ScoreSLA.LevelScoreCurGame[i] >= GameControl.HighScores.HighScoreSLA[i + 1] && ScoreSLA.LevelScoreCurGame[i] != 0)
                     {
                         _levelScore[i].transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = Color.green;
                     }
                 }
 
-                _gameScore.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = GameControl.Instance.State.TotalScore.ToString();
+                _gameScore.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = GameControl.State.TotalScore.ToString();
                 _combinedScore.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
             }
         }

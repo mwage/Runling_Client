@@ -62,8 +62,8 @@ public class LevelManagerRLR : MonoBehaviour {
     // Load next level
     public void EndLevel(float delay)
     {
-        GameControl.Instance.State.FinishedLevel = false;
-        StartCoroutine((GameControl.Instance.State.CurrentLevel == _levels.Count) ? EndGameRLR(delay) : LoadNextLevel(0));
+        GameControl.State.FinishedLevel = false;
+        StartCoroutine((GameControl.State.CurrentLevel == _levels.Count) ? EndGameRLR(delay) : LoadNextLevel(0));
     }
 
     // End game
@@ -77,7 +77,7 @@ public class LevelManagerRLR : MonoBehaviour {
     {
         yield return new WaitForSeconds(delay);
         DroneFactory.StopAllCoroutines();
-        Destroy(GameControl.Instance.State.Player);
+        Destroy(GameControl.State.Player);
         var enemies = GameObject.FindGameObjectsWithTag("Enemy");
         var strongEnemies = GameObject.FindGameObjectsWithTag("Strong Enemy");
         foreach (var t in enemies)
@@ -88,14 +88,14 @@ public class LevelManagerRLR : MonoBehaviour {
         {
             Destroy(t);
         }
-        GameControl.Instance.State.CurrentLevel++;
+        GameControl.State.CurrentLevel++;
         InitializeGameRLR.InitializeGame();
     }
 
     // Load after the last level
     private IEnumerator EndGameRLR(float delay)
     {
-        if (!GameControl.Instance.State.IsDead)
+        if (!GameControl.State.IsDead)
         {
             Win.transform.Find("Victory").gameObject.SetActive(true);
             Win.transform.Find("Defeat").gameObject.SetActive(false);

@@ -16,21 +16,21 @@ namespace Assets.Scripts.Players
             // Enter Finishzone
             if (other.CompareTag("Finish") && !_finishedLevel)
             {
-                GameControl.Instance.State.FinishedLevel = true;
+                GameControl.State.FinishedLevel = true;
                 _finishedLevel = true;
             }
 
             // Enter Safezone
-            if (other.CompareTag("SafeZone") && !GameControl.Instance.State.IsInvulnerable)
+            if (other.CompareTag("SafeZone") && !GameControl.State.IsInvulnerable)
             {
-                GameControl.Instance.State.IsSafe = true;
+                GameControl.State.IsSafe = true;
 
             }
 
             // Death Trigger
-            if (((other.CompareTag("Enemy") && !GameControl.Instance.State.IsSafe || other.CompareTag("Strong Enemy")) && !GameControl.Instance.State.IsInvulnerable) && !GameControl.Instance.State.GodModeActive)
+            if (((other.CompareTag("Enemy") && !GameControl.State.IsSafe || other.CompareTag("Strong Enemy")) && !GameControl.State.IsInvulnerable) && !GameControl.State.GodModeActive)
             {
-                GameControl.Instance.State.IsDead = true;
+                GameControl.State.IsDead = true;
             }
         }
 
@@ -50,7 +50,7 @@ namespace Assets.Scripts.Players
         {
             if (other.CompareTag("SafeZone"))
             {
-                GameControl.Instance.State.IsSafe = false;
+                GameControl.State.IsSafe = false;
                 _onPlatform = false;
             }
         }

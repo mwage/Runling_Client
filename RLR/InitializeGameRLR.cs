@@ -32,29 +32,29 @@ namespace Assets.Scripts.RLR
 
         IEnumerator PrepareLevel()
         {
-            LevelManagerRLR.GenerateMap(GameControl.Instance.State.CurrentLevel);
+            LevelManagerRLR.GenerateMap(GameControl.State.CurrentLevel);
 
             // Load drones and player
             var startPlatform = LevelManagerRLR.GenerateMapRLR.GetStartPlatform();
             var airColliderRange = LevelManagerRLR.GenerateMapRLR.GetAirColliderRange();
-            GameControl.Instance.State.Player = Instantiate(PlayerPrefab, new Vector3(startPlatform.x, 0, startPlatform.z), Quaternion.Euler(0, 90, 0));
-            GameControl.Instance.State.Player.GetComponent<PlayerMovement>().Acceleration = 80;
-            if (GameControl.Instance.State.GodModeActive && !GameControl.Instance.State.Player.transform.Find("GodMode").gameObject.activeSelf)
+            GameControl.State.Player = Instantiate(PlayerPrefab, new Vector3(startPlatform.x, 0, startPlatform.z), Quaternion.Euler(0, 90, 0));
+            GameControl.State.Player.GetComponent<PlayerMovement>().Acceleration = 80;
+            if (GameControl.State.GodModeActive && !GameControl.State.Player.transform.Find("GodMode").gameObject.activeSelf)
             {
-                GameControl.Instance.State.Player.transform.Find("GodMode").gameObject.SetActive(true);
+                GameControl.State.Player.transform.Find("GodMode").gameObject.SetActive(true);
             }
-            GameControl.Instance.Settings.CameraRange = airColliderRange / 2.5f;
-            CameraHandleMovement.SetCameraHandlePosition(new Vector3(GameControl.Instance.State.Player.transform.localPosition.x, 0, GameControl.Instance.State.Player.transform.localPosition.z));
-            LevelManagerRLR.GenerateChasers(GameControl.Instance.State.CurrentLevel);
-            GameControl.Instance.State.IsDead = false;
-            GameControl.Instance.State.IsInvulnerable = true;
-            GameControl.Instance.State.IsImmobile = true;
+            GameControl.Settings.CameraRange = airColliderRange / 2.5f;
+            CameraHandleMovement.SetCameraHandlePosition(new Vector3(GameControl.State.Player.transform.localPosition.x, 0, GameControl.State.Player.transform.localPosition.z));
+            LevelManagerRLR.GenerateChasers(GameControl.State.CurrentLevel);
+            GameControl.State.IsDead = false;
+            GameControl.State.IsInvulnerable = true;
+            GameControl.State.IsImmobile = true;
             ControlRLR.StopUpdate = false;
-            LevelManagerRLR.LoadDrones(GameControl.Instance.State.CurrentLevel);
+            LevelManagerRLR.LoadDrones(GameControl.State.CurrentLevel);
 
             // Show current level
             var levelText = LevelTextObject.GetComponent<TextMeshProUGUI>();
-            levelText.text = "Level " + GameControl.Instance.State.CurrentLevel;
+            levelText.text = "Level " + GameControl.State.CurrentLevel;
             LevelTextObject.SetActive(true);
             yield return new WaitForSeconds(0.2f);
             LevelTextObject.SetActive(false);
@@ -70,8 +70,8 @@ namespace Assets.Scripts.RLR
                 Destroy(countdown);
             }
 
-            GameControl.Instance.State.IsInvulnerable = false;
-            GameControl.Instance.State.IsImmobile = false;
+            GameControl.State.IsInvulnerable = false;
+            GameControl.State.IsImmobile = false;
         }
     }
 }

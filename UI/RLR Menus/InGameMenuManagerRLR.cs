@@ -39,14 +39,14 @@ namespace Assets.Scripts.UI.RLR_Menus
         void Update()
         {
             // Navigate menu with esc
-            if (GameControl.Instance.InputManager.GetButtonDown(HotkeyAction.NavigateMenu))
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.NavigateMenu))
             {
                 if (!MenuOn && !WinScreen.gameObject.activeSelf)
                 {
                     InGameMenuObject.SetActive(true);
                     Time.timeScale = 0;
                     MenuOn = true;
-                    if (GameControl.Instance.State.SetGameMode == Gamemode.Practice)
+                    if (GameControl.State.SetGameMode == Gamemode.Practice)
                     {
                         ChooseLevel.SetActive(true);
                     }
@@ -66,7 +66,7 @@ namespace Assets.Scripts.UI.RLR_Menus
             }
 
             //pause game
-            if (GameControl.Instance.InputManager.GetButtonDown(HotkeyAction.Pause))
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.Pause))
             {
                 if (!_pause)
                 {

@@ -26,17 +26,17 @@ namespace Assets.Scripts.Drones
 
         private void FixedUpdate()
         {
-            if (GameControl.Instance.State.Player == null || _rb == null)
+            if (GameControl.State.Player == null || _rb == null)
             {
                 return;
             }
-            if (!GameControl.Instance.State.Player.activeSelf || GameControl.Instance.State.IsImmobile)
+            if (!GameControl.State.Player.activeSelf || GameControl.State.IsImmobile)
             {
                 _rb.velocity = Vector3.zero;
             }
             else
             {
-                _targetPos = GameControl.Instance.State.Player.transform.position;
+                _targetPos = GameControl.State.Player.transform.position;
                 _targetPos.y += 0.6f;
                 var currentSpeed = _rb.velocity.magnitude;
                 _direction = (_targetPos - transform.position).normalized;

@@ -23,9 +23,9 @@ namespace Assets.Scripts.UI.Main_Menu
         
         public void StartGame()
         {
-            GameControl.Instance.State.IsDead = true;
-            GameControl.Instance.State.TotalScore = 0;
-            GameControl.Instance.State.CurrentLevel = 1;
+            GameControl.State.IsDead = true;
+            GameControl.State.TotalScore = 0;
+            GameControl.State.CurrentLevel = 1;
             SetModes();
 
             SceneLoader.LoadScene("RLR", 1);
@@ -65,8 +65,8 @@ namespace Assets.Scripts.UI.Main_Menu
 
         public void SetModes()
         {
-            GameControl.Instance.State.SetDifficulty = (Difficulty)_voteDifficulty;
-            GameControl.Instance.State.SetGameMode = (Gamemode)_voteGameMode;
+            GameControl.State.SetDifficulty = (Difficulty)_voteDifficulty;
+            GameControl.State.SetGameMode = (Gamemode)_voteGameMode;
         }
 
         public void HighScores()

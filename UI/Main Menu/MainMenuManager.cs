@@ -25,7 +25,7 @@ namespace Assets.Scripts.UI.Main_Menu
 
         void Update()
         {
-            if (GameControl.Instance.InputManager.GetButtonDown(HotkeyAction.NavigateMenu))
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.NavigateMenu))
             {
                 if (OptionsMenu.OptionsMenuActive)
                 {

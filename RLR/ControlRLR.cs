@@ -16,9 +16,9 @@ namespace Assets.Scripts.RLR
         {
             // Set current Level and movespeed, load drones and spawn immunity
             StopUpdate = true;
-            GameControl.Instance.State.GameActive = true;
-            GameControl.Instance.State.MoveSpeed = 13;
-            if (GameControl.Instance.State.SetGameMode == Gamemode.Practice)
+            GameControl.State.GameActive = true;
+            GameControl.State.MoveSpeed = 13;
+            if (GameControl.State.SetGameMode == Gamemode.Practice)
             {
                 PracticeMode.SetActive(true);
             }
@@ -29,48 +29,48 @@ namespace Assets.Scripts.RLR
         //update when dead
         private void Update()
         {
-            if (GameControl.Instance.State.IsDead && !StopUpdate)
+            if (GameControl.State.IsDead && !StopUpdate)
             {
                 StopUpdate = true;
                 DeathRLR.Death(LevelManager, InitializeGameRLR, this);
             }
 
-            if (GameControl.Instance.State.FinishedLevel && !StopUpdate)
+            if (GameControl.State.FinishedLevel && !StopUpdate)
             {
                 LevelManager.EndLevel(0f);
             }
 
             // Press Ctrl to start autoclicking
-            if (GameControl.Instance.InputManager.GetButtonDown(HotkeyAction.ActivateClicker))
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateClicker))
             {
-                if (!GameControl.Instance.State.AutoClickerActive)
-                    GameControl.Instance.State.AutoClickerActive = true;
+                if (!GameControl.State.AutoClickerActive)
+                    GameControl.State.AutoClickerActive = true;
             }
 
             // Press Alt to stop autoclicking
-            if (GameControl.Instance.InputManager.GetButtonDown(HotkeyAction.DeactivateClicker))
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactivateClicker))
             {
-                if (GameControl.Instance.State.AutoClickerActive)
-                    GameControl.Instance.State.AutoClickerActive = false;
+                if (GameControl.State.AutoClickerActive)
+                    GameControl.State.AutoClickerActive = false;
             }
 
             // Press 1 to be invulnerable
-            if (GameControl.Instance.InputManager.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.Instance.State.GodModeActive)
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.State.GodModeActive)
             {
-                GameControl.Instance.State.GodModeActive = true;
-                if (GameControl.Instance.State.Player != null)
+                GameControl.State.GodModeActive = true;
+                if (GameControl.State.Player != null)
                 {
-                    GameControl.Instance.State.Player.transform.Find("GodMode").gameObject.SetActive(true);
+                    GameControl.State.Player.transform.Find("GodMode").gameObject.SetActive(true);
                 }
             }
 
             // Press 2 to be vulnerable
-            if (GameControl.Instance.InputManager.GetButtonDown(HotkeyAction.DeactiveGodmode) && GameControl.Instance.State.GodModeActive)
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactiveGodmode) && GameControl.State.GodModeActive)
             {
-                GameControl.Instance.State.GodModeActive = false;
-                if (GameControl.Instance.State.Player != null)
+                GameControl.State.GodModeActive = false;
+                if (GameControl.State.Player != null)
                 {
-                    GameControl.Instance.State.Player.transform.Find("GodMode").gameObject.SetActive(false);
+                    GameControl.State.Player.transform.Find("GodMode").gameObject.SetActive(false);
                 }
             }
         }

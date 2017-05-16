@@ -9,19 +9,25 @@ namespace Assets.Scripts.Launcher
 
         public SceneLoader SceneLoader;
 
-        public GameState State;
-        public InputManager InputManager;
-        public Settings Settings;
-        public HighScores HighScores;
+        private GameState _state;
+        private InputManager _inputManager;
+        private Settings _settings;
+        private HighScores _highScores;
+
+        public static GameState State { get { return Instance._state; } }
+        public static InputManager InputManager { get { return Instance._inputManager; } }
+        public static Settings Settings { get { return Instance._settings; } }
+        public static HighScores HighScores { get { return Instance._highScores; } }
+
 
         //Keep Game Manager active and destroy any additional copys
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
-            State = new GameState();
-            InputManager = new InputManager();
-            Settings = new Settings();
-            HighScores = new HighScores();
+            _state = new GameState();
+            _inputManager = new InputManager();
+            _settings = new Settings();
+            _highScores = new HighScores();
         }
 
         //Start Game

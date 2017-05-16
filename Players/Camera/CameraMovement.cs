@@ -8,7 +8,7 @@ namespace Assets.Scripts.Players.Camera
 
         void Start ()
         {
-            SetCameraPitch(GameControl.Instance.Settings.CameraAngle.Val);
+            SetCameraPitch(GameControl.Settings.CameraAngle.Val);
         }
 
         public void SetCameraPitch(float pitchAngle)
