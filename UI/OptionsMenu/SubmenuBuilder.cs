@@ -18,11 +18,11 @@ namespace Assets.Scripts.UI.OptionsMenu
             var hotkeyText = hotkey.transform.Find("SetHotkey/KeyPressed").GetComponent<Text>();
             var kc = InputManager.Instance.GetHotkey(action);
             hotkeyText.text = kc != null ? kc.ToString() : "<None>";
-            InputManager.HotkeyLabel[action] = hotkeyText;
+            InputManager.Instance.HotkeyLabel[action] = hotkeyText;
 
             var setHotkey = hotkey.transform.Find("SetHotkey").GetComponent<Button>();
             var keyName = action;
-            setHotkey.onClick.AddListener(() => { InputManager.RebindHotkey(keyName);});
+            setHotkey.onClick.AddListener(() => { InputManager.Instance.RebindHotkey(keyName);});
         }
 
         public static Slider AddSlider(GameObject sliderPrefab, GameObject hotkeyList, string name, float defaultValue, float minValue, float maxValue, UnityEngine.Events.UnityAction<float> sliderFunction)

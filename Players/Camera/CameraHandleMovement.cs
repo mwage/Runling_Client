@@ -21,8 +21,8 @@ namespace Assets.Scripts.Players.Camera
         {
             float inputX = Input.GetAxis("Horizontal");
             float inputY = Input.GetAxis("Vertical");
-            float moveX = inputX * Settings.CameraSpeed.Val * Time.deltaTime;
-            float moveY = inputY * Settings.CameraSpeed.Val * Time.deltaTime;
+            float moveX = inputX * Settings.Instance.CameraSpeed.Val * Time.deltaTime;
+            float moveY = inputY * Settings.Instance.CameraSpeed.Val * Time.deltaTime;
             transform.position += (transform.forward * moveY + transform.right * moveX);
 
             if (InputManager.Instance.GetButtonDown(HotkeyAction.RotateLeft))
@@ -36,20 +36,21 @@ namespace Assets.Scripts.Players.Camera
             if (InputManager.Instance.GetButtonDown(HotkeyAction.ZoomMore))
             {
                 ZoomMore();
-                PlayerPrefs.SetFloat("CameraZoom", Settings.CameraZoom.Val);
+                PlayerPrefs.SetFloat("CameraZoom", Settings.Instance.CameraZoom.Val);
             }
             if (InputManager.Instance.GetButtonDown(HotkeyAction.ZoomLess))
             {
                 ZoomLess();
-                PlayerPrefs.SetFloat("CameraZoom", Settings.CameraZoom.Val);
+                PlayerPrefs.SetFloat("CameraZoom", Settings.Instance.CameraZoom.Val);
             }
             if (InputManager.Instance.GetButtonDown(HotkeyAction.ActivateFollow))
             {
-                Settings.FollowState = (Settings.FollowState + 1) % 2;
+
+                Settings.Instance.FollowEnabled = (Settings.Instance.FollowEnabled + 1) % 2;
             }
-            if (Settings.FollowEnabled == 1)
+            if (Settings.Instance.FollowEnabled == 1)
             {
-                if (Settings.FollowState == 1)
+                if (Settings.Instance.FollowState == 1)
                 {
                     if (GameControl.Player != null)
                     {
@@ -62,14 +63,14 @@ namespace Assets.Scripts.Players.Camera
         private void ZoomMore()
         {
             Vector3 watchedPoint = GetWatchedPoint();
-            Settings.CameraZoom.Decrease(5);
+            Settings.Instance.CameraZoom.Decrease(5);
             SetCameraHandlePosition(watchedPoint);
         }
 
         private void ZoomLess()
         {
             Vector3 watchedPoint = GetWatchedPoint();
-            Settings.CameraZoom.Increase(5);
+            Settings.Instance.CameraZoom.Increase(5);
             SetCameraHandlePosition(watchedPoint);
         }
 
@@ -78,18 +79,18 @@ namespace Assets.Scripts.Players.Camera
             if (transform.GetComponentInChildren<UnityEngine.Camera>() != null)
             {
                 transform.position = new Vector3(
-                    watchedPoint.x - transform.forward.x * Settings.CameraZoom.Val * Mathf.Cos(Settings.CameraAngle.Val * Mathf.PI / 180),
-                    Settings.CameraZoom.Val * Mathf.Sin(Settings.CameraAngle.Val * Mathf.PI / 180),
-                    watchedPoint.z - transform.forward.z * Settings.CameraZoom.Val * Mathf.Cos(Settings.CameraAngle.Val * Mathf.PI / 180));
+                    watchedPoint.x - transform.forward.x * Settings.Instance.CameraZoom.Val * Mathf.Cos(Settings.Instance.CameraAngle.Val * Mathf.PI / 180),
+                    Settings.Instance.CameraZoom.Val * Mathf.Sin(Settings.Instance.CameraAngle.Val * Mathf.PI / 180),
+                    watchedPoint.z - transform.forward.z * Settings.Instance.CameraZoom.Val * Mathf.Cos(Settings.Instance.CameraAngle.Val * Mathf.PI / 180));
             }
         }
 
         public Vector3 GetWatchedPoint()
         {
             return new Vector3(
-                transform.localPosition.x + transform.forward.x * Settings.CameraZoom.Val * Mathf.Cos(Settings.CameraAngle.Val * Mathf.PI / 180),
+                transform.localPosition.x + transform.forward.x * Settings.Instance.CameraZoom.Val * Mathf.Cos(Settings.Instance.CameraAngle.Val * Mathf.PI / 180),
                 0F,
-                transform.localPosition.z + transform.forward.z * Settings.CameraZoom.Val * Mathf.Cos(Settings.CameraAngle.Val * Mathf.PI / 180));
+                transform.localPosition.z + transform.forward.z * Settings.Instance.CameraZoom.Val * Mathf.Cos(Settings.Instance.CameraAngle.Val * Mathf.PI / 180));
         }
 
         private void RotateCameraYAxis(float degrees)
