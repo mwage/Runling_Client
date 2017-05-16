@@ -12,7 +12,7 @@ namespace Assets.Scripts.Drones
         public RedDrone(float speed, float size, DroneColor color, float acceleration, Area area, float? waitTime = null, bool? synchronized = null, DroneType? droneType = null) :
             base(speed, size, color, droneType)
         {
-            DroneType = droneType ?? DroneType.MineDrone;
+            DroneType = droneType ?? DroneType.FlyingOnewayDrone;
             Acceleration = acceleration;
             Area = area;
             Synchronized = synchronized ?? false;
