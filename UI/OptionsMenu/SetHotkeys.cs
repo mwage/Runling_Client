@@ -25,7 +25,7 @@ namespace Assets.Scripts.UI.OptionsMenu
         // Update is called once per frame
         void Update()
         {
-            InputManager.Instance.RebindHotkeyIfNeed();
+            GameControl.InputManager.RebindHotkeyIfNeed();
         }
 
         public void DeleteHotkeyPrefabs()

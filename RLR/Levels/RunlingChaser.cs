@@ -68,7 +68,7 @@ namespace Assets.Scripts.RLR.Levels
 
         public void GetTriggerInstance()
         {
-            _playerTrigger = GameControl.Player.transform.Find("Trigger").gameObject.GetComponent<PlayerTrigger>();
+            _playerTrigger = GameControl.State.Player.transform.Find("Trigger").gameObject.GetComponent<PlayerTrigger>();
             _createdInstance = true;
         }
 

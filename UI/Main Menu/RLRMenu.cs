@@ -16,16 +16,16 @@ namespace Assets.Scripts.UI.Main_Menu
         public GameObject LaunchRLR;
         public GameObject Menus;
 
-        private GameControl.Difficulty? _voteDifficulty;
-        private GameControl.Gamemode? _voteGameMode;
+        private Difficulty? _voteDifficulty;
+        private Gamemode? _voteGameMode;
 
         public bool RLRMenuActive;
         
         public void StartGame()
         {
-            GameControl.IsDead = true;
-            GameControl.TotalScore = 0;
-            GameControl.CurrentLevel = 1;
+            GameControl.State.IsDead = true;
+            GameControl.State.TotalScore = 0;
+            GameControl.State.CurrentLevel = 1;
             SetModes();
 
             SceneLoader.LoadScene("RLR", 1);
@@ -40,33 +40,33 @@ namespace Assets.Scripts.UI.Main_Menu
 
         public void VoteDifficultyNormal()
         {
-            _voteDifficulty = GameControl.Difficulty.Normal;
+            _voteDifficulty = Difficulty.Normal;
         }
 
         public void VoteDifficultyHard()
         {
-            _voteDifficulty = GameControl.Difficulty.Hard;
+            _voteDifficulty = Difficulty.Hard;
         }
 
         public void VoteModeClassic()
         {
-            _voteGameMode = GameControl.Gamemode.Classic;
+            _voteGameMode = Gamemode.Classic;
         }
 
         public void VoteModeTime()
         {
-            _voteGameMode = GameControl.Gamemode.TimeMode;
+            _voteGameMode = Gamemode.TimeMode;
         }
 
         public void VoteModePractice()
         {
-            _voteGameMode = GameControl.Gamemode.Practice;
+            _voteGameMode = Gamemode.Practice;
         }
 
         public void SetModes()
         {
-            GameControl.SetDifficulty = (GameControl.Difficulty)_voteDifficulty;
-            GameControl.SetGameMode = (GameControl.Gamemode)_voteGameMode;
+            GameControl.State.SetDifficulty = (Difficulty)_voteDifficulty;
+            GameControl.State.SetGameMode = (Gamemode)_voteGameMode;
         }
 
         public void HighScores()

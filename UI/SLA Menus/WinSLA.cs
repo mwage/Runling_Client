@@ -19,15 +19,15 @@ namespace Assets.Scripts.UI.SLA_Menus
 
         public void BackToMenu()
         {
-            GameControl.GameActive = false;
+            GameControl.State.GameActive = false;
             SceneManager.LoadScene("MainMenu");
         }
 
         public void RestartGame()
         {
-            GameControl.IsDead = true;
-            GameControl.AutoClickerActive = false;
-            GameControl.TotalScore = 0;
+            GameControl.State.IsDead = true;
+            GameControl.State.AutoClickerActive = false;
+            GameControl.State.TotalScore = 0;
 
             SceneManager.LoadScene("SLA");
         }

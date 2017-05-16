@@ -23,9 +23,9 @@ namespace Assets.Scripts.UI.RLR_Menus
 
         public void RestartGame()
         {
-            GameControl.IsDead = true;
-            GameControl.TotalScore = 0;
-            GameControl.AutoClickerActive = false;
+            GameControl.State.IsDead = true;
+            GameControl.State.TotalScore = 0;
+            GameControl.State.AutoClickerActive = false;
             Time.timeScale = 1;
 
             SceneManager.LoadScene("RLR");
@@ -40,7 +40,7 @@ namespace Assets.Scripts.UI.RLR_Menus
 
         public void BackToMenu()
         {
-            GameControl.GameActive = false;
+            GameControl.State.GameActive = false;
             Time.timeScale = 1;
             SceneManager.LoadScene("MainMenu");
         }

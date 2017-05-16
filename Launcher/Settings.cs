@@ -5,28 +5,14 @@ namespace Assets.Scripts.Launcher
     public class Settings
     {
         // Camera
-        public static float CameraRange = 0;
-
+        public float CameraRange = 0;
         public Limits CameraZoom = new Limits(10, 50, def: 40);
         public Limits CameraAngle = new Limits(10, 90, def: 90);
         public Limits CameraSpeed = new Limits(5, 50, def: 20);
-        public  int FollowEnabled;
-        public  int FollowState;
+        public int FollowEnabled;
+        public int FollowState;
 
-
-        private static Settings _instance;
-
-        public static Settings Instance
-        {
-            get
-            {
-                if (_instance == null)
-                    _instance = new Settings();
-                return _instance;
-            }
-        }
-
-        private Settings()
+        public Settings()
         {
             LoadSettings();
         }
@@ -40,8 +26,7 @@ namespace Assets.Scripts.Launcher
             FollowState = PlayerPrefs.GetInt("FollowState");
         }
     }
-
-
+    
     public class Limits
     {
         public float Min;
@@ -53,17 +38,17 @@ namespace Assets.Scripts.Launcher
         {
             Min = min;
             Max = max;
-            //Val = val;
+            Val = val;
             Def = def;
         }
 
         public void Decrease(float v)
         {
-            Val = Val - v > Min ? Val - v : Min;
+            Val = Mathf.Max(Val - v, Min);
         }
         public void Increase(float v)
         {
-            Val = Val + v < Max ? Val + v : Max;
+            Val = Mathf.Min(Val + v, Max);
         }
     }
 }

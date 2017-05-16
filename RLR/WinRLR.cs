@@ -10,14 +10,14 @@ namespace Assets.Scripts.RLR
 
         public void BackToMenu()
         {
-            GameControl.GameActive = false;
+            GameControl.State.GameActive = false;
             SceneManager.LoadScene("MainMenu");
         }
 
         public void RestartGame()
         {
-            GameControl.IsDead = true;
-            GameControl.AutoClickerActive = false;
+            GameControl.State.IsDead = true;
+            GameControl.State.AutoClickerActive = false;
 
             SceneManager.LoadScene("RLR");
         }

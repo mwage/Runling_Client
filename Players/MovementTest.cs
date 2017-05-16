@@ -29,7 +29,7 @@ namespace Assets.Scripts.Players
             _acceleration = 100f;
             _deceleration = 100f;
             _currentSpeed = 0;
-            GameControl.MoveSpeed = 10;
+            GameControl.State.MoveSpeed = 10;
             _accelerate = false;
             _stop = true;
             _highestSpeedReached = 0;
@@ -45,7 +45,7 @@ namespace Assets.Scripts.Players
 
             if (!Physics.Raycast(ray, out hit)) return;
 
-            _maxSpeed = GameControl.MoveSpeed;
+            _maxSpeed = GameControl.State.MoveSpeed;
             _clickPos = hit.point;
             _clickPos.y = 0;
             if (!((_clickPos - transform.position).magnitude > 0.05f)) return;

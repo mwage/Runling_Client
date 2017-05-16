@@ -49,7 +49,7 @@ namespace Assets.Scripts.Players
 
         private void Update()
         {
-            if (GameControl.AutoClickerActive)
+            if (GameControl.State.AutoClickerActive)
             {
                 if (!IsAutoClicking)
                 {
@@ -58,7 +58,7 @@ namespace Assets.Scripts.Players
                 }
             }
 
-            if (!GameControl.AutoClickerActive)
+            if (!GameControl.State.AutoClickerActive)
             {
                 if (IsAutoClicking)
                 {
@@ -89,14 +89,14 @@ namespace Assets.Scripts.Players
 
         private void MoveToPosition(Vector3 position)
         {
-            if (!GameControl.IsImmobile)
+            if (!GameControl.State.IsImmobile)
             {
                 RaycastHit hit;
                 var ray = UnityEngine.Camera.main.ScreenPointToRay(position);
 
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity, _defLayer))
                 {
-                    _maxSpeed = GameControl.MoveSpeed;
+                    _maxSpeed = GameControl.State.MoveSpeed;
                     _clickPos = hit.point;
                     if ((_clickPos - transform.position).magnitude > 0.05f)
                     {
@@ -124,7 +124,7 @@ namespace Assets.Scripts.Players
 
         private void FixedUpdate()
         {
-            if (GameControl.IsImmobile)
+            if (GameControl.State.IsImmobile)
             {
                 _targetPos = _rb.transform.position;
             }

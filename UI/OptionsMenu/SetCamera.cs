@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Assets.Scripts.Launcher;
 using Assets.Scripts.Players.Camera;
 
@@ -43,12 +40,10 @@ namespace Assets.Scripts.UI.OptionsMenu
                 SubmenuBuilder.AddButton(HotkeyAction.RotateRight, SetHotkeyPrefab, HotkeyList);
                 SubmenuBuilder.AddButton(HotkeyAction.ActivateFollow, SetHotkeyPrefab, HotkeyList);
 
-
-                _cameraZoomSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Zoom", Settings.Instance.CameraZoom.Val, Settings.Instance.CameraZoom.Min, Settings.Instance.CameraZoom.Max, SetCameraZoom);
-                _cameraAngleSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Angle", Settings.Instance.CameraAngle.Val, Settings.Instance.CameraAngle.Min, Settings.Instance.CameraAngle.Max, SetCameraAngle);
-                _cameraSpeedSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Speed", Settings.Instance.CameraSpeed.Val, Settings.Instance.CameraSpeed.Min, Settings.Instance.CameraSpeed.Max, SetCameraSpeed);
+                _cameraZoomSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Zoom", GameControl.Settings.CameraZoom.Val, GameControl.Settings.CameraZoom.Min, GameControl.Settings.CameraZoom.Max, SetCameraZoom);
+                _cameraAngleSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Angle", GameControl.Settings.CameraAngle.Val, GameControl.Settings.CameraAngle.Min, GameControl.Settings.CameraAngle.Max, SetCameraAngle);
+                _cameraSpeedSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Speed", GameControl.Settings.CameraSpeed.Val, GameControl.Settings.CameraSpeed.Min, GameControl.Settings.CameraSpeed.Max, SetCameraSpeed);
                 _cameraFollowSelection = SubmenuBuilder.AddSelection(SelectionPrefab, HotkeyList, "Follow", FollowCameraSelection);
-
 
                 SetSliderValuesFromSettings();
             }
@@ -57,18 +52,18 @@ namespace Assets.Scripts.UI.OptionsMenu
         // Update is called once per frame
         void Update()
         {
-            InputManager.Instance.RebindHotkeyIfNeed();
+            GameControl.InputManager.RebindHotkeyIfNeed();
         }
 
         public void FollowCameraSelection(bool on)
         {
             if (_cameraFollowSelection.isOn )
             {
-                Settings.Instance.FollowEnabled = 1; // tru
+                GameControl.Settings.FollowEnabled = 1; // tru
             }
             else
             {
-                Settings.Instance.FollowEnabled = 0;
+                GameControl.Settings.FollowEnabled = 0;
             }
         }
         
@@ -77,10 +72,10 @@ namespace Assets.Scripts.UI.OptionsMenu
             if (_cameraZoomSlider != null)
             {
 
-                _cameraZoomSlider.value = Settings.Instance.CameraZoom.Val;
-                _cameraAngleSlider.value = Settings.Instance.CameraAngle.Val;
-                _cameraSpeedSlider.value = Settings.Instance.CameraSpeed.Val;
-                _cameraFollowSelection.isOn = Settings.Instance.FollowEnabled == 1;
+                _cameraZoomSlider.value = GameControl.Settings.CameraZoom.Val;
+                _cameraAngleSlider.value = GameControl.Settings.CameraAngle.Val;
+                _cameraSpeedSlider.value = GameControl.Settings.CameraSpeed.Val;
+                _cameraFollowSelection.isOn = GameControl.Settings.FollowEnabled == 1;
 
             }
         }
@@ -88,10 +83,10 @@ namespace Assets.Scripts.UI.OptionsMenu
         public void SaveCameraOptions()
         {
              /////// change it before
-            PlayerPrefs.SetFloat("CameraZoom", Settings.Instance.CameraZoom.Val);
-            PlayerPrefs.SetFloat("CameraAngle", Settings.Instance.CameraAngle.Val);
-            PlayerPrefs.SetFloat("CameraSpeed", Settings.Instance.CameraSpeed.Val);
-            PlayerPrefs.SetInt("CameraFollow", Settings.Instance.FollowEnabled);
+            PlayerPrefs.SetFloat("CameraZoom", GameControl.Settings.CameraZoom.Val);
+            PlayerPrefs.SetFloat("CameraAngle", GameControl.Settings.CameraAngle.Val);
+            PlayerPrefs.SetFloat("CameraSpeed", GameControl.Settings.CameraSpeed.Val);
+            PlayerPrefs.SetInt("CameraFollow", GameControl.Settings.FollowEnabled);
 
             PlayerPrefs.Save();
         }
@@ -100,9 +95,9 @@ namespace Assets.Scripts.UI.OptionsMenu
         {
             if (_camera != null)
             {
-                Settings.Instance.CameraZoom.Val = zoom;
+                GameControl.Settings.CameraZoom.Val = zoom;
                 _cameraHandleMovement.SetCameraHandlePosition(_currentPosition);
-                _camera.GetComponent<CameraMovement>().SetCameraPitch(Settings.Instance.CameraAngle.Val);
+                _camera.GetComponent<CameraMovement>().SetCameraPitch(GameControl.Settings.CameraAngle.Val);
             }
         }
 
@@ -110,9 +105,9 @@ namespace Assets.Scripts.UI.OptionsMenu
         {
             if (_camera != null)
             {
-                Settings.Instance.CameraAngle.Val = angle;
+                GameControl.Settings.CameraAngle.Val = angle;
                 _cameraHandleMovement.SetCameraHandlePosition(_currentPosition);
-                _cameraMovement.SetCameraPitch(Settings.Instance.CameraAngle.Val);
+                _cameraMovement.SetCameraPitch(GameControl.Settings.CameraAngle.Val);
             }
         }
 
@@ -120,7 +115,7 @@ namespace Assets.Scripts.UI.OptionsMenu
         {
             if (_camera != null)
             {
-                Settings.Instance.CameraSpeed.Val = speed;
+                GameControl.Settings.CameraSpeed.Val = speed;
             }
         }
     }

@@ -17,9 +17,9 @@ namespace Assets.Scripts.UI.Main_Menu
 
         public void StartGame()
         {
-            GameControl.IsDead = true;
-            GameControl.CurrentLevel = 1;
-            GameControl.SetGameMode = GameControl.Gamemode.Classic;
+            GameControl.State.IsDead = true;
+            GameControl.State.CurrentLevel = 1;
+            GameControl.State.SetGameMode = Gamemode.Classic;
 
             SceneLoader.LoadScene("SLA", 1);
             Menus.SetActive(false);
@@ -27,9 +27,9 @@ namespace Assets.Scripts.UI.Main_Menu
 
         public void Practice()
         {
-            GameControl.IsDead = true;
-            GameControl.CurrentLevel = 1;
-            GameControl.SetGameMode = GameControl.Gamemode.Practice;
+            GameControl.State.IsDead = true;
+            GameControl.State.CurrentLevel = 1;
+            GameControl.State.SetGameMode = Gamemode.Practice;
 
             SceneLoader.LoadScene("SLA", 1);
             Menus.SetActive(false);

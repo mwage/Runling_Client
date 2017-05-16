@@ -12,16 +12,16 @@ namespace Assets.Scripts.RLR
         //events following Deathtrigger
         public void Death(LevelManagerRLR manager, InitializeGameRLR initializeGame, ControlRLR control)
         {
-            GameControl.IsImmobile = true;
-            GameControl.Player.GetComponent<PlayerMovement>().IsAutoClicking = false;
-            GameControl.Player.SetActive(false);
+            GameControl.State.IsImmobile = true;
+            GameControl.State.Player.GetComponent<PlayerMovement>().IsAutoClicking = false;
+            GameControl.State.Player.SetActive(false);
 
 
-            if (GameControl.SetGameMode == GameControl.Gamemode.Classic)
+            if (GameControl.State.SetGameMode == Gamemode.Classic)
             {
                 manager.EndGame(0.1f);
             }
-            else if (GameControl.SetGameMode == GameControl.Gamemode.Practice)
+            else if (GameControl.State.SetGameMode == Gamemode.Practice)
             {
                 StartCoroutine(Respawn(1, initializeGame, control));
             }
@@ -30,10 +30,10 @@ namespace Assets.Scripts.RLR
         IEnumerator Respawn(float delay, InitializeGameRLR initializeGame, ControlRLR control)
         {
             yield return new WaitForSeconds(2f);
-            GameControl.Player.SetActive(true);
-            GameControl.Player.transform.Find("Shield").gameObject.SetActive(true);
-            GameControl.IsInvulnerable = true;
-            GameControl.IsDead = false;
+            GameControl.State.Player.SetActive(true);
+            GameControl.State.Player.transform.Find("Shield").gameObject.SetActive(true);
+            GameControl.State.IsInvulnerable = true;
+            GameControl.State.IsDead = false;
             control.StopUpdate = false;
 
 
@@ -52,10 +52,10 @@ namespace Assets.Scripts.RLR
             }
             Destroy(respawnIn);
 
-            GameControl.IsImmobile = false;
+            GameControl.State.IsImmobile = false;
             yield return new WaitForSeconds(delay);
-            GameControl.Player.transform.Find("Shield").gameObject.SetActive(false);
-            GameControl.IsInvulnerable = false;
+            GameControl.State.Player.transform.Find("Shield").gameObject.SetActive(false);
+            GameControl.State.IsInvulnerable = false;
         }
     }
 }

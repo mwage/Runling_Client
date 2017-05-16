@@ -28,50 +28,35 @@ namespace Assets.Scripts.Launcher
         ActivateFollow
         // graphics hotkeys
     }
-    
 
     public class InputManager
     {
-        private static InputManager _instance;
-
-        public static InputManager Instance
-        {
-            get
-            {
-                if (_instance == null)
-                    _instance = new InputManager();
-                return _instance;
-            }
-        }
-
-
         private HotkeyAction? _hotkeyToRebind;
         public readonly Dictionary<HotkeyAction, Text> HotkeyLabel = new Dictionary<HotkeyAction, Text>();
 
-        private readonly Dictionary<HotkeyAction, KeyCode> Hotkeys = new Dictionary<HotkeyAction, KeyCode>();
-        private readonly Dictionary<KeyCode, HotkeyAction> KeyCodes = new Dictionary<KeyCode, HotkeyAction>();
+        private readonly Dictionary<HotkeyAction, KeyCode> _hotkeys = new Dictionary<HotkeyAction, KeyCode>();
+        private readonly Dictionary<KeyCode, HotkeyAction> _keyCodes = new Dictionary<KeyCode, HotkeyAction>();
 
-        private InputManager()
+        public InputManager()
         {
             LoadHotkeys();
-            Console.WriteLine(Hotkeys.Count);
         }
 
         public bool GetButtonDown(HotkeyAction hotkeyAction)
         {
-            if (!Hotkeys.ContainsKey(hotkeyAction))
+            if (!_hotkeys.ContainsKey(hotkeyAction))
             {
                // Debug.Log("no hotkey named " + hotkeyAction);
                 return false;
             }
 
-            return Input.GetKeyDown(Hotkeys[hotkeyAction]);
+            return Input.GetKeyDown(_hotkeys[hotkeyAction]);
         }
 
         public KeyCode? GetHotkey(HotkeyAction action)
         {
-            if (Hotkeys.ContainsKey(action))
-                return Hotkeys[action];
+            if (_hotkeys.ContainsKey(action))
+                return _hotkeys[action];
 
             return null;
         }
@@ -81,25 +66,25 @@ namespace Assets.Scripts.Launcher
             HotkeyAction? removed = null;
 
             // Remove old hotkey mapping
-            if (KeyCodes.ContainsKey(keyCode))
+            if (_keyCodes.ContainsKey(keyCode))
             {
-                var oldAction = KeyCodes[keyCode];
-                KeyCodes.Remove(keyCode);
-                Hotkeys.Remove(oldAction);
+                var oldAction = _keyCodes[keyCode];
+                _keyCodes.Remove(keyCode);
+                _hotkeys.Remove(oldAction);
                 removed = oldAction;
             }
 
             // Remove old keycode mapping
-            if (Hotkeys.ContainsKey(action))
-                KeyCodes.Remove(Hotkeys[action]);
+            if (_hotkeys.ContainsKey(action))
+                _keyCodes.Remove(_hotkeys[action]);
 
-            Hotkeys[action] = keyCode;
-            KeyCodes[keyCode] = action;
+            _hotkeys[action] = keyCode;
+            _keyCodes[keyCode] = action;
 
             return removed;
         }
 
-        public void LoadHotkey(HotkeyAction action, KeyCode defaultKeyCode)
+        private void LoadHotkey(HotkeyAction action, KeyCode defaultKeyCode)
         {
             var kc = PlayerPrefs.GetInt(action.ToString());
             if (kc != 0)
@@ -107,8 +92,6 @@ namespace Assets.Scripts.Launcher
             else
                 UpdateHotkey(action, defaultKeyCode);
         }
-
-
 
         public void LoadHotkeys()
         {
@@ -127,7 +110,6 @@ namespace Assets.Scripts.Launcher
             LoadHotkey(HotkeyAction.RotateRight, KeyCode.K);
             LoadHotkey(HotkeyAction.RotateLeft, KeyCode.L);
             LoadHotkey(HotkeyAction.ActivateFollow, KeyCode.F);
-        
             // write lacking hotkeys if need to have them chosen
         }
 
@@ -149,7 +131,7 @@ namespace Assets.Scripts.Launcher
                             var removed = UpdateHotkey(_hotkeyToRebind.Value, kc);
                             if (removed != null)
                                 HotkeyLabel[removed.Value].text = "<None>";
-                            HotkeyLabel[_hotkeyToRebind.Value].text = kc.ToString();
+                            if (_hotkeyToRebind != null) HotkeyLabel[_hotkeyToRebind.Value].text = kc.ToString();
                             _hotkeyToRebind = null;
                             break;
                         }
@@ -175,5 +157,3 @@ namespace Assets.Scripts.Launcher
         }
     }
 }
-
-
