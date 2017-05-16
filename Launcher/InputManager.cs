@@ -21,7 +21,8 @@ namespace Assets.Scripts.Launcher
         ZoomMore,
         ZoomLess,
         RotateRight,
-        RotateLeft
+        RotateLeft,
+        ActivateFollow
         // graphics hotkeys
 
     }
@@ -105,15 +106,6 @@ namespace Assets.Scripts.Launcher
                 UpdateHotkey(action, defaultKeyCode);
         }
 
-        //public static void LoadSliderValue(HotkeyAction action, float defaultValue)
-        //{
-        //    float kc = PlayerPrefs.GetFloat(action.ToString());
-        //    if (kc != 0)
-        //        UpdateHotkey(action, (float)kc);
-        //    else
-        //        UpdateHotkey(action, defaultValue);
-        //}
-
         public static void LoadHotkeys()
         {
             LoadHotkey(HotkeyAction.ActivateClicker, KeyCode.LeftControl);
@@ -130,6 +122,7 @@ namespace Assets.Scripts.Launcher
             LoadHotkey(HotkeyAction.ZoomLess, KeyCode.P);
             LoadHotkey(HotkeyAction.RotateRight, KeyCode.K);
             LoadHotkey(HotkeyAction.RotateLeft, KeyCode.L);
+            LoadHotkey(HotkeyAction.ActivateFollow, KeyCode.F);
         
             // write lacking hotkeys if need to have them chosen
         }

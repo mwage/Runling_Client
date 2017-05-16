@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Launcher;
+﻿using System.Net.NetworkInformation;
+using Assets.Scripts.Launcher;
 using Assets.Scripts.UI.OptionsMenu;
 using UnityEngine;
 
@@ -42,15 +43,18 @@ namespace Assets.Scripts.Players.Camera
                 ZoomLess();
                 PlayerPrefs.SetFloat("CameraZoom", Settings.CameraZoom.Val);
             }
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.F))        /////// INPUT NOT WORKING PROPERLY
+            if (InputManager.Instance.GetButtonDown(HotkeyAction.ActivateFollow))
             {
-                Settings.CameraFollow = (Settings.CameraFollow + 1) % 2;
+                Settings.FollowState = (Settings.FollowState + 1) % 2;
             }
-            if (Settings.CameraFollow == 1)
+            if (Settings.FollowEnabled == 1)
             {
-                if (GameControl.Player != null)
+                if (Settings.FollowState == 1)
                 {
-                    SetCameraHandlePosition(GameControl.Player.transform.position);
+                    if (GameControl.Player != null)
+                    {
+                        SetCameraHandlePosition(GameControl.Player.transform.position);
+                    }
                 }
             }
         }

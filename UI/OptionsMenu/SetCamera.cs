@@ -41,11 +41,12 @@ namespace Assets.Scripts.UI.OptionsMenu
                 SubmenuBuilder.AddButton(HotkeyAction.ZoomLess, SetHotkeyPrefab, HotkeyList);
                 SubmenuBuilder.AddButton(HotkeyAction.RotateLeft, SetHotkeyPrefab, HotkeyList);
                 SubmenuBuilder.AddButton(HotkeyAction.RotateRight, SetHotkeyPrefab, HotkeyList);
+                SubmenuBuilder.AddButton(HotkeyAction.ActivateFollow, SetHotkeyPrefab, HotkeyList);
 
                 _cameraZoomSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Zoom", Settings.CameraZoom.Val, Settings.CameraZoom.Min, Settings.CameraZoom.Max, SetCameraZoom);
                 _cameraAngleSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Angle", Settings.CameraAngle.Val, Settings.CameraAngle.Min, Settings.CameraAngle.Max, SetCameraAngle);
                 _cameraSpeedSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Speed", Settings.CameraSpeed.Val, Settings.CameraSpeed.Min, Settings.CameraSpeed.Max, SetCameraSpeed);
-                _cameraFollowSelection = SubmenuBuilder.AddSelection(SelectionPrefab, HotkeyList, "Follow", FollowCameraSelection);
+                _cameraFollowSelection = SubmenuBuilder.AddSelection(SelectionPrefab, HotkeyList, "Enable Follow", FollowCameraSelection);
 
                 SetSliderValuesFromSettings();
             }
@@ -61,11 +62,11 @@ namespace Assets.Scripts.UI.OptionsMenu
         {
             if (_cameraFollowSelection.isOn )
             {
-                Settings.CameraFollow = 1; // tru
+                Settings.FollowEnabled = 1; // tru
             }
             else
             {
-                Settings.CameraFollow = 0;
+                Settings.FollowEnabled = 0;
             }
         }
         
@@ -76,7 +77,7 @@ namespace Assets.Scripts.UI.OptionsMenu
                 _cameraZoomSlider.value = Settings.CameraZoom.Val;
                 _cameraAngleSlider.value = Settings.CameraAngle.Val;
                 _cameraSpeedSlider.value = Settings.CameraSpeed.Val;
-                _cameraFollowSelection.isOn = Settings.CameraFollow == 1;
+                _cameraFollowSelection.isOn = Settings.FollowEnabled == 1;
             }
         }
         
@@ -86,7 +87,7 @@ namespace Assets.Scripts.UI.OptionsMenu
             PlayerPrefs.SetFloat("CameraZoom", Settings.CameraZoom.Val);
             PlayerPrefs.SetFloat("CameraAngle", Settings.CameraAngle.Val);
             PlayerPrefs.SetFloat("CameraSpeed", Settings.CameraSpeed.Val);
-            PlayerPrefs.SetInt("CameraFollow", Settings.CameraFollow);
+            PlayerPrefs.SetInt("FollowEnabled", Settings.FollowEnabled);
             PlayerPrefs.Save();
         }
 
