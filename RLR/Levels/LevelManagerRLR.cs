@@ -100,6 +100,11 @@ public class LevelManagerRLR : MonoBehaviour {
             Win.transform.Find("Victory").gameObject.SetActive(true);
             Win.transform.Find("Defeat").gameObject.SetActive(false);
         }
+        else
+        {
+            Win.transform.Find("Victory").gameObject.SetActive(false);
+            Win.transform.Find("Defeat").gameObject.SetActive(true);
+        }
 
         // Load win screen
         yield return new WaitForSeconds(delay);

@@ -37,7 +37,7 @@ namespace Assets.Scripts.Drones
         public void ConfigureDrone(GameObject drone)
         {
             // Adjust drone color and size
-            var rend = drone.GetComponent<Renderer>();
+            var rend = drone.GetComponentInChildren<Renderer>();
             rend.material.color = Color;
             var scale = drone.transform.localScale;
             scale.x *= Size;
