@@ -1,66 +1,34 @@
-﻿using UnityEngine;
-using UnityEngine.SceneManagement;
-
+﻿
 namespace Assets.Scripts.Launcher
 {
-    public class GameControl : MonoBehaviour {
+    public class GameControl : Singleton<GameControl>{
 
-        public static GameControl Instance;
+        protected GameControl()
+        {
+        }
+
         public SceneLoader SceneLoader;
 
-        // Level/Game management
-        public static bool GameActive = false;
-        public static int CurrentLevel = 1;
-        public static int TotalScore = 0;
-        public static bool FinishedLevel = false;
-        public static Difficulty SetDifficulty = Difficulty.Hard;
-        public static Gamemode SetGameMode = Gamemode.Practice;
-
-
-        // Toggles
-        public static bool AutoClickerActive = false;
-        public static bool GodModeActive = false;
-
-        // Player
-        public static GameObject Player;
-        public static float MoveSpeed = 0;
-        public static bool IsDead = true;
-        public static bool IsInvulnerable = false;
-        public static bool IsSafe = false;
-        public static bool IsImmobile = false;
-        
+        public GameState State;
+        public InputManager InputManager;
+        public Settings Settings;
+        public HighScores HighScores;
 
         //Keep Game Manager active and destroy any additional copys
         private void Awake()
         {
-            if (Instance == null)
-            {
-                DontDestroyOnLoad(gameObject);
-                Instance = this;
-            }
-            else if (Instance != this)
-            {
-                Destroy(gameObject);
-            }
+            DontDestroyOnLoad(gameObject);
+            State = new GameState();
+            InputManager = new InputManager();
+            Settings = new Settings();
+            HighScores = new HighScores();
         }
 
         //Start Game
-        private void Start()
+         private void Start()
         {
-            SceneLoader.LoadScene("Mainmenu", 0.5f);
-        }
-
-        public enum Difficulty
-        {
-            Normal,
-            Hard
-        }
-
-        public enum Gamemode
-        {
-            Classic,
-            TimeMode,
-            Practice
+            if (SceneLoader != null)
+                SceneLoader.LoadScene("Mainmenu", 0.5f);
         }
     }
 }

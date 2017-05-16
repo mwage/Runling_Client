@@ -33,13 +33,13 @@ namespace Assets.Scripts.SLA
         IEnumerator PrepareLevel()
         {
             // Set current movespeed and cameraposition
-            GameControl.MoveSpeed = LevelManagerSla.GetMovementSpeed(GameControl.CurrentLevel);
+            GameControl.Instance.State.MoveSpeed = LevelManagerSla.GetMovementSpeed(GameControl.Instance.State.CurrentLevel);
             CameraHandleMovement.SetCameraHandlePosition(Vector3.zero);
 
             // Show level highscore and current level
-            CurrentPr.text = HighScores.highScoreSLA[GameControl.CurrentLevel].ToString();
+            CurrentPr.text = GameControl.Instance.HighScores.HighScoreSLA[GameControl.Instance.State.CurrentLevel].ToString();
             var levelText = LevelTextObject.GetComponent<TextMeshProUGUI>();
-            levelText.text = "Level " + GameControl.CurrentLevel;
+            levelText.text = "Level " + GameControl.Instance.State.CurrentLevel;
             LevelTextObject.SetActive(true);
             CurrentPrWindow.SetActive(true);
             yield return new WaitForSeconds(0.2f);
@@ -49,17 +49,17 @@ namespace Assets.Scripts.SLA
 
             // Load drones and player
 
-            GameControl.Player = Instantiate(PlayerPrefab);
-            GameControl.IsDead = false;
-            GameControl.IsInvulnerable = true;
-            GameControl.Player.transform.Find("Shield").gameObject.SetActive(true);
-            if (GameControl.GodModeActive && !GameControl.Player.transform.Find("GodMode").gameObject.activeSelf)
+            GameControl.Instance.State.Player = Instantiate(PlayerPrefab);
+            GameControl.Instance.State.IsDead = false;
+            GameControl.Instance.State.IsInvulnerable = true;
+            GameControl.Instance.State.Player.transform.Find("Shield").gameObject.SetActive(true);
+            if (GameControl.Instance.State.GodModeActive && !GameControl.Instance.State.Player.transform.Find("GodMode").gameObject.activeSelf)
             {
                 transform.Find("GodMode").gameObject.SetActive(true);
             }
-            GameControl.IsImmobile = false;
+            GameControl.Instance.State.IsImmobile = false;
             ControlSla.StopUpdate = false;
-            LevelManagerSla.LoadDrones(GameControl.CurrentLevel);
+            LevelManagerSla.LoadDrones(GameControl.Instance.State.CurrentLevel);
             
             // Countdown
             for (var i = 0; i < 3; i++)
@@ -70,8 +70,8 @@ namespace Assets.Scripts.SLA
                 Destroy(countdown);
             }
 
-            GameControl.Player.transform.Find("Shield").gameObject.SetActive(false);
-            GameControl.IsInvulnerable = false;
+            GameControl.Instance.State.Player.transform.Find("Shield").gameObject.SetActive(false);
+            GameControl.Instance.State.IsInvulnerable = false;
             ScoreSla.StartScore();
             
         }

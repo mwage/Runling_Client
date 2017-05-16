@@ -11,105 +11,105 @@ namespace Assets.Scripts.UI.SLA_Menus
 
         public void Level1()
         {
-            GameControl.CurrentLevel = 1;
+            GameControl.Instance.State.CurrentLevel = 1;
             Time.timeScale = 1;
-            GameControl.TotalScore = 0;
+            GameControl.Instance.State.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 
         public void Level2()
         {
-            GameControl.CurrentLevel = 2;
+            GameControl.Instance.State.CurrentLevel = 2;
             Time.timeScale = 1;
-            GameControl.TotalScore = 0;
+            GameControl.Instance.State.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 
         public void Level3()
         {
-            GameControl.CurrentLevel = 3;
+            GameControl.Instance.State.CurrentLevel = 3;
             Time.timeScale = 1;
-            GameControl.TotalScore = 0;
+            GameControl.Instance.State.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 
         public void Level4()
         {
-            GameControl.CurrentLevel = 4;
+            GameControl.Instance.State.CurrentLevel = 4;
             Time.timeScale = 1;
-            GameControl.TotalScore = 0;
+            GameControl.Instance.State.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 
         public void Level5()
         {
-            GameControl.CurrentLevel = 5;
+            GameControl.Instance.State.CurrentLevel = 5;
             Time.timeScale = 1;
-            GameControl.TotalScore = 0;
+            GameControl.Instance.State.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 
         public void Level6()
         {
-            GameControl.CurrentLevel = 6;
+            GameControl.Instance.State.CurrentLevel = 6;
             Time.timeScale = 1;
-            GameControl.TotalScore = 0;
+            GameControl.Instance.State.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 
         public void Level7()
         {
-            GameControl.CurrentLevel = 7;
+            GameControl.Instance.State.CurrentLevel = 7;
             Time.timeScale = 1;
-            GameControl.TotalScore = 0;
+            GameControl.Instance.State.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 
         public void Level8()
         {
-            GameControl.CurrentLevel = 8;
+            GameControl.Instance.State.CurrentLevel = 8;
             Time.timeScale = 1;
-            GameControl.TotalScore = 0;
+            GameControl.Instance.State.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 
         public void Level9()
         {
-            GameControl.CurrentLevel = 9;
+            GameControl.Instance.State.CurrentLevel = 9;
             Time.timeScale = 1;
-            GameControl.TotalScore = 0;
+            GameControl.Instance.State.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 
         public void Level10()
         {
-            GameControl.CurrentLevel = 10;
+            GameControl.Instance.State.CurrentLevel = 10;
             Time.timeScale = 1;
-            GameControl.TotalScore = 0;
+            GameControl.Instance.State.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 
         public void Level11()
         {
-            GameControl.CurrentLevel = 11;
+            GameControl.Instance.State.CurrentLevel = 11;
             Time.timeScale = 1;
-            GameControl.TotalScore = 0;
+            GameControl.Instance.State.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 
         public void Level12()
         {
-            GameControl.CurrentLevel = 12;
+            GameControl.Instance.State.CurrentLevel = 12;
             Time.timeScale = 1;
-            GameControl.TotalScore = 0;
+            GameControl.Instance.State.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 
         public void Level13()
         {
-            GameControl.CurrentLevel = 13;
+            GameControl.Instance.State.CurrentLevel = 13;
             Time.timeScale = 1;
-            GameControl.TotalScore = 0;
+            GameControl.Instance.State.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 

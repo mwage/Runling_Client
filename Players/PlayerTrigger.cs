@@ -14,29 +14,29 @@ namespace Assets.Scripts.Players
         void OnTriggerStay(Collider other)
         {
             // Enter Finishzone
-            if (other.tag == "Finish" && !_finishedLevel)
+            if (other.CompareTag("Finish") && !_finishedLevel)
             {
-                GameControl.FinishedLevel = true;
+                GameControl.Instance.State.FinishedLevel = true;
                 _finishedLevel = true;
             }
 
             // Enter Safezone
-            if (other.tag == "SafeZone" && !GameControl.IsInvulnerable)
+            if (other.CompareTag("SafeZone") && !GameControl.Instance.State.IsInvulnerable)
             {
-                GameControl.IsSafe = true;
+                GameControl.Instance.State.IsSafe = true;
 
             }
 
             // Death Trigger
-            if (((other.tag == "Enemy" && !GameControl.IsSafe || other.tag == "Strong Enemy") && !GameControl.IsInvulnerable) && !GameControl.GodModeActive)
+            if (((other.CompareTag("Enemy") && !GameControl.Instance.State.IsSafe || other.CompareTag("Strong Enemy")) && !GameControl.Instance.State.IsInvulnerable) && !GameControl.Instance.State.GodModeActive)
             {
-                GameControl.IsDead = true;
+                GameControl.Instance.State.IsDead = true;
             }
         }
 
         void OnTriggerEnter(Collider other)
         {
-            if (other.tag == "SafeZone" && !_onPlatform)
+            if (other.CompareTag("SafeZone") && !_onPlatform)
             {
                 SaveZone = other.transform.parent.parent.gameObject;
                 EnterSaveZone = true;
@@ -48,9 +48,9 @@ namespace Assets.Scripts.Players
         // Leave Safezone
         void OnTriggerExit(Collider other)
         {
-            if (other.tag == "SafeZone")
+            if (other.CompareTag("SafeZone"))
             {
-                GameControl.IsSafe = false;
+                GameControl.Instance.State.IsSafe = false;
                 _onPlatform = false;
             }
         }

@@ -6,7 +6,6 @@ namespace Assets.Scripts.UI.Main_Menu
 {
     public class MainMenuManager : MonoBehaviour
     {
-
         public MainMenu MainMenu;
         public OptionsMenu.OptionsMenu OptionsMenu;
         public SLAMenu SLAMenu;
@@ -19,7 +18,6 @@ namespace Assets.Scripts.UI.Main_Menu
 
         private void Awake()
         {
-            InputManager.Instance.LoadHotkeys(); ////////////
             OptionsMenu.OptionsMenuActive = false;
             SLAMenu.SLAMenuActive = false;
             HighScoreMenuSLA.HighScoreMenuActive = false;
@@ -27,7 +25,7 @@ namespace Assets.Scripts.UI.Main_Menu
 
         void Update()
         {
-            if (InputManager.Instance.GetButtonDown(HotkeyAction.NavigateMenu))
+            if (GameControl.Instance.InputManager.GetButtonDown(HotkeyAction.NavigateMenu))
             {
                 if (OptionsMenu.OptionsMenuActive)
                 {

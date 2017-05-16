@@ -24,9 +24,9 @@ namespace Assets.Scripts.UI.OptionsMenu
         {
             SubmenuBuilder.DeleteHotkeyPrefabs(SetCamera.HotkeyList); 
             SubmenuBuilder.DeleteHotkeyPrefabs(SetHotkeys.HotkeyList);
-            InputManager.Instance.LoadHotkeys();
+            GameControl.Instance.InputManager.LoadHotkeys();
             CameraHandleMovement.SetCameraHandlePosition(CameraHandleMovement.GetWatchedPoint());
-            CameraMovement.SetCameraPitch(Settings.Instance.CameraAngle.Val);
+            CameraMovement.SetCameraPitch(GameControl.Instance.Settings.CameraAngle.Val);
             OptionsMenuActive = false;
             gameObject.SetActive(false);
             Menu.gameObject.SetActive(true);
@@ -38,7 +38,7 @@ namespace Assets.Scripts.UI.OptionsMenu
         {
             foreach (HotkeyAction action in Enum.GetValues(typeof(HotkeyAction)))
             {
-                var kc = InputManager.Instance.GetHotkey(action);
+                var kc = GameControl.Instance.InputManager.GetHotkey(action);
                 if (kc != null)
                     PlayerPrefs.SetInt(action.ToString(), (int)kc);
             }
