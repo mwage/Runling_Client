@@ -7,10 +7,10 @@ namespace Assets.Scripts.Launcher
         // Camera
         public static float CameraRange = 0;
 
-        public static Limits CameraZoom = new Limits(10, 50, def: 40);
-        public static Limits CameraAngle = new Limits(10, 90, def: 90);
-        public static Limits CameraSpeed = new Limits(5, 50, def: 20);
-        public static int CameraFollow;
+        public Limits CameraZoom = new Limits(10, 50, def: 40);
+        public Limits CameraAngle = new Limits(10, 90, def: 90);
+        public Limits CameraSpeed = new Limits(5, 50, def: 20);
+        public int CameraFollow;
 
         private static Settings _instance;
 
@@ -24,7 +24,12 @@ namespace Assets.Scripts.Launcher
             }
         }
 
-        public void LoadSettings()
+        private Settings()
+        {
+            LoadSettings();
+        }
+
+        private void LoadSettings()
         {
             CameraZoom.Val = PlayerPrefs.GetFloat("CameraZoom") > 0.01 ? PlayerPrefs.GetFloat("CameraZoom") : CameraZoom.Def;
             CameraAngle.Val = PlayerPrefs.GetFloat("CameraAngle") > 0.01 ? PlayerPrefs.GetFloat("CameraAngle") : CameraAngle.Def;

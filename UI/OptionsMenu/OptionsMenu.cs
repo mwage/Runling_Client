@@ -24,10 +24,9 @@ namespace Assets.Scripts.UI.OptionsMenu
         {
             SubmenuBuilder.DeleteHotkeyPrefabs(SetCamera.HotkeyList); 
             SubmenuBuilder.DeleteHotkeyPrefabs(SetHotkeys.HotkeyList);
-            InputManager.LoadHotkeys();
-            Settings.Instance.LoadSettings();
+            InputManager.Instance.LoadHotkeys();
             CameraHandleMovement.SetCameraHandlePosition(CameraHandleMovement.GetWatchedPoint());
-            CameraMovement.SetCameraPitch(Settings.CameraAngle.Val);
+            CameraMovement.SetCameraPitch(Settings.Instance.CameraAngle.Val);
             OptionsMenuActive = false;
             gameObject.SetActive(false);
             Menu.gameObject.SetActive(true);

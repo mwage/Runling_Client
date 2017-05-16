@@ -8,13 +8,16 @@ namespace Assets.Scripts.Launcher
 {
     public enum HotkeyAction
     {
-        ActivateClicker, // general hotkeys
+        // general hotkeys
+        ActivateClicker,
         DeactivateClicker,
         NavigateMenu,
         Pause,
         ActivateGodmode,
         DeactiveGodmode,
-        CameraUp, // camera hotkeys
+
+        // camera hotkeys
+        CameraUp,
         CameraDown,
         CameraRight,
         CameraLeft,
@@ -22,8 +25,6 @@ namespace Assets.Scripts.Launcher
         ZoomLess,
         RotateRight,
         RotateLeft
-        // graphics hotkeys
-
     }
     
 
@@ -42,11 +43,11 @@ namespace Assets.Scripts.Launcher
         }
 
 
-        private static HotkeyAction? _hotkeyToRebind;
-        public static readonly Dictionary<HotkeyAction, Text> HotkeyLabel = new Dictionary<HotkeyAction, Text>();
+        private HotkeyAction? _hotkeyToRebind;
+        public readonly Dictionary<HotkeyAction, Text> HotkeyLabel = new Dictionary<HotkeyAction, Text>();
 
-        private static readonly Dictionary<HotkeyAction, KeyCode> Hotkeys = new Dictionary<HotkeyAction, KeyCode>();
-        private static readonly Dictionary<KeyCode, HotkeyAction> KeyCodes = new Dictionary<KeyCode, HotkeyAction>();
+        private readonly Dictionary<HotkeyAction, KeyCode> Hotkeys = new Dictionary<HotkeyAction, KeyCode>();
+        private readonly Dictionary<KeyCode, HotkeyAction> KeyCodes = new Dictionary<KeyCode, HotkeyAction>();
 
         private InputManager()
         {
@@ -73,7 +74,7 @@ namespace Assets.Scripts.Launcher
             return null;
         }
 
-        private static HotkeyAction? UpdateHotkey(HotkeyAction action, KeyCode keyCode)
+        private HotkeyAction? UpdateHotkey(HotkeyAction action, KeyCode keyCode)
         {
             HotkeyAction? removed = null;
 
@@ -96,7 +97,7 @@ namespace Assets.Scripts.Launcher
             return removed;
         }
 
-        public static void LoadHotkey(HotkeyAction action, KeyCode defaultKeyCode)
+        public void LoadHotkey(HotkeyAction action, KeyCode defaultKeyCode)
         {
             var kc = PlayerPrefs.GetInt(action.ToString());
             if (kc != 0)
@@ -105,16 +106,8 @@ namespace Assets.Scripts.Launcher
                 UpdateHotkey(action, defaultKeyCode);
         }
 
-        //public static void LoadSliderValue(HotkeyAction action, float defaultValue)
-        //{
-        //    float kc = PlayerPrefs.GetFloat(action.ToString());
-        //    if (kc != 0)
-        //        UpdateHotkey(action, (float)kc);
-        //    else
-        //        UpdateHotkey(action, defaultValue);
-        //}
 
-        public static void LoadHotkeys()
+        public void LoadHotkeys()
         {
             LoadHotkey(HotkeyAction.ActivateClicker, KeyCode.LeftControl);
             LoadHotkey(HotkeyAction.DeactivateClicker, KeyCode.LeftAlt);
@@ -134,12 +127,12 @@ namespace Assets.Scripts.Launcher
             // write lacking hotkeys if need to have them chosen
         }
 
-        public static void RebindHotkey(HotkeyAction action)
+        public void RebindHotkey(HotkeyAction action)
         {
             _hotkeyToRebind = action;
         }
 
-        public static void RebindHotkeyIfNeed()
+        public void RebindHotkeyIfNeed()
         {
             if (_hotkeyToRebind != null)
             {

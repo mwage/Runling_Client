@@ -47,7 +47,6 @@ namespace Assets.Scripts.Launcher
         //Start Game
         private void Start()
         {
-            Settings.Instance.LoadSettings();
             SceneLoader.LoadScene("Mainmenu", 0.5f);
         }
 
