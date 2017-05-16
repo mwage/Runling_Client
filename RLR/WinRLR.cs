@@ -11,6 +11,7 @@ namespace Assets.Scripts.RLR
         public void BackToMenu()
         {
             GameControl.State.GameActive = false;
+            GameControl.State.IsSafe = false;
             SceneManager.LoadScene("MainMenu");
         }
 

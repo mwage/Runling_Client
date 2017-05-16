@@ -38,7 +38,7 @@ namespace Assets.Scripts.Drones
         {
             // Adjust drone color and size
             var rend = drone.GetComponentInChildren<Renderer>();
-            rend.material.color = Color;
+            //rend.material.color = Color;
             var scale = drone.transform.localScale;
             scale.x *= Size;
             scale.z *= Size;
