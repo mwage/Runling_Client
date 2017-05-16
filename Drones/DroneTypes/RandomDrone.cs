@@ -27,7 +27,7 @@ namespace Assets.Scripts.Drones
 
         public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null)
         {
-            var newDrone = Object.Instantiate(DroneFactory.SetDroneType[DroneType]);
+            var newDrone = Object.Instantiate(factory.SetDroneType[DroneType]);
 
             var isGround = newDrone.layer == 11;
 

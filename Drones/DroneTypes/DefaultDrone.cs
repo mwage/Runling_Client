@@ -26,7 +26,7 @@ namespace Assets.Scripts.Drones
 
         public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null)
         {
-            return Object.Instantiate(DroneFactory.SetDroneType[DroneType], Position, Quaternion.Euler(0, Direction, 0));
+            return Object.Instantiate(factory.SetDroneType[DroneType], Position, Quaternion.Euler(0, Direction, 0));
         }
     }
 }

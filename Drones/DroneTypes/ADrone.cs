@@ -34,13 +34,13 @@ namespace Assets.Scripts.Drones
 
         public abstract GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null);
 
-        public void ConfigureDrone(GameObject drone)
+        public void ConfigureDrone(GameObject drone, DroneFactory factory)
         {
             // Adjust drone color and size
             var model = drone.transform.GetChild(0);
             foreach (Transform ch in model)
             {
-                ch.GetComponent<Renderer>().material = DroneFactory.SetDroneMaterial[Color];
+                ch.GetComponent<Renderer>().material = factory.SetDroneMaterial[Color];
             }
 
             var scale = drone.transform.localScale;

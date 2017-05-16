@@ -22,8 +22,8 @@ namespace Assets.Scripts.Drones
         public Material DarkGreenMaterial;
         public Material CyanMaterial;
 
-        public static Dictionary<DroneType,GameObject> SetDroneType = new Dictionary<DroneType,GameObject>();
-        public static Dictionary<DroneColor, Material> SetDroneMaterial = new Dictionary<DroneColor, Material>();
+        public Dictionary<DroneType,GameObject> SetDroneType = new Dictionary<DroneType,GameObject>();
+        public Dictionary<DroneColor, Material> SetDroneMaterial = new Dictionary<DroneColor, Material>();
 
         private void Awake()
         {
@@ -51,7 +51,7 @@ namespace Assets.Scripts.Drones
             {
                 var newDrone = drone.CreateDroneInstance(this, isAdded, area, posDelegate);
                 if (newDrone != null)
-                    drone.ConfigureDrone(newDrone);
+                    drone.ConfigureDrone(newDrone, this);
                 drones.Add(newDrone);
             }
 

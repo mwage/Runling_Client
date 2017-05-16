@@ -23,7 +23,7 @@ namespace Assets.Scripts.Drones
         public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null)
         {
             var direction = Random.Range(0, 4);
-            var newDrone = Object.Instantiate(DroneFactory.SetDroneType[DroneType], DroneStartPosition.GetRandomPositionAir(Size, Area), Quaternion.Euler(0, -45 + 90 * direction, 0));
+            var newDrone = Object.Instantiate(factory.SetDroneType[DroneType], DroneStartPosition.GetRandomPositionAir(Size, Area), Quaternion.Euler(0, -45 + 90 * direction, 0));
             var instance = newDrone.AddComponent<PointToPointMovement>();
             instance.Acceleration = Acceleration;
             instance.MaxVelocity = Speed;

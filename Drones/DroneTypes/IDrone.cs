@@ -6,6 +6,6 @@ namespace Assets.Scripts.Drones
     {
         float Size { get; }
         GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null);
-        void ConfigureDrone(GameObject drone);
+        void ConfigureDrone(GameObject drone, DroneFactory factory);
     }
 }
