@@ -45,8 +45,7 @@ namespace Assets.Scripts.Players.Camera
             }
             if (InputManager.Instance.GetButtonDown(HotkeyAction.ActivateFollow))
             {
-
-                Settings.Instance.FollowEnabled = (Settings.Instance.FollowEnabled + 1) % 2;
+                Settings.Instance.FollowState = (Settings.Instance.FollowState + 1) % 2;
             }
             if (Settings.Instance.FollowEnabled == 1)
             {

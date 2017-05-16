@@ -64,13 +64,11 @@ namespace Assets.Scripts.UI.OptionsMenu
         {
             if (_cameraFollowSelection.isOn )
             {
-
                 Settings.Instance.FollowEnabled = 1; // tru
             }
             else
             {
                 Settings.Instance.FollowEnabled = 0;
-
             }
         }
         
