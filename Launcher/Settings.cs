@@ -17,7 +17,7 @@ namespace Assets.Scripts.Launcher
             LoadSettings();
         }
 
-        private void LoadSettings()
+        public void LoadSettings()
         {
             CameraZoom.Val = PlayerPrefs.GetFloat("CameraZoom") > 0.01 ? PlayerPrefs.GetFloat("CameraZoom") : CameraZoom.Def;
             CameraAngle.Val = PlayerPrefs.GetFloat("CameraAngle") > 0.01 ? PlayerPrefs.GetFloat("CameraAngle") : CameraAngle.Def;

@@ -25,8 +25,11 @@ namespace Assets.Scripts.UI.OptionsMenu
             SubmenuBuilder.DeleteHotkeyPrefabs(SetCamera.HotkeyList); 
             SubmenuBuilder.DeleteHotkeyPrefabs(SetHotkeys.HotkeyList);
             GameControl.InputManager.LoadHotkeys();
-            CameraHandleMovement.SetCameraHandlePosition(CameraHandleMovement.GetWatchedPoint());
+            var watchedPoint = CameraHandleMovement.GetWatchedPoint();
+            GameControl.Settings.LoadSettings();
+            CameraHandleMovement.SetCameraHandlePosition(watchedPoint);
             CameraMovement.SetCameraPitch(GameControl.Settings.CameraAngle.Val);
+
             OptionsMenuActive = false;
             gameObject.SetActive(false);
             Menu.gameObject.SetActive(true);
