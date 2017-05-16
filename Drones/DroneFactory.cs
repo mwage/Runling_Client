@@ -14,7 +14,16 @@ namespace Assets.Scripts.Drones
         public GameObject MineDroneBouncing;
         public GameObject MineDroneOneway;
 
+        public Material GreyMaterial;
+        public Material BlueMaterial;
+        public Material RedMaterial;
+        public Material GoldenMaterial;
+        public Material MagentaMaterial;
+        public Material DarkGreenMaterial;
+        public Material CyanMaterial;
+
         public static Dictionary<DroneType,GameObject> SetDroneType = new Dictionary<DroneType,GameObject>();
+        public static Dictionary<DroneColor, Material> SetDroneMaterial = new Dictionary<DroneColor, Material>();
 
         private void Awake()
         {
@@ -24,6 +33,14 @@ namespace Assets.Scripts.Drones
             SetDroneType[DroneType.MineDrone] = MineDrone;
             SetDroneType[DroneType.MineDroneBouncing] = MineDroneBouncing;
             SetDroneType[DroneType.MineDroneOneway] = MineDroneOneway;
+
+            SetDroneMaterial[DroneColor.Grey] = GreyMaterial;
+            SetDroneMaterial[DroneColor.Blue] = BlueMaterial;
+            SetDroneMaterial[DroneColor.Red] = RedMaterial;
+            SetDroneMaterial[DroneColor.Golden] = GoldenMaterial;
+            SetDroneMaterial[DroneColor.Magenta] = MagentaMaterial;
+            SetDroneMaterial[DroneColor.DarkGreen] = DarkGreenMaterial;
+            SetDroneMaterial[DroneColor.Cyan] = CyanMaterial;
         }
 
         public List<GameObject> SpawnDrones(IDrone drone, int droneCount = 1, bool isAdded = false, Area area = new Area(), StartPositionDelegate posDelegate = null)
@@ -79,16 +96,5 @@ namespace Assets.Scripts.Drones
         public float RightBoundary;
         public float TopBoundary;
         public float BottomBoundary;
-    }
-
-    public enum DroneType
-    {
-        BouncingDrone,
-        FlyingBouncingDrone,
-        FlyingOnewayDrone,
-        MineDrone,
-        MineDroneBouncing,
-        MineDroneOneway
-
     }
 }

@@ -18,13 +18,13 @@ namespace Assets.Scripts.SLA.Levels
         public override void CreateDrones()
         {
             // Spawn Bouncing Drones
-            DroneFactory.SpawnAndAddDrones(new RandomDrone(7f, 1.5f, Color.red), 15, 7f, BoundariesSLA.BouncingSla);
+            DroneFactory.SpawnAndAddDrones(new RandomDrone(7f, 1.5f, DroneColor.Red), 15, 7f, BoundariesSLA.BouncingSla);
 
             // Spawn Green Drones
-            DroneFactory.StartCoroutine(GenerateLevel12GreenDrones(4f, 9f, 1.2f, Color.cyan, 32, 0.03f, 1.5f, 1, 48));
+            DroneFactory.StartCoroutine(GenerateLevel12GreenDrones(4f, 9f, 1.2f, DroneColor.Cyan, 32, 0.03f, 1.5f, 1, 48));
         }
 
-        private IEnumerator GenerateLevel12GreenDrones(float delay, float speed, float size, Color color, int initialDroneCount, float reduceDelay, float minDelay, int droneIncrease, int maxDrones)
+        private IEnumerator GenerateLevel12GreenDrones(float delay, float speed, float size, DroneColor color, int initialDroneCount, float reduceDelay, float minDelay, int droneIncrease, int maxDrones)
         {
             var droneCount = 0;
 

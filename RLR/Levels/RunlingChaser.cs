@@ -38,7 +38,7 @@ namespace Assets.Scripts.RLR.Levels
             _destroyChaser = destroyChaser;
             _chaserBase = chaserBase;
             _pattern = pattern;
-            _iDrone = iDrone ?? new DefaultDrone(7, 1, Color.cyan);
+            _iDrone = iDrone ?? new DefaultDrone(7, 1, DroneColor.Cyan);
 
 
             if (_spawnChaser == null || _destroyChaser == null) return;

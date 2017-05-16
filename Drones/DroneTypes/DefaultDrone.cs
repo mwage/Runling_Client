@@ -15,7 +15,7 @@ namespace Assets.Scripts.Drones
             Direction = direction;
         }
 
-        public DefaultDrone(float speed, float size, Color color, Vector3? position = null, float? direction = null, DroneType? droneType = null, 
+        public DefaultDrone(float speed, float size, DroneColor color, Vector3? position = null, float? direction = null, DroneType? droneType = null, 
             DroneMovement.MovementDelegate moveDelegate = null, float? curving = null, float? sinForce = null, float? sinFrequency = null) : 
             base(speed, size, color, droneType, moveDelegate, curving, sinForce, sinFrequency)
         {

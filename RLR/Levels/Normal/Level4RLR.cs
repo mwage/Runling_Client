@@ -14,7 +14,7 @@ namespace Assets.Scripts.RLR.Levels
             Area[] laneArea = Manager.GenerateMapRLR.GetDroneSpawnArea();
 
             // Spawn red drones
-            DroneFactory.SpawnDrones(new RedDrone(10, 1, Color.red, 3, laneArea[0]), 80);
+            DroneFactory.SpawnDrones(new RedDrone(10, 1, DroneColor.Red, 3, laneArea[0]), 80);
         }
     }
 }

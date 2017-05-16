@@ -10,8 +10,8 @@ namespace Assets.Scripts.UI.Main_Menu
 
         void Start()
         {
-            DroneFactory.SpawnDrones(new RandomDrone(3f, 1f, Color.blue), 20, area: BoundariesSLA.BouncingMainMenu);
-            DroneFactory.SpawnDrones(new RandomDrone(5f, 1f, Color.magenta, DroneType.FlyingBouncingDrone), 30, area: BoundariesSLA.FlyingMainMenu);
+            DroneFactory.SpawnDrones(new RandomDrone(3f, 1f, DroneColor.Blue), 20, area: BoundariesSLA.BouncingMainMenu);
+            DroneFactory.SpawnDrones(new RandomDrone(5f, 1f, DroneColor.Magenta, DroneType.FlyingBouncingDrone), 30, area: BoundariesSLA.FlyingMainMenu);
         }
     }
 }

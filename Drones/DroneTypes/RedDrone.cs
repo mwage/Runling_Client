@@ -9,7 +9,7 @@ namespace Assets.Scripts.Drones
         protected readonly float WaitTime;
         protected readonly bool Synchronized;
 
-        public RedDrone(float speed, float size, Color color, float acceleration, Area area, float? waitTime = null, bool? synchronized = null, DroneType? droneType = null) :
+        public RedDrone(float speed, float size, DroneColor color, float acceleration, Area area, float? waitTime = null, bool? synchronized = null, DroneType? droneType = null) :
             base(speed, size, color, droneType)
         {
             DroneType = droneType ?? DroneType.MineDrone;

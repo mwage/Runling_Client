@@ -16,7 +16,7 @@ namespace Assets.Scripts.Drones
             StartDirection = startDirection ?? 0;
         }
 
-        public RandomDrone(float speed, float size, Color color, DroneType? droneType = null, float? restrictedZone = null, float? coneRange = null, float? startDirection = null,
+        public RandomDrone(float speed, float size, DroneColor color, DroneType? droneType = null, float? restrictedZone = null, float? coneRange = null, float? startDirection = null,
             DroneMovement.MovementDelegate moveDelegate = null, float? curving = null, float? sinForce = null, float? sinFrequency = null) : 
             base(speed, size, color, droneType, moveDelegate, curving, sinForce, sinFrequency)
         {

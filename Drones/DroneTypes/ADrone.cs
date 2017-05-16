@@ -8,7 +8,7 @@ namespace Assets.Scripts.Drones
 
 
         protected float Speed;
-        protected Color Color;
+        protected DroneColor Color;
         protected DroneType DroneType;
         protected DroneMovement.MovementDelegate MoveDelegate;
         protected float? Curving;
@@ -19,7 +19,7 @@ namespace Assets.Scripts.Drones
         {
         }
 
-        protected ADrone(float speed, float size, Color color, DroneType? droneType = null, DroneMovement.MovementDelegate moveDelegate = null, 
+        protected ADrone(float speed, float size, DroneColor color, DroneType? droneType = null, DroneMovement.MovementDelegate moveDelegate = null, 
             float? curving = null, float? sinForce = null, float? sinFrequency = null)
         {
             Speed = speed;
@@ -37,8 +37,12 @@ namespace Assets.Scripts.Drones
         public void ConfigureDrone(GameObject drone)
         {
             // Adjust drone color and size
-            var rend = drone.GetComponentInChildren<Renderer>();
-            //rend.material.color = Color;
+            var model = drone.transform.GetChild(0);
+            foreach (Transform ch in model)
+            {
+                ch.GetComponent<Renderer>().material = DroneFactory.SetDroneMaterial[Color];
+            }
+
             var scale = drone.transform.localScale;
             scale.x *= Size;
             scale.z *= Size;
@@ -63,5 +67,26 @@ namespace Assets.Scripts.Drones
                 SinFrequency = rhs.SinFrequency;
             }
         }
+    }
+
+    public enum DroneType
+    {
+        BouncingDrone,
+        FlyingBouncingDrone,
+        FlyingOnewayDrone,
+        MineDrone,
+        MineDroneBouncing,
+        MineDroneOneway
+    }
+
+    public enum DroneColor
+    {
+        Grey,
+        Blue,
+        Red,
+        Golden,
+        Magenta,
+        DarkGreen,
+        Cyan
     }
 }

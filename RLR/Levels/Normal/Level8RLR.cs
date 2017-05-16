@@ -16,13 +16,13 @@ namespace Assets.Scripts.RLR.Levels
             // Spawn bouncing drones
             for (var i = 1; i < laneArea.Length - 2; i++)
             {
-                DroneFactory.SpawnDrones(new RandomDrone(5, 2f, Color.grey), (int)(12 - i * 0.4f), area: laneArea[i]);
+                DroneFactory.SpawnDrones(new RandomDrone(5, 2f, DroneColor.Grey), (int)(12 - i * 0.4f), area: laneArea[i]);
             }
-            DroneFactory.SpawnDrones(new RandomDrone(5, 2f, Color.grey), 4, area: laneArea[19]);
-            DroneFactory.SpawnDrones(new RandomDrone(5, 2f, Color.grey), 3, area: laneArea[20]);
+            DroneFactory.SpawnDrones(new RandomDrone(5, 2f, DroneColor.Grey), 4, area: laneArea[19]);
+            DroneFactory.SpawnDrones(new RandomDrone(5, 2f, DroneColor.Grey), 3, area: laneArea[20]);
 
             // Spawn red drones
-            DroneFactory.SpawnDrones(new RedDrone(13, 2, Color.red, 3, laneArea[0]), 60);
+            DroneFactory.SpawnDrones(new RedDrone(13, 2, DroneColor.Red, 3, laneArea[0]), 60);
         }
     }
 }
