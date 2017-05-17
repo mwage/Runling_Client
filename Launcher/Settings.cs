@@ -19,10 +19,10 @@ namespace Launcher
 
         public void LoadSettings()
         {
+            FollowEnabled = PlayerPrefs.GetFloat("CameraZoom") < 0.01 ? 1 : PlayerPrefs.GetInt("FollowEnabled");
             CameraZoom.Val = PlayerPrefs.GetFloat("CameraZoom") > 0.01 ? PlayerPrefs.GetFloat("CameraZoom") : CameraZoom.Def;
             CameraAngle.Val = PlayerPrefs.GetFloat("CameraAngle") > 0.01 ? PlayerPrefs.GetFloat("CameraAngle") : CameraAngle.Def;
             CameraSpeed.Val = PlayerPrefs.GetFloat("CameraSpeed") > 0.01 ? PlayerPrefs.GetFloat("CameraSpeed") : CameraSpeed.Def;
-            FollowEnabled = PlayerPrefs.GetInt("FollowEnabled");
             FollowState = PlayerPrefs.GetInt("FollowState");
         }
     }

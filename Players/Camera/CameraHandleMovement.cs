@@ -4,57 +4,23 @@ using UnityEngine;
 
 namespace Players.Camera
 {
-    public class CameraHandleMovement : MonoBehaviour 
+    public class CameraHandleMovement : MonoBehaviour
         // the scipt respons on camera position. It ensure rotation around Y axis (yaw), but doenst make around X (pitch) direcly [thats makes CameraMovement]
         // CameraHandle Object allows to use arrows to move properly with Camera with any Y-axis rotation.
     {
         public SetCamera SetCamera;
 
-        private void Start()
+        void Start()
         {
-            SetCameraHandlePosition(GetWatchedPoint());  
+            SetCameraHandlePosition(GetWatchedPoint());
         }
 
-        private void LateUpdate()
+        void LateUpdate()
         {
-            var inputX = Input.GetAxis("Horizontal");
-            var inputY = Input.GetAxis("Vertical");
-            var moveX = inputX * GameControl.Settings.CameraSpeed.Val * Time.deltaTime;
-            var moveY = inputY * GameControl.Settings.CameraSpeed.Val * Time.deltaTime;
-            transform.position += (transform.forward * moveY + transform.right * moveX);
-
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.RotateLeft))
-            {
-                RotateCameraYAxis(-90F);
-            }
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.RotateRight))
-            {
-                RotateCameraYAxis(90F);
-            }
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.ZoomMore))
-            {
-                ZoomMore();
-                PlayerPrefs.SetFloat("CameraZoom", GameControl.Settings.CameraZoom.Val);
-            }
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.ZoomLess))
-            {
-                ZoomLess();
-                PlayerPrefs.SetFloat("CameraZoom", GameControl.Settings.CameraZoom.Val);
-            }
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateFollow))
-            {
-                GameControl.Settings.FollowState = (GameControl.Settings.FollowState + 1) % 2;
-            }
-            if (GameControl.Settings.FollowEnabled == 1)
-            {
-                if (GameControl.Settings.FollowState == 1)
-                {
-                    if (GameControl.State.Player != null)
-                    {
-                        SetCameraHandlePosition(GameControl.State.Player.transform.position);
-                    }
-                }
-            }
+            MoveCameraUsingInput();
+            RotateCameraUsingInput();
+            ZoomCameraUsingInput();
+            De_activateFollowUsingInput();
         }
 
         private void ZoomMore()
@@ -90,12 +56,102 @@ namespace Players.Camera
                 transform.localPosition.z + transform.forward.z * GameControl.Settings.CameraZoom.Val * Mathf.Cos(GameControl.Settings.CameraAngle.Val * Mathf.PI / 180));
         }
 
+        public Vector3 GetWatchedPoint(Vector3 hypotheticalPosition)
+        {
+            return new Vector3(
+                hypotheticalPosition.x + transform.forward.x * GameControl.Settings.CameraZoom.Val * Mathf.Cos(GameControl.Settings.CameraAngle.Val * Mathf.PI / 180),
+                0F,
+                hypotheticalPosition.z + transform.forward.z * GameControl.Settings.CameraZoom.Val * Mathf.Cos(GameControl.Settings.CameraAngle.Val * Mathf.PI / 180));
+        }
+
         private void RotateCameraYAxis(float degrees)
         {
             var watchedPoint = GetWatchedPoint();
             transform.Rotate(0F, degrees, 0F);
             SetCameraHandlePosition(watchedPoint);
         }
+
+        private void SetWatchedPointInCameraRange(ref Vector3 newWatchedPoint)
+        {
+            Debug.Log(GameControl.Settings.CameraRange);
+            Debug.Log(newWatchedPoint);
+            if (newWatchedPoint.x < -GameControl.Settings.CameraRange)
+            {
+                newWatchedPoint.x = -GameControl.Settings.CameraRange + 0.1F;
+            }
+            if (newWatchedPoint.x > GameControl.Settings.CameraRange)
+            {
+                newWatchedPoint.x = GameControl.Settings.CameraRange - 0.1F;
+            }
+            if (newWatchedPoint.z < -GameControl.Settings.CameraRange)
+            {
+                newWatchedPoint.z = -GameControl.Settings.CameraRange + 0.1F;
+            }
+            if (newWatchedPoint.z > GameControl.Settings.CameraRange)
+            {
+                newWatchedPoint.z = GameControl.Settings.CameraRange - 0.1F;
+            }
+        }
+
+        private void MoveCameraUsingInput()
+        {
+            var inputX = Input.GetAxis("Horizontal");
+            var inputY = Input.GetAxis("Vertical");
+            var moveX = inputX * GameControl.Settings.CameraSpeed.Val * Time.deltaTime;
+            var moveY = inputY * GameControl.Settings.CameraSpeed.Val * Time.deltaTime;
+            var newWatchedPoint = GetWatchedPoint() + (transform.forward * moveY + transform.right * moveX);
+            SetWatchedPointInCameraRange(ref newWatchedPoint);
+            SetCameraHandlePosition(newWatchedPoint);
+        }
+
+        private void RotateCameraUsingInput()
+        {
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.RotateLeft))
+            {
+                RotateCameraYAxis(-90F);
+            }
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.RotateRight))
+            {
+                RotateCameraYAxis(90F);
+            }
+        }
+
+        private void ZoomCameraUsingInput()
+        {
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.ZoomMore))
+            {
+                ZoomMore();
+                PlayerPrefs.SetFloat("CameraZoom", GameControl.Settings.CameraZoom.Val);
+                //PlayerPrefs.Save(); // it makes nullexception, because some hotkeys arent assignet yet, but works without it probably too 
+            }
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.ZoomLess))
+            {
+                ZoomLess();
+                PlayerPrefs.SetFloat("CameraZoom", GameControl.Settings.CameraZoom.Val);
+                //PlayerPrefs.Save();
+            }
+        }
+
+        private void De_activateFollowUsingInput()
+        {
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateFollow))
+            {
+                GameControl.Settings.FollowState = (GameControl.Settings.FollowState + 1) % 2;
+                PlayerPrefs.SetInt(("FollowState"), (PlayerPrefs.GetInt("FollowState") + 1) % 2);
+                //PlayerPrefs.Save();
+            }
+            if (GameControl.Settings.FollowEnabled == 1)
+            {
+                if (GameControl.Settings.FollowState == 1)
+                {
+                    if (GameControl.State.Player != null)
+                    {
+                        SetCameraHandlePosition(GameControl.State.Player.transform.position);
+                    }
+                }
+            }
+        }
+
     }
 }
 

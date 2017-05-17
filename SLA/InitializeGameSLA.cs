@@ -55,7 +55,7 @@ namespace SLA
             GameControl.State.Player.transform.Find("Shield").gameObject.SetActive(true);
             if (GameControl.State.GodModeActive && !GameControl.State.Player.transform.Find("GodMode").gameObject.activeSelf)
             {
-                transform.Find("GodMode").gameObject.SetActive(true);
+                GameControl.State.Player.transform.Find("GodMode").gameObject.SetActive(true);
             }
             GameControl.State.IsImmobile = false;
             ControlSla.StopUpdate = false;

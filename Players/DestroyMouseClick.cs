@@ -14,7 +14,7 @@ namespace Players
 
         private IEnumerator DestroyAnimation()
         {
-            yield return new WaitForSeconds(1.66f);
+            yield return new WaitForSeconds(1.66f / 2);
             Destroy(gameObject);
         }
     }

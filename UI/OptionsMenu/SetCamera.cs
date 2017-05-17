@@ -57,19 +57,17 @@ namespace UI.OptionsMenu
 
         public void FollowCameraSelection(bool on)
         {
-            GameControl.Settings.FollowEnabled = _cameraFollowSelection.isOn ? 1 : 0;
+            GameControl.Settings.FollowEnabled = on ? 1 : 0;
         }
         
         public void SetSliderValuesFromSettings()
         {
             if (_cameraZoomSlider != null)
             {
-
                 _cameraZoomSlider.value = GameControl.Settings.CameraZoom.Val;
                 _cameraAngleSlider.value = GameControl.Settings.CameraAngle.Val;
                 _cameraSpeedSlider.value = GameControl.Settings.CameraSpeed.Val;
                 _cameraFollowSelection.isOn = GameControl.Settings.FollowEnabled == 1;
-
             }
         }
         
@@ -79,7 +77,8 @@ namespace UI.OptionsMenu
             PlayerPrefs.SetFloat("CameraZoom", GameControl.Settings.CameraZoom.Val);
             PlayerPrefs.SetFloat("CameraAngle", GameControl.Settings.CameraAngle.Val);
             PlayerPrefs.SetFloat("CameraSpeed", GameControl.Settings.CameraSpeed.Val);
-            PlayerPrefs.SetInt("CameraFollow", GameControl.Settings.FollowEnabled);
+            PlayerPrefs.SetInt("FollowState", GameControl.Settings.FollowState);
+            PlayerPrefs.SetInt("FollowEnabled", GameControl.Settings.FollowEnabled);
 
             PlayerPrefs.Save();
         }
