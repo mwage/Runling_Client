@@ -73,8 +73,6 @@ namespace Players.Camera
 
         private void SetWatchedPointInCameraRange(ref Vector3 newWatchedPoint)
         {
-            Debug.Log(GameControl.Settings.CameraRange);
-            Debug.Log(newWatchedPoint);
             if (newWatchedPoint.x < -GameControl.Settings.CameraRange)
             {
                 newWatchedPoint.x = -GameControl.Settings.CameraRange + 0.1F;
@@ -136,13 +134,11 @@ namespace Players.Camera
         {
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateFollow))
             {
-                GameControl.Settings.FollowState = (GameControl.Settings.FollowState + 1) % 2;
-                PlayerPrefs.SetInt(("FollowState"), (PlayerPrefs.GetInt("FollowState") + 1) % 2);
-                //PlayerPrefs.Save();
+                GameControl.Settings.FollowState = !GameControl.Settings.FollowState;
             }
             if (GameControl.Settings.FollowEnabled == 1)
             {
-                if (GameControl.Settings.FollowState == 1)
+                if (GameControl.Settings.FollowState)
                 {
                     if (GameControl.State.Player != null)
                     {

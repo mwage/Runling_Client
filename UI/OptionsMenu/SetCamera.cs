@@ -77,7 +77,6 @@ namespace UI.OptionsMenu
             PlayerPrefs.SetFloat("CameraZoom", GameControl.Settings.CameraZoom.Val);
             PlayerPrefs.SetFloat("CameraAngle", GameControl.Settings.CameraAngle.Val);
             PlayerPrefs.SetFloat("CameraSpeed", GameControl.Settings.CameraSpeed.Val);
-            PlayerPrefs.SetInt("FollowState", GameControl.Settings.FollowState);
             PlayerPrefs.SetInt("FollowEnabled", GameControl.Settings.FollowEnabled);
 
             PlayerPrefs.Save();

@@ -10,7 +10,7 @@ namespace Launcher
         public Limits CameraAngle = new Limits(10, 90, def: 90);
         public Limits CameraSpeed = new Limits(5, 50, def: 20);
         public int FollowEnabled;
-        public int FollowState;
+        public bool FollowState = true;
 
         public Settings()
         {
@@ -23,7 +23,6 @@ namespace Launcher
             CameraZoom.Val = PlayerPrefs.GetFloat("CameraZoom") > 0.01 ? PlayerPrefs.GetFloat("CameraZoom") : CameraZoom.Def;
             CameraAngle.Val = PlayerPrefs.GetFloat("CameraAngle") > 0.01 ? PlayerPrefs.GetFloat("CameraAngle") : CameraAngle.Def;
             CameraSpeed.Val = PlayerPrefs.GetFloat("CameraSpeed") > 0.01 ? PlayerPrefs.GetFloat("CameraSpeed") : CameraSpeed.Def;
-            FollowState = PlayerPrefs.GetInt("FollowState");
         }
     }
     
