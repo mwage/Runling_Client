@@ -28,6 +28,7 @@ namespace Players
         private Rigidbody _rb;
         private Coroutine _autoClickRoutine;
         private Animator _anim;
+        public GameObject MouseClick;
         private readonly int _speedHash = Animator.StringToHash("Speed");
 
         private void Start()
@@ -97,6 +98,9 @@ namespace Players
                 {
                     _maxSpeed = GameControl.State.MoveSpeed;
                     _clickPos = hit.point;
+
+                    Instantiate(MouseClick, _clickPos, Quaternion.identity);
+                    
                     if ((_clickPos - transform.position).magnitude > 0.05f)
                     {
                         _targetPos = _clickPos;
