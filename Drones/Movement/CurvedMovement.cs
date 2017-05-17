@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Drones
+namespace Drones.Movement
 {
     public class CurvedMovement : MonoBehaviour
     {

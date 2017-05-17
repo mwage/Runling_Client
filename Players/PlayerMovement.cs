@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
-using Assets.Scripts.Launcher;
+using Launcher;
 using UnityEngine;
 
-namespace Assets.Scripts.Players
+namespace Players
 {
     public class PlayerMovement : MonoBehaviour
     {
@@ -29,7 +29,6 @@ namespace Assets.Scripts.Players
         private Coroutine _autoClickRoutine;
         private Animator _anim;
         private readonly int _speedHash = Animator.StringToHash("Speed");
-
 
         private void Start()
         {
@@ -198,7 +197,7 @@ namespace Assets.Scripts.Players
         }
 
         // Rotate Player
-        void Rotate()
+        private void Rotate()
         {
             var lookRotation = _rb.transform.rotation.eulerAngles.y;
             int sign;

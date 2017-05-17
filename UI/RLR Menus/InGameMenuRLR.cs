@@ -1,8 +1,8 @@
-﻿using Assets.Scripts.Launcher;
+﻿using Launcher;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Assets.Scripts.UI.RLR_Menus
+namespace UI.RLR_Menus
 {
     public class InGameMenuRLR : MonoBehaviour {
 

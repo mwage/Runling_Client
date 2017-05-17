@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Drones
+namespace Drones.DroneTypes
 {
     public interface IDrone
     {

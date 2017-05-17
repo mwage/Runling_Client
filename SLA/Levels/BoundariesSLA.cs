@@ -1,6 +1,6 @@
-﻿using Assets.Scripts.Drones;
+﻿using Drones;
 
-namespace Assets.Scripts.SLA.Levels
+namespace SLA.Levels
 {
     public class BoundariesSLA
     {

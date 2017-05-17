@@ -1,8 +1,8 @@
-﻿using System.Collections;
-using Assets.Scripts.Drones;
+﻿using Drones.DroneTypes;
+using Drones.Pattern;
 using UnityEngine;
 
-namespace Assets.Scripts.SLA.Levels
+namespace SLA.Levels
 {
     public class Level8SLA : ALevelSLA
     {
@@ -22,17 +22,11 @@ namespace Assets.Scripts.SLA.Levels
             DroneFactory.SpawnAndAddDrones(new RandomDrone(6f, 1.5f, DroneColor.Red), 8, 8f, BoundariesSLA.BouncingSla);
 
             // Spawn Green Drones
-            DroneFactory.SetPattern(new Pat360Drones(numRays: 12, delay: 2.5f, repeat: true, clockwise: true,
-                    startRotation: -90, maxRotation: 180,
-                    pulseDelay: 5, reducePulseDelay: 0.05f, minPulseDelay: 2, changeDirection: true,
-                    addRays: 1, maxRays: 32, patternRepeats: 2, reduceDelay: 0.03f, minDelay: 1.5f),
+            DroneFactory.SetPattern(new Pat360Drones(12, 2.5f, true, true, -90, 180, 5, 0.05f, 2, null, true, 1, 32, 2, 0.03f, 1.5f),
                 new DefaultDrone(7, 1.5f, DroneColor.DarkGreen), posDelegate: delegate {
                     return new Vector3(0, 0.6f, BoundariesSLA.FlyingSla.BottomBoundary + (0.5f + 1.5f / 2)); });
 
-            DroneFactory.SetPattern(new Pat360Drones(numRays: 12, delay: 2.5f, repeat: true, clockwise: false,
-                    startRotation: -90, maxRotation: 180,
-                    pulseDelay: 5, reducePulseDelay: 0.05f, minPulseDelay: 2, initialDelay: 5, changeDirection: true,
-                    addRays: 1, maxRays: 32, patternRepeats: 2, reduceDelay: 0.03f, minDelay: 1.5f),
+            DroneFactory.SetPattern(new Pat360Drones(12, 2.5f, true, false, -90, 180, 5, 0.05f, 2, 5, true, 1, 32, 2, 0.03f, 1.5f),
                 new DefaultDrone(7, 1.5f, DroneColor.DarkGreen), posDelegate: delegate {
                     return new Vector3(0, 0.6f, BoundariesSLA.FlyingSla.TopBoundary - (0.5f + 1.5f / 2)); });
         }

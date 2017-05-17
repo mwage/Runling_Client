@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Drones
+namespace Drones.Movement
 {
     public class DroneMovement
     {
@@ -17,7 +17,6 @@ namespace Assets.Scripts.Drones
                 moveDelegate(drone, droneSpeed, curving, sinForce, sinFrequency);
             }
         }
-
 
         //move drones in a straight line
         public static void MoveStraight(GameObject drone, float droneSpeed)

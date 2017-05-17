@@ -1,8 +1,8 @@
-﻿using Assets.Scripts.Drones;
-using UnityEngine;
-using Assets.Scripts.Launcher;
+﻿using Drones.DroneTypes;
+using Drones.Movement;
+using Drones.Pattern;
 
-namespace Assets.Scripts.RLR.Levels
+namespace RLR.Levels.Normal
 {
     public class Level6RLR : ALevelRLR
     {
@@ -12,7 +12,7 @@ namespace Assets.Scripts.RLR.Levels
 
         public override void SetChasers()
         {
-            Manager.RunlingChaser.SetChaserPlatforms(new DefaultDrone(6, 1f, DroneColor.DarkGreen, moveDelegate: DroneMovement.ChaserMovement), new int[2] { 1, 8}, new int[2] { 4, 12});
+            Manager.RunlingChaser.SetChaserPlatforms(new DefaultDrone(6, 1f, DroneColor.DarkGreen, moveDelegate: DroneMovement.ChaserMovement), new[] { 1, 8}, new[] { 4, 12});
         }
 
         public override void CreateDrones()

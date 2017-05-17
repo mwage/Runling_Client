@@ -1,8 +1,8 @@
 ﻿using System;
-using Assets.Scripts.Launcher;
+using Launcher;
 using UnityEngine;
 
-namespace Assets.Scripts.Players
+namespace Players
 {
     public class MovementTest : MonoBehaviour
     {
@@ -21,7 +21,7 @@ namespace Assets.Scripts.Players
         private bool _stop;
         private Rigidbody _rb;
 
-        void Start()
+        private void Start()
         {
             _rb = GetComponent<Rigidbody>();
             _targetPos = transform.position;
@@ -114,7 +114,7 @@ namespace Assets.Scripts.Players
 
         private void OnCollisionStay(Collision collision)
         {
-            if (collision.collider.tag == "Wall")
+            if (collision.collider.CompareTag("Wall"))
             {
                 transform.position = transform.position + collision.contacts[0].normal * 0.05f;
                 if (Math.Abs(collision.contacts[0].normal.x) < PlayerMovement.ZeroTolerance)
@@ -141,7 +141,7 @@ namespace Assets.Scripts.Players
         }
 
         // Rotate Player
-        void Rotate()
+        private void Rotate()
         {
             var lookrotation = _targetPos - transform.position;
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookrotation), _rotationSpeed * Time.deltaTime);

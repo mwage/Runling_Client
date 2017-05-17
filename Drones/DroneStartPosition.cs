@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Drones
+namespace Drones
 {
     public delegate Vector3 StartPositionDelegate(float size, Area boundary);
 

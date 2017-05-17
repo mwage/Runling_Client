@@ -1,5 +1,6 @@
-﻿
-namespace Assets.Scripts.Launcher
+﻿using UI;
+
+namespace Launcher
 {
     public class GameControl : Singleton<GameControl>{
 

@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using Drones.Movement;
+using UnityEngine;
 
-namespace Assets.Scripts.Drones
+namespace Drones.DroneTypes
 {
     public abstract class ADrone : IDrone
     {

@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using Assets.Scripts.Drones;
-using Assets.Scripts.Launcher;
-using UnityEngine;
+﻿using Drones.DroneTypes;
+using Drones.Movement;
+using Drones.Pattern;
 
-namespace Assets.Scripts.RLR.Levels
+namespace RLR.Levels.Hard
 {
     public class Level8HardRLR : ALevelRLR
     {
@@ -13,15 +12,13 @@ namespace Assets.Scripts.RLR.Levels
 
         public override void SetChasers()
         {
-            Manager.RunlingChaser.SetChaserPlatforms(new DefaultDrone(9f, 1f, DroneColor.DarkGreen, moveDelegate: DroneMovement.ChaserMovement), new int[2] { 1, 8}, new int[2] { 4, 12});
+            Manager.RunlingChaser.SetChaserPlatforms(new DefaultDrone(9f, 1f, DroneColor.DarkGreen, moveDelegate: DroneMovement.ChaserMovement), new[] { 1, 8}, new[] { 4, 12});
         }
 
         public override void CreateDrones()
         {
-            Area[] laneArea = Manager.GenerateMapRLR.GetDroneSpawnArea();
-
             // Spawn red drones
-            DroneFactory.SpawnDrones(new RedDrone(17, 2, DroneColor.Red, 3, laneArea[0]), 80);
+            DroneFactory.SpawnDrones(new RedDrone(17, 2, DroneColor.Red, 3, LaneArea[0]), 80);
 
             // Spawn yellow drones
             DroneFactory.SetPattern(new Pat360Drones(32, 3, true, startRotation: -90),

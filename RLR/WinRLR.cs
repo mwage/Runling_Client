@@ -1,9 +1,8 @@
-﻿using Assets.Scripts.Launcher;
+﻿using Launcher;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
-namespace Assets.Scripts.RLR
+namespace RLR
 {
     public class WinRLR : MonoBehaviour
     {

@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+﻿using Launcher;
+using Players.Camera;
+using UnityEngine;
 using UnityEngine.UI;
-using Assets.Scripts.Launcher;
-using Assets.Scripts.Players.Camera;
 
-namespace Assets.Scripts.UI.OptionsMenu
+namespace UI.OptionsMenu
 {
     public class SetCamera : MonoBehaviour
     {
@@ -50,21 +50,14 @@ namespace Assets.Scripts.UI.OptionsMenu
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
             GameControl.InputManager.RebindHotkeyIfNeed();
         }
 
         public void FollowCameraSelection(bool on)
         {
-            if (_cameraFollowSelection.isOn )
-            {
-                GameControl.Settings.FollowEnabled = 1; // tru
-            }
-            else
-            {
-                GameControl.Settings.FollowEnabled = 0;
-            }
+            GameControl.Settings.FollowEnabled = _cameraFollowSelection.isOn ? 1 : 0;
         }
         
         public void SetSliderValuesFromSettings()

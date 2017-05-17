@@ -1,12 +1,11 @@
-﻿using Assets.Scripts.Launcher;
+﻿using Launcher;
 using UnityEngine;
 
-namespace Assets.Scripts.Players.Camera
+namespace Players.Camera
 {
     public class CameraMovement : MonoBehaviour
     {
-
-        void Start ()
+        private void Start ()
         {
             SetCameraPitch(GameControl.Settings.CameraAngle.Val);
         }
@@ -15,7 +14,5 @@ namespace Assets.Scripts.Players.Camera
         {
             transform.rotation = Quaternion.Euler(pitchAngle, 0, 0);
         }
-
-
     }
 }

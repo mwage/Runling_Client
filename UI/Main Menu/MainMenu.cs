@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
-using Assets.Scripts.Launcher;
-using UnityEngine.SceneManagement;
 
-namespace Assets.Scripts.UI.Main_Menu
+namespace UI.Main_Menu
 {
     public class MainMenu : MonoBehaviour
     {
@@ -12,7 +10,6 @@ namespace Assets.Scripts.UI.Main_Menu
         public SLAMenu SLAMenu;
         public GameObject RLRMenuObject;
         public RLRMenu RLRMenu;
-
 
         public void SLA()
         {

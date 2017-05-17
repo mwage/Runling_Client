@@ -1,13 +1,10 @@
-﻿using UnityEngine;
+﻿using Drones.DroneTypes;
+using UnityEngine;
 
-namespace Assets.Scripts.Drones
+namespace Drones.Pattern
 {
     public abstract class APattern : IPattern
     {
-        protected APattern()
-        {
-        }
-
         public abstract void SetPattern(DroneFactory factory, IDrone drone, Area area, StartPositionDelegate posDelegate = null);
 
         public virtual void AddPattern(DroneFactory factory, GameObject drone, IDrone addedDrone, Area area)

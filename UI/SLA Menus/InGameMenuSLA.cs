@@ -1,8 +1,8 @@
-﻿using Assets.Scripts.Launcher;
+﻿using Launcher;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Assets.Scripts.UI.SLA_Menus
+namespace UI.SLA_Menus
 {
     public class InGameMenuSLA : MonoBehaviour {
 

@@ -1,7 +1,8 @@
 ﻿using System.Collections;
+using Drones.DroneTypes;
 using UnityEngine;
 
-namespace Assets.Scripts.Drones {
+namespace Drones.Pattern {
     public class PatContinuousSpawn : APattern
     {
         protected readonly float Delay;
@@ -26,7 +27,7 @@ namespace Assets.Scripts.Drones {
             factory.StartCoroutine(GenerateDrones(factory, addedDrone, delegate { return Vector3.zero; }, drone));
         }
 
-        IEnumerator GenerateDrones(DroneFactory factory, IDrone drone, StartPositionDelegate posDelegate, GameObject parentDrone = null)
+        private IEnumerator GenerateDrones(DroneFactory factory, IDrone drone, StartPositionDelegate posDelegate, GameObject parentDrone = null)
         {
             var addPattern = parentDrone != null;
             while (true)

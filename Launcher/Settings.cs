@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Launcher
+namespace Launcher
 {
     public class Settings
     {

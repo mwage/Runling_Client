@@ -1,12 +1,13 @@
 ﻿using System.Collections;
-using Assets.Scripts.Launcher;
-using Assets.Scripts.Players.Camera;
-using Assets.Scripts.UI.SLA_Menus;
+using Launcher;
+using Players.Camera;
+using SLA.Levels;
 using TMPro;
+using UI.SLA_Menus;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.SLA
+namespace SLA
 {
     public class InitializeGameSLA : MonoBehaviour {
 
@@ -23,14 +24,13 @@ namespace Assets.Scripts.SLA
         public Text CurrentPr;
         public CameraHandleMovement CameraHandleMovement;
 
-
         //set Spawnimmunity once game starts
         public void InitializeGame()
         {
             StartCoroutine(PrepareLevel());
         }
 
-        IEnumerator PrepareLevel()
+        private IEnumerator PrepareLevel()
         {
             // Set current movespeed and cameraposition
             GameControl.State.MoveSpeed = LevelManagerSla.GetMovementSpeed(GameControl.State.CurrentLevel);
@@ -73,7 +73,6 @@ namespace Assets.Scripts.SLA
             GameControl.State.Player.transform.Find("Shield").gameObject.SetActive(false);
             GameControl.State.IsInvulnerable = false;
             ScoreSla.StartScore();
-            
         }
     }
 }

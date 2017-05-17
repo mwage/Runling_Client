@@ -1,7 +1,7 @@
-﻿using Assets.Scripts.Launcher;
+﻿using Launcher;
 using UnityEngine;
 
-namespace Assets.Scripts.SLA
+namespace SLA
 {
     public class DeathSLA : MonoBehaviour
     {

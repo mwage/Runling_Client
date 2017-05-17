@@ -1,9 +1,9 @@
-﻿using Assets.Scripts.Drones;
-using Assets.Scripts.Launcher;
-using Assets.Scripts.RLR.GenerateMap;
-using UnityEngine;
+﻿using Drones;
+using Drones.DroneTypes;
+using Drones.Movement;
+using RLR.GenerateMap;
 
-namespace Assets.Scripts.RLR.Levels
+namespace RLR.Levels
 {
     public abstract class ALevelRLR : ILevelRLR
     {
@@ -11,6 +11,8 @@ namespace Assets.Scripts.RLR.Levels
         protected readonly DroneFactory DroneFactory;
         protected readonly GenerateMapRLR GenerateMapRLR;
         protected readonly RunlingChaser RunlingChaser;
+
+        protected Area[] LaneArea;
 
         protected ALevelRLR(LevelManagerRLR manager)
         {
@@ -25,6 +27,7 @@ namespace Assets.Scripts.RLR.Levels
         public virtual void GenerateMap()
         {
             GenerateMapRLR.GenerateMap(15,new float[] {8,6,8,6,8}, 1.2f, 0.3f, SetAirCollider());
+            LaneArea = GenerateMapRLR.GetDroneSpawnArea();
         }
 
         protected virtual float SetAirCollider()

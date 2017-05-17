@@ -1,5 +1,5 @@
 ﻿
-namespace Assets.Scripts.SLA.Levels
+namespace SLA.Levels
 {
     internal interface ILevelSLA
     {

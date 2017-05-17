@@ -1,56 +1,55 @@
-﻿using UnityEngine;
-using System.Collections;
-using UnityEngine.UI;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class SceneLoader : MonoBehaviour {
+namespace UI
+{
+    public class SceneLoader : MonoBehaviour {
 
-	private bool _loadScene;
-	private Text _loadingText;
+        private bool _loadScene;
+        private Text _loadingText;
 
-    void Awake()
-    {
-        _loadingText = GetComponentInChildren<Text>();
-    }
-
-
-	void Update() {
-		// If the new scene has started loading...
-		if (_loadScene)
+        private void Awake()
         {
-			// ...then pulse the transparency of the loading text to let the player know that the computer is still working.
-			_loadingText.color = new Color(_loadingText.color.r, _loadingText.color.g, _loadingText.color.b, Mathf.PingPong(Time.time, 0.5f));
-		}
-	}
+            _loadingText = GetComponentInChildren<Text>();
+        }
 
-	public void LoadScene(string sceneName, float minDelay)
-    {
-        gameObject.SetActive(true);
-		// ...set the loadScene boolean to true to prevent loading a new scene more than once...
-		_loadScene = true;
+        private void Update() {
+            // If the new scene has started loading...
+            if (_loadScene)
+            {
+                // ...then pulse the transparency of the loading text to let the player know that the computer is still working.
+                _loadingText.color = new Color(_loadingText.color.r, _loadingText.color.g, _loadingText.color.b, Mathf.PingPong(Time.time, 0.5f));
+            }
+        }
 
-		// ...change the instruction text to read "Loading..."
-		_loadingText.text = "Loading " + sceneName + "...";
+        public void LoadScene(string sceneName, float minDelay)
+        {
+            gameObject.SetActive(true);
+            // ...set the loadScene boolean to true to prevent loading a new scene more than once...
+            _loadScene = true;
 
-		// ...and start a coroutine that will load the desired scene.
-		StartCoroutine(LoadNewScene(sceneName, minDelay));
+            // ...change the instruction text to read "Loading..."
+            _loadingText.text = "Loading " + sceneName + "...";
 
-	}
+            // ...and start a coroutine that will load the desired scene.
+            StartCoroutine(LoadNewScene(sceneName, minDelay));
 
+        }
 
-	// The coroutine runs on its own at the same time as Update() and takes an integer indicating which scene to load.
-    private IEnumerator LoadNewScene(string sceneName, float minDelay)
-    {
-		yield return new WaitForSeconds(minDelay);
+        // The coroutine runs on its own at the same time as Update() and takes an integer indicating which scene to load.
+        private static IEnumerator LoadNewScene(string sceneName, float minDelay)
+        {
+            yield return new WaitForSeconds(minDelay);
 
-		// Start an asynchronous operation to load the scene that was passed to the LoadNewScene coroutine.
-		AsyncOperation async = SceneManager.LoadSceneAsync(sceneName);
+            // Start an asynchronous operation to load the scene that was passed to the LoadNewScene coroutine.
+            var async = SceneManager.LoadSceneAsync(sceneName);
 
-		// While the asynchronous operation to load the new scene is not yet complete, continue waiting until it's done.
-		while (!async.isDone) {
-			yield return null;
-		}
-
-	}
-
+            // While the asynchronous operation to load the new scene is not yet complete, continue waiting until it's done.
+            while (!async.isDone) {
+                yield return null;
+            }
+        }
+    }
 }

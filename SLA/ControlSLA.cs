@@ -1,7 +1,8 @@
-﻿using Assets.Scripts.Launcher;
+﻿using Launcher;
+using SLA.Levels;
 using UnityEngine;
 
-namespace Assets.Scripts.SLA
+namespace SLA
 {
     public class ControlSLA : MonoBehaviour
     {
@@ -13,7 +14,7 @@ namespace Assets.Scripts.SLA
 
         public bool StopUpdate;
 
-        void Start()
+        private void Start()
         {
             // Set current Level and movespeed, load drones and spawn immunity
             StopUpdate = true;
@@ -26,7 +27,6 @@ namespace Assets.Scripts.SLA
             }
             InitializeGameSLA.InitializeGame();
         }
-
 
         private void Update()
         {
@@ -46,7 +46,6 @@ namespace Assets.Scripts.SLA
                 //dont repeat above once player dead
                 StopUpdate = true;
             }
-
 
             // Press Ctrl to start autoclicking
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateClicker))

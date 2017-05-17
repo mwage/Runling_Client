@@ -1,9 +1,10 @@
 ﻿using System.Collections;
-using Assets.Scripts.Launcher;
+using Launcher;
+using SLA.Levels;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.SLA
+namespace SLA
 {
     public class ScoreSLA : MonoBehaviour
     {
@@ -29,8 +30,8 @@ namespace Assets.Scripts.SLA
             GameControl.State.TotalScore -= 2;
             StartCoroutine(AddScore());
         }
-    
-        IEnumerator AddScore()
+
+        private IEnumerator AddScore()
         {
             while (GameControl.State.IsDead == false)
             {
@@ -46,7 +47,7 @@ namespace Assets.Scripts.SLA
         //message that you got a new highscore
         public void NewHighScoreSLA()
         {
-            NewHighScore.text = "New Highscore: " + CurrentScore.ToString();
+            NewHighScore.text = "New Highscore: " + CurrentScore;
             HighScore.SetActive(true);
         }
 

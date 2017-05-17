@@ -1,8 +1,8 @@
-﻿using Assets.Scripts.Launcher;
-using Assets.Scripts.UI.SLA_Menus;
+﻿using Launcher;
+using UI.SLA_Menus;
 using UnityEngine;
 
-namespace Assets.Scripts.UI.Main_Menu
+namespace UI.Main_Menu
 {
     public class SLAMenu : MonoBehaviour {
 

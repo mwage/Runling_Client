@@ -1,7 +1,8 @@
-﻿using Assets.Scripts.Launcher;
+﻿using Launcher;
+using RLR.Levels;
 using UnityEngine;
 
-namespace Assets.Scripts.RLR
+namespace RLR
 {
     public class ControlRLR : MonoBehaviour
     {
@@ -12,7 +13,7 @@ namespace Assets.Scripts.RLR
 
         public bool StopUpdate;
 
-        void Start()
+        private void Start()
         {
             // Set current Level and movespeed, load drones and spawn immunity
             StopUpdate = true;
@@ -40,21 +41,21 @@ namespace Assets.Scripts.RLR
                 LevelManager.EndLevel(0f);
             }
 
-            // Press Ctrl to start autoclicking
+            // Start autoclicking
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateClicker))
             {
                 if (!GameControl.State.AutoClickerActive)
                     GameControl.State.AutoClickerActive = true;
             }
 
-            // Press Alt to stop autoclicking
+            // Stop autoclicking
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactivateClicker))
             {
                 if (GameControl.State.AutoClickerActive)
                     GameControl.State.AutoClickerActive = false;
             }
 
-            // Press 1 to be invulnerable
+            // Become invulnerable
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.State.GodModeActive)
             {
                 GameControl.State.GodModeActive = true;
@@ -64,7 +65,7 @@ namespace Assets.Scripts.RLR
                 }
             }
 
-            // Press 2 to be vulnerable
+            // Become vulnerable
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactiveGodmode) && GameControl.State.GodModeActive)
             {
                 GameControl.State.GodModeActive = false;

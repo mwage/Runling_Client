@@ -1,10 +1,11 @@
 ﻿using System.Collections;
-using Assets.Scripts.Launcher;
-using Assets.Scripts.Players;
+using Launcher;
+using Players;
+using RLR.Levels;
 using TMPro;
 using UnityEngine;
 
-namespace Assets.Scripts.RLR
+namespace RLR
 {
     public class DeathRLR : MonoBehaviour
     {
@@ -17,17 +18,18 @@ namespace Assets.Scripts.RLR
             GameControl.State.Player.SetActive(false);
 
 
-            if (GameControl.State.SetGameMode == Gamemode.Classic)
+            switch (GameControl.State.SetGameMode)
             {
-                manager.EndGame(0.1f);
-            }
-            else if (GameControl.State.SetGameMode == Gamemode.Practice)
-            {
-                StartCoroutine(Respawn(1, initializeGame, control));
+                case Gamemode.Classic:
+                    manager.EndGame(0.1f);
+                    break;
+                case Gamemode.Practice:
+                    StartCoroutine(Respawn(1, initializeGame, control));
+                    break;
             }
         }
 
-        IEnumerator Respawn(float delay, InitializeGameRLR initializeGame, ControlRLR control)
+        private static IEnumerator Respawn(float delay, InitializeGameRLR initializeGame, ControlRLR control)
         {
             yield return new WaitForSeconds(2f);
             GameControl.State.Player.SetActive(true);

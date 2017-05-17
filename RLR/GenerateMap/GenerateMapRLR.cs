@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using Assets.Scripts.Drones;
+using Drones;
 
-namespace Assets.Scripts.RLR.GenerateMap
+namespace RLR.GenerateMap
 {
     public class GenerateMapRLR : MonoBehaviour
     {
@@ -20,10 +20,10 @@ namespace Assets.Scripts.RLR.GenerateMap
         protected List<GameObject> SafeZones ;
         protected List<GameObject> AirCollider ;
 
-        public void GenerateMap(int centerSize, float[] lanesWidth, float gapBetweenLines, float wallSize, float AirColliderOffset)
+        public void GenerateMap(int centerSize, float[] lanesWidth, float gapBetweenLines, float wallSize, float airColliderOffset)
         {
             var centerSizeHalf = centerSize / 2;
-            _flyingDroneColliderOffset = AirColliderOffset;
+            _flyingDroneColliderOffset = airColliderOffset;
 
             SafeZones = new List<GameObject>();
             AirCollider = new List<GameObject>();
@@ -103,7 +103,7 @@ namespace Assets.Scripts.RLR.GenerateMap
             ALane.ColliderWallSize = colliderWidth;
         }
 
-        private List<ALane> CalculateLanesParameters(int spiralsAmount, float[] linesWidth, float gap, float centerSize)
+        private static List<ALane> CalculateLanesParameters(int spiralsAmount, float[] linesWidth, float gap, float centerSize)
         {
             var lanes = new List<ALane>
             {
@@ -146,7 +146,7 @@ namespace Assets.Scripts.RLR.GenerateMap
             return lanes;
         }
 
-        private List<GameObject> CreateFlyingDroneColliders(IList<ALane> lanes, GameObject flyingDroneCollider, float flyingDroneColliderOffset, Transform terrain)
+        private static List<GameObject> CreateFlyingDroneColliders(IList<ALane> lanes, GameObject flyingDroneCollider, float flyingDroneColliderOffset, Transform terrain)
         {
             var flyingDroneColliders = new List<GameObject>();
             var colliderLen = lanes[lanes.Count - 1].Sc + new Vector3(2 * lanes[lanes.Count - 1].LaneWidth + 2 * flyingDroneColliderOffset, 10f, 0f);

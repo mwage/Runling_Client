@@ -1,8 +1,8 @@
-﻿using Assets.Scripts.UI.SLA_Menus;
-using Assets.Scripts.Launcher;
+﻿using Launcher;
+using UI.SLA_Menus;
 using UnityEngine;
 
-namespace Assets.Scripts.UI.Main_Menu
+namespace UI.Main_Menu
 {
     public class MainMenuManager : MonoBehaviour
     {
@@ -15,7 +15,6 @@ namespace Assets.Scripts.UI.Main_Menu
         public GameObject SLAMenuObject;
         public GameObject HighScoreMenuObject;
 
-
         private void Awake()
         {
             OptionsMenu.OptionsMenuActive = false;
@@ -23,7 +22,7 @@ namespace Assets.Scripts.UI.Main_Menu
             HighScoreMenuSLA.HighScoreMenuActive = false;
         }
 
-        void Update()
+        private void Update()
         {
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.NavigateMenu))
             {

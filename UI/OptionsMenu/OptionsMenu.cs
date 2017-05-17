@@ -1,9 +1,9 @@
 ﻿using System;
-using Assets.Scripts.Launcher;
-using Assets.Scripts.Players.Camera;
+using Launcher;
+using Players.Camera;
 using UnityEngine;
 
-namespace Assets.Scripts.UI.OptionsMenu
+namespace UI.OptionsMenu
 {
     public class OptionsMenu : MonoBehaviour
     {
@@ -33,8 +33,6 @@ namespace Assets.Scripts.UI.OptionsMenu
             OptionsMenuActive = false;
             gameObject.SetActive(false);
             Menu.gameObject.SetActive(true);
-            
-
         }
 
         public void SaveChanges()

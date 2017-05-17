@@ -1,7 +1,7 @@
-﻿using Assets.Scripts.Drones;
-using UnityEngine;
+﻿using Drones.DroneTypes;
+using Drones.Pattern;
 
-namespace Assets.Scripts.RLR.Levels
+namespace RLR.Levels.Normal
 {
     public class Level9RLR : ALevelRLR
     {
@@ -11,18 +11,16 @@ namespace Assets.Scripts.RLR.Levels
 
         public override void CreateDrones()
         {
-            Area[] laneArea = Manager.GenerateMapRLR.GetDroneSpawnArea();
-
             // Spawn bouncing drones
-            for (var i = 1; i < laneArea.Length - 2; i++)
+            for (var i = 1; i < LaneArea.Length - 2; i++)
             {
-                DroneFactory.SpawnDrones(new RandomDrone(5, 2f, DroneColor.Grey), (int)(9 - i * 0.35f), area: laneArea[i]);
+                DroneFactory.SpawnDrones(new RandomDrone(5, 2f, DroneColor.Grey), (int)(9 - i * 0.35f), area: LaneArea[i]);
             }
-            DroneFactory.SpawnDrones(new RandomDrone(5, 2f, DroneColor.Grey), 3, area: laneArea[19]);
-            DroneFactory.SpawnDrones(new RandomDrone(5, 2f, DroneColor.Grey), 2, area: laneArea[20]);
+            DroneFactory.SpawnDrones(new RandomDrone(5, 2f, DroneColor.Grey), 3, area: LaneArea[19]);
+            DroneFactory.SpawnDrones(new RandomDrone(5, 2f, DroneColor.Grey), 2, area: LaneArea[20]);
 
             // Spawn red drones
-            DroneFactory.SpawnDrones(new RedDrone(13, 2, DroneColor.Red, 3, laneArea[0]), 50);
+            DroneFactory.SpawnDrones(new RedDrone(13, 2, DroneColor.Red, 3, LaneArea[0]), 50);
 
             // Spawn blue drones
             DroneFactory.SetPattern(new Pat360Drones(32, 10, true, true, 270), new DefaultDrone(8, 2, DroneColor.Blue));

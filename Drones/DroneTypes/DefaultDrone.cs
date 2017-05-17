@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using Object = UnityEngine.Object;
+﻿using Drones.Movement;
+using UnityEngine;
 
-namespace Assets.Scripts.Drones
+namespace Drones.DroneTypes
 {
     public class DefaultDrone : ADrone
     {

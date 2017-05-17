@@ -1,13 +1,13 @@
 ﻿using System.Collections;
-using Assets.Scripts.Launcher;
-using Assets.Scripts.Players;
-using Assets.Scripts.Players.Camera;
+using Launcher;
+using Players;
+using Players.Camera;
+using RLR.Levels;
 using TMPro;
+using UI.RLR_Menus;
 using UnityEngine;
-using Assets.Scripts.UI.RLR_Menus;
 
-
-namespace Assets.Scripts.RLR
+namespace RLR
 {
     public class InitializeGameRLR : MonoBehaviour
     {
@@ -30,7 +30,7 @@ namespace Assets.Scripts.RLR
             StartCoroutine(PrepareLevel());
         }
 
-        IEnumerator PrepareLevel()
+        private IEnumerator PrepareLevel()
         {
             LevelManagerRLR.GenerateMap(GameControl.State.CurrentLevel);
 
@@ -58,9 +58,9 @@ namespace Assets.Scripts.RLR
             LevelTextObject.SetActive(true);
             yield return new WaitForSeconds(0.2f);
             LevelTextObject.SetActive(false);
-  
+
             yield return new WaitForSeconds(0.1f);
-                   
+
             // Countdown
             for (var i = 0; i < 3; i++)
             {

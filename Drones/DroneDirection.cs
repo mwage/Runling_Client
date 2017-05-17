@@ -1,17 +1,15 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Drones
+namespace Drones
 {
     public class DroneDirection {
-
-
 
         // Generates a random direction
         public static float RandomDirection(float restrictedZone, float? coneRange = null)
         {
             bool droneAngle;
             float randomDir;
-            float range = coneRange ?? 360;
+            var range = coneRange ?? 360;
 
             do
             {

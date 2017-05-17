@@ -1,9 +1,10 @@
-﻿using Assets.Scripts.Launcher;
-using Assets.Scripts.SLA;
+﻿using Launcher;
+using SLA;
+using SLA.Levels;
 using TMPro;
 using UnityEngine;
 
-namespace Assets.Scripts.UI.SLA_Menus
+namespace UI.SLA_Menus
 {
     public class HighScoreMenuSLA : MonoBehaviour {
 
@@ -11,14 +12,12 @@ namespace Assets.Scripts.UI.SLA_Menus
         public GameObject ScorePrefab;
         public GameObject Background;
         public ScoreSLA ScoreSLA;
-        
 
         public bool HighScoreMenuActive;
         private GameObject _descriptionText;
-        private GameObject[] _levelScore = new GameObject[LevelManagerSLA.NumLevels];
+        private readonly GameObject[] _levelScore = new GameObject[LevelManagerSLA.NumLevels];
         private GameObject _gameScore;
         private GameObject _combinedScore;
-
 
         private void Awake()
         {
@@ -32,8 +31,6 @@ namespace Assets.Scripts.UI.SLA_Menus
 
         public void CreateTextObjects(GameObject background)
         {
-
-
             // Descriptions
             _descriptionText = Instantiate(ScorePrefab, background.transform);
             _descriptionText.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Level";
@@ -107,7 +104,6 @@ namespace Assets.Scripts.UI.SLA_Menus
                 _combinedScore.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
             }
         }
-        
 
         public void Back()
         {

@@ -1,7 +1,8 @@
 ﻿using System.Collections;
+using Drones.DroneTypes;
 using UnityEngine;
 
-namespace Assets.Scripts.Drones
+namespace Drones.Pattern
 {
     public class PatGridDrones : APattern
     {
@@ -22,7 +23,7 @@ namespace Assets.Scripts.Drones
             factory.StartCoroutine(GenerateVerticalGridDrones(drone, DroneCount, Delay, area, factory, AddDrones));
         }
         
-        private IEnumerator GenerateHorizontalGridDrones(IDrone drone, int droneCount, float delay, Area area, DroneFactory factory, bool addDrones)
+        private static IEnumerator GenerateHorizontalGridDrones(IDrone drone, int droneCount, float delay, Area area, DroneFactory factory, bool addDrones)
         {
             var height = area.TopBoundary - (0.5f + drone.Size / 2);
             var length = area.RightBoundary - (0.5f + drone.Size / 2);
@@ -52,7 +53,7 @@ namespace Assets.Scripts.Drones
             }
         }
 
-        private IEnumerator GenerateVerticalGridDrones(IDrone drone, int droneCount, float delay, Area area, DroneFactory factory, bool addDrones)
+        private static IEnumerator GenerateVerticalGridDrones(IDrone drone, int droneCount, float delay, Area area, DroneFactory factory, bool addDrones)
         {
             var height = area.TopBoundary - (0.5f + drone.Size / 2);
             var lenght = area.RightBoundary - (0.5f + drone.Size / 2);

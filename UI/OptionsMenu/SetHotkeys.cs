@@ -1,13 +1,12 @@
-﻿using UnityEngine;
-using Assets.Scripts.Launcher;
+﻿using Launcher;
+using UnityEngine;
 
-namespace Assets.Scripts.UI.OptionsMenu
+namespace UI.OptionsMenu
 {
     public class SetHotkeys : MonoBehaviour
     {
         public GameObject SetHotkeyPrefab;
         public GameObject HotkeyList;
-
 
         private void OnEnable()
         {
@@ -23,7 +22,7 @@ namespace Assets.Scripts.UI.OptionsMenu
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
             GameControl.InputManager.RebindHotkeyIfNeed();
         }
@@ -37,4 +36,3 @@ namespace Assets.Scripts.UI.OptionsMenu
         }
     }
 }
-

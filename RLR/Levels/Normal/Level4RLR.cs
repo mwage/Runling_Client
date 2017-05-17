@@ -1,7 +1,6 @@
-﻿using Assets.Scripts.Drones;
-using UnityEngine;
+﻿using Drones.DroneTypes;
 
-namespace Assets.Scripts.RLR.Levels
+namespace RLR.Levels.Normal
 {
     public class Level4RLR : ALevelRLR
     {
@@ -11,10 +10,8 @@ namespace Assets.Scripts.RLR.Levels
 
         public override void CreateDrones()
         {
-            Area[] laneArea = Manager.GenerateMapRLR.GetDroneSpawnArea();
-
             // Spawn red drones
-            DroneFactory.SpawnDrones(new RedDrone(10, 1, DroneColor.Red, 3, laneArea[0]), 80);
+            DroneFactory.SpawnDrones(new RedDrone(10, 1, DroneColor.Red, 3, LaneArea[0]), 80);
         }
     }
 }

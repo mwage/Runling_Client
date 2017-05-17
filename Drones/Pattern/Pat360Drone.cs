@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
+using Drones.DroneTypes;
 using UnityEngine;
 
-namespace Assets.Scripts.Drones
+namespace Drones.Pattern
 {
     public class Pat360Drones : APattern
     {
@@ -59,7 +58,6 @@ namespace Assets.Scripts.Drones
         {
             factory.StartCoroutine(Generate360Drones(factory, addedDrone, area, delegate { return Vector3.zero; }, drone));
         }
-
 
         private IEnumerator Generate360Drones(DroneFactory factory, IDrone drone, Area area, StartPositionDelegate posDelegate, GameObject parentDrone = null)
         {

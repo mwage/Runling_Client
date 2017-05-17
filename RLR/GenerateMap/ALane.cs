@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.RLR.GenerateMap
+namespace RLR.GenerateMap
 {
     public abstract class ALane
     {
@@ -35,23 +35,23 @@ namespace Assets.Scripts.RLR.GenerateMap
             {
                 foreach (Transform ch in child)
                 {
-                    Vector3 localPos = ch.transform.localPosition;
-                    Vector3 localScale = ch.transform.localScale;
+                    var localPos = ch.transform.localPosition;
+                    var localScale = ch.transform.localScale;
 
                     // Scale ground
-                    if (ch.tag == "Ground")
+                    if (ch.CompareTag("Ground"))
                     {
                         ch.transform.localScale = new Vector3(LaneLength, localScale.y, LaneWidth);
                     }
 
                     // Position and scale walls and colliders
-                    if (ch.tag == "Top")
+                    if (ch.CompareTag("Top"))
                     {
                         ch.transform.localScale = new Vector3(LaneLength, localScale.y, WallSize);
                         ch.transform.localPosition = new Vector3(0, localPos.y, (LaneWidth + WallSize) / 2);
                         SetWallTexture(ch);
                     }
-                    else if (ch.tag == "Bottom")
+                    else if (ch.CompareTag("Bottom"))
                     {
                         ch.transform.localScale = new Vector3(LaneLength, localScale.y, WallSize);
                         ch.transform.localPosition = new Vector3(0, localPos.y, -(LaneWidth + WallSize) / 2);
@@ -72,26 +72,26 @@ namespace Assets.Scripts.RLR.GenerateMap
                 foreach (Transform ch in child)
                 {
                     // Scale walls and colliders
-                    if (ch.tag == "Top") 
+                    if (ch.CompareTag("Top")) 
                     {
                         SetDroneCollider(ch, child, 0F, (LaneWidth + ColliderWallSize) / 2, nextLineWidth, WallSize);
                         SetWallOrPlayerCollider(ch, child, 0F, (LaneWidth + WallSize) / 2, nextLineWidth, WallSize);
                     }
 
-                    else if (ch.tag == "Right")
+                    else if (ch.CompareTag("Right"))
                     {
                         SetDroneCollider(ch, child, (nextLineWidth - WallSize) / 2, 0F, ColliderWallSize, LaneWidth);
                     }
                     // scale individual 
                     
-                    else if (ch.tag == "Bottom")
+                    else if (ch.CompareTag("Bottom"))
                     {
                         SetDroneCollider(ch, child, 0F, -(LaneWidth  - WallSize ) / 2, nextLineWidth, ColliderWallSize);
                         SetWallOrPlayerCollider(ch, child, -WallSize/2, -(LaneWidth  + WallSize) / 2, nextLineWidth + WallSize, ColliderWallSize);
 
                     }
 
-                    else if (ch.tag == "Left")
+                    else if (ch.CompareTag("Left"))
                     {
                         SetWallOrPlayerCollider(ch, child, -(nextLineWidth + WallSize) / 2, WallSize/2, WallSize, LaneWidth+WallSize);
                         SetDroneCollider(ch, child, -(nextLineWidth + WallSize) / 2, 0F, WallSize, LaneWidth);
@@ -99,13 +99,13 @@ namespace Assets.Scripts.RLR.GenerateMap
 
                     // Scale ground
                     // suitable for standards, 2nd of center
-                    if (ch.tag == "Ground" || ch.tag == "SafeZone")
+                    if (ch.CompareTag("Ground") || ch.CompareTag("SafeZone"))
                     {
                         SetWallOrPlayerCollider(ch, child, 0F, 0F, nextLineWidth, LaneWidth);
                     }
 
                     // Set material tiling
-                    if (ch.tag == "Ground")
+                    if (ch.CompareTag("Ground"))
                     {
                        // SetPlatformTexture(ch);
                     }

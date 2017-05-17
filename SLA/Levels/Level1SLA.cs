@@ -1,8 +1,6 @@
-﻿using System.Security.Permissions;
-using Assets.Scripts.Drones;
-using UnityEngine;
+﻿using Drones.DroneTypes;
 
-namespace Assets.Scripts.SLA.Levels
+namespace SLA.Levels
 {
     public class Level1SLA : ALevelSLA
     {

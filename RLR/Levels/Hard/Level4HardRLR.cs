@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using Assets.Scripts.Drones;
-using UnityEngine;
+﻿using Drones.DroneTypes;
+using Drones.Pattern;
 
-namespace Assets.Scripts.RLR.Levels
+namespace RLR.Levels.Hard
 {
     public class Level4HardRLR : ALevelRLR
     {
@@ -12,15 +11,13 @@ namespace Assets.Scripts.RLR.Levels
 
         public override void CreateDrones()
         {
-            Area[] laneArea = Manager.GenerateMapRLR.GetDroneSpawnArea();
-
             // Spawn bouncing drones
-            for (var i = 1; i < laneArea.Length - 2; i++)
+            for (var i = 1; i < LaneArea.Length - 2; i++)
             {
-                DroneFactory.SpawnDrones(new RandomDrone(6, 2f, DroneColor.Grey), (int)(11 - i * 0.4f), area: laneArea[i]);
+                DroneFactory.SpawnDrones(new RandomDrone(6, 2f, DroneColor.Grey), (int)(11 - i * 0.4f), area: LaneArea[i]);
             }
-            DroneFactory.SpawnDrones(new RandomDrone(6, 2f, DroneColor.Grey), 4, area: laneArea[19]);
-            DroneFactory.SpawnDrones(new RandomDrone(6, 2f, DroneColor.Grey), 3, area: laneArea[20]);
+            DroneFactory.SpawnDrones(new RandomDrone(6, 2f, DroneColor.Grey), 4, area: LaneArea[19]);
+            DroneFactory.SpawnDrones(new RandomDrone(6, 2f, DroneColor.Grey), 3, area: LaneArea[20]);
 
             // Spawn yellow drones
             DroneFactory.SetPattern(new Pat360Drones(40, repeat: true, pulseDelay: 5),

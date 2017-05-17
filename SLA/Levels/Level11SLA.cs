@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Assets.Scripts.Drones;
-using UnityEngine;
+﻿using Drones;
+using Drones.DroneTypes;
 
-namespace Assets.Scripts.SLA.Levels
+namespace SLA.Levels
 {
     public class Level11SLA : ALevelSLA
     {

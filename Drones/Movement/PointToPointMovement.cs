@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
-namespace Assets.Scripts.Drones
+namespace Drones.Movement
 {
     public class PointToPointMovement : MonoBehaviour
     {
@@ -84,7 +84,7 @@ namespace Assets.Scripts.Drones
             }
         }
 
-        IEnumerator SetNewPosition()
+        private IEnumerator SetNewPosition()
         {
             SetLocationParameters();
             if (Synchronized && _startTime - _syncTime > WaitTime)

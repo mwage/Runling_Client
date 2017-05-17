@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Launcher
+namespace Launcher
 {
     /// <summary>
     /// Be aware this will not prevent a non singleton constructor

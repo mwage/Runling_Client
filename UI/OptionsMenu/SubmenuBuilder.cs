@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+﻿using Launcher;
+using UnityEngine;
 using UnityEngine.UI;
-using Assets.Scripts.Launcher;
 
-namespace Assets.Scripts.UI.OptionsMenu
+namespace UI.OptionsMenu
 {
     public class SubmenuBuilder
     {

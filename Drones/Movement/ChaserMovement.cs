@@ -1,7 +1,7 @@
-﻿using Assets.Scripts.Launcher;
+﻿using Launcher;
 using UnityEngine;
 
-namespace Assets.Scripts.Drones
+namespace Drones.Movement
 {
     public class ChaserMovement : MonoBehaviour
     {
@@ -14,7 +14,6 @@ namespace Assets.Scripts.Drones
         private float _acceleration;
         private float _maxSpeed;
 
-
         private void Start()
         {
             _rb = GetComponent<Rigidbody>();
@@ -22,7 +21,6 @@ namespace Assets.Scripts.Drones
             _acceleration = 50f;
             _maxSpeed = Speed;
         }
-
 
         private void FixedUpdate()
         {
@@ -75,6 +73,5 @@ namespace Assets.Scripts.Drones
             var lookrotation = _targetPos - transform.position;
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookrotation), _rotationSpeed * Time.deltaTime);
         }
-
     }
 }

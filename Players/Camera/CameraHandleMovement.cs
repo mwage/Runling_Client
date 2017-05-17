@@ -1,8 +1,8 @@
-﻿using Assets.Scripts.Launcher;
-using Assets.Scripts.UI.OptionsMenu;
+﻿using Launcher;
+using UI.OptionsMenu;
 using UnityEngine;
 
-namespace Assets.Scripts.Players.Camera
+namespace Players.Camera
 {
     public class CameraHandleMovement : MonoBehaviour 
         // the scipt respons on camera position. It ensure rotation around Y axis (yaw), but doenst make around X (pitch) direcly [thats makes CameraMovement]
@@ -10,17 +10,17 @@ namespace Assets.Scripts.Players.Camera
     {
         public SetCamera SetCamera;
 
-        void Start()
+        private void Start()
         {
             SetCameraHandlePosition(GetWatchedPoint());  
         }
 
-        void LateUpdate()
+        private void LateUpdate()
         {
-            float inputX = Input.GetAxis("Horizontal");
-            float inputY = Input.GetAxis("Vertical");
-            float moveX = inputX * GameControl.Settings.CameraSpeed.Val * Time.deltaTime;
-            float moveY = inputY * GameControl.Settings.CameraSpeed.Val * Time.deltaTime;
+            var inputX = Input.GetAxis("Horizontal");
+            var inputY = Input.GetAxis("Vertical");
+            var moveX = inputX * GameControl.Settings.CameraSpeed.Val * Time.deltaTime;
+            var moveY = inputY * GameControl.Settings.CameraSpeed.Val * Time.deltaTime;
             transform.position += (transform.forward * moveY + transform.right * moveX);
 
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.RotateLeft))
@@ -59,14 +59,14 @@ namespace Assets.Scripts.Players.Camera
 
         private void ZoomMore()
         {
-            Vector3 watchedPoint = GetWatchedPoint();
+            var watchedPoint = GetWatchedPoint();
             GameControl.Settings.CameraZoom.Decrease(5);
             SetCameraHandlePosition(watchedPoint);
         }
 
         private void ZoomLess()
         {
-            Vector3 watchedPoint = GetWatchedPoint();
+            var watchedPoint = GetWatchedPoint();
             GameControl.Settings.CameraZoom.Increase(5);
             SetCameraHandlePosition(watchedPoint);
         }
@@ -92,7 +92,7 @@ namespace Assets.Scripts.Players.Camera
 
         private void RotateCameraYAxis(float degrees)
         {
-            Vector3 watchedPoint = GetWatchedPoint();
+            var watchedPoint = GetWatchedPoint();
             transform.Rotate(0F, degrees, 0F);
             SetCameraHandlePosition(watchedPoint);
         }

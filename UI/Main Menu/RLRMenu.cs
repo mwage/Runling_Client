@@ -1,13 +1,12 @@
-﻿using Assets.Scripts.Launcher;
-using Assets.Scripts.UI.RLR_Menus;
+﻿using Launcher;
+using UI.RLR_Menus;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.UI.Main_Menu
+namespace UI.Main_Menu
 {
     public class RLRMenu : MonoBehaviour
     {
-
         public HighScoreMenuRLR HighScoreMenuSLA;
         public SceneLoader SceneLoader;
 
@@ -65,8 +64,8 @@ namespace Assets.Scripts.UI.Main_Menu
 
         public void SetModes()
         {
-            GameControl.State.SetDifficulty = (Difficulty)_voteDifficulty;
-            GameControl.State.SetGameMode = (Gamemode)_voteGameMode;
+            if (_voteDifficulty != null) GameControl.State.SetDifficulty = (Difficulty) _voteDifficulty;
+            if (_voteGameMode != null) GameControl.State.SetGameMode = (Gamemode) _voteGameMode;
         }
 
         public void HighScores()

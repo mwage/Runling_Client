@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using Assets.Scripts.Drones;
-using Assets.Scripts.Launcher;
-using UnityEngine;
+﻿using Drones.DroneTypes;
+using Drones.Movement;
+using Drones.Pattern;
 
-namespace Assets.Scripts.RLR.Levels
+namespace RLR.Levels.Hard
 {
     public class Level9HardRLR : ALevelRLR
     {
@@ -18,21 +17,18 @@ namespace Assets.Scripts.RLR.Levels
 
         public override void SetChasers()
         {
-            Manager.RunlingChaser.SetChaserPlatforms(new DefaultDrone(9, 1f, DroneColor.DarkGreen, moveDelegate: DroneMovement.ChaserMovement), new int[1] { 1}, new int[1] { 4});
+            Manager.RunlingChaser.SetChaserPlatforms(new DefaultDrone(9, 1f, DroneColor.DarkGreen, moveDelegate: DroneMovement.ChaserMovement), new[] { 1}, new[] { 4});
         }
-
 
         public override void CreateDrones()
         {
-            Area[] laneArea = Manager.GenerateMapRLR.GetDroneSpawnArea();
-
             // Spawn bouncing drones
-            for (var i = 1; i < laneArea.Length - 2; i++)
+            for (var i = 1; i < LaneArea.Length - 2; i++)
             {
-                DroneFactory.SpawnDrones(new RandomDrone(7, 2f, DroneColor.Grey), (int)(11 - i * 0.4f), area: laneArea[i]);
+                DroneFactory.SpawnDrones(new RandomDrone(7, 2f, DroneColor.Grey), (int)(11 - i * 0.4f), area: LaneArea[i]);
             }
-            DroneFactory.SpawnDrones(new RandomDrone(7, 2f, DroneColor.Grey), 4, area: laneArea[19]);
-            DroneFactory.SpawnDrones(new RandomDrone(7, 2f, DroneColor.Grey), 3, area: laneArea[20]);
+            DroneFactory.SpawnDrones(new RandomDrone(7, 2f, DroneColor.Grey), 4, area: LaneArea[19]);
+            DroneFactory.SpawnDrones(new RandomDrone(7, 2f, DroneColor.Grey), 3, area: LaneArea[20]);
 
             // Spawn blue drones
             DroneFactory.SetPattern(new Pat360Drones(48, 10, true, true, 270), new DefaultDrone(15, 2, DroneColor.Blue));

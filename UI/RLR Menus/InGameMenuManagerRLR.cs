@@ -1,8 +1,8 @@
-﻿using Assets.Scripts.RLR;
-using Assets.Scripts.Launcher;
+﻿using Launcher;
+using RLR;
 using UnityEngine;
 
-namespace Assets.Scripts.UI.RLR_Menus
+namespace UI.RLR_Menus
 {
     public class InGameMenuManagerRLR : MonoBehaviour
     {
@@ -36,7 +36,7 @@ namespace Assets.Scripts.UI.RLR_Menus
             ChooseLevelMenuObject.SetActive(false);
         }
 
-        void Update()
+        private void Update()
         {
             // Navigate menu with esc
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.NavigateMenu))

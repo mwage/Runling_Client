@@ -1,9 +1,11 @@
 ﻿using System.Collections;
-using Assets.Scripts.Drones;
-using Assets.Scripts.Launcher;
+using Drones;
+using Drones.DroneTypes;
+using Drones.Movement;
+using Drones.Pattern;
 using UnityEngine;
 
-namespace Assets.Scripts.SLA.Levels
+namespace SLA.Levels
 {
     public class Level9SLA : ALevelSLA
     {
@@ -28,7 +30,7 @@ namespace Assets.Scripts.SLA.Levels
             DroneFactory.StartCoroutine(GenerateLevel9GreenDrones(4f, 16, 8f, 1.5f, DroneColor.DarkGreen, 0.1f, 1f, 1, 32));
         }
 
-        IEnumerator GenerateLevel9GreenDrones(float delay, int initialDroneCount, float speed, float size, DroneColor color, float reduceDelay, float minDelay, int droneIncrease, int maxDrones)
+        private IEnumerator GenerateLevel9GreenDrones(float delay, int initialDroneCount, float speed, float size, DroneColor color, float reduceDelay, float minDelay, int droneIncrease, int maxDrones)
         {
             var droneCount = 0;
             while (true)

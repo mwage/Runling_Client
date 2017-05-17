@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Drones
+namespace Drones
 {
     public class DestroyDroneTrigger : MonoBehaviour {
 
-        public GameObject drone;
+        public GameObject Drone;
 
-        void OnTriggerStay(Collider other)
+        private void OnTriggerStay(Collider other)
         {
-            Destroy(drone);
+            Destroy(Drone);
         }
     }
 }

@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using Drones.Movement;
+using Drones.Pattern;
+using UnityEngine;
 
-namespace Assets.Scripts.Drones
+namespace Drones.DroneTypes
 {
     public class MineDrone : ADrone
     {

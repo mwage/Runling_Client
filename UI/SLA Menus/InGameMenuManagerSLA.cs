@@ -1,15 +1,16 @@
-﻿using Assets.Scripts.SLA;
-using Assets.Scripts.Launcher;
+﻿using Launcher;
+using SLA;
+using UI.OptionsMenu;
 using UnityEngine;
 
-namespace Assets.Scripts.UI.SLA_Menus
+namespace UI.SLA_Menus
 {
     public class InGameMenuManagerSLA : MonoBehaviour
     {
         public InGameMenuSLA InGameMenu;
         public ControlSLA ControlSLA;
         public OptionsMenu.OptionsMenu OptionsMenu;
-        public OptionsMenu.SetHotkeys SetHotkeys;
+        public SetHotkeys SetHotkeys;
         public HighScoreMenuSLA HighScoreMenuSLA;
         public ChooseLevelMenuSLA ChooseLevelMenu;
 
@@ -40,7 +41,7 @@ namespace Assets.Scripts.UI.SLA_Menus
             HighScoreMenuObject.SetActive(false);
         }
 
-        void Update()
+        private void Update()
         {
             // Navigate menu with esc
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.NavigateMenu))

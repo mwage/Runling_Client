@@ -1,5 +1,5 @@
 ﻿
-namespace Assets.Scripts.RLR.Levels
+namespace RLR.Levels
 {
     public interface ILevelRLR
     {

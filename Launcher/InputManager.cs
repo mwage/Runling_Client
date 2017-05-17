@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Text;
+using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.Launcher
+namespace Launcher
 {
     public enum HotkeyAction
     {
@@ -44,13 +44,7 @@ namespace Assets.Scripts.Launcher
 
         public bool GetButtonDown(HotkeyAction hotkeyAction)
         {
-            if (!_hotkeys.ContainsKey(hotkeyAction))
-            {
-               // Debug.Log("no hotkey named " + hotkeyAction);
-                return false;
-            }
-
-            return Input.GetKeyDown(_hotkeys[hotkeyAction]);
+            return _hotkeys.ContainsKey(hotkeyAction) && Input.GetKeyDown(_hotkeys[hotkeyAction]);
         }
 
         public KeyCode? GetHotkey(HotkeyAction action)

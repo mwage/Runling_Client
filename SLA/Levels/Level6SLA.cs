@@ -1,8 +1,10 @@
 ﻿using System.Collections;
-using Assets.Scripts.Drones;
+using Drones;
+using Drones.DroneTypes;
+using Drones.Pattern;
 using UnityEngine;
 
-namespace Assets.Scripts.SLA.Levels
+namespace SLA.Levels
 {
     public class Level6SLA : ALevelSLA
     {
@@ -33,7 +35,7 @@ namespace Assets.Scripts.SLA.Levels
             while (true)
             {
                 DroneFactory.SetPattern(new Pat360Drones(initialDroneCount + droneCount, 5f),
-                    new DefaultDrone(speed, size, color), BoundariesSLA.FlyingSla, posDelegate: posDelegate);
+                    new DefaultDrone(speed, size, color), BoundariesSLA.FlyingSla, posDelegate);
                 yield return new WaitForSeconds(delay);
                 if (delay > minDelay) { delay -= delay * reduceDelay; }
                 if (droneCount < maxDrones-initialDroneCount) { droneCount += droneIncrease; }

@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Drones.DroneTypes;
+using Drones.Pattern;
 using UnityEngine;
 
-namespace Assets.Scripts.Drones
+namespace Drones
 {
     public class DroneFactory : MonoBehaviour
     { 

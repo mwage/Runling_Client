@@ -1,29 +1,18 @@
 ﻿using System.Collections.Generic;
-using Assets.Scripts.Launcher;
-using UnityEngine;
+using Launcher;
+using RLR.Levels.Hard;
+using RLR.Levels.Normal;
 
-namespace Assets.Scripts.RLR.Levels
+namespace RLR.Levels
 {
     public class InitializeLevelsRLR
     {
         public List<ILevelRLR> SetDifficulty(LevelManagerRLR manager)
         {
-            List<ILevelRLR> levels;
-
-            if (GameControl.State.SetDifficulty == Difficulty.Hard)
-            {
-                levels = SetHard(manager);
-            }
-            else
-            {
-                levels = SetNormal(manager);
-            }
-
-            return levels;
+            return GameControl.State.SetDifficulty == Difficulty.Hard ? SetHard(manager) : SetNormal(manager);
         }
 
-
-        List<ILevelRLR> SetNormal(LevelManagerRLR manager)
+        private static List<ILevelRLR> SetNormal(LevelManagerRLR manager)
         {
             var levels = new List<ILevelRLR>
             {
@@ -40,7 +29,7 @@ namespace Assets.Scripts.RLR.Levels
             return levels;
         }
 
-        List<ILevelRLR> SetHard(LevelManagerRLR manager)
+        private static List<ILevelRLR> SetHard(LevelManagerRLR manager)
         {
             var levels = new List<ILevelRLR>
             {

@@ -1,13 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Assets.Scripts.Drones;
-using Assets.Scripts.Launcher;
-using Assets.Scripts.Players;
-using Assets.Scripts.RLR.GenerateMap;
+using Drones;
+using Drones.DroneTypes;
+using Drones.Pattern;
+using Launcher;
+using Players;
+using RLR.GenerateMap;
 using TMPro;
 using UnityEngine;
 
-namespace Assets.Scripts.RLR.Levels
+namespace RLR.Levels
 {
     public class RunlingChaser : MonoBehaviour
     {
@@ -27,7 +29,7 @@ namespace Assets.Scripts.RLR.Levels
         private IDrone _iDrone;
         private IPattern _pattern;
 
-        void Awake()
+        private void Awake()
         {
             _createdInstance = false;
         }
@@ -122,7 +124,7 @@ namespace Assets.Scripts.RLR.Levels
             }
         }
 
-        IEnumerator SpawnChaserText(float duration)
+        private IEnumerator SpawnChaserText(float duration)
         {
             var chaserText = Instantiate(ChaserText, GameObject.Find("Canvas").transform);
             chaserText.GetComponent<TextMeshProUGUI>().text = "Warning: Chaser Drone!";
@@ -130,7 +132,7 @@ namespace Assets.Scripts.RLR.Levels
             Destroy(chaserText);
         }
 
-        IEnumerator DestroyChaserText(float duration)
+        private IEnumerator DestroyChaserText(float duration)
         {
             var chaserText = Instantiate(ChaserText, GameObject.Find("Canvas").transform);
             chaserText.GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 50);
@@ -139,7 +141,7 @@ namespace Assets.Scripts.RLR.Levels
             Destroy(chaserText);
         }
 
-        void Update()
+        private void Update()
         {
             if (_playerTrigger.EnterSaveZone && _createdInstance)
             {

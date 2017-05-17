@@ -1,8 +1,8 @@
-﻿using Assets.Scripts.Drones;
-using System.Collections;
-using UnityEngine;
+﻿using Drones.DroneTypes;
+using Drones.Movement;
+using Drones.Pattern;
 
-namespace Assets.Scripts.RLR.Levels
+namespace RLR.Levels.Normal
 {
     public class Level3RLR : ALevelRLR
     {

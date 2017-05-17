@@ -1,7 +1,7 @@
-﻿using Assets.Scripts.Launcher;
+﻿using Launcher;
 using UnityEngine;
 
-namespace Assets.Scripts.Players
+namespace Players
 {
     public class PlayerTrigger : MonoBehaviour
     {
@@ -11,7 +11,7 @@ namespace Assets.Scripts.Players
         public GameObject SaveZone;
 
         // Trigger
-        void OnTriggerStay(Collider other)
+        private void OnTriggerStay(Collider other)
         {
             // Enter Finishzone
             if (other.CompareTag("Finish") && !_finishedLevel)
@@ -34,7 +34,7 @@ namespace Assets.Scripts.Players
             }
         }
 
-        void OnTriggerEnter(Collider other)
+        private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("SafeZone") && !_onPlatform)
             {
@@ -44,9 +44,8 @@ namespace Assets.Scripts.Players
             }
         }
 
-
         // Leave Safezone
-        void OnTriggerExit(Collider other)
+        private void OnTriggerExit(Collider other)
         {
             if (other.CompareTag("SafeZone"))
             {

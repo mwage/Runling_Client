@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Launcher
+namespace Launcher
 {
     public class HighScores {
 
@@ -17,9 +17,9 @@ namespace Assets.Scripts.Launcher
         {
             HighScoreSLA[0] = PlayerPrefs.GetInt("HighScoreSLAGame");
             HighScoreSLA[14] = PlayerPrefs.GetInt("HighScoreSLACombined");
-            for (int i = 1; i < (HighScoreSLA.Length - 1); i++)
+            for (var i = 1; i < (HighScoreSLA.Length - 1); i++)
             {
-                HighScoreSLA[i] = PlayerPrefs.GetInt("HighScoreSLA" + i.ToString());
+                HighScoreSLA[i] = PlayerPrefs.GetInt("HighScoreSLA" + i);
             }
         }
     }
