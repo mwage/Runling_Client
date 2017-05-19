@@ -1,4 +1,5 @@
 ﻿using Launcher;
+using UI.RLR_Menus;
 using UI.SLA_Menus;
 using UnityEngine;
 
@@ -11,9 +12,12 @@ namespace UI.Main_Menu
         public SLAMenu SLAMenu;
         public HighScoreMenuSLA HighScoreMenuSLA;
         public RLRMenu RLRMenu;
+        public HighScoreMenuRLR HighScoreMenuRLR;
 
         public GameObject SLAMenuObject;
-        public GameObject HighScoreMenuObject;
+        public GameObject RLRMenuObject;
+        public GameObject HighScoreMenuSLAObject;
+        public GameObject HighScoreMenuRLRObject;
 
         private void Awake()
         {
@@ -40,10 +44,17 @@ namespace UI.Main_Menu
                 }
                 else if (HighScoreMenuSLA.HighScoreMenuActive)
                 {
-                    HighScoreMenuObject.SetActive(false);
+                    HighScoreMenuSLAObject.SetActive(false);
                     HighScoreMenuSLA.HighScoreMenuActive = false;
                     SLAMenuObject.SetActive(true);
                     SLAMenu.SLAMenuActive = true;
+                }
+                else if (HighScoreMenuRLR.HighScoreMenuActive)
+                {
+                    HighScoreMenuRLRObject.SetActive(false);
+                    HighScoreMenuRLR.HighScoreMenuActive = false;
+                    RLRMenuObject.SetActive(true);
+                    RLRMenu.RLRMenuActive = true;
                 }
             }
         }

@@ -1,4 +1,5 @@
 ﻿using Launcher;
+using UI.RLR_Menus;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -6,6 +7,19 @@ namespace RLR
 {
     public class WinRLR : MonoBehaviour
     {
+        public GameObject Background;
+        public HighScoreMenuRLR HighScoreMenuRLR;
+
+
+        public void Awake()
+        {
+            if (GameControl.State.SetGameMode == Gamemode.TimeMode)
+            {
+                Background.SetActive(true);
+                HighScoreMenuRLR.CreateTextObjects(Background);
+                HighScoreMenuRLR.SetNumbers();
+            }
+        }
 
         public void BackToMenu()
         {
@@ -17,6 +31,7 @@ namespace RLR
         {
             GameControl.State.IsDead = true;
             GameControl.State.AutoClickerActive = false;
+            GameControl.State.CurrentLevel = 1;
 
             SceneManager.LoadScene("RLR");
         }

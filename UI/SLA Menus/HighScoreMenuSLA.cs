@@ -101,6 +101,10 @@ namespace UI.SLA_Menus
                 }
 
                 _gameScore.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = GameControl.State.TotalScore.ToString();
+                if (GameControl.State.TotalScore > GameControl.HighScores.HighScoreSLA[0] && GameControl.State.TotalScore > 0)
+                {
+                    _gameScore.transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = Color.green;
+                }
                 _combinedScore.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
             }
         }

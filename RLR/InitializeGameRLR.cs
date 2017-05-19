@@ -72,10 +72,7 @@ namespace RLR
 
             GameControl.State.IsInvulnerable = false;
             GameControl.State.IsImmobile = false;
-            if (GameControl.State.SetGameMode == Gamemode.TimeMode)
-            {
-                ScoreRLR.StartTimer();
-            }
+            ScoreRLR.StartTimer();
         }
     }
 }

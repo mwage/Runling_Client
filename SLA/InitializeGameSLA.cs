@@ -65,7 +65,7 @@ namespace SLA
             // Countdown
             for (var i = 0; i < 3; i++)
             {
-                var countdown = Instantiate(CountdownPrefab, GameObject.Find("ScoreCanvas").transform);
+                var countdown = Instantiate(CountdownPrefab, GameObject.Find("Canvas").transform);
                 countdown.GetComponent<TextMeshProUGUI>().text = (3 - i).ToString();
                 yield return new WaitForSeconds(1f);
                 Destroy(countdown);

@@ -10,6 +10,7 @@ namespace UI.RLR_Menus
         public ControlRLR ControlRLR;
         public OptionsMenu.OptionsMenu OptionsMenu;
         public ChooseLevelMenuRLR ChooseLevelMenu;
+        public HighScoreMenuRLR HighScoreMenuRLR;
 
         public GameObject InGameMenuObject;
         public GameObject OptionsMenuObject;
@@ -17,6 +18,7 @@ namespace UI.RLR_Menus
         public GameObject WinScreen;
         public GameObject PauseScreen;
         public GameObject ChooseLevel;
+        public GameObject HighScoreMenuObject;
 
         public bool MenuOn;
         private bool _pause;
@@ -58,6 +60,10 @@ namespace UI.RLR_Menus
                 else if (MenuOn && ChooseLevelMenu.ChooseLevelMenuActive)
                 {
                     ChooseLevelMenu.Back();
+                }
+                else if (MenuOn && HighScoreMenuRLR.HighScoreMenuActive)
+                {
+                    HighScoreMenuRLR.Back();
                 }
                 else
                 {

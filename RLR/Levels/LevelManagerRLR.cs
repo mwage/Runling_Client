@@ -11,7 +11,8 @@ using UnityEngine.SceneManagement;
 
 namespace RLR.Levels
 {
-    public class LevelManagerRLR : MonoBehaviour {
+    public class LevelManagerRLR : MonoBehaviour
+        {
 
         //attach scripts
         public InGameMenuManagerRLR InGameMenuManagerRLR;
@@ -26,7 +27,7 @@ namespace RLR.Levels
 
         private readonly InitializeLevelsRLR _initializeLevelsRLR = new InitializeLevelsRLR();
 
-        //public static int NumLevels = 9;             //currently last level available in RLR
+        public static int NumLevels = 9;             //currently last level available in RLR
         private List<ILevelRLR> _levels;
 
 
@@ -65,7 +66,6 @@ namespace RLR.Levels
         // Load next level
         public void EndLevel(float delay)
         {
-            GameControl.State.FinishedLevel = false;
             StartCoroutine((GameControl.State.CurrentLevel == _levels.Count) ? EndGameRLR(delay) : LoadNextLevel(0));
         }
 
@@ -91,14 +91,20 @@ namespace RLR.Levels
             {
                 Destroy(t);
             }
-            GameControl.State.CurrentLevel++;
+
             if (GameControl.State.SetGameMode == Gamemode.TimeMode)
             {
-                GameControl.State.Lives = 3;
                 CheckSafeZones.ScoreRLR.AddRemainingCountdown();
-                CheckSafeZones.ScoreRLR.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + CheckSafeZones.ScoreRLR.Score;
+                CheckSafeZones.ScoreRLR.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + GameControl.State.TotalScore;
+                GameControl.State.Lives = 3;
                 LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + GameControl.State.Lives;
             }
+            if (GameControl.State.SetGameMode != Gamemode.Practice)
+            {
+                CheckSafeZones.ScoreRLR.SetHighScore();
+            }
+            GameControl.State.FinishedLevel = false;
+            GameControl.State.CurrentLevel++;
             InitializeGameRLR.InitializeGame();
         }
 
@@ -120,6 +126,11 @@ namespace RLR.Levels
             GameControl.State.GameActive = false;
             yield return new WaitForSeconds(delay);
             InGameMenuManagerRLR.CloseMenus();
+            if (GameControl.State.SetGameMode != Gamemode.Practice)
+            {
+                CheckSafeZones.ScoreRLR.SetHighScore();
+            }
+            GameControl.State.FinishedLevel = false;
             Win.gameObject.SetActive(true);
         }
     }

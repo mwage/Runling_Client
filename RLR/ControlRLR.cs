@@ -31,7 +31,7 @@ namespace RLR
             {
                 GameControl.State.Lives = 3;
                 TimeModeUI.SetActive(true);
-                CountDownText.GetComponent<TextMeshProUGUI>().text = "Countdown: " + (int)((285 + GameControl.State.CurrentLevel*15) / 60) + ":" + ((285 + GameControl.State.CurrentLevel*15) % 60).ToString("f2");
+                CountDownText.GetComponent<TextMeshProUGUI>().text = "Countdown: " + (int)((285 + GameControl.State.CurrentLevel*15) / 60) + ":" + ((285 + GameControl.State.CurrentLevel*15) % 60).ToString("00.00");
                 LevelManager.LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + GameControl.State.Lives;
             }
 
@@ -49,6 +49,7 @@ namespace RLR
 
             if (GameControl.State.FinishedLevel && !StopUpdate)
             {
+                StopUpdate = true;
                 LevelManager.EndLevel(0f);
             }
 

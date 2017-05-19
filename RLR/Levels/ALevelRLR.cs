@@ -26,7 +26,7 @@ namespace RLR.Levels
 
         public virtual void GenerateMap()
         {
-            GenerateMapRLR.GenerateMap(15,new float[] {8,6,8,6,8}, 1.2f, 0.3f, SetAirCollider());
+            GenerateMapRLR.GenerateMap(15,new float[] {8, 6, 8, 6, 8}, 1.2f, 0.3f, SetAirCollider());
             LaneArea = GenerateMapRLR.GetDroneSpawnArea();
         }
 

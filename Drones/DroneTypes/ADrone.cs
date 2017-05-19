@@ -43,11 +43,20 @@ namespace Drones.DroneTypes
             {
                 ch.GetComponent<Renderer>().material = factory.SetDroneMaterial[Color];
             }
+            if (DroneType == DroneType.BouncingDrone || DroneType == DroneType.FlyingBouncingDrone ||
+                DroneType == DroneType.FlyingOnewayDrone)
+            {
+                drone.transform.localScale = Size * Vector3.one;
+                if (Size > 1)
+                {
+                    drone.transform.Find("Model").transform.localPosition += new Vector3(0, (Size - 1) / 7, 0);
+                }
+            }
+            else
+            {
+                drone.transform.localScale = new Vector3 (drone.transform.localScale.x *Size, drone.transform.localScale.y, drone.transform.localScale.z * Size);
+            }
 
-            var scale = drone.transform.localScale;
-            scale.x *= Size;
-            scale.z *= Size;
-            drone.transform.localScale = scale;
 
             // Move drone
             DroneMovement.Move(drone, Speed, MoveDelegate, Curving, SinForce, SinFrequency);

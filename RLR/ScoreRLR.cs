@@ -4,6 +4,7 @@ using Launcher;
 using RLR.Levels;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace RLR
 {
@@ -12,7 +13,9 @@ namespace RLR
         public CheckSafeZones CheckSafeZones;
         public GameObject CurrentScoreText;
         public GameObject CountDownText;
-        public int Score;
+        public Text NewHighScoreText;
+        public GameObject NewHighScoreObject;
+        public float[] FinishTimeCurGame = new float[LevelManagerRLR.NumLevels];
 
         private int _timeLimit;
         private float _countdown;
@@ -45,8 +48,11 @@ namespace RLR
             if (_countdown > 0 && !GameControl.State.FinishedLevel && GameControl.State.GameActive)
             {
                 _timer = Time.time - _initializationTime;
-                _countdown = _timeLimit - _timer;
-                CountDownText.GetComponent<TextMeshProUGUI>().text ="Countdown: " + (int) _countdown / 60 + ":" + (_countdown % 60).ToString("f2");
+                if (GameControl.State.SetGameMode == Gamemode.TimeMode)
+                {
+                    _countdown = _timeLimit - _timer;
+                    CountDownText.GetComponent<TextMeshProUGUI>().text = "Countdown: " + (int)_countdown / 60 + ":" + (_countdown % 60).ToString("00.00");
+                }
             }
         }
 
@@ -56,21 +62,87 @@ namespace RLR
             if (index == null) return;
             if (!CheckSafeZones.VisitedSafeZone[index.Value] && index.Value != 0)
             {
-                Score += _difficultyMultiplier * GameControl.State.CurrentLevel;
-                CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + Score;
-                CheckSafeZones.VisitedSafeZone[index.Value] = true;
+                if (GameControl.State.SetGameMode == Gamemode.TimeMode)
+                {
+                    GameControl.State.TotalScore += _difficultyMultiplier * GameControl.State.CurrentLevel;
+                    CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + GameControl.State.TotalScore;
+                    CheckSafeZones.VisitedSafeZone[index.Value] = true;
+                    SetTimeModeHighScore();
+                }
             }
         }
 
         public void AddRemainingCountdown()
         {
-            Score += (int) _countdown;
+            GameControl.State.TotalScore += (int) _countdown;
             _countdown = 0;
         }
 
-        public void SetHighScores()
+        //Checks for a new highscore and saves it
+        public void SetHighScore()
         {
-            
+            if (GameControl.State.FinishedLevel && GameControl.State.SetGameMode != Gamemode.Practice)
+            {
+                FinishTimeCurGame[GameControl.State.CurrentLevel - 1] = _timer;
+
+                switch (GameControl.State.SetDifficulty)
+                {
+                    case Difficulty.Normal:
+                        if (_timer < GameControl.HighScores.HighScoreRLRNormal[GameControl.State.CurrentLevel] || GameControl.HighScores.HighScoreRLRNormal[GameControl.State.CurrentLevel] < 0.1f)
+                        {
+                            StartCoroutine(NewHighScore(_timer));
+                            GameControl.HighScores.HighScoreRLRNormal[GameControl.State.CurrentLevel] = _timer;
+                            PlayerPrefs.SetFloat("HighScoreRLRNormal" + GameControl.State.CurrentLevel,
+                                GameControl.HighScores.HighScoreRLRNormal[GameControl.State.CurrentLevel]);
+                        }
+                        break;
+                    case Difficulty.Hard:
+                        if (_timer < GameControl.HighScores.HighScoreRLRHard[GameControl.State.CurrentLevel] || GameControl.HighScores.HighScoreRLRHard[GameControl.State.CurrentLevel] < 0.1f)
+                        {
+                            StartCoroutine(NewHighScore(_timer));
+                            GameControl.HighScores.HighScoreRLRHard[GameControl.State.CurrentLevel] = _timer;
+                            PlayerPrefs.SetFloat("HighScoreRLRHard" + GameControl.State.CurrentLevel,
+                                GameControl.HighScores.HighScoreRLRHard[GameControl.State.CurrentLevel]);
+                        }
+                        break;
+                }
+            }
+            if (GameControl.State.SetGameMode == Gamemode.TimeMode)
+            {
+                SetTimeModeHighScore();
+            }
+            PlayerPrefs.Save();
+        }
+
+        public void SetTimeModeHighScore()
+        {
+
+            switch (GameControl.State.SetDifficulty)
+            {
+                case Difficulty.Normal:
+                    if (GameControl.State.TotalScore > GameControl.HighScores.HighScoreRLRNormal[0])
+                    {
+                        GameControl.HighScores.HighScoreRLRNormal[0] = GameControl.State.TotalScore;
+                    }
+                    PlayerPrefs.SetFloat("HighScoreRLRNormalTimeMode", GameControl.HighScores.HighScoreRLRNormal[0]);
+                    break;
+                case Difficulty.Hard:
+                    if (GameControl.State.TotalScore >= GameControl.HighScores.HighScoreRLRHard[0])
+                    {
+                        GameControl.HighScores.HighScoreRLRHard[0] = GameControl.State.TotalScore;
+                    }
+                    PlayerPrefs.SetFloat("HighScoreRLRHardTimeMode", GameControl.HighScores.HighScoreRLRHard[0]);
+                    break;
+            }
+        }
+
+        private IEnumerator NewHighScore(float timer)
+        {
+            var record = timer;
+            NewHighScoreText.text = record > 60 ? "New Highscore: " + (int)record / 60 + ":" + (record % 60).ToString("00.00") : "New Highscore: " + record.ToString("f2");
+            NewHighScoreObject.SetActive(true);
+            yield return new WaitForSeconds(3);
+            NewHighScoreObject.SetActive(false);
         }
     }
 }
