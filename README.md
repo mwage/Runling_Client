@@ -3,9 +3,11 @@
 ### Script folder structure:
 
 Launcher (Folder): scripts that won't be destroyed on load to hold important variables for different modes
- * GameControl: static variables you always want to have access to (f.e.: dead, currentLevel, moveSpeed, cameraSettings, etc.)
- * HighScoreSLA: loads SLA Highscore from playerprefs
+ * GameControl: Singleton class that starts the game and provides an Instance for all other Launcher classes.
+ * GameState: Variables that describe the state of the game and the player
+ * HighScores: loads Highscores for SLA and Runling from playerprefs
  * InputManager: handles player input and hotkeys
+ * Singleton: makes an inheriting class a thread safe singleton
     
 UI (Folder): UI related scripts
  * MainMenu (Folder): Main Menu related scripts
@@ -18,13 +20,13 @@ UI (Folder): UI related scripts
  * SLAMenu (Folder): Ingame menu in SLA
    * InGameMenuManagerSLA: ESC to open menu and navigate back in menus, function to close all open menus
    * InGameMenuSLA: buttons of the initial ingame menu
-   * HighscoreMenuSLA: Highscore Menu, also accessed from Main Menu
+   * HighscoreMenuSLA: Highscore Menu for SLA, also accessed from Main Menu
    * ChooseLevelMenuSLA: Menu for to choose your level in practice mode
    * WinSLA: winscreen, shows highscores, winscreen buttons
   * RLRMenu (Folder): Ingame menu in RLR
    * InGameMenuManagerRLR: ESC to open menu and navigate back in menus, function to close all open menus
    * InGameMenuRLR: buttons of the initial ingame menu
-   * HighscoreMenuRLR: currently not used, will be rewritten for time mode
+   * HighscoreMenuRLR: Highscore Menu for RLR time mode
    * ChooseLevelMenuRLR: Menu for to choose your level in practice mode
  * OptionsMenu (Folder): scripts for the options menu
   * OptionsMenu: Options Menu 
@@ -55,15 +57,19 @@ Drones (Folder): different kinds of drone movements
   * Movement (Folder): different movement types for drones
     * DroneMovement: Contains movement delegates, adds the according movementscripts to the drones
     * ChaserMovement: drone follows the player
-    * CurvedMovement: drone goes in a circle (radius dependant on parameters)
-    * SinusoidalMovement: drone moves in a sin pattern
+    * CurvedMovement: drone goes in a circle or with declining curve
+    * SinusoidalMovement: drone moves in a cos pattern
     * PointToPointMovement: movement for red drones from RLR
+    * RotateBouncingDrone: rotates the drones after bounces in the right direction
     
 Players (Folder): everything regarding the player
   * PlayerMovement: movement script
   * PlayerTrigger: handles various trigger events
-  * CameraMovement: moves camera, sets camera according to camera settings
+  * DestroyMouseClick: Handles mouse click animation
   * MovementTest: script to test movement in the movementtest scene
+  * Camera (Folder):
+    * CameraMovement: rotates camera to the correct angle
+    * CameraHandleMovement: calculates correct position of the camer by given zoom/angle, moves camera
 
 SLA (Folder): All scripts used specifically for SLA
   * ControlSLA: script that controls the flow of the game
@@ -82,16 +88,16 @@ RLR (Folder): All scripts used specifically for RLR
   * InitializeGameRLR: spawnimmobility, countdown, leveltexts, instantiates player
   * DeathRLR: manages what happens after death in RLR
   * WinRLR: win screen for RLR
+  * ScoreRLR: handles everything score related in RLR and sets highscores
   * Levels (Folder): everything that happens during the levels (mostly related to drones)
     * LevelManager: Manages the levels, drone creation, and transactions between levels
     * ILevelRLR: Interface for RLR levels
     * ALevelRLR: Abstract class for RLR levels
     * Runling Chaser: sets and manages what platforms spawn chaser drones
+    * CheckSafeZone: On safezone enter, identifies safezone, handles safezone events
     * Normal (Folder): Normal difficulty levels
     * Hard (Folder): Hard difficulty levels
   * GenerateMap (Folder): Generates RLR spiral map
     * GenerateMap: Generates spawn parameters for the map parts, sets colliders
     * ALane: Abstract class for prefabs, adjusts all parameters for the prefab (scaling mostly)
     * Lanes: scaling for special lanes (f.e. Last lane)
-
-
