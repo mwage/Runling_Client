@@ -13,26 +13,19 @@ namespace RLR.Levels
 {
     public class RunlingChaser : MonoBehaviour
     {
-        private PlayerTrigger _playerTrigger;
-        public GenerateMapRLR GenerateMap;
         public DroneFactory DroneFactory;
-
         public GameObject ChaserText;
-        private bool _createdInstance;
+        public CheckSafeZones CheckSafeZones;
+
         private int[] _spawnChaser;
         private int[] _destroyChaser;
         private int[] _chaserStartPosition;
         private IDrone _chaserBase;
         private bool[,] _reachedChaserPlatform;
-        private List<GameObject> _safeZones;
         private List <GameObject> _chaser;
         private IDrone _iDrone;
         private IPattern _pattern;
 
-        private void Awake()
-        {
-            _createdInstance = false;
-        }
 
         public void SetChaserPlatforms(IDrone chaserBase, int[] spawnChaser = null, int[] destroyChaser = null, int[] chaserStartPosition = null, IPattern pattern = null, IDrone iDrone = null) 
         {
@@ -68,31 +61,12 @@ namespace RLR.Levels
             }
         }
 
-        public void GetTriggerInstance()
-        {
-            _playerTrigger = GameControl.State.Player.transform.Find("Trigger").gameObject.GetComponent<PlayerTrigger>();
-            _createdInstance = true;
-        }
 
-        public void GetSafeZones()
-        {
-            _safeZones = GenerateMap.GetSafeZones();
-            _safeZones.Reverse();
-        }
-
-        private int? GetPlatformIndex(GameObject currentSafeZone)
-        {
-            if (_safeZones.Contains(currentSafeZone))
-                return _safeZones.IndexOf(currentSafeZone);
-
-            return null;
-        }
-
-        private void IsChaser(GameObject currentSafeZone)
+        public void IsChaser(GameObject currentSafeZone, List<GameObject> safeZones)
         {
             if (_spawnChaser == null || _destroyChaser == null) return;
 
-            var index = GetPlatformIndex(currentSafeZone);
+            var index = CheckSafeZones.GetPlatformIndex(currentSafeZone, safeZones);
             if (index == null) return;
             for (var i = 0; i < _spawnChaser.Length; i++)
             {
@@ -102,8 +76,8 @@ namespace RLR.Levels
                     
                     if (_spawnChaser[i] != 0)
                     {
-                        _chaser[i].transform.position = _safeZones[_chaserStartPosition[i]].transform.position +
-                                                        new Vector3(0, 0.6f, 0);
+                        _chaser[i].transform.position = safeZones[_chaserStartPosition[i]].transform.position + safeZones[_chaserStartPosition[i]].transform.rotation *
+                                                        new Vector3(safeZones[_chaserStartPosition[i]].transform.Find("VisibleObjects/Ground").transform.localScale.x / 2 + _chaserBase.Size / 2 + 0.5f, 0.6f, 0);
                     }
                     if (_pattern != null)
                     {
@@ -111,14 +85,14 @@ namespace RLR.Levels
                     }
                     _chaser[i].tag = "Strong Enemy";
                     _reachedChaserPlatform[i, 0] = true;
-                    _safeZones[_destroyChaser[i]].transform.Find("PlayerCollider/ChaserGlow").gameObject.SetActive(true);
+                    safeZones[_destroyChaser[i]].transform.Find("PlayerCollider/ChaserGlow").gameObject.SetActive(true);
                     DroneFactory.StartCoroutine(SpawnChaserText(3f));
                 }
                 if (_destroyChaser[i] == index.Value && !_reachedChaserPlatform[i, 1] && _reachedChaserPlatform[i, 0])
                 {
                     Destroy(_chaser[i]);
                     _reachedChaserPlatform[i, 1] = true;
-                    _safeZones[_destroyChaser[i]].transform.Find("PlayerCollider/ChaserGlow").gameObject.SetActive(false);
+                    safeZones[_destroyChaser[i]].transform.Find("PlayerCollider/ChaserGlow").gameObject.SetActive(false);
                     DroneFactory.StartCoroutine(DestroyChaserText(3f));
                 }
             }
@@ -141,13 +115,6 @@ namespace RLR.Levels
             Destroy(chaserText);
         }
 
-        private void Update()
-        {
-            if (_playerTrigger.EnterSaveZone && _createdInstance)
-            {
-                IsChaser(_playerTrigger.SaveZone);
-                _playerTrigger.EnterSaveZone = false;
-            }
-        }
+
     }
 }

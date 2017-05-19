@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Drones;
 using Launcher;
 using RLR.GenerateMap;
+using TMPro;
 using UI.RLR_Menus;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,9 +17,12 @@ namespace RLR.Levels
         public InGameMenuManagerRLR InGameMenuManagerRLR;
         public InitializeGameRLR InitializeGameRLR;
         public RunlingChaser RunlingChaser;
+        public CheckSafeZones CheckSafeZones;
         public GameObject Win;
         public DroneFactory DroneFactory;
         public GenerateMapRLR GenerateMapRLR;
+
+        public GameObject LivesText;
 
         private readonly InitializeLevelsRLR _initializeLevelsRLR = new InitializeLevelsRLR();
 
@@ -53,8 +57,8 @@ namespace RLR.Levels
 
         public void GenerateChasers(int level)
         {
-            RunlingChaser.GetTriggerInstance();
-            RunlingChaser.GetSafeZones();
+            CheckSafeZones.GetTriggerInstance();
+            CheckSafeZones.GetSafeZones();
             _levels[level - 1].SetChasers();
         }
 
@@ -88,6 +92,13 @@ namespace RLR.Levels
                 Destroy(t);
             }
             GameControl.State.CurrentLevel++;
+            if (GameControl.State.SetGameMode == Gamemode.TimeMode)
+            {
+                GameControl.State.Lives = 3;
+                CheckSafeZones.ScoreRLR.AddRemainingCountdown();
+                CheckSafeZones.ScoreRLR.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + CheckSafeZones.ScoreRLR.Score;
+                LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + GameControl.State.Lives;
+            }
             InitializeGameRLR.InitializeGame();
         }
 
@@ -106,6 +117,7 @@ namespace RLR.Levels
             }
 
             // Load win screen
+            GameControl.State.GameActive = false;
             yield return new WaitForSeconds(delay);
             InGameMenuManagerRLR.CloseMenus();
             Win.gameObject.SetActive(true);

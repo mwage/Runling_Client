@@ -88,6 +88,7 @@ namespace Drones.DroneTypes
         Golden,
         Magenta,
         DarkGreen,
-        Cyan
+        Cyan, 
+        BrightGreen
     }
 }

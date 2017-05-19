@@ -14,7 +14,7 @@ namespace SLA.Levels
 
         public override float GetMovementSpeed()
         {
-            return 10;
+            return 11;
         }
 
         public override void CreateDrones()

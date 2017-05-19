@@ -29,7 +29,7 @@ namespace UI.OptionsMenu
 
             hotkey.transform.Find("HotkeyName").GetComponent<Text>().text = name;
 
-            var slider =  hotkey.transform.FindChild("Slider").gameObject.GetComponent<Slider>();
+            var slider =  hotkey.transform.Find("Slider").gameObject.GetComponent<Slider>();
             slider.minValue = minValue;
             slider.maxValue = maxValue;
             slider.onValueChanged.AddListener(sliderFunction);
@@ -51,7 +51,7 @@ namespace UI.OptionsMenu
 
             hotkey.transform.Find("HotkeyName").GetComponent<Text>().text = name;
 
-            var selection = hotkey.transform.FindChild("Toggle").gameObject.GetComponent<Toggle>();
+            var selection = hotkey.transform.Find("Toggle").gameObject.GetComponent<Toggle>();
             selection.onValueChanged.AddListener(selectionFunction);
             return selection;
         }

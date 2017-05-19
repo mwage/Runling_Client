@@ -18,7 +18,7 @@ namespace Players
         private float _currentSpeed;
         private float _highestSpeedReached;
         private float _distance;
-        public float Acceleration = 50;
+        public float Acceleration = 80;
         private float _deceleration;
         private float _stopSensitivity;
         private bool _accelerate;
@@ -42,7 +42,7 @@ namespace Players
             _stop = true;
             _highestSpeedReached = 0;
             _stopSensitivity = 20;
-            _defLayer = (1 << 0);
+            _defLayer = (1 << 15);
             IsAutoClicking = false;
             _anim = GetComponent<Animator>();
         }
@@ -99,7 +99,8 @@ namespace Players
                     _maxSpeed = GameControl.State.MoveSpeed;
                     _clickPos = hit.point;
 
-                    Instantiate(MouseClick, _clickPos, Quaternion.identity);
+                    // Play click animation
+                    Instantiate(MouseClick, _clickPos, Quaternion.Euler(0,45,0));
                     
                     if ((_clickPos - transform.position).magnitude > 0.05f)
                     {
@@ -110,9 +111,9 @@ namespace Players
                         _accelerate = true;
                         _stop = false;
 
-                        if ((_targetPos - transform.position).magnitude < 0.5)
+                        if ((_targetPos - transform.position).magnitude < 0.5f)
                         {
-                            _rb.velocity = _direction * _currentSpeed / 2;
+                            _rb.velocity = _direction * _currentSpeed /2;
                         }
                         else
                         {
@@ -174,9 +175,10 @@ namespace Players
 
         private void OnCollisionStay(Collision collision)
         {
-            if (collision.gameObject.layer == 18)
+            if (collision.gameObject.layer == 10)
             {
                 transform.position = transform.position + collision.contacts[0].normal * 0.05f;
+
                 if (Math.Abs(collision.contacts[0].normal.x) < ZeroTolerance)
                 {
                     _rb.velocity = new Vector3(1, 0, 0) * _rb.velocity.x;
@@ -187,13 +189,14 @@ namespace Players
                 else if (Math.Abs(collision.contacts[0].normal.z) < ZeroTolerance)
                 {
                     _rb.velocity = new Vector3(0, 0, 1) * _rb.velocity.z;
-                    _targetPos = transform.position + new Vector3(0.1f, 0, 0) * _rb.velocity.z;
+                    _targetPos = transform.position + new Vector3(0, 0, 0.1f) * _rb.velocity.z;
                     _direction = (_targetPos - transform.position).normalized;
                     _highestSpeedReached = _rb.velocity.magnitude;
                 }
                 else
                 {
                     _rb.velocity = Vector3.zero;
+                    _targetPos = transform.position;
                     _stop = true;
                     _accelerate = false;
                 }

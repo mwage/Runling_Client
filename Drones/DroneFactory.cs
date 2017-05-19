@@ -23,6 +23,7 @@ namespace Drones
         public Material MagentaMaterial;
         public Material DarkGreenMaterial;
         public Material CyanMaterial;
+        public Material BrightGreenMaterial;
 
         public Dictionary<DroneType,GameObject> SetDroneType = new Dictionary<DroneType,GameObject>();
         public Dictionary<DroneColor, Material> SetDroneMaterial = new Dictionary<DroneColor, Material>();
@@ -43,6 +44,7 @@ namespace Drones
             SetDroneMaterial[DroneColor.Magenta] = MagentaMaterial;
             SetDroneMaterial[DroneColor.DarkGreen] = DarkGreenMaterial;
             SetDroneMaterial[DroneColor.Cyan] = CyanMaterial;
+            SetDroneMaterial[DroneColor.BrightGreen] = BrightGreenMaterial;
         }
 
         public List<GameObject> SpawnDrones(IDrone drone, int droneCount = 1, bool isAdded = false, Area area = new Area(), StartPositionDelegate posDelegate = null)

@@ -41,7 +41,6 @@ namespace UI.RLR_Menus
         public void BackToMenu()
         {
             GameControl.State.GameActive = false;
-            GameControl.State.IsSafe = false;
             Time.timeScale = 1;
             SceneManager.LoadScene("MainMenu");
         }

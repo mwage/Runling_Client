@@ -52,6 +52,7 @@ namespace SLA
             GameControl.State.Player = Instantiate(PlayerPrefab);
             GameControl.State.IsDead = false;
             GameControl.State.IsInvulnerable = true;
+            GameControl.State.IsSafe = false;
             GameControl.State.Player.transform.Find("Shield").gameObject.SetActive(true);
             if (GameControl.State.GodModeActive && !GameControl.State.Player.transform.Find("GodMode").gameObject.activeSelf)
             {

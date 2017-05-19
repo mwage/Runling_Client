@@ -1,5 +1,6 @@
 ﻿using Launcher;
 using RLR.Levels;
+using TMPro;
 using UnityEngine;
 
 namespace RLR
@@ -10,6 +11,8 @@ namespace RLR
         public InitializeGameRLR InitializeGameRLR;
         public DeathRLR DeathRLR;
         public GameObject PracticeMode;
+        public GameObject TimeModeUI;
+        public GameObject CountDownText;
 
         public bool StopUpdate;
 
@@ -18,10 +21,18 @@ namespace RLR
             // Set current Level and movespeed, load drones and spawn immunity
             StopUpdate = true;
             GameControl.State.GameActive = true;
-            GameControl.State.MoveSpeed = 13;
+            GameControl.State.MoveSpeed = 15;
+            GameControl.State.TotalScore = 0;
             if (GameControl.State.SetGameMode == Gamemode.Practice)
             {
                 PracticeMode.SetActive(true);
+            }
+            if (GameControl.State.SetGameMode == Gamemode.TimeMode)
+            {
+                GameControl.State.Lives = 3;
+                TimeModeUI.SetActive(true);
+                CountDownText.GetComponent<TextMeshProUGUI>().text = "Countdown: " + (int)((285 + GameControl.State.CurrentLevel*15) / 60) + ":" + ((285 + GameControl.State.CurrentLevel*15) % 60).ToString("f2");
+                LevelManager.LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + GameControl.State.Lives;
             }
 
             InitializeGameRLR.InitializeGame();

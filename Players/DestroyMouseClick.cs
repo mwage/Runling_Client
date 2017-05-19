@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Launcher;
 using UnityEngine;
 
 namespace Players
@@ -9,12 +10,13 @@ namespace Players
         {
             var anim = GetComponent<Animator>();
             anim.Play("Take 001");
-            StartCoroutine(DestroyAnimation());
+            float delay = GameControl.State.AutoClickerActive ? 0.5f : 1.666f / 2;
+            StartCoroutine(DestroyAnimation(delay));
         }
 
-        private IEnumerator DestroyAnimation()
+        private IEnumerator DestroyAnimation(float delay)
         {
-            yield return new WaitForSeconds(1.66f / 2);
+            yield return new WaitForSeconds(delay);
             Destroy(gameObject);
         }
     }

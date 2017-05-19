@@ -26,8 +26,8 @@ namespace RLR.Levels.Hard
             DroneFactory.SpawnDrones(new RandomDrone(6, 2f, DroneColor.Grey), 3, area: LaneArea[20]);
 
             // Spawn yellow drones
-            DroneFactory.SetPattern(new Pat360Drones(40, repeat: true, pulseDelay: 6),
-                new DefaultDrone(15, 2, DroneColor.Golden, moveDelegate: DroneMovement.CurvedMovement, curving: 7));
+            DroneFactory.SetPattern(new Pat360Drones(32, repeat: true, pulseDelay: 5),
+                new DefaultDrone(12, 2, DroneColor.Golden, moveDelegate: DroneMovement.CurvedMovement, curving: 10));
         }
     }
 }
