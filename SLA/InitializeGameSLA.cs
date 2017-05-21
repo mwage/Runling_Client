@@ -12,10 +12,10 @@ namespace SLA
     public class InitializeGameSLA : MonoBehaviour {
 
         // Attach scripts
-        public LevelManagerSLA LevelManagerSla;
-        public ScoreSLA ScoreSla;
-        public ControlSLA ControlSla;
-        public InGameMenuManagerSLA InGameMenuManagerSla;
+        public LevelManagerSLA LevelManagerSLA;
+        public ScoreSLA ScoreSLA;
+        public ControlSLA ControlSLA;
+        public InGameMenuManagerSLA InGameMenuManagerSLA;
 
         public GameObject PlayerPrefab;
         public GameObject LevelTextObject;
@@ -33,7 +33,7 @@ namespace SLA
         private IEnumerator PrepareLevel()
         {
             // Set current movespeed and cameraposition
-            GameControl.State.MoveSpeed = LevelManagerSla.GetMovementSpeed(GameControl.State.CurrentLevel);
+            GameControl.State.MoveSpeed = LevelManagerSLA.GetMovementSpeed(GameControl.State.CurrentLevel);
             CameraHandleMovement.SetCameraHandlePosition(Vector3.zero);
 
             // Show level highscore and current level
@@ -42,10 +42,10 @@ namespace SLA
             levelText.text = "Level " + GameControl.State.CurrentLevel;
             LevelTextObject.SetActive(true);
             CurrentPrWindow.SetActive(true);
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(2);
             LevelTextObject.SetActive(false);
             CurrentPrWindow.SetActive(false);
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(1);
 
             // Load drones and player
 
@@ -59,21 +59,21 @@ namespace SLA
                 GameControl.State.Player.transform.Find("GodMode").gameObject.SetActive(true);
             }
             GameControl.State.IsImmobile = false;
-            ControlSla.StopUpdate = false;
-            LevelManagerSla.LoadDrones(GameControl.State.CurrentLevel);
+            ControlSLA.StopUpdate = false;
+            LevelManagerSLA.LoadDrones(GameControl.State.CurrentLevel);
             
             // Countdown
             for (var i = 0; i < 3; i++)
             {
                 var countdown = Instantiate(CountdownPrefab, GameObject.Find("Canvas").transform);
                 countdown.GetComponent<TextMeshProUGUI>().text = (3 - i).ToString();
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(1);
                 Destroy(countdown);
             }
 
             GameControl.State.Player.transform.Find("Shield").gameObject.SetActive(false);
             GameControl.State.IsInvulnerable = false;
-            ScoreSla.StartScore();
+            ScoreSLA.StartScore();
         }
     }
 }

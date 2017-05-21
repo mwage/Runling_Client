@@ -12,7 +12,7 @@ using UnityEngine.SceneManagement;
 namespace RLR.Levels
 {
     public class LevelManagerRLR : MonoBehaviour
-        {
+    {
 
         //attach scripts
         public InGameMenuManagerRLR InGameMenuManagerRLR;

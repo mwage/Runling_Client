@@ -16,6 +16,7 @@ namespace Drones.DroneTypes
         protected float? SinForce;
         protected float? SinFrequency;
 
+
         protected ADrone()
         {
         }
@@ -39,9 +40,16 @@ namespace Drones.DroneTypes
         {
             // Adjust drone color and size
             var model = drone.transform.GetChild(0);
-            foreach (Transform ch in model)
+            foreach (Transform child in model)
             {
-                ch.GetComponent<Renderer>().material = factory.SetDroneMaterial[Color];
+                if (child.name == "Sphere")
+                {
+                    foreach (Transform ch in child)
+                    {
+                        ch.GetComponent<Renderer>().material = factory.SetDroneMaterial[Color];
+                    }
+                }
+                child.GetComponent<Renderer>().material = factory.SetDroneMaterial[Color];
             }
             if (DroneType == DroneType.BouncingDrone || DroneType == DroneType.FlyingBouncingDrone ||
                 DroneType == DroneType.FlyingOnewayDrone)
@@ -56,7 +64,6 @@ namespace Drones.DroneTypes
             {
                 drone.transform.localScale = new Vector3 (drone.transform.localScale.x *Size, drone.transform.localScale.y, drone.transform.localScale.z * Size);
             }
-
 
             // Move drone
             DroneMovement.Move(drone, Speed, MoveDelegate, Curving, SinForce, SinFrequency);

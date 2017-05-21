@@ -20,15 +20,15 @@ namespace RLR
             switch (GameControl.State.SetGameMode)
             {
                 case Gamemode.Classic:
-                    manager.EndGame(0.1f);
+                    manager.EndGame(1);
                     break;
                 case Gamemode.Practice:
-                    StartCoroutine(Respawn(3, 1, initializeGame, control));
+                    StartCoroutine(Respawn(3, 3, initializeGame, control));
                     break;
                 case Gamemode.TimeMode:
                     if (GameControl.State.Lives == 0)
                     {
-                        manager.EndGame(0.1f);
+                        manager.EndGame(1);
                         break;
                     }
                     else
@@ -65,7 +65,7 @@ namespace RLR
                     GameControl.State.IsDead = false;
                     control.StopUpdate = false;
                 }
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(1);
                 Destroy(countdown);
             }
             Destroy(respawnIn);

@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using Launcher;
-using Players;
 using Players.Camera;
 using RLR.Levels;
 using TMPro;
@@ -56,17 +55,17 @@ namespace RLR
             var levelText = LevelTextObject.GetComponent<TextMeshProUGUI>();
             levelText.text = "Level " + GameControl.State.CurrentLevel;
             LevelTextObject.SetActive(true);
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(2);
             LevelTextObject.SetActive(false);
 
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(1);
 
             // Countdown
             for (var i = 0; i < 3; i++)
             {
                 var countdown = Instantiate(CountdownPrefab, GameObject.Find("Canvas").transform);
                 countdown.GetComponent<TextMeshProUGUI>().text = (3 - i).ToString();
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(1);
                 Destroy(countdown);
             }
 

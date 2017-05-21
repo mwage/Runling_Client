@@ -41,7 +41,7 @@ namespace SLA
                 }
                 
                 //change level
-                LevelManager.EndLevel(0.3f);
+                LevelManager.EndLevel(2f);
 
                 //dont repeat above once player dead
                 StopUpdate = true;

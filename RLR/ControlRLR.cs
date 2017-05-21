@@ -13,6 +13,7 @@ namespace RLR
         public GameObject PracticeMode;
         public GameObject TimeModeUI;
         public GameObject CountDownText;
+        public GameObject HighScoreText;
 
         public bool StopUpdate;
 
@@ -32,6 +33,7 @@ namespace RLR
                 GameControl.State.Lives = 3;
                 TimeModeUI.SetActive(true);
                 CountDownText.GetComponent<TextMeshProUGUI>().text = "Countdown: " + (int)((285 + GameControl.State.CurrentLevel*15) / 60) + ":" + ((285 + GameControl.State.CurrentLevel*15) % 60).ToString("00.00");
+                HighScoreText.GetComponent<TextMeshProUGUI>().text = GameControl.State.SetDifficulty == Difficulty.Normal ? "Highscore: " + GameControl.HighScores.HighScoreRLRNormal[0].ToString("f0") : "Highscore: " + GameControl.HighScores.HighScoreRLRHard[0].ToString("f0");
                 LevelManager.LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + GameControl.State.Lives;
             }
 
@@ -50,7 +52,7 @@ namespace RLR
             if (GameControl.State.FinishedLevel && !StopUpdate)
             {
                 StopUpdate = true;
-                LevelManager.EndLevel(0f);
+                LevelManager.EndLevel(0);
             }
 
             // Start autoclicking

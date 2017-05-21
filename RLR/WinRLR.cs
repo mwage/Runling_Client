@@ -13,12 +13,9 @@ namespace RLR
 
         public void Awake()
         {
-            if (GameControl.State.SetGameMode == Gamemode.TimeMode)
-            {
-                Background.SetActive(true);
-                HighScoreMenuRLR.CreateTextObjects(Background);
-                HighScoreMenuRLR.SetNumbers();
-            }
+            Background.SetActive(true);
+            HighScoreMenuRLR.CreateTextObjects(Background);
+            HighScoreMenuRLR.SetNumbers();
         }
 
         public void BackToMenu()

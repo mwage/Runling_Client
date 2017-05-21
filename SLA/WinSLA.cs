@@ -20,7 +20,7 @@ namespace UI.SLA_Menus
         public void BackToMenu()
         {
             GameControl.State.GameActive = false;
-            SceneManager.LoadScene("MainMenu");
+            SceneManager.LoadSceneAsync("MainMenu");
         }
 
         public void RestartGame()
@@ -29,7 +29,7 @@ namespace UI.SLA_Menus
             GameControl.State.AutoClickerActive = false;
             GameControl.State.TotalScore = 0;
 
-            SceneManager.LoadScene("SLA");
+            SceneManager.LoadSceneAsync("SLA");
         }
     }
 }

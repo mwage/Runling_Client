@@ -8,24 +8,40 @@ namespace Drones.Movement
         public delegate void MovementDelegate(GameObject drone, float droneSpeed, float? curving = null,
             float? sinForce = null, float? sinFrequency = null);
 
+        private static readonly int SpeedHash = Animator.StringToHash("DroneSpeed");
+        private static Animator _anim;
+        private static float _rotationSpeed;
+
         public static void Move(GameObject drone, float droneSpeed, MovementDelegate moveDelegate = null,
             float? curving = null, float? sinForce = null, float? sinFrequency = null)
         {
+            var model = drone.transform.Find("Model");
+            if (model != null)
+            {
+                _anim = model.GetComponent<Animator>();
+            }
+            _rotationSpeed = 3 + droneSpeed / 2;
             if (moveDelegate == null)
             {
                 MoveStraight(drone, droneSpeed);
-                var instance = drone.AddComponent<RotateBouncingDrone>();
-                instance.DroneSpeed = droneSpeed;
             }
             else
             {
                 moveDelegate(drone, droneSpeed, curving, sinForce, sinFrequency);
+                if (drone.GetComponent<PointToPointMovement>() != null)
+                {
+                    Object.Destroy(_anim);
+                }
             }
         }
 
         //move drones in a straight line
         public static void MoveStraight(GameObject drone, float droneSpeed)
         {
+            if (_anim != null)
+            {
+                _anim.SetFloat(SpeedHash, _rotationSpeed);
+            }
             var rb = drone.GetComponent<Rigidbody>();
             rb.AddForce(drone.transform.forward * droneSpeed, ForceMode.VelocityChange);
         }
@@ -33,6 +49,11 @@ namespace Drones.Movement
         public static void ChaserMovement(GameObject drone, float droneSpeed, float? curving = null,
             float? sinForce = null, float? sinFrequency = null)
         {
+            if (_anim != null)
+            {
+                _anim.SetFloat(SpeedHash, _rotationSpeed);
+            }
+
             var instance = drone.AddComponent<ChaserMovement>();
             instance.Speed = droneSpeed;
         }
@@ -60,6 +81,7 @@ namespace Drones.Movement
         public static void SinusoidalMovement(GameObject drone, float droneSpeed, float? curving = null,
             float? sinForce = null, float? sinFrequency = null)
         {
+            Object.Destroy(_anim);
             MoveStraight(drone, droneSpeed);
             var instance = drone.AddComponent<SinusoidalMovement>();
             instance.SinFrequency = sinFrequency ?? 5;
@@ -70,6 +92,7 @@ namespace Drones.Movement
         public static void FixedSinusoidalMovement(GameObject drone, float droneSpeed, float? curving = null,
             float? sinForce = null, float? sinFrequency = null)
         {
+            Object.Destroy(_anim);
             SinusoidalMovement(drone, droneSpeed, sinForce: sinForce, sinFrequency: sinFrequency);
             drone.GetComponent<SinusoidalMovement>().Fixed = true;
         }
