@@ -20,8 +20,8 @@ namespace SLA.Levels
             DroneFactory.SpawnAndAddDrones(new RandomDrone(7f, 1.5f, DroneColor.Red), 10, 7f, BoundariesSLA.BouncingSla);
 
             // Spawn Mine Drones
-            MineVariations.Timed360Mines(DroneFactory, 3, new MineDrone(5, 3, DroneColor.Red), BoundariesSLA.FlyingSla,
-                new DefaultDrone(10, 1, DroneColor.Cyan), 32, 8, 0.1f);
+            MineVariations.Synced360Mines(DroneFactory, 3, new MineDrone(5, 3, DroneColor.Red), BoundariesSLA.FlyingSla,
+                new DefaultDrone(10, 1, DroneColor.Cyan), 32, 8, 0.07f);
         }
     }
 }

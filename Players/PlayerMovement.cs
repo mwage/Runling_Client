@@ -89,19 +89,30 @@ namespace Players
 
         private void MoveToPosition(Vector3 position)
         {
-            if (!GameControl.State.IsImmobile)
+            RaycastHit hit;
+            var ray = UnityEngine.Camera.main.ScreenPointToRay(position);
+
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, _defLayer))
             {
-                RaycastHit hit;
-                var ray = UnityEngine.Camera.main.ScreenPointToRay(position);
+                _maxSpeed = GameControl.State.MoveSpeed;
+                _clickPos = hit.point;
 
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity, _defLayer))
+                // Play click animation
+                var click = Instantiate(MouseClick, _clickPos, Quaternion.Euler(0,45,0));
+                if (GameControl.State.IsImmobile)
                 {
-                    _maxSpeed = GameControl.State.MoveSpeed;
-                    _clickPos = hit.point;
+                    foreach (Transform child in click.transform)
+                    {
+                        child.GetComponent<Renderer>().material.color = Color.red;
+                        foreach (Transform ch in child)
+                        {
+                            ch.GetComponent<Renderer>().material.color = Color.red;
+                        }
+                    }
+                }
 
-                    // Play click animation
-                    Instantiate(MouseClick, _clickPos, Quaternion.Euler(0,45,0));
-                    
+                if (!GameControl.State.IsImmobile)
+                {
                     if ((_clickPos - transform.position).magnitude > 0.05f)
                     {
                         _targetPos = _clickPos;
