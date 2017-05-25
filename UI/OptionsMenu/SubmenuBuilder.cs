@@ -22,7 +22,7 @@ namespace UI.OptionsMenu
             setHotkey.onClick.AddListener(() => { GameControl.InputManager.RebindHotkey(keyName);});
         }
 
-        public static Slider AddSlider(GameObject sliderPrefab, GameObject hotkeyList, string name, float defaultValue, float minValue, float maxValue, UnityEngine.Events.UnityAction<float> sliderFunction)
+        public static Slider AddSlider(GameObject sliderPrefab, GameObject hotkeyList, string name, float minValue, float maxValue, UnityEngine.Events.UnityAction<float> sliderFunction)
         {
             var hotkey = Object.Instantiate(sliderPrefab, hotkeyList.transform);
             hotkey.transform.localScale = Vector3.one;

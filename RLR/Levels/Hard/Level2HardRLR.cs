@@ -20,7 +20,7 @@ namespace RLR.Levels.Hard
             // Spawn bouncing drones
             for (var i = 1; i < LaneArea.Length - 2; i++)
             {
-                DroneFactory.SpawnDrones(new RandomDrone(5, 1f, DroneColor.Grey), (int)(15 - i * 0.6f), area: LaneArea[i]);
+                DroneFactory.SpawnDrones(new RandomDrone(5, 1, DroneColor.Grey), (int)(11 - i * 0.4f), area: LaneArea[i]);
             }
 
             // Spawn blue drones

@@ -33,11 +33,11 @@ namespace Launcher
             HighScoreRLRNormal[0] = PlayerPrefs.GetFloat("HighScoreRLRNormalTimeMode");
             HighScoreRLRHard[0] = PlayerPrefs.GetFloat("HighScoreRLRHardTimeMode");
 
-            for (var i = 1; i < (HighScoreRLRNormal.Length - 1); i++)
+            for (var i = 1; i < (HighScoreRLRNormal.Length); i++)
             {
                 HighScoreRLRNormal[i] = PlayerPrefs.GetFloat("HighScoreRLRNormal" + i);
             }
-            for (var i = 1; i < (HighScoreRLRHard.Length - 1); i++)
+            for (var i = 1; i < (HighScoreRLRHard.Length); i++)
             {
                 HighScoreRLRHard[i] = PlayerPrefs.GetFloat("HighScoreRLRHard" + i);
             }

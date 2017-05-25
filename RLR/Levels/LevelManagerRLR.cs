@@ -111,6 +111,12 @@ namespace RLR.Levels
         // Load after the last level
         private IEnumerator EndGameRLR(float delay)
         {
+            if (GameControl.State.SetGameMode == Gamemode.TimeMode)
+            {
+                CheckSafeZones.ScoreRLR.AddRemainingCountdown();
+                CheckSafeZones.ScoreRLR.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + GameControl.State.TotalScore;
+            }
+
             if (!GameControl.State.IsDead)
             {
                 Win.transform.Find("Victory").gameObject.SetActive(true);
@@ -123,7 +129,6 @@ namespace RLR.Levels
             }
 
             // Load win screen
-            GameControl.State.GameActive = false;
             yield return new WaitForSeconds(delay);
             InGameMenuManagerRLR.CloseMenus();
             if (GameControl.State.SetGameMode != Gamemode.Practice)
@@ -131,6 +136,7 @@ namespace RLR.Levels
                 CheckSafeZones.ScoreRLR.SetHighScore();
             }
             GameControl.State.FinishedLevel = false;
+            GameControl.State.Player.SetActive(false);
             Win.gameObject.SetActive(true);
         }
     }

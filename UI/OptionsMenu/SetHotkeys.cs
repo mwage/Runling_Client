@@ -16,8 +16,8 @@ namespace UI.OptionsMenu
                 SubmenuBuilder.AddButton(HotkeyAction.DeactivateClicker, SetHotkeyPrefab, HotkeyList);
                 SubmenuBuilder.AddButton(HotkeyAction.NavigateMenu, SetHotkeyPrefab, HotkeyList);
                 SubmenuBuilder.AddButton(HotkeyAction.Pause, SetHotkeyPrefab, HotkeyList);
-                SubmenuBuilder.AddButton(HotkeyAction.ActivateGodmode, SetHotkeyPrefab, HotkeyList);
-                SubmenuBuilder.AddButton(HotkeyAction.DeactiveGodmode, SetHotkeyPrefab, HotkeyList);
+                //SubmenuBuilder.AddButton(HotkeyAction.ActivateGodmode, SetHotkeyPrefab, HotkeyList);
+                //SubmenuBuilder.AddButton(HotkeyAction.DeactiveGodmode, SetHotkeyPrefab, HotkeyList);
             }
         }
 

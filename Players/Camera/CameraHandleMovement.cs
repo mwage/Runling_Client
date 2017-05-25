@@ -56,14 +56,6 @@ namespace Players.Camera
                 transform.localPosition.z + transform.forward.z * GameControl.Settings.CameraZoom.Val * Mathf.Cos(GameControl.Settings.CameraAngle.Val * Mathf.PI / 180));
         }
 
-        public Vector3 GetWatchedPoint(Vector3 hypotheticalPosition)
-        {
-            return new Vector3(
-                hypotheticalPosition.x + transform.forward.x * GameControl.Settings.CameraZoom.Val * Mathf.Cos(GameControl.Settings.CameraAngle.Val * Mathf.PI / 180),
-                0F,
-                hypotheticalPosition.z + transform.forward.z * GameControl.Settings.CameraZoom.Val * Mathf.Cos(GameControl.Settings.CameraAngle.Val * Mathf.PI / 180));
-        }
-
         private void RotateCameraYAxis(float degrees)
         {
             var watchedPoint = GetWatchedPoint();
@@ -74,21 +66,16 @@ namespace Players.Camera
         private void SetWatchedPointInCameraRange(ref Vector3 newWatchedPoint)
         {
             if (newWatchedPoint.x < -GameControl.Settings.CameraRange)
-            {
                 newWatchedPoint.x = -GameControl.Settings.CameraRange + 0.1F;
-            }
+
             if (newWatchedPoint.x > GameControl.Settings.CameraRange)
-            {
                 newWatchedPoint.x = GameControl.Settings.CameraRange - 0.1F;
-            }
+
             if (newWatchedPoint.z < -GameControl.Settings.CameraRange)
-            {
                 newWatchedPoint.z = -GameControl.Settings.CameraRange + 0.1F;
-            }
+
             if (newWatchedPoint.z > GameControl.Settings.CameraRange)
-            {
                 newWatchedPoint.z = GameControl.Settings.CameraRange - 0.1F;
-            }
         }
 
         private void MoveCameraUsingInput()

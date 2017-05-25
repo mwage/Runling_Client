@@ -22,6 +22,7 @@ namespace RLR
             // Set current Level and movespeed, load drones and spawn immunity
             StopUpdate = true;
             GameControl.State.GameActive = true;
+            GameControl.State.CurrentLevel = 9;
             GameControl.State.MoveSpeed = 15;
             GameControl.State.TotalScore = 0;
             if (GameControl.State.SetGameMode == Gamemode.Practice)
@@ -68,7 +69,7 @@ namespace RLR
                 if (GameControl.State.AutoClickerActive)
                     GameControl.State.AutoClickerActive = false;
             }
-
+            /*
             // Become invulnerable
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.State.GodModeActive)
             {
@@ -88,6 +89,7 @@ namespace RLR
                     GameControl.State.Player.transform.Find("GodMode").gameObject.SetActive(false);
                 }
             }
+            */
         }
     }
 }

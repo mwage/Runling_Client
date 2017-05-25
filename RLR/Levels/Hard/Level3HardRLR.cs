@@ -18,7 +18,7 @@ namespace RLR.Levels.Hard
         public override void CreateDrones()
         {
             // Spawn blue drones
-            DroneFactory.SetPattern(new PatContinuousSpawn(0.1f, 2),
+            DroneFactory.SetPattern(new PatContinuousSpawn(0.15f, 2),
                 new RandomDrone(10, 1, DroneColor.Blue, restrictedZone: 0, droneType: DroneType.FlyingOnewayDrone));
 
             // Spawn red drones

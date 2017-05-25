@@ -10,6 +10,7 @@ namespace UI.Main_Menu
         public SLAMenu SLAMenu;
         public GameObject RLRMenuObject;
         public RLRMenu RLRMenu;
+        public MainMenuManager MainMenuManager;
 
         public void SLA()
         {
@@ -17,6 +18,7 @@ namespace UI.Main_Menu
             RLRMenuObject.gameObject.SetActive(false);
             SLAMenuObject.gameObject.SetActive(true);
             SLAMenu.SLAMenuActive = true;
+            MainMenuManager.MoveCamera(MainMenuManager.CameraPosSLA, MainMenuManager.CameraRotSLA);
         }
 
         public void RLR()
@@ -25,6 +27,7 @@ namespace UI.Main_Menu
             SLAMenuObject.gameObject.SetActive(false);
             RLRMenuObject.gameObject.SetActive(true);
             RLRMenu.RLRMenuActive = true;
+            MainMenuManager.MoveCamera(MainMenuManager.CameraPosRLR, MainMenuManager.CameraRotRLR);
         }
 
         public void Options()

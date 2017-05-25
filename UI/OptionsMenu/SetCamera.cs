@@ -40,9 +40,9 @@ namespace UI.OptionsMenu
                 SubmenuBuilder.AddButton(HotkeyAction.RotateRight, SetHotkeyPrefab, HotkeyList);
                 SubmenuBuilder.AddButton(HotkeyAction.ActivateFollow, SetHotkeyPrefab, HotkeyList);
 
-                _cameraZoomSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Zoom", GameControl.Settings.CameraZoom.Val, GameControl.Settings.CameraZoom.Min, GameControl.Settings.CameraZoom.Max, SetCameraZoom);
-                _cameraAngleSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Angle", GameControl.Settings.CameraAngle.Val, GameControl.Settings.CameraAngle.Min, GameControl.Settings.CameraAngle.Max, SetCameraAngle);
-                _cameraSpeedSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Speed", GameControl.Settings.CameraSpeed.Val, GameControl.Settings.CameraSpeed.Min, GameControl.Settings.CameraSpeed.Max, SetCameraSpeed);
+                _cameraZoomSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Zoom",  GameControl.Settings.CameraZoom.Min, GameControl.Settings.CameraZoom.Max, SetCameraZoom);
+                _cameraAngleSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Angle",  GameControl.Settings.CameraAngle.Min, GameControl.Settings.CameraAngle.Max, SetCameraAngle);
+                _cameraSpeedSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Speed",  GameControl.Settings.CameraSpeed.Min, GameControl.Settings.CameraSpeed.Max, SetCameraSpeed);
                 _cameraFollowSelection = SubmenuBuilder.AddSelection(SelectionPrefab, HotkeyList, "Follow", FollowCameraSelection);
 
                 SetSliderValuesFromSettings();

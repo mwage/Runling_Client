@@ -50,9 +50,9 @@ namespace RLR.GenerateMap
             AirCollider = CreateFlyingDroneColliders(Lanes, FlyingDroneCollider, _flyingDroneColliderOffset, Terrain.transform);
         }
 
-        public Vector3 GetStartPlatform()
+        public GameObject GetStartPlatform()
         {
-            return SafeZones[SafeZones.Count - 1].transform.position;
+            return SafeZones[SafeZones.Count - 1];
         }
 
         public List<GameObject> GetSafeZones()

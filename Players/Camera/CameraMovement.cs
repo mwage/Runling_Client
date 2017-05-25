@@ -12,7 +12,7 @@ namespace Players.Camera
 
         public void SetCameraPitch(float pitchAngle)
         {
-            transform.rotation = Quaternion.Euler(pitchAngle, 0, 0);
+            transform.localEulerAngles = new Vector3(pitchAngle, 0, 0);
         }
     }
 }

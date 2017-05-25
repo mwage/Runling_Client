@@ -37,7 +37,7 @@ namespace RLR
             // Load drones and player
             var startPlatform = LevelManagerRLR.GenerateMapRLR.GetStartPlatform();
             var airColliderRange = LevelManagerRLR.GenerateMapRLR.GetAirColliderRange();
-            GameControl.State.Player = Instantiate(PlayerPrefab, new Vector3(startPlatform.x, 0, startPlatform.z), Quaternion.Euler(0, 90, 0));
+            GameControl.State.Player = Instantiate(PlayerPrefab, new Vector3(startPlatform.transform.position.x + startPlatform.transform.Find("VisibleObjects/Ground").transform.localScale.x / 2 - 1, 0, startPlatform.transform.position.z), Quaternion.Euler(0, 90, 0));
             if (GameControl.State.GodModeActive && !GameControl.State.Player.transform.Find("GodMode").gameObject.activeSelf)
             {
                 GameControl.State.Player.transform.Find("GodMode").gameObject.SetActive(true);

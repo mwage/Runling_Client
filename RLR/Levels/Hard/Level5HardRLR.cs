@@ -19,7 +19,7 @@ namespace RLR.Levels.Hard
             DroneFactory.SpawnDrones(new RandomDrone(6, 2, DroneColor.Grey), 3, area: LaneArea[20]);
 
             // Spawn red drones
-            DroneFactory.SpawnDrones(new RedDrone(17, 2, DroneColor.Red, 3, LaneArea[0]), 70);
+            DroneFactory.SpawnDrones(new RedDrone(17, 2, DroneColor.Red, 3, LaneArea[0]), 60);
         }
     }
 }

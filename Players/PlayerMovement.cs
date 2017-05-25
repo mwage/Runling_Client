@@ -18,7 +18,7 @@ namespace Players
         private float _currentSpeed;
         private float _highestSpeedReached;
         private float _distance;
-        public float Acceleration = 80;
+        private float _acceleration;
         private float _deceleration;
         private float _stopSensitivity;
         private bool _accelerate;
@@ -36,6 +36,7 @@ namespace Players
             _rb = GetComponent<Rigidbody>();
             _targetPos = transform.position;
             _rotationSpeed = 30;
+            _acceleration = 100;
             _deceleration = 100;
             _currentSpeed = 0;
             _accelerate = false;
@@ -160,7 +161,7 @@ namespace Players
             {
                 if (_currentSpeed < _maxSpeed)
                 {
-                    _rb.AddForce(_direction * Acceleration, ForceMode.Acceleration);
+                    _rb.AddForce(_direction * _acceleration, ForceMode.Acceleration);
                     _currentSpeed = _rb.velocity.magnitude;
                     _highestSpeedReached = _currentSpeed;
                 }
