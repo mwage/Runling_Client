@@ -16,8 +16,8 @@ namespace SLA.Levels
         public override void CreateDrones()
         {
             // Spawn Bouncing Drones
-            DroneFactory.SpawnAndAddDrones(new RandomDrone(5f, 1f, DroneColor.Blue), 25, 3, BoundariesSLA.BouncingSla);
-            DroneFactory.SpawnAndAddDrones(new RandomDrone(5f, 1.5f, DroneColor.Red), 15, 8f, BoundariesSLA.BouncingSla);
+            DroneFactory.SpawnAndAddDrones(new RandomDrone(5f, 1f, DroneColor.Blue), 20, 2.5f, BoundariesSLA.BouncingSla);
+            DroneFactory.SpawnAndAddDrones(new RandomDrone(5f, 1.5f, DroneColor.Red), 10, 8, BoundariesSLA.BouncingSla);
         }
     }
 }

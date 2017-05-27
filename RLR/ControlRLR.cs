@@ -22,8 +22,7 @@ namespace RLR
             // Set current Level and movespeed, load drones and spawn immunity
             StopUpdate = true;
             GameControl.State.GameActive = true;
-            GameControl.State.CurrentLevel = 9;
-            GameControl.State.MoveSpeed = 15;
+            GameControl.State.MoveSpeed = 13;
             GameControl.State.TotalScore = 0;
             if (GameControl.State.SetGameMode == Gamemode.Practice)
             {

@@ -11,8 +11,19 @@ namespace Launcher
         public float[] HighScoreRLRNormal = new float[10];
         public float[] HighScoreRLRHard = new float[10];
 
+        private const int Version = 2;
+
         public HighScores()
         {
+            var reset = PlayerPrefs.GetInt("Reset");
+            if (reset < Version)
+            {
+                Debug.Log("resetting scores");
+                ResetHighscoresRLR();
+                ResetHighscoresSLA();
+                PlayerPrefs.SetInt("Reset", Version);
+            }
+
             LoadHighscoresSLA();
             LoadHighscoresRLR();
         }
@@ -40,6 +51,31 @@ namespace Launcher
             for (var i = 1; i < (HighScoreRLRHard.Length); i++)
             {
                 HighScoreRLRHard[i] = PlayerPrefs.GetFloat("HighScoreRLRHard" + i);
+            }
+        }
+
+        private void ResetHighscoresSLA()
+        {
+            PlayerPrefs.SetInt("HighScoreSLAGame", 0);
+            PlayerPrefs.SetInt("HighScoreSLACombined", 0);
+            for (var i = 1; i < (HighScoreSLA.Length - 1); i++)
+            {
+                PlayerPrefs.SetInt("HighScoreSLA" + i, 0);
+            }
+        }
+
+        private void ResetHighscoresRLR()
+        {
+            PlayerPrefs.SetFloat("HighScoreRLRNormalTimeMode", 0);
+            PlayerPrefs.SetFloat("HighScoreRLRHardTimeMode", 0);
+
+            for (var i = 1; i < (HighScoreRLRNormal.Length); i++)
+            {
+                PlayerPrefs.SetFloat("HighScoreRLRNormal" + i, 0);
+            }
+            for (var i = 1; i < (HighScoreRLRHard.Length); i++)
+            {
+                PlayerPrefs.SetFloat("HighScoreRLRHard" + i, 0);
             }
         }
     }

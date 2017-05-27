@@ -29,6 +29,8 @@ namespace UI.OptionsMenu
             GameControl.Settings.LoadSettings();
             CameraHandleMovement.SetCameraHandlePosition(watchedPoint);
             CameraMovement.SetCameraPitch(GameControl.Settings.CameraAngle.Val);
+            
+            
 
             OptionsMenuActive = false;
             gameObject.SetActive(false);

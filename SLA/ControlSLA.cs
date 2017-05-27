@@ -60,6 +60,7 @@ namespace SLA
                 if (GameControl.State.AutoClickerActive)
                     GameControl.State.AutoClickerActive = false;
             }
+            
             /*
             // Press 1 to turn on Godmode
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.State.GodModeActive)
