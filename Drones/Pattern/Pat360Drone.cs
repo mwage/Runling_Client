@@ -49,7 +49,7 @@ namespace Drones.Pattern
         public override void SetPattern(DroneFactory factory, IDrone drone, Area area, StartPositionDelegate posDelegate = null)
         {
             if (posDelegate == null)
-                posDelegate = delegate { return new Vector3(0, 0.6f, 0); };
+                posDelegate = delegate { return new Vector3(0, 0.4f, 0); };
 
             factory.StartCoroutine(Generate360Drones(factory, drone, area, posDelegate));
         }

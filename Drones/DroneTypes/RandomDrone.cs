@@ -30,25 +30,15 @@ namespace Drones.DroneTypes
         {
             var newDrone = Object.Instantiate(factory.SetDroneType[DroneType]);
 
-            var isGround = newDrone.layer == 11;
-
             Vector3 pos;
             if (posDelegate != null)
                 pos = posDelegate(Size, area);
             else
             {
-                if (isGround)
-                {
-                    pos = isAdded
-                        ? DroneStartPosition.GetRandomCornerGround(Size, area)
-                        : DroneStartPosition.GetRandomPositionGround(Size, area);
-                }
-                else
-                {
-                    pos = isAdded
-                        ? DroneStartPosition.GetRandomCornerAir(Size, area)
-                        : DroneStartPosition.GetRandomPositionAir(Size, area);
-                }
+                pos = isAdded
+                    ? DroneStartPosition.GetRandomCorner(Size, area)
+                    : DroneStartPosition.GetRandomPosition(Size, area);
+               
             }
 
             newDrone.transform.position = pos;

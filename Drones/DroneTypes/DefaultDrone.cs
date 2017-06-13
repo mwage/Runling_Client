@@ -19,7 +19,7 @@ namespace Drones.DroneTypes
             DroneMovement.MovementDelegate moveDelegate = null, float? curving = null, float? sinForce = null, float? sinFrequency = null) : 
             base(speed, size, color, droneType, moveDelegate, curving, sinForce, sinFrequency)
         {
-            Position = position ?? new Vector3(0, 0.6f, 0);
+            Position = position ?? new Vector3(0, 0.4f, 0);
             Direction = direction ?? 0;
             DroneType = droneType ?? DroneType.FlyingOnewayDrone;
         }

@@ -28,6 +28,7 @@ namespace UI.SLA_Menus
             GameControl.State.IsDead = true;
             GameControl.State.AutoClickerActive = false;
             GameControl.State.TotalScore = 0;
+            GameControl.State.CurrentLevel = 1;
 
             SceneManager.LoadSceneAsync("SLA");
         }

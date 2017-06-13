@@ -77,7 +77,7 @@ namespace RLR.Levels
                     if (_spawnChaser[i] != 0)
                     {
                         _chaser[i].transform.position = safeZones[_chaserStartPosition[i]].transform.position + safeZones[_chaserStartPosition[i]].transform.rotation *
-                                                        new Vector3(safeZones[_chaserStartPosition[i]].transform.Find("VisibleObjects/Ground").transform.localScale.x / 2 + _chaserBase.Size / 2 + 0.5f, 0.6f, 0);
+                                                        new Vector3(safeZones[_chaserStartPosition[i]].transform.Find("VisibleObjects/Ground").transform.localScale.x / 2 + _chaserBase.Size / 2 + 0.5f, 0.4f, 0);
                     }
                     if (_pattern != null)
                     {

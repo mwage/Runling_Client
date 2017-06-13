@@ -19,6 +19,7 @@ namespace UI.RLR_Menus
         public GameObject PauseScreen;
         public GameObject ChooseLevel;
         public GameObject HighScoreMenuObject;
+        public GameObject RestartGame;
 
         public bool MenuOn;
         private bool _pause;
@@ -48,8 +49,9 @@ namespace UI.RLR_Menus
                     InGameMenuObject.SetActive(true);
                     Time.timeScale = 0;
                     MenuOn = true;
-                    if (GameControl.State.SetGameMode == Gamemode.Practice)
+                    if (GameControl.State.SetGameMode == Gamemode.Practice && !ChooseLevel.activeSelf)
                     {
+                        RestartGame.SetActive(false);
                         ChooseLevel.SetActive(true);
                     }
                 }
