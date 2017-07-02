@@ -11,8 +11,9 @@ namespace UI.RLR_Menus
         public GameObject HighScoreMenuObject;
         public GameObject ChooseLevelObject;
         public InGameMenuManagerRLR InGameMenuManagerSla;
-        public OptionsMenu.OptionsMenu OptionsMenu;
+        public RLRMenus.Characters.OptionsMenu OptionsMenu;
         public ChooseLevelMenuRLR ChooseLevelMenu;
+        public HighScoreMenuRLR HighScoreMenuRLR;
 
         public void BackToGame()
         {
@@ -26,6 +27,7 @@ namespace UI.RLR_Menus
             GameControl.State.IsDead = true;
             GameControl.State.TotalScore = 0;
             GameControl.State.AutoClickerActive = false;
+            GameControl.State.CurrentLevel = 1;
             Time.timeScale = 1;
 
             SceneManager.LoadScene("RLR");
@@ -41,7 +43,6 @@ namespace UI.RLR_Menus
         public void BackToMenu()
         {
             GameControl.State.GameActive = false;
-            GameControl.State.IsSafe = false;
             Time.timeScale = 1;
             SceneManager.LoadScene("MainMenu");
         }
@@ -51,6 +52,13 @@ namespace UI.RLR_Menus
             InGameMenuObject.gameObject.SetActive(false);
             ChooseLevelObject.gameObject.SetActive(true);
             ChooseLevelMenu.ChooseLevelMenuActive = true;
+        }
+
+        public void HighScores()
+        {
+            gameObject.SetActive(false);
+            HighScoreMenuObject.gameObject.SetActive(true);
+            HighScoreMenuRLR.HighScoreMenuActive = true;
         }
     }
 }

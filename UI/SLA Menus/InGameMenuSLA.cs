@@ -12,7 +12,7 @@ namespace UI.SLA_Menus
         public GameObject ChooseLevelObject;
 
         public InGameMenuManagerSLA InGameMenuManagerSla;
-        public OptionsMenu.OptionsMenu OptionsMenu;
+        public RLRMenus.Characters.OptionsMenu OptionsMenu;
         public HighScoreMenuSLA HighScoreMenuSLA;
         public ChooseLevelMenuSLA ChooseLevelMenu;
 
@@ -34,6 +34,7 @@ namespace UI.SLA_Menus
         {
             GameControl.State.IsDead = true;
             GameControl.State.TotalScore = 0;
+            GameControl.State.CurrentLevel = 1;
             GameControl.State.AutoClickerActive = false;
             Time.timeScale = 1;
 

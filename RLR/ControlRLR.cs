@@ -1,5 +1,6 @@
 ﻿using Launcher;
 using RLR.Levels;
+using TMPro;
 using UnityEngine;
 
 namespace RLR
@@ -10,6 +11,9 @@ namespace RLR
         public InitializeGameRLR InitializeGameRLR;
         public DeathRLR DeathRLR;
         public GameObject PracticeMode;
+        public GameObject TimeModeUI;
+        public GameObject CountDownText;
+        public GameObject HighScoreText;
 
         public bool StopUpdate;
 
@@ -19,9 +23,18 @@ namespace RLR
             StopUpdate = true;
             GameControl.State.GameActive = true;
             GameControl.State.MoveSpeed = 13;
+            GameControl.State.TotalScore = 0;
             if (GameControl.State.SetGameMode == Gamemode.Practice)
             {
                 PracticeMode.SetActive(true);
+            }
+            if (GameControl.State.SetGameMode == Gamemode.TimeMode)
+            {
+                GameControl.State.Lives = 3;
+                TimeModeUI.SetActive(true);
+                CountDownText.GetComponent<TextMeshProUGUI>().text = "Countdown: " + (int)((285 + GameControl.State.CurrentLevel*15) / 60) + ":" + ((285 + GameControl.State.CurrentLevel*15) % 60).ToString("00.00");
+                HighScoreText.GetComponent<TextMeshProUGUI>().text = GameControl.State.SetDifficulty == Difficulty.Normal ? "Highscore: " + GameControl.HighScores.HighScoreRLRNormal[0].ToString("f0") : "Highscore: " + GameControl.HighScores.HighScoreRLRHard[0].ToString("f0");
+                LevelManager.LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + GameControl.State.Lives;
             }
 
             InitializeGameRLR.InitializeGame();
@@ -38,7 +51,8 @@ namespace RLR
 
             if (GameControl.State.FinishedLevel && !StopUpdate)
             {
-                LevelManager.EndLevel(0f);
+                StopUpdate = true;
+                LevelManager.EndLevel(0);
             }
 
             // Start autoclicking
@@ -54,7 +68,7 @@ namespace RLR
                 if (GameControl.State.AutoClickerActive)
                     GameControl.State.AutoClickerActive = false;
             }
-
+            /*
             // Become invulnerable
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.State.GodModeActive)
             {
@@ -74,6 +88,7 @@ namespace RLR
                     GameControl.State.Player.transform.Find("GodMode").gameObject.SetActive(false);
                 }
             }
+            */
         }
     }
 }

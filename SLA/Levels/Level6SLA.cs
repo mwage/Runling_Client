@@ -20,11 +20,11 @@ namespace SLA.Levels
         public override void CreateDrones()
         {
             // Spawn Bouncing Drones
-            DroneFactory.SpawnAndAddDrones(new RandomDrone(7f, 1f, DroneColor.Blue), 15, 6f, BoundariesSLA.BouncingSla);
+            DroneFactory.SpawnAndAddDrones(new RandomDrone(7, 1f, DroneColor.Blue), 13, 8, BoundariesSLA.BouncingSla);
 
             // Spawn Green Drones
-            DroneFactory.StartCoroutine(GenerateLevel6GreenDrones(4f, 24, 7f, 1.5f, DroneColor.DarkGreen, 0.02f, 1.5f, 2, 48, DroneStartPosition.GetRandomBottomSector));
-            DroneFactory.StartCoroutine(GenerateLevel6GreenDrones(5f, 24, 7f, 1.5f, DroneColor.DarkGreen, 0.03f, 1.5f, 2, 48, DroneStartPosition.GetRandomTopSector));
+            DroneFactory.StartCoroutine(GenerateLevel6GreenDrones(4f, 24, 7f, 1.5f, DroneColor.DarkGreen, 0.01f, 1.5f, 1, 40, DroneStartPosition.GetRandomBottomSector));
+            DroneFactory.StartCoroutine(GenerateLevel6GreenDrones(5f, 24, 7f, 1.5f, DroneColor.DarkGreen, 0.02f, 1.5f, 1, 40, DroneStartPosition.GetRandomTopSector));
         }
 
         private IEnumerator GenerateLevel6GreenDrones(float delay, int initialDroneCount, float speed, float size, DroneColor color,

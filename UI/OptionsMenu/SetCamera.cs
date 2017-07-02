@@ -3,7 +3,7 @@ using Players.Camera;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.OptionsMenu
+namespace UI.RLRMenus.Characters
 {
     public class SetCamera : MonoBehaviour
     {
@@ -22,6 +22,7 @@ namespace UI.OptionsMenu
         private Slider _cameraAngleSlider;
         private Slider _cameraSpeedSlider;
         private Toggle _cameraFollowSelection;
+        private Toggle _hideMiniMapSelection;
 
         private void OnEnable()
         {
@@ -40,10 +41,11 @@ namespace UI.OptionsMenu
                 SubmenuBuilder.AddButton(HotkeyAction.RotateRight, SetHotkeyPrefab, HotkeyList);
                 SubmenuBuilder.AddButton(HotkeyAction.ActivateFollow, SetHotkeyPrefab, HotkeyList);
 
-                _cameraZoomSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Zoom", GameControl.Settings.CameraZoom.Val, GameControl.Settings.CameraZoom.Min, GameControl.Settings.CameraZoom.Max, SetCameraZoom);
-                _cameraAngleSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Angle", GameControl.Settings.CameraAngle.Val, GameControl.Settings.CameraAngle.Min, GameControl.Settings.CameraAngle.Max, SetCameraAngle);
-                _cameraSpeedSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Speed", GameControl.Settings.CameraSpeed.Val, GameControl.Settings.CameraSpeed.Min, GameControl.Settings.CameraSpeed.Max, SetCameraSpeed);
+                _cameraZoomSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Zoom",  GameControl.Settings.CameraZoom.Min, GameControl.Settings.CameraZoom.Max, SetCameraZoom);
+                _cameraAngleSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Angle",  GameControl.Settings.CameraAngle.Min, GameControl.Settings.CameraAngle.Max, SetCameraAngle);
+                _cameraSpeedSlider = SubmenuBuilder.AddSlider(SliderPrefab, HotkeyList, "Camera Speed",  GameControl.Settings.CameraSpeed.Min, GameControl.Settings.CameraSpeed.Max, SetCameraSpeed);
                 _cameraFollowSelection = SubmenuBuilder.AddSelection(SelectionPrefab, HotkeyList, "Follow", FollowCameraSelection);
+                _hideMiniMapSelection = SubmenuBuilder.AddSelection(SelectionPrefab, HotkeyList, "Hide Minimap",HideMiniMapSelection);
 
                 SetSliderValuesFromSettings();
             }
@@ -59,7 +61,12 @@ namespace UI.OptionsMenu
         {
             GameControl.Settings.FollowEnabled = on ? 1 : 0;
         }
-        
+
+        public void HideMiniMapSelection(bool on)
+        {
+            GameControl.Settings.HideMiniMap = on;
+        }
+
         public void SetSliderValuesFromSettings()
         {
             if (_cameraZoomSlider != null)
@@ -68,6 +75,7 @@ namespace UI.OptionsMenu
                 _cameraAngleSlider.value = GameControl.Settings.CameraAngle.Val;
                 _cameraSpeedSlider.value = GameControl.Settings.CameraSpeed.Val;
                 _cameraFollowSelection.isOn = GameControl.Settings.FollowEnabled == 1;
+                _hideMiniMapSelection.isOn = GameControl.Settings.HideMiniMap;
             }
         }
         
@@ -77,8 +85,8 @@ namespace UI.OptionsMenu
             PlayerPrefs.SetFloat("CameraZoom", GameControl.Settings.CameraZoom.Val);
             PlayerPrefs.SetFloat("CameraAngle", GameControl.Settings.CameraAngle.Val);
             PlayerPrefs.SetFloat("CameraSpeed", GameControl.Settings.CameraSpeed.Val);
-            PlayerPrefs.SetInt("FollowState", GameControl.Settings.FollowState);
             PlayerPrefs.SetInt("FollowEnabled", GameControl.Settings.FollowEnabled);
+            PlayerPrefs.SetInt("HideMiniMap", GameControl.Settings.HideMiniMap ? 1 : 0);
 
             PlayerPrefs.Save();
         }

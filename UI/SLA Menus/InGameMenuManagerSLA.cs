@@ -1,6 +1,6 @@
 ﻿using Launcher;
 using SLA;
-using UI.OptionsMenu;
+using UI.RLRMenus.Characters;
 using UnityEngine;
 
 namespace UI.SLA_Menus
@@ -9,7 +9,7 @@ namespace UI.SLA_Menus
     {
         public InGameMenuSLA InGameMenu;
         public ControlSLA ControlSLA;
-        public OptionsMenu.OptionsMenu OptionsMenu;
+        public RLRMenus.Characters.OptionsMenu OptionsMenu;
         public SetHotkeys SetHotkeys;
         public HighScoreMenuSLA HighScoreMenuSLA;
         public ChooseLevelMenuSLA ChooseLevelMenu;
@@ -21,6 +21,7 @@ namespace UI.SLA_Menus
         public GameObject WinScreen;
         public GameObject PauseScreen;
         public GameObject ChooseLevel;
+        public GameObject RestartGame;
 
         public bool MenuOn;
         private bool _pause;
@@ -51,8 +52,9 @@ namespace UI.SLA_Menus
                     InGameMenuObject.SetActive(true);
                     Time.timeScale = 0;
                     MenuOn = true;
-                    if (GameControl.State.SetGameMode == Gamemode.Practice)
+                    if (GameControl.State.SetGameMode == Gamemode.Practice && !ChooseLevel.activeSelf)
                     {
+                        RestartGame.SetActive(false);
                         ChooseLevel.SetActive(true);
                     }
                 }

@@ -35,7 +35,7 @@ namespace Drones.Movement
             else
             {
                 _targetPos = GameControl.State.Player.transform.position;
-                _targetPos.y += 0.6f;
+                _targetPos.y += 0.4f;
                 var currentSpeed = _rb.velocity.magnitude;
                 _direction = (_targetPos - transform.position).normalized;
 

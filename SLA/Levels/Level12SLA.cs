@@ -23,7 +23,7 @@ namespace SLA.Levels
             DroneFactory.SpawnAndAddDrones(new RandomDrone(7f, 1.5f, DroneColor.Red), 15, 7f, BoundariesSLA.BouncingSla);
 
             // Spawn Green Drones
-            DroneFactory.StartCoroutine(GenerateLevel12GreenDrones(4f, 9f, 1.2f, DroneColor.Cyan, 32, 0.03f, 1.5f, 1, 48));
+            DroneFactory.StartCoroutine(GenerateLevel12GreenDrones(5f, 9f, 1.2f, DroneColor.Cyan, 32, 0.02f, 2.5f, 1, 48));
         }
 
         private IEnumerator GenerateLevel12GreenDrones(float delay, float speed, float size, DroneColor color, int initialDroneCount, float reduceDelay, float minDelay, int droneIncrease, int maxDrones)
@@ -37,7 +37,7 @@ namespace SLA.Levels
                 DroneFactory.SetPattern(new Pat360Drones(initialDroneCount + droneCount, 5f),
                     new DefaultDrone(speed, size, color), BoundariesSLA.FlyingSla, DroneStartPosition.GetRandomTopSector);
 
-                yield return new WaitForSeconds(delay);
+                yield return new WaitForSeconds(delay *6/5);
                 if (delay > minDelay) { delay -= delay * reduceDelay; }
                 if (droneCount < maxDrones-initialDroneCount) { droneCount += droneIncrease; }
             }

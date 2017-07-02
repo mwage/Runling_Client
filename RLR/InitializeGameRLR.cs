@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using Launcher;
-using Players;
 using Players.Camera;
 using RLR.Levels;
 using TMPro;
@@ -16,12 +15,13 @@ namespace RLR
         public LevelManagerRLR LevelManagerRLR;
         public ControlRLR ControlRLR;
         public InGameMenuManagerRLR InGameMenuManagerRLR;
-
+        public CameraHandleMovement CameraHandleMovement;
+        public ScoreRLR ScoreRLR;
 
         public GameObject PlayerPrefab;
         public GameObject LevelTextObject;
         public GameObject CountdownPrefab;
-        public CameraHandleMovement CameraHandleMovement;
+
 
 
         //set Spawnimmunity once game starts
@@ -37,8 +37,7 @@ namespace RLR
             // Load drones and player
             var startPlatform = LevelManagerRLR.GenerateMapRLR.GetStartPlatform();
             var airColliderRange = LevelManagerRLR.GenerateMapRLR.GetAirColliderRange();
-            GameControl.State.Player = Instantiate(PlayerPrefab, new Vector3(startPlatform.x, 0, startPlatform.z), Quaternion.Euler(0, 90, 0));
-            GameControl.State.Player.GetComponent<PlayerMovement>().Acceleration = 80;
+            GameControl.State.Player = Instantiate(PlayerPrefab, new Vector3(startPlatform.transform.position.x + startPlatform.transform.Find("VisibleObjects/Ground").transform.localScale.x / 2 - 1, 0, startPlatform.transform.position.z), Quaternion.Euler(0, 90, 0));
             if (GameControl.State.GodModeActive && !GameControl.State.Player.transform.Find("GodMode").gameObject.activeSelf)
             {
                 GameControl.State.Player.transform.Find("GodMode").gameObject.SetActive(true);
@@ -56,22 +55,23 @@ namespace RLR
             var levelText = LevelTextObject.GetComponent<TextMeshProUGUI>();
             levelText.text = "Level " + GameControl.State.CurrentLevel;
             LevelTextObject.SetActive(true);
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(2);
             LevelTextObject.SetActive(false);
 
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(1);
 
             // Countdown
             for (var i = 0; i < 3; i++)
             {
                 var countdown = Instantiate(CountdownPrefab, GameObject.Find("Canvas").transform);
                 countdown.GetComponent<TextMeshProUGUI>().text = (3 - i).ToString();
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(1);
                 Destroy(countdown);
             }
 
             GameControl.State.IsInvulnerable = false;
             GameControl.State.IsImmobile = false;
+            ScoreRLR.StartTimer();
         }
     }
 }

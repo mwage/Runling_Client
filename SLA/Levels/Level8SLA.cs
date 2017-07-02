@@ -1,4 +1,5 @@
-﻿using Drones.DroneTypes;
+﻿using System.Collections;
+using Drones.DroneTypes;
 using Drones.Pattern;
 using UnityEngine;
 
@@ -18,17 +19,42 @@ namespace SLA.Levels
         public override void CreateDrones()
         {
             // Spawn Bouncing Drones
-            DroneFactory.SpawnAndAddDrones(new RandomDrone(6f, 1f, DroneColor.Blue), 10, 4f, BoundariesSLA.BouncingSla);
-            DroneFactory.SpawnAndAddDrones(new RandomDrone(6f, 1.5f, DroneColor.Red), 8, 8f, BoundariesSLA.BouncingSla);
+            DroneFactory.SpawnAndAddDrones(new RandomDrone(7, 1f, DroneColor.Blue), 10, 6, BoundariesSLA.BouncingSla);
+            DroneFactory.SpawnAndAddDrones(new RandomDrone(7, 1.5f, DroneColor.Red), 6, 10, BoundariesSLA.BouncingSla);
 
             // Spawn Green Drones
-            DroneFactory.SetPattern(new Pat360Drones(12, 2.5f, true, true, -90, 180, 5, 0.05f, 2, null, true, 1, 32, 2, 0.03f, 1.5f),
-                new DefaultDrone(7, 1.5f, DroneColor.DarkGreen), posDelegate: delegate {
-                    return new Vector3(0, 0.6f, BoundariesSLA.FlyingSla.BottomBoundary + (0.5f + 1.5f / 2)); });
+            DroneFactory.StartCoroutine(GenerateGreenDrones(2.5f, 12, 7, 1.5f, DroneColor.DarkGreen, 0.02f, 1.5f, 1, 24));
 
-            DroneFactory.SetPattern(new Pat360Drones(12, 2.5f, true, false, -90, 180, 5, 0.05f, 2, 5, true, 1, 32, 2, 0.03f, 1.5f),
-                new DefaultDrone(7, 1.5f, DroneColor.DarkGreen), posDelegate: delegate {
-                    return new Vector3(0, 0.6f, BoundariesSLA.FlyingSla.TopBoundary - (0.5f + 1.5f / 2)); });
+        }
+
+        private IEnumerator GenerateGreenDrones(float delay, int initialDroneCount, float speed, float size,
+            DroneColor color,float reduceDelay, float minDelay, int droneIncrease, int maxDrones)
+        {
+            var droneCount = 0;
+
+            while (true)
+            {
+                DroneFactory.SetPattern(new Pat360Drones(initialDroneCount + droneCount, delay, false, true, -90, 180, changeDirection: true, patternRepeats: 2),
+                    new DefaultDrone(speed, size, color), posDelegate: delegate {
+                        return new Vector3(0, 0.4f, BoundariesSLA.FlyingSla.BottomBoundary + (0.5f + 1.5f / 2));
+                    });
+                yield return new WaitForSeconds(2 * delay);
+                DroneFactory.SetPattern(new Pat360Drones(initialDroneCount + droneCount, delay, false, false, -90, 180, changeDirection: true, patternRepeats: 2),
+                    new DefaultDrone(speed, size, color), posDelegate: delegate {
+                        return new Vector3(0, 0.4f, BoundariesSLA.FlyingSla.TopBoundary - (0.5f + 1.5f / 2));
+                    });
+
+                yield return new WaitForSeconds(2*delay);
+
+                if (delay > minDelay)
+                {
+                    delay -= delay * reduceDelay;
+                }
+                if (droneCount < maxDrones - initialDroneCount)
+                {
+                    droneCount += droneIncrease;
+                }
+            }
         }
     }
 }

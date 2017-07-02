@@ -8,6 +8,7 @@ namespace UI.Main_Menu
 
         public HighScoreMenuSLA HighScoreMenuSLA;
         public SceneLoader SceneLoader;
+        public MainMenuManager MainMenuManager;
 
         public GameObject MainMenu;
         public GameObject HighScoreMenu;
@@ -48,6 +49,7 @@ namespace UI.Main_Menu
             SLAMenuActive = false;
             gameObject.SetActive(false);
             MainMenu.gameObject.SetActive(true);
+            MainMenuManager.MoveCamera(MainMenuManager.CameraPosMainMenu, MainMenuManager.CameraRotMainMenu);
         }
     }
 }

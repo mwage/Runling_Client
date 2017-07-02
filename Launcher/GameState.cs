@@ -36,5 +36,6 @@ namespace Launcher
         public bool IsInvulnerable = false;
         public bool IsSafe = false;
         public bool IsImmobile = false;
+        public int Lives = 0;
     }
 }

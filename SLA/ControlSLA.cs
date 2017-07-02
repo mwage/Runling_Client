@@ -41,7 +41,7 @@ namespace SLA
                 }
                 
                 //change level
-                LevelManager.EndLevel(0.3f);
+                LevelManager.EndLevel(2f);
 
                 //dont repeat above once player dead
                 StopUpdate = true;
@@ -60,7 +60,8 @@ namespace SLA
                 if (GameControl.State.AutoClickerActive)
                     GameControl.State.AutoClickerActive = false;
             }
-
+            
+            /*
             // Press 1 to turn on Godmode
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.State.GodModeActive)
             {
@@ -80,6 +81,7 @@ namespace SLA
                    GameControl.State.Player.transform.Find("GodMode").gameObject.SetActive(false);
                 }
             }
+            */
         }
     }
 }

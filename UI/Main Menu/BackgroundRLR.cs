@@ -21,18 +21,18 @@ namespace UI.Main_Menu
             // Spawn bouncing drones
             for (var i = 1; i < laneArea.Length - 2; i++)
             {
-                DroneFactory.SpawnDrones(new RandomDrone(7, 2f, DroneColor.Grey), (int)(12 - i * 0.4f), area: laneArea[i]);
+                DroneFactory.SpawnDrones(new RandomDrone(6, 2f, DroneColor.Grey), (int)(11 - i * 0.4f), area: laneArea[i]);
             }
-            DroneFactory.SpawnDrones(new RandomDrone(7, 2f, DroneColor.Grey), 4, area: laneArea[19]);
-            DroneFactory.SpawnDrones(new RandomDrone(7, 2f, DroneColor.Grey), 3, area: laneArea[20]);
+            DroneFactory.SpawnDrones(new RandomDrone(6, 2f, DroneColor.Grey), 4, area: laneArea[19]);
+            DroneFactory.SpawnDrones(new RandomDrone(6, 2f, DroneColor.Grey), 3, area: laneArea[20]);
 
             // Spawn blue drones
-            DroneFactory.SetPattern(new Pat360Drones(48, 10, true, true, 270), new DefaultDrone(15, 2, DroneColor.Blue));
-            DroneFactory.SetPattern(new Pat360Drones(48, 10, true, true, 90), new DefaultDrone(15, 2, DroneColor.Blue));
+            DroneFactory.SetPattern(new Pat360Drones(40, 9, true, true, 270), new DefaultDrone(12, 2, DroneColor.Blue));
+            DroneFactory.SetPattern(new Pat360Drones(40, 9, true, true, 90), new DefaultDrone(12, 2, DroneColor.Blue));
 
             // Spawn yellow drones
-            DroneFactory.SetPattern(new Pat360Drones(32, repeat: true, pulseDelay: 6),
-                new DefaultDrone(15, 2, DroneColor.Golden, moveDelegate: DroneMovement.CurvedMovement, curving: 7));
+            DroneFactory.SetPattern(new Pat360Drones(32, repeat: true, pulseDelay: 5),
+                new DefaultDrone(12, 2, DroneColor.Golden, moveDelegate: DroneMovement.CurvedMovement, curving: 10));
         }
     }
 }

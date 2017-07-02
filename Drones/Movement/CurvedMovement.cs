@@ -7,6 +7,7 @@ namespace Drones.Movement
         private Rigidbody _rb;
         public float Curving;
         public float DroneSpeed;
+        public float? CurvingDuration;
 
         private void Start ()
         {
@@ -21,6 +22,10 @@ namespace Drones.Movement
                 _rb.transform.rotation = Quaternion.LookRotation(_rb.velocity, Vector3.up);
             }
             _rb.velocity = _rb.velocity.normalized * DroneSpeed;
+            if (CurvingDuration != null && Curving > Time.fixedDeltaTime * Curving / CurvingDuration.Value)
+            {
+                Curving -= Time.fixedDeltaTime * Curving / CurvingDuration.Value;
+            }
         }
     }
 }

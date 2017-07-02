@@ -27,7 +27,7 @@ namespace Players
 
             }
 
-            // Death Trigger
+            // Safety Death Trigger
             if (((other.CompareTag("Enemy") && !GameControl.State.IsSafe || other.CompareTag("Strong Enemy")) && !GameControl.State.IsInvulnerable) && !GameControl.State.GodModeActive)
             {
                 GameControl.State.IsDead = true;
@@ -41,6 +41,12 @@ namespace Players
                 SaveZone = other.transform.parent.parent.gameObject;
                 EnterSaveZone = true;
                 _onPlatform = true;
+            }
+
+            // Death Trigger
+            if (((other.CompareTag("Enemy") && !GameControl.State.IsSafe || other.CompareTag("Strong Enemy")) && !GameControl.State.IsInvulnerable) && !GameControl.State.GodModeActive)
+            {
+                GameControl.State.IsDead = true;
             }
         }
 

@@ -12,7 +12,7 @@ namespace UI.Main_Menu
         private void Start()
         {
             DroneFactory.SpawnDrones(new RandomDrone(3f, 1f, DroneColor.Blue), 20, area: BoundariesSLA.BouncingMainMenu);
-            DroneFactory.SpawnDrones(new RandomDrone(5f, 1f, DroneColor.Magenta, DroneType.FlyingBouncingDrone), 30, area: BoundariesSLA.FlyingMainMenu);
+            DroneFactory.SpawnDrones(new RandomDrone(5f, 1f, DroneColor.Magenta, DroneType.FlyingBouncingDrone), 50, area: BoundariesSLA.FlyingMainMenu);
         }
     }
 }

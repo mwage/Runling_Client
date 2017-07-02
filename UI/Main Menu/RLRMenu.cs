@@ -9,11 +9,13 @@ namespace UI.Main_Menu
     {
         public HighScoreMenuRLR HighScoreMenuSLA;
         public SceneLoader SceneLoader;
+        public MainMenuManager MainMenuManager;
 
         public GameObject MainMenu;
         public GameObject HighScoreMenu;
         public GameObject LaunchRLR;
         public GameObject Menus;
+
 
         private Difficulty? _voteDifficulty;
         private Gamemode? _voteGameMode;
@@ -81,6 +83,12 @@ namespace UI.Main_Menu
             RLRMenuActive = false;
             gameObject.SetActive(false);
             MainMenu.gameObject.SetActive(true);
+            transform.Find("Mode/Classic").GetComponent<Toggle>().isOn = false;
+            transform.Find("Mode/Practice").GetComponent<Toggle>().isOn = false;
+            transform.Find("Mode/Time").GetComponent<Toggle>().isOn = false;
+            transform.Find("Difficulty/Normal").GetComponent<Toggle>().isOn = false;
+            transform.Find("Difficulty/Hard").GetComponent<Toggle>().isOn = false;
+            MainMenuManager.MoveCamera(MainMenuManager.CameraPosMainMenu, MainMenuManager.CameraRotMainMenu);
         }
 
         public void Update()

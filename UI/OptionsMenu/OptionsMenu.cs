@@ -3,7 +3,7 @@ using Launcher;
 using Players.Camera;
 using UnityEngine;
 
-namespace UI.OptionsMenu
+namespace UI.RLRMenus.Characters
 {
     public class OptionsMenu : MonoBehaviour
     {
@@ -29,6 +29,8 @@ namespace UI.OptionsMenu
             GameControl.Settings.LoadSettings();
             CameraHandleMovement.SetCameraHandlePosition(watchedPoint);
             CameraMovement.SetCameraPitch(GameControl.Settings.CameraAngle.Val);
+            
+            
 
             OptionsMenuActive = false;
             gameObject.SetActive(false);

@@ -8,8 +8,9 @@ namespace UI.RLR_Menus
     {
         public InGameMenuRLR InGameMenu;
         public ControlRLR ControlRLR;
-        public OptionsMenu.OptionsMenu OptionsMenu;
+        public RLRMenus.Characters.OptionsMenu OptionsMenu;
         public ChooseLevelMenuRLR ChooseLevelMenu;
+        public HighScoreMenuRLR HighScoreMenuRLR;
 
         public GameObject InGameMenuObject;
         public GameObject OptionsMenuObject;
@@ -17,6 +18,8 @@ namespace UI.RLR_Menus
         public GameObject WinScreen;
         public GameObject PauseScreen;
         public GameObject ChooseLevel;
+        public GameObject HighScoreMenuObject;
+        public GameObject RestartGame;
 
         public bool MenuOn;
         private bool _pause;
@@ -46,8 +49,9 @@ namespace UI.RLR_Menus
                     InGameMenuObject.SetActive(true);
                     Time.timeScale = 0;
                     MenuOn = true;
-                    if (GameControl.State.SetGameMode == Gamemode.Practice)
+                    if (GameControl.State.SetGameMode == Gamemode.Practice && !ChooseLevel.activeSelf)
                     {
+                        RestartGame.SetActive(false);
                         ChooseLevel.SetActive(true);
                     }
                 }
@@ -58,6 +62,10 @@ namespace UI.RLR_Menus
                 else if (MenuOn && ChooseLevelMenu.ChooseLevelMenuActive)
                 {
                     ChooseLevelMenu.Back();
+                }
+                else if (MenuOn && HighScoreMenuRLR.HighScoreMenuActive)
+                {
+                    HighScoreMenuRLR.Back();
                 }
                 else
                 {

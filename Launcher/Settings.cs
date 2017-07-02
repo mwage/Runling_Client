@@ -6,11 +6,12 @@ namespace Launcher
     {
         // Camera
         public float CameraRange = 0;
-        public Limits CameraZoom = new Limits(10, 50, def: 40);
-        public Limits CameraAngle = new Limits(10, 90, def: 90);
+        public Limits CameraZoom = new Limits(5, 60, def: 40);
+        public Limits CameraAngle = new Limits(5, 90, def: 90);
         public Limits CameraSpeed = new Limits(5, 50, def: 20);
         public int FollowEnabled;
-        public int FollowState;
+        public bool FollowState = true;
+        public bool HideMiniMap;
 
         public Settings()
         {
@@ -19,11 +20,11 @@ namespace Launcher
 
         public void LoadSettings()
         {
-            FollowEnabled = PlayerPrefs.GetFloat("CameraZoom") < 0.01 ? 1 : PlayerPrefs.GetInt("FollowEnabled");
+            HideMiniMap = PlayerPrefs.GetInt("HideMiniMap") != 0;
+            FollowEnabled = PlayerPrefs.GetFloat("CameraZoom") < 0.01 ? 0 : PlayerPrefs.GetInt("FollowEnabled");
             CameraZoom.Val = PlayerPrefs.GetFloat("CameraZoom") > 0.01 ? PlayerPrefs.GetFloat("CameraZoom") : CameraZoom.Def;
             CameraAngle.Val = PlayerPrefs.GetFloat("CameraAngle") > 0.01 ? PlayerPrefs.GetFloat("CameraAngle") : CameraAngle.Def;
             CameraSpeed.Val = PlayerPrefs.GetFloat("CameraSpeed") > 0.01 ? PlayerPrefs.GetFloat("CameraSpeed") : CameraSpeed.Def;
-            FollowState = PlayerPrefs.GetInt("FollowState");
         }
     }
     

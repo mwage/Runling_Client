@@ -10,13 +10,13 @@ namespace SLA.Levels
 
         public override float GetMovementSpeed()
         {
-            return 8;
+            return 10;
         }
 
         public override void CreateDrones()
         {
             // Spawn Bouncing Drones
-            DroneFactory.SpawnAndAddDrones(new RandomDrone(4f, 1f, DroneColor.Blue), 50, 1.5f, BoundariesSLA.BouncingSla);
+            DroneFactory.SpawnAndAddDrones(new RandomDrone(5, 1, DroneColor.Blue), 40, 1.5f, BoundariesSLA.BouncingSla);
         }
     }
 }

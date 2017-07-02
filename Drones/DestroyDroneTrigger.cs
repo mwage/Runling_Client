@@ -2,13 +2,12 @@
 
 namespace Drones
 {
-    public class DestroyDroneTrigger : MonoBehaviour {
-
-        public GameObject Drone;
+    public class DestroyDroneTrigger : MonoBehaviour
+    {
 
         private void OnTriggerStay(Collider other)
         {
-            Destroy(Drone);
+            Destroy(transform.parent.gameObject);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Launcher;
-using SLA;
-using SLA.Levels;
+using RLR;
+using RLR.Levels;
 using TMPro;
 using UnityEngine;
 
@@ -11,13 +11,12 @@ namespace UI.RLR_Menus
         public GameObject Menu;
         public GameObject ScorePrefab;
         public GameObject Background;
-        public ScoreSLA ScoreSLA;
+        public ScoreRLR ScoreRLR;
 
         public bool HighScoreMenuActive;
         private GameObject _descriptionText;
-        private readonly GameObject[] _levelScore = new GameObject[LevelManagerSLA.NumLevels];
-        private GameObject _gameScore;
-        private GameObject _combinedScore;
+        private readonly GameObject[] _levelScore = new GameObject[LevelManagerRLR.NumLevels];
+        private GameObject _timeModeScore;
 
         private void Awake()
         {
@@ -34,8 +33,17 @@ namespace UI.RLR_Menus
             // Descriptions
             _descriptionText = Instantiate(ScorePrefab, background.transform);
             _descriptionText.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Level";
-            _descriptionText.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "Cur:";
-            _descriptionText.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "PB:";
+            if (GameControl.State.GameActive && GameControl.State.SetGameMode != Gamemode.Practice)
+            {
+                _descriptionText.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "Cur:";
+                _descriptionText.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "PB:";
+            }
+            else
+            {
+                _descriptionText.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "Normal:";
+                _descriptionText.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "Hard";
+            }
+
             _descriptionText.GetComponent<RectTransform>().sizeDelta = new Vector2(50, 20);
             for (var i = 0; i < 3; i++)
             {
@@ -43,67 +51,189 @@ namespace UI.RLR_Menus
             }
 
             // Level Highscores
-            for (var i = 0; i < LevelManagerSLA.NumLevels; i++)
+            for (var i = 0; i < LevelManagerRLR.NumLevels; i++)
             {
                 _levelScore[i] = Instantiate(ScorePrefab, background.transform);
                 _levelScore[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = (i + 1).ToString();
             }
 
-            // Game Score
-            _gameScore = Instantiate(ScorePrefab, background.transform);
-            _gameScore.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Game";
-            _gameScore.GetComponent<RectTransform>().sizeDelta = new Vector2(60, 20);
-            _gameScore.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(60, 20);
+            // Time Mode Score
+            _timeModeScore = Instantiate(ScorePrefab, background.transform);
+            _timeModeScore.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Time Mode";
+            _timeModeScore.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 20);
+            _timeModeScore.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(100, 20);
 
-            // Combined Score
-            _combinedScore = Instantiate(ScorePrefab, background.transform);
-            _combinedScore.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Combined";
-            _combinedScore.GetComponent<RectTransform>().sizeDelta = new Vector2(80, 20);
-            _combinedScore.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(80, 20);
 
             if (!GameControl.State.GameActive)
             {
-                _descriptionText.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
-                _descriptionText.transform.GetChild(2).GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 15);
-                _gameScore.transform.GetChild(2).GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 15);
-                _combinedScore.transform.GetChild(2).GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 15);
-                for (var i = 0; i < LevelManagerSLA.NumLevels; i++)
-                {
-                    _levelScore[i].transform.GetChild(2).GetComponent<RectTransform>().anchoredPosition +=
-                        new Vector2(0, 15);
-                }
+                _descriptionText.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "Normal";
+                _descriptionText.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "Hard";
             }
         }
 
         public void SetNumbers()
         {
-            // Show highscores
-            for (var i = 0; i < LevelManagerSLA.NumLevels; i++)
+            if (GameControl.State.GameActive && GameControl.State.SetGameMode != Gamemode.Practice)
             {
-                _levelScore[i].transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = GameControl.HighScores.HighScoreSLA[i + 1].ToString();
+                SetHighScoresIngame();
+                SetCurrentScores();
             }
-
-            _gameScore.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = GameControl.HighScores.HighScoreSLA[0].ToString();
-            _combinedScore.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = GameControl.HighScores.HighScoreSLA[14].ToString();
-
-            // Current game scores
-            if (GameControl.State.GameActive)
+            else
             {
-                for (var i = 0; i < LevelManagerSLA.NumLevels; i++)
-                {
-                    _levelScore[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = ScoreSLA.LevelScoreCurGame[i].ToString();
-
-                    // New records are shown green
-                    if (ScoreSLA.LevelScoreCurGame[i] >= GameControl.HighScores.HighScoreSLA[i + 1] && ScoreSLA.LevelScoreCurGame[i] != 0)
-                    {
-                        _levelScore[i].transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = Color.green;
-                    }
-                }
-
-                _gameScore.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = GameControl.State.TotalScore.ToString();
-                _combinedScore.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
+                SetMainMenuScores();
             }
         }
+
+        private void SetHighScoresIngame()
+        {
+            switch (GameControl.State.SetDifficulty)
+            {
+                case Difficulty.Normal:
+                    for (var i = 0; i < LevelManagerRLR.NumLevels; i++)
+                    {
+                        if (GameControl.HighScores.HighScoreRLRNormal[i + 1] > 0.1f)
+                        {
+                            _levelScore[i].transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = GameControl.HighScores.HighScoreRLRNormal[i + 1] > 60
+                                    ? (int)GameControl.HighScores.HighScoreRLRNormal[i + 1] / 60 + ":" + (GameControl.HighScores.HighScoreRLRNormal[i + 1] % 60).ToString("00.00")
+                                    : GameControl.HighScores.HighScoreRLRNormal[i + 1].ToString("f2");
+                        }
+                        else
+                        {
+                            _levelScore[i].transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "-";
+                        }
+                    }
+                    _timeModeScore.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = GameControl.HighScores.HighScoreRLRNormal[0].ToString("f0");
+                    break;
+
+                case Difficulty.Hard:
+                    for (var i = 0; i < LevelManagerRLR.NumLevels; i++)
+                    {
+                        if (GameControl.HighScores.HighScoreRLRHard[i + 1] > 0.1f)
+                        {
+                            _levelScore[i].transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = GameControl.HighScores.HighScoreRLRHard[i + 1] > 60
+                                    ? (int)GameControl.HighScores.HighScoreRLRHard[i + 1] / 60 + ":" + (GameControl.HighScores.HighScoreRLRHard[i + 1] % 60).ToString("00.00") 
+                                    : GameControl.HighScores.HighScoreRLRHard[i + 1].ToString("f2");
+                        }
+                        else
+                        {
+                            _levelScore[i].transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "-";
+                        }
+                    }
+                    _timeModeScore.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = GameControl.HighScores.HighScoreRLRHard[0].ToString("f0");
+                    break;
+            }
+        }
+
+        private void SetCurrentScores()
+        {
+            switch (GameControl.State.SetDifficulty)
+            {
+                case Difficulty.Normal:
+                    for (var i = 0; i < LevelManagerRLR.NumLevels; i++)
+                    {
+                        if (ScoreRLR.FinishTimeCurGame[i] > 0.1f)
+                        {
+                            _levelScore[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = ScoreRLR.FinishTimeCurGame[i] > 60
+                                ? (int)ScoreRLR.FinishTimeCurGame[i] / 60 + ":" + (ScoreRLR.FinishTimeCurGame[i] % 60).ToString("00.00")
+                                : ScoreRLR.FinishTimeCurGame[i].ToString("f2");
+                        }
+                        else
+                        {
+                            _levelScore[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "-";
+                        }
+
+                        // New records are shown green
+                        if ((ScoreRLR.FinishTimeCurGame[i] <= GameControl.HighScores.HighScoreRLRNormal[i + 1] || GameControl.HighScores.HighScoreRLRNormal[i + 1] < 0.1f) && ScoreRLR.FinishTimeCurGame[i] > 0.1f)
+                        {
+                            _levelScore[i].transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = Color.green;
+                        }
+                    }
+                    if (GameControl.State.SetGameMode == Gamemode.TimeMode)
+                    {
+                        _timeModeScore.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = GameControl.State.TotalScore.ToString();
+                        if (GameControl.State.TotalScore >= GameControl.HighScores.HighScoreRLRNormal[0] && GameControl.State.TotalScore != 0)
+                        {
+                            _timeModeScore.transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = Color.green;
+                        }
+                    }
+                    else
+                    {
+                        _timeModeScore.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
+                    }
+                    break;
+
+                case Difficulty.Hard:
+                    for (var i = 0; i < LevelManagerRLR.NumLevels; i++)
+                    {
+                        if (ScoreRLR.FinishTimeCurGame[i] > 0.1f)
+                        {
+                            _levelScore[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = ScoreRLR.FinishTimeCurGame[i] > 60
+                                ? (int)ScoreRLR.FinishTimeCurGame[i] / 60 + ":" + (ScoreRLR.FinishTimeCurGame[i] % 60).ToString("00.00")
+                                : ScoreRLR.FinishTimeCurGame[i].ToString("f2");
+                        }
+                        else
+                        {
+                            _levelScore[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "-";
+                        }
+
+                        // New records are shown green
+                        if ((ScoreRLR.FinishTimeCurGame[i] <= GameControl.HighScores.HighScoreRLRHard[i + 1] || GameControl.HighScores.HighScoreRLRHard[i + 1] < 0.1f) && ScoreRLR.FinishTimeCurGame[i] > 0.1f)
+                        {
+                            _levelScore[i].transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = Color.green;
+                        }
+                    }
+                    if (GameControl.State.SetGameMode == Gamemode.TimeMode)
+                    {
+                        _timeModeScore.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = GameControl.State.TotalScore.ToString();
+                        if (GameControl.State.TotalScore >= GameControl.HighScores.HighScoreRLRHard[0] && GameControl.State.TotalScore != 0)
+                        {
+                            _timeModeScore.transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = Color.green;
+                        }
+                    }
+                    else
+                    {
+                        _timeModeScore.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
+                    }
+                    break;
+            }
+
+        }
+
+        private void SetMainMenuScores()
+        {
+            // Normal
+            for (var i = 0; i < LevelManagerRLR.NumLevels; i++)
+            {
+                if (GameControl.HighScores.HighScoreRLRNormal[i + 1] > 0.1f)
+                {
+                    _levelScore[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = GameControl.HighScores.HighScoreRLRNormal[i + 1] > 60
+                        ? (int)GameControl.HighScores.HighScoreRLRNormal[i + 1] / 60 + ":" + (GameControl.HighScores.HighScoreRLRNormal[i + 1] % 60).ToString("00.00")
+                        : GameControl.HighScores.HighScoreRLRNormal[i + 1].ToString("f2");
+                }
+                else
+                {
+                    _levelScore[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "-";
+                }
+            }
+            _timeModeScore.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = GameControl.HighScores.HighScoreRLRNormal[0].ToString("f0");
+
+            // Hard
+            for (var i = 0; i < LevelManagerRLR.NumLevels; i++)
+            {
+                if (GameControl.HighScores.HighScoreRLRHard[i + 1] > 0.1f)
+                {
+                    _levelScore[i].transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = GameControl.HighScores.HighScoreRLRHard[i + 1] > 60
+                        ? (int)GameControl.HighScores.HighScoreRLRHard[i + 1] / 60 + ":" + (GameControl.HighScores.HighScoreRLRHard[i + 1] % 60).ToString("00.00")
+                        : GameControl.HighScores.HighScoreRLRHard[i + 1].ToString("f2");
+                }
+                else
+                {
+                    _levelScore[i].transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "-";
+                }
+            }
+            _timeModeScore.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = GameControl.HighScores.HighScoreRLRHard[0].ToString("f0");
+        }
+
 
         public void Back()
         {
