@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.OptionsMenu
+namespace UI.RLRMenus.Characters
 {
     public class SubmenuBuilder
     {

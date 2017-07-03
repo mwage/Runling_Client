@@ -3,7 +3,7 @@ using Players.Camera;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.OptionsMenu
+namespace UI.RLRMenus.Characters
 {
     public class SetCamera : MonoBehaviour
     {

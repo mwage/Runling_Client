@@ -12,7 +12,7 @@ namespace UI.SLA_Menus
         public GameObject ChooseLevelObject;
 
         public InGameMenuManagerSLA InGameMenuManagerSla;
-        public OptionsMenu.OptionsMenu OptionsMenu;
+        public RLRMenus.Characters.OptionsMenu OptionsMenu;
         public HighScoreMenuSLA HighScoreMenuSLA;
         public ChooseLevelMenuSLA ChooseLevelMenu;
 

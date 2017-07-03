@@ -1,7 +1,7 @@
 ﻿using Launcher;
 using UnityEngine;
 
-namespace UI.OptionsMenu
+namespace UI.RLRMenus.Characters
 {
     public class SetHotkeys : MonoBehaviour
     {

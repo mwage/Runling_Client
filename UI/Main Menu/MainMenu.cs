@@ -5,7 +5,7 @@ namespace UI.Main_Menu
     public class MainMenu : MonoBehaviour
     {
         public GameObject OptionsMenuObject;
-        public OptionsMenu.OptionsMenu OptionsMenu;
+        public RLRMenus.Characters.OptionsMenu OptionsMenu;
         public GameObject SLAMenuObject;
         public SLAMenu SLAMenu;
         public GameObject RLRMenuObject;

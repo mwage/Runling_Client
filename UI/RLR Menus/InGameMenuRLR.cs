@@ -11,7 +11,7 @@ namespace UI.RLR_Menus
         public GameObject HighScoreMenuObject;
         public GameObject ChooseLevelObject;
         public InGameMenuManagerRLR InGameMenuManagerSla;
-        public OptionsMenu.OptionsMenu OptionsMenu;
+        public RLRMenus.Characters.OptionsMenu OptionsMenu;
         public ChooseLevelMenuRLR ChooseLevelMenu;
         public HighScoreMenuRLR HighScoreMenuRLR;
 

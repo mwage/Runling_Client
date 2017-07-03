@@ -8,7 +8,7 @@ namespace UI.RLR_Menus
     {
         public InGameMenuRLR InGameMenu;
         public ControlRLR ControlRLR;
-        public OptionsMenu.OptionsMenu OptionsMenu;
+        public RLRMenus.Characters.OptionsMenu OptionsMenu;
         public ChooseLevelMenuRLR ChooseLevelMenu;
         public HighScoreMenuRLR HighScoreMenuRLR;
 
