@@ -4,10 +4,10 @@ namespace MP
 {
     public class LoadingAnimation : MonoBehaviour
     {
-        public float Speed = 180f;
-        public float Radius = 1f;
         public GameObject Particles;
 
+        private const float Speed = 360f;
+        private const float Radius = 0.5f;
         private Vector3 _offset;
         private Transform _transform;
         private Transform _particleTransform;
