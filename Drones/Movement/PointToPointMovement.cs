@@ -24,9 +24,7 @@ namespace Drones.Movement
         private float _endDelay;
         private float _syncTime;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         private void Start()
         {
             _rb = GetComponent<Rigidbody>();
