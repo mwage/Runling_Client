@@ -1,5 +1,6 @@
 ﻿using Launcher;
 using UI.RLR_Menus;
+using UI.RLR_Menus.Characters;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,8 @@ namespace UI.Main_Menu
         public GameObject HighScoreMenu;
         public GameObject LaunchRLR;
         public GameObject Menus;
+
+        public GameObject PickCharacterMenu;
 
 
         private Difficulty? _voteDifficulty;
@@ -33,7 +36,7 @@ namespace UI.Main_Menu
             Menus.SetActive(false);
         }
 
-        private void OnDisable()
+        private void OnEnable()
         {
             _voteDifficulty = null;
             _voteGameMode = null;
@@ -82,6 +85,7 @@ namespace UI.Main_Menu
         {
             RLRMenuActive = false;
             gameObject.SetActive(false);
+            PickCharacterMenu.SetActive(false);
             MainMenu.gameObject.SetActive(true);
             transform.Find("Mode/Classic").GetComponent<Toggle>().isOn = false;
             transform.Find("Mode/Practice").GetComponent<Toggle>().isOn = false;
@@ -93,7 +97,7 @@ namespace UI.Main_Menu
 
         public void Update()
         {
-            if (_voteDifficulty != null && _voteGameMode != null)
+            if (_voteDifficulty != null && _voteGameMode != null && PickCharacterMenu.GetComponent<PickCharacterMenu>().Id != null)
             {
                 LaunchRLR.GetComponentInChildren<Text>().text = "R U N";
                 LaunchRLR.GetComponent<Button>().interactable = true;

@@ -5,12 +5,13 @@ namespace UI.Main_Menu
     public class MainMenu : MonoBehaviour
     {
         public GameObject OptionsMenuObject;
-        public RLRMenus.Characters.OptionsMenu OptionsMenu;
+        public OptionsMenu.OptionsMenu OptionsMenu;
         public GameObject SLAMenuObject;
         public SLAMenu SLAMenu;
         public GameObject RLRMenuObject;
         public RLRMenu RLRMenu;
         public MainMenuManager MainMenuManager;
+        public GameObject PickCharacterMenu;
 
         public void SLA()
         {
@@ -23,6 +24,7 @@ namespace UI.Main_Menu
 
         public void RLR()
         {
+            PickCharacterMenu.SetActive(true);
             gameObject.SetActive(false);
             SLAMenuObject.gameObject.SetActive(false);
             RLRMenuObject.gameObject.SetActive(true);

@@ -8,7 +8,7 @@ namespace UI.Main_Menu
     public class MainMenuManager : MonoBehaviour
     {
         public MainMenu MainMenu;
-        public RLRMenus.Characters.OptionsMenu OptionsMenu;
+        public OptionsMenu.OptionsMenu OptionsMenu;
         public SLAMenu SLAMenu;
         public HighScoreMenuSLA HighScoreMenuSLA;
         public RLRMenu RLRMenu;

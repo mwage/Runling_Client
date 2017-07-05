@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Characters.Repositories;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using Characters.Types;
 
-namespace Characters.Types
+namespace Characters.Repositories
 {
     public interface ICharacterRepository
     {
@@ -12,7 +9,7 @@ namespace Characters.Types
         void Remove(int id);
         CharacterDto Get(int id);
         List<CharacterDto> GetAll();
-        void UpdatePlayerPrefs(int id, string character, int speedPoints, int regenPoints, int energyPoints,
+        void UpdateRepository(int id, string character, int speedPoints, int regenPoints, int energyPoints,
             int exp, int level, int abilityFirstLevel, int abilitySecondLevel);
     }
 }

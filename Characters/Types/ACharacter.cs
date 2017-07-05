@@ -19,6 +19,13 @@ namespace Characters.Types
         public int EnergyMax { get; protected set; }
         public int BaseSpeed { get; protected set; }
         public int UnspentPoints { get; protected set; }
+        public float Speed
+        {
+            get { return _baseSpeed + _speedPointRatio * SpeedPoints; }
+        }
+
+        private float _baseSpeed, _speedPointRatio;
+        private float _regenPerSecondRatio;
 
         public ACharacter(CharacterDto chacterDto)
         {

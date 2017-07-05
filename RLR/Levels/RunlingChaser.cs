@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using Drones;
 using Drones.DroneTypes;
 using Drones.Pattern;
-using Launcher;
-using Players;
-using RLR.GenerateMap;
 using TMPro;
 using UnityEngine;
 
