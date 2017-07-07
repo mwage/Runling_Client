@@ -50,7 +50,7 @@ namespace UI.RLR_Menus.Characters
 
         public void Manticore2PreviewToggle()
         {
-            _character = "ManticoreX";
+            _character = "Unicorn";
             ManticorePreview.SetActive(false);
             Manticore2Preview.SetActive(true);
         }

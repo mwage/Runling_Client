@@ -80,7 +80,7 @@ namespace RLR.Levels
         {
             yield return new WaitForSeconds(delay);
             DroneFactory.StopAllCoroutines();
-            Destroy(GameControl.State.Player);
+            // Destroy(GameControl.State.Player); // dont destroy player. if exists playerfactory donest make new one, just move him on start position
             var enemies = GameObject.FindGameObjectsWithTag("Enemy");
             var strongEnemies = GameObject.FindGameObjectsWithTag("Strong Enemy");
             foreach (var t in enemies)

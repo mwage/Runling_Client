@@ -15,23 +15,29 @@ namespace UI.RLR_Menus.Characters
         public List<Toggle> toggs;
         public Toggle ActiveSlot;
 
-        //
         public int? Id { get; private set; } // id of picked slot, value 1-8, if not set or respond to not valid character - 0
 
         [NonSerialized] public int PickedSlot;
+
         private ICharacterRepository _characterRepository;
         private ToggleGroup _slotsToggleGroup;
-        private List<Text> _charactersText;
+        private List<Text> _slotsText;
         private Transform _preview;
 
-        
-        
         public void Awake()
         {
             // TODO: set ID to last game picked id
             _characterRepository = new PlayerPrefsCharacterRepository();
             _characterRepository.Remove(0); // remove 0-id character
             _slotsToggleGroup = CharacterController.FindObjectOfType<ToggleGroup>();
+
+            _slotsText = new List<Text>();
+            var slots = gameObject.transform.Find("Slots"); // get slots from unity
+            foreach (Transform slot in slots.transform)
+            {
+                _slotsText.Add(slot.Find("Button").Find("ButtonText").GetComponent<Text>());
+            }
+
             _preview = gameObject.transform.Find("Preview");
             if (Id != null)
             {
@@ -98,23 +104,16 @@ namespace UI.RLR_Menus.Characters
             if (Id == null) return;
             if (PickedSlot != Id) return;
             _characterRepository.Remove(PickedSlot);
-            _charactersText[(int)Id - 1].text = "Empty";
+            _slotsText[PickedSlot - 1].text = "Empty";
             SetId(null);
             UnselectAllSlots();
         }
 
         private void FullfilTogglesTexts(List<CharacterDto> characters)
         {
-            _charactersText = new List<Text>();
-            var slots = gameObject.transform.Find("Slots"); // get slots from unity
-            foreach (Transform slot in slots.transform)
-            {
-                _charactersText.Add(slot.Find("Button").Find("ButtonText").GetComponent<Text>());
-            }
-            // fullfil toggles' slots with proprer text
             for (int i = 0; i < LevelingSystem.MaxCharactersAmount; i++)
             {
-                _charactersText[i].text = characters[i].Occupied ? characters[i].Character : "Empty";
+                _slotsText[i].text = characters[i].Occupied ? characters[i].Character : "Empty";
             }
         }
 
@@ -138,6 +137,17 @@ namespace UI.RLR_Menus.Characters
         public void UnselectAllSlots()
         {
             _slotsToggleGroup.SetAllTogglesOff();
+        }
+
+        public CharacterDto GetCharacterDto()
+        {
+            if (Id == null) PickFirstValidCharacterOrMakeNewOne();
+            return _characterRepository.Get((int)Id);
+        }
+
+        public void PickFirstValidCharacterOrMakeNewOne()
+        {
+            
         }
     }
 }

@@ -17,8 +17,8 @@ namespace RLR
         public InGameMenuManagerRLR InGameMenuManagerRLR;
         public CameraHandleMovement CameraHandleMovement;
         public ScoreRLR ScoreRLR;
+        public PlayerFactory PlayerFactory;
 
-        public GameObject PlayerPrefab;
         public GameObject LevelTextObject;
         public GameObject CountdownPrefab;
 
@@ -34,21 +34,32 @@ namespace RLR
         {
             LevelManagerRLR.GenerateMap(GameControl.State.CurrentLevel);
 
-            // Load drones and player
+            // Load player
+           if (GameControl.State.Player == null)
+            {
+                GameControl.State.Player = PlayerFactory.Create(GameControl.State.CharacterDto, 1);
+            }
             var startPlatform = LevelManagerRLR.GenerateMapRLR.GetStartPlatform();
-            var airColliderRange = LevelManagerRLR.GenerateMapRLR.GetAirColliderRange();
-            GameControl.State.Player = Instantiate(PlayerPrefab, new Vector3(startPlatform.transform.position.x + startPlatform.transform.Find("VisibleObjects/Ground").transform.localScale.x / 2 - 1, 0, startPlatform.transform.position.z), Quaternion.Euler(0, 90, 0));
+            GameControl.State.Player.transform.position =
+                new Vector3(
+                    startPlatform.transform.position.x + startPlatform.transform.Find("VisibleObjects/Ground")
+                        .transform.localScale.x / 2 - 1, 0, startPlatform.transform.position.z);
             if (GameControl.State.GodModeActive && !GameControl.State.Player.transform.Find("GodMode").gameObject.activeSelf)
             {
                 GameControl.State.Player.transform.Find("GodMode").gameObject.SetActive(true);
             }
-            GameControl.Settings.CameraRange = airColliderRange / 2.5f;
-            CameraHandleMovement.SetCameraHandlePosition(new Vector3(GameControl.State.Player.transform.localPosition.x, 0, GameControl.State.Player.transform.localPosition.z));
-            LevelManagerRLR.GenerateChasers(GameControl.State.CurrentLevel);
             GameControl.State.IsDead = false;
             GameControl.State.IsInvulnerable = true;
             GameControl.State.IsImmobile = true;
+
+            // set camera
+            GameControl.Settings.CameraRange = LevelManagerRLR.GenerateMapRLR.GetAirColliderRange() / 2.5f;
+            CameraHandleMovement.SetCameraHandlePosition(new Vector3(GameControl.State.Player.transform.localPosition.x, 0, GameControl.State.Player.transform.localPosition.z));
+
             ControlRLR.StopUpdate = false;
+
+            // generate drones
+            LevelManagerRLR.GenerateChasers(GameControl.State.CurrentLevel);
             LevelManagerRLR.LoadDrones(GameControl.State.CurrentLevel);
 
             // Show current level

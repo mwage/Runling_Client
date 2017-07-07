@@ -8,23 +8,18 @@ using UnityEngine.UI;
 
 namespace Characters.Types
 {
-    public class Manticore : ACharacter
+    public class Unicorn : ACharacter
     {
         // ablitiy 1
         // ablitiy 2
         public AAbility AbilityFirst { get; protected set; }
         public AAbility AbilitySecond { get; protected set; }
 
-        private void Awake()
+        private Unicorn(CharacterDto characterDto): base(characterDto)
         {
-            
-        }
-
-        private Manticore(CharacterDto characterDto): base(characterDto)
-        {
-            _baseSpeed = 10;
-            _regenPerSecondRatio = 0.3F;
-            _speedPointRatio = 0.05F;
+            _baseSpeed = 7;
+            _regenPerSecondRatio = 0.8F;
+            _speedPointRatio = 0.09F;
             //AbilityFirst = a1;
             //AbilitySecond = a2;
         }
@@ -40,6 +35,9 @@ namespace Characters.Types
             //AbilitySecond = a2;
         }
 
-
+        public static Unicorn Create(CharacterDto character)
+        {
+            return new Unicorn(character);
+        }
     }
 }

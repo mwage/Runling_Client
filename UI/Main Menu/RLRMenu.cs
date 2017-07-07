@@ -30,6 +30,7 @@ namespace UI.Main_Menu
             GameControl.State.IsDead = true;
             GameControl.State.TotalScore = 0;
             GameControl.State.CurrentLevel = 1;
+            GameControl.State.CharacterDto = PickCharacterMenu.GetComponent<PickCharacterMenu>().GetCharacterDto();
             SetModes();
 
             SceneLoader.LoadScene("RLR", 1);
