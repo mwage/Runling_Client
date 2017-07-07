@@ -1,6 +1,5 @@
 ﻿using Characters.Repositories;
 using Characters.Types;
-using UI.RLRMenus.Characters;
 using UnityEngine;
 
 namespace UI.RLR_Menus.Characters
@@ -23,6 +22,8 @@ namespace UI.RLR_Menus.Characters
         {
             gameObject.SetActive(false);
             PickCharacterMenu.gameObject.SetActive(true);
+            PickCharacterMenu.SetId(null);
+            PickCharacterMenu.UnselectAllSlots();
         }
 
         public void Pick()
@@ -31,9 +32,13 @@ namespace UI.RLR_Menus.Characters
             {
                 return;
             }
-            _characterRepository.Add(PickCharacterMenu.Id, _character);
-            gameObject.SetActive(false);
+            _characterRepository.Add(PickCharacterMenu.PickedSlot, _character);
+            
             PickCharacterMenu.gameObject.SetActive(true);
+            PickCharacterMenu.SetId(PickCharacterMenu.PickedSlot);
+            // PickCharacterMenu.ActiveSlot.isOn = true;
+            PickCharacterMenu.ActiveSlot.Select();
+            gameObject.SetActive(false);
         }
 
         public void ManticorePreviewToggle()
@@ -45,7 +50,7 @@ namespace UI.RLR_Menus.Characters
 
         public void Manticore2PreviewToggle()
         {
-            _character = "ManticoreX";
+            _character = "Unicorn";
             ManticorePreview.SetActive(false);
             Manticore2Preview.SetActive(true);
         }

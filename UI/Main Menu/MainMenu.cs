@@ -2,10 +2,12 @@
 
 namespace UI.Main_Menu
 {
+    using OptionsMenu;
+
     public class MainMenu : MonoBehaviour
     {
         public GameObject OptionsMenuObject;
-        public RLRMenus.Characters.OptionsMenu OptionsMenu;
+        public OptionsMenu OptionsMenu;
         public GameObject SLAMenuObject;
         public SLAMenu SLAMenu;
         public GameObject RLRMenuObject;

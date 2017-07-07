@@ -1,33 +1,45 @@
 ﻿using Launcher;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UI.OptionsMenu;
 
 namespace UI.SLA_Menus
 {
+    using OptionsMenu;
+
     public class InGameMenuSLA : MonoBehaviour {
 
-        public GameObject InGameMenuObject;
-        public GameObject OptionsMenuObject;
-        public GameObject HighScoreMenuObject;
-        public GameObject ChooseLevelObject;
+        public GameObject InGameMenu;
+        public GameObject OptionsMenu;
+        public GameObject HighScoreMenu;
+        public GameObject ChooseLevelMenu;
+        public InGameMenuManagerSLA InGameMenuManagerSLA;
 
-        public InGameMenuManagerSLA InGameMenuManagerSla;
-        public RLRMenus.Characters.OptionsMenu OptionsMenu;
-        public HighScoreMenuSLA HighScoreMenuSLA;
-        public ChooseLevelMenuSLA ChooseLevelMenu;
+        private OptionsMenu _optionsMenu;
+        private HighScoreMenuSLA _highScoreMenuSLA;
+        private ChooseLevelMenuSLA _chooseLevelMenu;
+
+        private void Awake()
+        {
+            _optionsMenu = OptionsMenu.GetComponent<OptionsMenu>();
+            _highScoreMenuSLA = HighScoreMenu.GetComponent<HighScoreMenuSLA>();
+            _chooseLevelMenu = ChooseLevelMenu.GetComponent<ChooseLevelMenuSLA>();
+        }
+
+        #region Buttons
 
         public void BackToGame()
         {
             gameObject.SetActive(false);
-            InGameMenuManagerSla.MenuOn = false;
+            InGameMenuManagerSLA.MenuOn = false;
             Time.timeScale = 1;
         }
 
         public void HighScores()
         {
             gameObject.SetActive(false);
-            HighScoreMenuObject.gameObject.SetActive(true);
-            HighScoreMenuSLA.HighScoreMenuActive = true;
+            HighScoreMenu.gameObject.SetActive(true);
+            _highScoreMenuSLA.HighScoreMenuActive = true;
         }
 
         public void RestartGame()
@@ -43,9 +55,9 @@ namespace UI.SLA_Menus
 
         public void Options()
         {
-            InGameMenuObject.gameObject.SetActive(false);
-            OptionsMenuObject.gameObject.SetActive(true);
-            OptionsMenu.OptionsMenuActive = true;
+            InGameMenu.gameObject.SetActive(false);
+            OptionsMenu.gameObject.SetActive(true);
+            _optionsMenu.OptionsMenuActive = true;
         }
 
         public void BackToMenu()
@@ -57,9 +69,10 @@ namespace UI.SLA_Menus
 
         public void ChooseLevel()
         {
-            InGameMenuObject.gameObject.SetActive(false);
-            ChooseLevelObject.gameObject.SetActive(true);
-            ChooseLevelMenu.ChooseLevelMenuActive = true;
+            InGameMenu.gameObject.SetActive(false);
+            ChooseLevelMenu.gameObject.SetActive(true);
+            _chooseLevelMenu.ChooseLevelMenuActive = true;
         }
+        #endregion
     }
 }

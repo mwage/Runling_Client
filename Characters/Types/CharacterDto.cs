@@ -19,6 +19,7 @@ namespace Characters.Types
         public int AbilitySecondLevel { get; protected set; }
         public int EnergyCurrent { get; protected set; }
 
+
         public CharacterDto(int id, string character, int speedPoints, int regenPoints, int energyPoints,
                           int exp, int level, int abilityFirstLevel, int abilitySecondLevel, bool occupied = true)
         {

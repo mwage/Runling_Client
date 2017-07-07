@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace Characters.Types
 {
-    public abstract class ACharacter
+    public abstract class ACharacter : MonoBehaviour
     {
-        public int Id { get; protected set; }
+        public int PlayerId { get; protected set; } 
         public int SpeedPoints { get; protected set; }
         public int RegenPoints { get; protected set; }
         public int EnergyPoints { get; protected set; }
@@ -19,10 +20,17 @@ namespace Characters.Types
         public int EnergyMax { get; protected set; }
         public int BaseSpeed { get; protected set; }
         public int UnspentPoints { get; protected set; }
-
-        public ACharacter(CharacterDto chacterDto)
+        public float Speed
         {
-            Id = chacterDto.Id;
+            get { return _baseSpeed + _speedPointRatio * SpeedPoints; }
+        }
+
+        protected float _baseSpeed, _speedPointRatio;
+        protected float _regenPerSecondRatio;
+        protected static GameObject _player;
+
+        protected ACharacter(CharacterDto chacterDto)
+        {
             SpeedPoints = chacterDto.SpeedPoints;
             RegenPoints = chacterDto.RegenPoints;
             EnergyPoints = chacterDto.EnergyPoints;
@@ -32,6 +40,20 @@ namespace Characters.Types
             AbilitySecondLevel = chacterDto.AbilitySecondLevel;
             EnergyCurrent = 0;
         }
+
+        protected void InitiazlizeBase(CharacterDto chacterDto)
+        {
+            SpeedPoints = chacterDto.SpeedPoints;
+            RegenPoints = chacterDto.RegenPoints;
+            EnergyPoints = chacterDto.EnergyPoints;
+            Exp = chacterDto.Exp;
+            Level = chacterDto.Level;
+            AbilityFirstLevel = chacterDto.AbilityFirstLevel;
+            AbilitySecondLevel = chacterDto.AbilitySecondLevel;
+            EnergyCurrent = 0;
+        }
+
+        public abstract void Initizalize(CharacterDto character);
 
         public virtual void IncrementLevelIfPossible()
         {

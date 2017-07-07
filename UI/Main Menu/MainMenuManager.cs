@@ -5,10 +5,12 @@ using UnityEngine;
 
 namespace UI.Main_Menu
 {
+    using OptionsMenu;
+
     public class MainMenuManager : MonoBehaviour
     {
         public MainMenu MainMenu;
-        public RLRMenus.Characters.OptionsMenu OptionsMenu;
+        public OptionsMenu OptionsMenu;
         public SLAMenu SLAMenu;
         public HighScoreMenuSLA HighScoreMenuSLA;
         public RLRMenu RLRMenu;

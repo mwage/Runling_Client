@@ -1,5 +1,5 @@
 ﻿using Launcher;
-using UI.RLRMenus.Characters;
+using UI.OptionsMenu;
 using UnityEngine;
 
 namespace Players.Camera
@@ -10,12 +10,12 @@ namespace Players.Camera
     {
         public SetCamera SetCamera;
 
-        void Start()
+        private void Start()
         {
             SetCameraHandlePosition(GetWatchedPoint());
         }
 
-        void LateUpdate()
+        private void LateUpdate()
         {
             MoveCameraUsingInput();
             RotateCameraUsingInput();

@@ -185,7 +185,7 @@ namespace Players
             if (Math.Abs(_currentSpeed) > ZeroTolerance) { Rotate(); }
 
 
-            Debug.Log(Physics.gravity);
+            //Debug.Log(Physics.gravity);
 
             _lastDistance = _distance;
             if (_distanceCounter > 0)

@@ -26,7 +26,7 @@ namespace Characters.Repositories
             }
         }
 
-        public CharacterDto Get(int id) 
+        public CharacterDto Get(int id)
         {
             if (PlayerPrefs.HasKey(PrefsStringBuilder(id, "Occupied")))
             {
@@ -66,7 +66,7 @@ namespace Characters.Repositories
             } 
         }
 
-        public void UpdatePlayerPrefs(int id, string character, int speedPoints, int regenPoints, int energyPoints, // to change for Dto probably or single method for properties
+        public void UpdateRepository(int id, string character, int speedPoints, int regenPoints, int energyPoints, // to change for Dto probably or single method for properties
                            int exp, int level, int abilityFirstLevel, int abilitySecondLevel)
         {
             SetPlayerPrefsCharacterFields(id, character, speedPoints, regenPoints, energyPoints, exp, level,

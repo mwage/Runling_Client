@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Characters.Types;
+using UnityEngine;
 
 namespace Launcher
 {
@@ -31,6 +32,7 @@ namespace Launcher
 
         // Player
         public GameObject Player;
+        public CharacterDto CharacterDto;
         public float MoveSpeed = 0;
         public bool IsDead = true;
         public bool IsInvulnerable = false;

@@ -1,15 +1,17 @@
 ﻿using Launcher;
 using SLA;
-using UI.RLRMenus.Characters;
+using UI.OptionsMenu;
 using UnityEngine;
 
 namespace UI.SLA_Menus
 {
+    using OptionsMenu;
+
     public class InGameMenuManagerSLA : MonoBehaviour
     {
         public InGameMenuSLA InGameMenu;
         public ControlSLA ControlSLA;
-        public RLRMenus.Characters.OptionsMenu OptionsMenu;
+        public OptionsMenu OptionsMenu;
         public SetHotkeys SetHotkeys;
         public HighScoreMenuSLA HighScoreMenuSLA;
         public ChooseLevelMenuSLA ChooseLevelMenu;

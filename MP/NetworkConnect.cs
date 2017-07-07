@@ -59,7 +59,7 @@ namespace MP
             if (PhotonNetwork.connected)
             {
                 FeedbackText.text = "Connected!";
-                SceneManager.LoadScene("MainMenu");
+                SceneManager.LoadSceneAsync("MainMenu");
             }
             else
             {
@@ -73,7 +73,7 @@ namespace MP
         public void OfflineMode()
         {
             PhotonNetwork.offlineMode = true;
-            SceneManager.LoadScene("MainMenu");
+            SceneManager.LoadSceneAsync("MainMenu");
         }
 
         public void Disconnect()
@@ -95,7 +95,7 @@ namespace MP
         public override void OnConnectedToMaster()
         {
             CancelButton.SetActive(false);
-            SceneManager.LoadScene("MainMenu");
+            SceneManager.LoadSceneAsync("MainMenu");
         }
     }
 }
