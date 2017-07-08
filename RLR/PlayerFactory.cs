@@ -10,7 +10,7 @@ namespace RLR
         // class creates player gameobject in hierarchy
         // returns Player to GameControl.State.Player - // TODO maybe we should change names here?
 
-        public Transform Player; // position in hierarchy
+        public Transform Player; // top position in hierarchy
 
         public GameObject ManticorePrefab;
         public GameObject UnicornPrefab;
