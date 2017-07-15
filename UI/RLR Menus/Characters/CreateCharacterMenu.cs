@@ -1,4 +1,4 @@
-﻿using Characters.Repositories;
+using Characters.Repositories;
 using Characters.Types;
 using UnityEngine;
 

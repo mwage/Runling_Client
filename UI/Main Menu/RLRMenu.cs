@@ -1,4 +1,4 @@
-﻿using Launcher;
+using Launcher;
 using UI.RLR_Menus;
 using UI.RLR_Menus.Characters;
 using UnityEngine;
