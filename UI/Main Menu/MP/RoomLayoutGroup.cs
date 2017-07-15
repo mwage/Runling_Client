@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Launcher;
 using Photon;
 using UnityEngine;
 
@@ -7,19 +6,15 @@ namespace UI.Main_Menu.MP
 {
     public class RoomLayoutGroup : PunBehaviour
     {
-        [SerializeField] private MultiplayerMenu _multiplayerMenu;
         [SerializeField] private GameObject _roomListingPrefab;
         private List<RoomListing> _roomList = new List<RoomListing>();
 
         public override void OnReceivedRoomListUpdate()
         {
             Debug.Log("recieved room update");
-
             var rooms = PhotonNetwork.GetRoomList();
-            Debug.Log(rooms.Length + " - " + PhotonNetwork.GetRoomList().Length);
             foreach (var room in rooms)
             {
-                Debug.Log(room.Name);
                 RoomRecieved(room);
             }
             

@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using ExitGames.Client.Photon;
 using Photon;
 using UI.Main_Menu.MP;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Main_Menu
 {
@@ -13,13 +16,37 @@ namespace UI.Main_Menu
         public GameObject OutOfLobby;
         public GameObject CreatingLobby;
         public GameObject InLobby;
-        public SelectGame? ChooseGame; 
+        public Button StartButton;
+        private SelectGame? _chooseGame; 
 
         private MainMenu _mainMenu;
         
         private void Awake()
         {
             _mainMenu = _mainMenuManager.MainMenu;
+            PhotonNetwork.automaticallySyncScene = true;
+        }
+
+        private void OnEnable()
+        {
+            if (PhotonNetwork.room == null)
+            {
+                OutOfLobby.SetActive(true);
+                CreatingLobby.SetActive(false);
+                InLobby.SetActive(false);
+            }
+        }
+
+        private void Update()
+        {
+            if (!PhotonNetwork.isMasterClient)
+            {
+                StartButton.interactable = false;
+            }
+            else
+            {
+                StartButton.interactable = true;
+            }
         }
 
         private static void OpenRoom(string roomName, RoomOptions roomOptions)
@@ -43,30 +70,44 @@ namespace UI.Main_Menu
             CreatingLobby.SetActive(true);
         }
 
-        public void ShowLobby()
-        {
-            OutOfLobby.SetActive(false);
-            InLobby.SetActive(true);
-        }
-
         public void CreateRoomRLR()
         {
             var roomOptions = new RoomOptions {IsVisible = true, IsOpen = true, MaxPlayers = 10};
-            ChooseGame = SelectGame.RunlingRun;
+            _chooseGame = SelectGame.RunlingRun;
             OpenRoom("Runling Run", roomOptions);
         }
 
         public void CreateRoomSLA()
         {
-            var roomOptions = new RoomOptions { IsVisible = true, IsOpen = true, MaxPlayers = 10 };
-            ChooseGame = SelectGame.Arena;
+            var roomOptions = new RoomOptions { IsVisible = true, IsOpen = true, MaxPlayers = 10};
+            _chooseGame = SelectGame.Arena;
             OpenRoom("Arena", roomOptions);
         }
 
         public void LeaveLobby()
         {
-            PhotonNetwork.Disconnect();
+            PhotonNetwork.LeaveRoom();
+            OutOfLobby.SetActive(true);
+            InLobby.SetActive(false);
         }
+
+        public void StartGame()
+        {
+            switch ((string) PhotonNetwork.room.CustomProperties["GM"])
+            {
+                case "RR":
+                    Debug.Log("Start RLR Game");
+                    PhotonNetwork.LoadLevel(3);
+                    break;
+                case "AR":
+                    Debug.Log("Start Arena Game");
+                    PhotonNetwork.LoadLevel(4);
+                    break;
+                default:
+                    Debug.Log("Couldn't load game, invalid selection");
+                    break;
+            }
+        } 
 
         public void BackToMenu()
         {
@@ -82,14 +123,25 @@ namespace UI.Main_Menu
 
         #region PUN Callbacks
 
-        public override void OnPhotonCreateRoomFailed(object[] codeAndMsg)
-        {
-            Debug.Log("Failed to join room");
-        }
-
         public override void OnCreatedRoom()
         {
             Debug.Log("Created Room: " + PhotonNetwork.room.Name);
+            var t = new Hashtable();
+            switch (_chooseGame)
+            {
+                case SelectGame.RunlingRun:
+                    t.Add("GM", "RR");
+                    break;
+                case SelectGame.Arena:
+                    t.Add("GM", "AR");
+                    break;
+                default:
+                    Debug.Log("No Gamemode assigned");
+                    break;
+            }
+
+            PhotonNetwork.room.SetCustomProperties(t);
+
             CreatingLobby.SetActive(false);
             InLobby.SetActive(true);
         }
@@ -101,40 +153,12 @@ namespace UI.Main_Menu
             _playerLayoutGroup.JoinedRoom();
         }
 
-        public override void OnLeftRoom()
-        {
-            Debug.Log(PhotonNetwork.lobby);
-            PhotonNetwork.LeaveLobby();
-            PhotonNetwork.JoinLobby(TypedLobby.Default);
-            Debug.Log(PhotonNetwork.room);
-            Debug.Log(PhotonNetwork.GetRoomList().Length);
-        }
-
-        public override void OnDisconnectedFromPhoton()
-        {
-            Debug.Log("disc");
-            PhotonNetwork.Reconnect();
-        }
-
-        public override void OnConnectedToMaster()
-        {
-            Debug.Log("connected");
-            PhotonNetwork.JoinLobby(TypedLobby.Default);
-        }
-
         #endregion
 
-        public enum SelectGame
+        private enum SelectGame
         {
             RunlingRun,
             Arena
-        }
-
-        public override void OnJoinedLobby()
-        {
-            Debug.Log("2nd " + PhotonNetwork.GetRoomList().Length);
-            OutOfLobby.SetActive(true);
-            InLobby.SetActive(false);
         }
     }
 }

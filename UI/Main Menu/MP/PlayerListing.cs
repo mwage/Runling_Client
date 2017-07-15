@@ -11,7 +11,7 @@ namespace UI.Main_Menu.MP
         public void ApplyPhotonPlayer(PhotonPlayer photonPlayer)
         {
             PhotonPlayer = photonPlayer;
-            _playerName.text = PhotonPlayer.NickName;
+            _playerName.text = PhotonPlayer.IsMasterClient ? PhotonPlayer.NickName + " (Host)" : PhotonPlayer.NickName;
         }
     }
 }

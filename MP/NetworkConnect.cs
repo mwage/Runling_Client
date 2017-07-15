@@ -30,7 +30,7 @@ namespace MP
 
         private void Awake()
         {
-            PhotonNetwork.autoJoinLobby = false;
+            PhotonNetwork.autoJoinLobby = true;
             PhotonNetwork.automaticallySyncScene = true;
             _autoConnect = PlayerPrefs.GetInt("AutoConnect") != 0;
             AutoConnect.isOn = _autoConnect;
@@ -47,10 +47,8 @@ namespace MP
 
         public void Connect()
         {
-            if (PhotonNetwork.playerName.Length < 2)
-            {
-                return;
-            }
+            if (PhotonNetwork.playerName.Length < 2) { return; }
+            PhotonNetwork.offlineMode = false;
             FeedbackText.text = "";
             ControlPanel.SetActive(false);
             CancelButton.SetActive(true);
@@ -91,11 +89,6 @@ namespace MP
             PlayerPrefs.SetInt("AutoConnect", selected ? 1 : 0);
         }
         #endregion
-
-        public override void OnConnectedToMaster()
-        {
-            PhotonNetwork.JoinLobby(TypedLobby.Default);
-        }
 
         public override void OnJoinedLobby()
         {

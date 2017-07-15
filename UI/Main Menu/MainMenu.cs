@@ -24,7 +24,7 @@ namespace UI.Main_Menu
 
         private void Update()
         {
-            if (PhotonNetwork.connected)
+            if (PhotonNetwork.connected && !PhotonNetwork.offlineMode)
             {
                 _multiplayerButtonText.text = PhotonNetwork.room != null ? "Back to Lobby" : "Multiplayer";
             }
@@ -32,14 +32,13 @@ namespace UI.Main_Menu
             {
                 _multiplayerButtonText.text = "Connect";
             }
-
         }
 
         #region Buttons
 
         public void Multiplayer()
         {
-            if (PhotonNetwork.connected)
+            if (PhotonNetwork.connected && !PhotonNetwork.offlineMode)
             {
                 gameObject.SetActive(false);
                 _multiplayerMenu.gameObject.SetActive(true);
@@ -52,15 +51,8 @@ namespace UI.Main_Menu
 
         public void Solo()
         {
-            if (PhotonNetwork.room == null)
-            {
-                gameObject.SetActive(false);
-                _soloMenu.gameObject.SetActive(true);
-            }
-            else
-            {
-                Debug.Log("Leave Lobby first");
-            }
+            gameObject.SetActive(false);
+            _soloMenu.gameObject.SetActive(true);
         }
 
         public void Options()
