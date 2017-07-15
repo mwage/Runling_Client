@@ -10,7 +10,8 @@ namespace UI.Main_Menu.MP
 
         public void ApplyPhotonPlayer(PhotonPlayer photonPlayer)
         {
-            _playerName.text = photonPlayer.NickName;
+            PhotonPlayer = photonPlayer;
+            _playerName.text = PhotonPlayer.NickName;
         }
     }
 }

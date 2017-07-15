@@ -94,6 +94,11 @@ namespace MP
 
         public override void OnConnectedToMaster()
         {
+            PhotonNetwork.JoinLobby(TypedLobby.Default);
+        }
+
+        public override void OnJoinedLobby()
+        {
             CancelButton.SetActive(false);
             SceneManager.LoadSceneAsync("MainMenu");
         }

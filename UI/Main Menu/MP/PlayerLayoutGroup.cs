@@ -33,13 +33,23 @@ namespace UI.Main_Menu.MP
 
         #region PUN Callbacks
 
-        public override void OnJoinedRoom()
+        public void JoinedRoom()
         {
-            var photonPlayers = PhotonNetwork.playerList;
-            for (var i = 0; i < photonPlayers.Length; i++)
+            foreach (Transform child in transform)
             {
-                PlayerJoinedRoom(photonPlayers[i]);
+                Destroy(child.gameObject);
             }
+
+            var photonPlayers = PhotonNetwork.playerList;
+            foreach (var player in photonPlayers)
+            {
+                PlayerJoinedRoom(player);
+            }
+        }
+
+        public override void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
+        {
+            PlayerJoinedRoom(newPlayer);
         }
 
         public override void OnPhotonPlayerDisconnected(PhotonPlayer photonPlayer)

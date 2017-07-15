@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace UI.Main_Menu
 {
@@ -8,6 +9,7 @@ namespace UI.Main_Menu
     public class MainMenu : MonoBehaviour
     {
         [SerializeField] private MainMenuManager _mainMenuManager;
+        [SerializeField] private Text _multiplayerButtonText;
 
         private OptionsMenu _optionsMenu;
         private SoloMenu _soloMenu;
@@ -18,6 +20,19 @@ namespace UI.Main_Menu
             _optionsMenu = _mainMenuManager.OptionsMenu;
             _soloMenu = _mainMenuManager.SoloMenu;
             _multiplayerMenu = _mainMenuManager.MultiplayerMenu;
+        }
+
+        private void Update()
+        {
+            if (PhotonNetwork.connected)
+            {
+                _multiplayerButtonText.text = PhotonNetwork.room != null ? "Back to Lobby" : "Multiplayer";
+            }
+            else
+            {
+                _multiplayerButtonText.text = "Connect";
+            }
+
         }
 
         #region Buttons
@@ -37,8 +52,15 @@ namespace UI.Main_Menu
 
         public void Solo()
         {
-            gameObject.SetActive(false);
-            _soloMenu.gameObject.SetActive(true);
+            if (PhotonNetwork.room == null)
+            {
+                gameObject.SetActive(false);
+                _soloMenu.gameObject.SetActive(true);
+            }
+            else
+            {
+                Debug.Log("Leave Lobby first");
+            }
         }
 
         public void Options()
