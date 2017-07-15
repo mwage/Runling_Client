@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace UI.Main_Menu
 {
@@ -6,44 +7,50 @@ namespace UI.Main_Menu
 
     public class MainMenu : MonoBehaviour
     {
-        public GameObject OptionsMenuObject;
-        public OptionsMenu OptionsMenu;
-        public GameObject SLAMenuObject;
-        public SLAMenu SLAMenu;
-        public GameObject RLRMenuObject;
-        public RLRMenu RLRMenu;
-        public MainMenuManager MainMenuManager;
+        [SerializeField] private MainMenuManager _mainMenuManager;
 
-        public void SLA()
+        private OptionsMenu _optionsMenu;
+        private SoloMenu _soloMenu;
+        private MultiplayerMenu _multiplayerMenu;
+
+        private void Awake()
         {
-            gameObject.SetActive(false);
-            RLRMenuObject.gameObject.SetActive(false);
-            SLAMenuObject.gameObject.SetActive(true);
-            SLAMenu.SLAMenuActive = true;
-            MainMenuManager.MoveCamera(MainMenuManager.CameraPosSLA, MainMenuManager.CameraRotSLA);
+            _optionsMenu = _mainMenuManager.OptionsMenu;
+            _soloMenu = _mainMenuManager.SoloMenu;
+            _multiplayerMenu = _mainMenuManager.MultiplayerMenu;
         }
 
-        public void RLR()
+        #region Buttons
+
+        public void Multiplayer()
+        {
+            if (PhotonNetwork.connected)
+            {
+                gameObject.SetActive(false);
+                _multiplayerMenu.gameObject.SetActive(true);
+            }
+            else
+            {
+                SceneManager.LoadScene("Connect");
+            }
+        }
+
+        public void Solo()
         {
             gameObject.SetActive(false);
-            SLAMenuObject.gameObject.SetActive(false);
-            RLRMenuObject.gameObject.SetActive(true);
-            RLRMenu.RLRMenuActive = true;
-            MainMenuManager.MoveCamera(MainMenuManager.CameraPosRLR, MainMenuManager.CameraRotRLR);
+            _soloMenu.gameObject.SetActive(true);
         }
 
         public void Options()
         {
             gameObject.SetActive(false);
-            RLRMenuObject.gameObject.SetActive(false);
-            OptionsMenuObject.gameObject.SetActive(true);
-            OptionsMenu.OptionsMenuActive = true;
+            _optionsMenu.gameObject.SetActive(true);
         }
 
         public void Quit()
         {
             Application.Quit();
         }
-
+        #endregion
     }
 }

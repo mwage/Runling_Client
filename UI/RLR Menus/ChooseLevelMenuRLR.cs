@@ -6,8 +6,9 @@ namespace UI.RLR_Menus
 {
     public class ChooseLevelMenuRLR : MonoBehaviour
     {
-        public bool ChooseLevelMenuActive;
-        public GameObject Menu;
+        [SerializeField] private InGameMenuManagerRLR _inGameMenuManagerRLR;
+
+        #region Buttons
 
         public void Level1()
         {
@@ -74,9 +75,9 @@ namespace UI.RLR_Menus
 
         public void Back()
         {
-            ChooseLevelMenuActive = false;
             gameObject.SetActive(false);
-            Menu.gameObject.SetActive(true);
+            _inGameMenuManagerRLR.InGameMenu.gameObject.SetActive(true);
         }
+        #endregion
     }
 }

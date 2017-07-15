@@ -15,14 +15,12 @@ namespace UI.Main_Menu
         public HighScoreMenuSLA HighScoreMenuSLA;
         public RLRMenu RLRMenu;
         public HighScoreMenuRLR HighScoreMenuRLR;
+        public SoloMenu SoloMenu;
+        public MultiplayerMenu MultiplayerMenu;
+        public SceneLoader SceneLoader;
 
-        public GameObject SLAMenuObject;
-        public GameObject RLRMenuObject;
-        public GameObject HighScoreMenuSLAObject;
-        public GameObject HighScoreMenuRLRObject;
-
+        #region CameraVariables
         public Camera Camera;
-
         public Vector3 CameraPosMainMenu;
         public Vector3 CameraPosRLR;
         public Vector3 CameraPosSLA;
@@ -40,13 +38,8 @@ namespace UI.Main_Menu
         private Vector3 _oldPos;
         private Quaternion _oldRot;
 
-
         private void Awake()
         {
-            OptionsMenu.OptionsMenuActive = false;
-            SLAMenu.SLAMenuActive = false;
-            HighScoreMenuSLA.HighScoreMenuActive = false;
-
             CameraPosMainMenu = Camera.transform.position;
             CameraPosRLR = new Vector3(0, 35, 70);
             CameraPosSLA = new Vector3(0, 35, 60);
@@ -57,6 +50,7 @@ namespace UI.Main_Menu
             _targetRot = Camera.transform.rotation;
             _cameraSpeed = 100;
         }
+        #endregion
 
 
         public void MoveCamera(Vector3 newPos, Quaternion newRot)
@@ -82,36 +76,40 @@ namespace UI.Main_Menu
                 Camera.transform.rotation = Quaternion.Slerp(_oldRot, _targetRot, _currentRot);
             }
 
-            // Navigate Menu
+            #region NavigateMenu
+
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.NavigateMenu))
             {
-                if (OptionsMenu.OptionsMenuActive)
+                if (OptionsMenu.gameObject.activeSelf)
                 {
                     OptionsMenu.DiscardChanges();
                 }
-                else if (SLAMenu.SLAMenuActive)
+                else if (SoloMenu.gameObject.activeSelf)
+                {
+                    SoloMenu.BackToMenu();
+                }
+                else if (MultiplayerMenu.gameObject.activeSelf)
+                {
+                    MultiplayerMenu.BackToMenu();
+                }
+                else if (SLAMenu.gameObject.activeSelf)
                 {
                     SLAMenu.BackToMenu();
                 }
-                else if (RLRMenu.RLRMenuActive)
+                else if (RLRMenu.gameObject.activeSelf)
                 {
                     RLRMenu.BackToMenu();
                 }
-                else if (HighScoreMenuSLA.HighScoreMenuActive)
+                else if (HighScoreMenuSLA.gameObject.activeSelf)
                 {
-                    HighScoreMenuSLAObject.SetActive(false);
-                    HighScoreMenuSLA.HighScoreMenuActive = false;
-                    SLAMenuObject.SetActive(true);
-                    SLAMenu.SLAMenuActive = true;
+                    HighScoreMenuSLA.Back();
                 }
-                else if (HighScoreMenuRLR.HighScoreMenuActive)
+                else if (HighScoreMenuRLR.gameObject.activeSelf)
                 {
-                    HighScoreMenuRLRObject.SetActive(false);
-                    HighScoreMenuRLR.HighScoreMenuActive = false;
-                    RLRMenuObject.SetActive(true);
-                    RLRMenu.RLRMenuActive = true;
+                    HighScoreMenuRLR.Back();
                 }
             }
+            #endregion
         }
     }
 }

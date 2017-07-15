@@ -18,7 +18,7 @@ namespace UI.OptionsMenu
         public GameObject CameraSubmenu;
         public GameObject GraphicsSubmenu;
 
-        public bool OptionsMenuActive;
+        #region Buttons
 
         public void DiscardChanges()
         {
@@ -30,9 +30,6 @@ namespace UI.OptionsMenu
             CameraHandleMovement.SetCameraHandlePosition(watchedPoint);
             CameraMovement.SetCameraPitch(GameControl.Settings.CameraAngle.Val);
             
-            
-
-            OptionsMenuActive = false;
             gameObject.SetActive(false);
             Menu.gameObject.SetActive(true);
         }
@@ -47,7 +44,6 @@ namespace UI.OptionsMenu
             }
             SetCamera.SaveCameraOptions();
 
-            OptionsMenuActive = false;
             gameObject.SetActive(false);
             Menu.gameObject.SetActive(true);
         }
@@ -72,6 +68,6 @@ namespace UI.OptionsMenu
             CameraSubmenu.SetActive(false);
             GraphicsSubmenu.SetActive(true);
         }
-
+        #endregion
     }
 }

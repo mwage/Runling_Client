@@ -3,8 +3,8 @@ using UnityEngine.SceneManagement;
 
 namespace Launcher
 {
-    public class GameControl : Singleton<GameControl>{
-
+    public class GameControl : Singleton<GameControl>
+    {
         protected GameControl()
         {
         }
@@ -34,7 +34,8 @@ namespace Launcher
         //Start Game
         private void Start()
         {
-            SceneManager.LoadScene("Connect");
+            if (SceneManager.GetActiveScene().name == "Launcher")
+                SceneManager.LoadScene("Connect");
         }
     }
 }

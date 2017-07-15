@@ -10,19 +10,13 @@ namespace UI.SLA_Menus
     public class InGameMenuManagerSLA : MonoBehaviour
     {
         public InGameMenuSLA InGameMenu;
-        public ControlSLA ControlSLA;
         public OptionsMenu OptionsMenu;
-        public SetHotkeys SetHotkeys;
         public HighScoreMenuSLA HighScoreMenuSLA;
         public ChooseLevelMenuSLA ChooseLevelMenu;
 
-        public GameObject InGameMenuObject;
-        public GameObject OptionsMenuObject;
-        public GameObject HighScoreMenuObject;
-        public GameObject ChooseLevelMenuObject;
         public GameObject WinScreen;
         public GameObject PauseScreen;
-        public GameObject ChooseLevel;
+        public GameObject ChooseLevelButton;
         public GameObject RestartGame;
 
         public bool MenuOn;
@@ -31,44 +25,41 @@ namespace UI.SLA_Menus
         private void Awake()
         {
             MenuOn = false;
-            OptionsMenu.OptionsMenuActive = false;
-            ChooseLevelMenu.ChooseLevelMenuActive = false;
-            HighScoreMenuSLA.HighScoreMenuActive = false;
             _pause = false;
         }
 
         public void CloseMenus()
         {
-            InGameMenuObject.SetActive(false);
-            OptionsMenuObject.SetActive(false);
-            HighScoreMenuObject.SetActive(false);
+            InGameMenu.gameObject.SetActive(false);
+            OptionsMenu.gameObject.SetActive(false);
+            HighScoreMenuSLA.gameObject.SetActive(false);
         }
 
         private void Update()
         {
-            // Navigate menu with esc
+            #region NavigateMenu
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.NavigateMenu))
             {
                 if (!MenuOn && !WinScreen.gameObject.activeSelf)
                 {
-                    InGameMenuObject.SetActive(true);
+                    InGameMenu.gameObject.SetActive(true);
                     Time.timeScale = 0;
                     MenuOn = true;
-                    if (GameControl.State.SetGameMode == Gamemode.Practice && !ChooseLevel.activeSelf)
+                    if (GameControl.State.SetGameMode == Gamemode.Practice && !ChooseLevelButton.activeSelf)
                     {
                         RestartGame.SetActive(false);
-                        ChooseLevel.SetActive(true);
+                        ChooseLevelButton.SetActive(true);
                     }
                 }
-                else if (MenuOn && OptionsMenu.OptionsMenuActive)
+                else if (MenuOn && OptionsMenu.gameObject.activeSelf)
                 {
                     OptionsMenu.DiscardChanges();
                 }
-                else if (MenuOn && HighScoreMenuSLA.HighScoreMenuActive)
+                else if (MenuOn && HighScoreMenuSLA.gameObject.activeSelf)
                 {
                     HighScoreMenuSLA.Back();
                 }
-                else if (MenuOn && ChooseLevelMenu.ChooseLevelMenuActive)
+                else if (MenuOn && ChooseLevelMenu.gameObject.activeSelf)
                 {
                     ChooseLevelMenu.Back();
                 }
@@ -77,6 +68,7 @@ namespace UI.SLA_Menus
                     InGameMenu.BackToGame();
                 }
             }
+            #endregion
 
             //pause game
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.Pause))

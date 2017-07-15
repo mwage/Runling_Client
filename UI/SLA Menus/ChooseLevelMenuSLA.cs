@@ -6,8 +6,9 @@ namespace UI.SLA_Menus
 {
     public class ChooseLevelMenuSLA : MonoBehaviour
     {
-        public bool ChooseLevelMenuActive;
-        public GameObject Menu;
+        [SerializeField] private InGameMenuManagerSLA _inGameMenuManagerSLA;
+
+        #region Buttons
 
         public void Level1()
         {
@@ -115,9 +116,9 @@ namespace UI.SLA_Menus
 
         public void Back()
         {
-            ChooseLevelMenuActive = false;
             gameObject.SetActive(false);
-            Menu.gameObject.SetActive(true);
+            _inGameMenuManagerSLA.InGameMenu.gameObject.SetActive(true);
         }
+        #endregion
     }
 }
