@@ -28,15 +28,12 @@ namespace UI.RLR_Menus.Characters
 
         public void Pick()
         {
-            if (_character == null)
-            {
-                return;
-            }
+            if (_character == null) return;
+
             _characterRepository.Add(PickCharacterMenu.PickedSlot, _character);
             
             PickCharacterMenu.gameObject.SetActive(true);
             PickCharacterMenu.SetId(PickCharacterMenu.PickedSlot);
-            // PickCharacterMenu.ActiveSlot.isOn = true;
             PickCharacterMenu.ActiveSlot.Select();
             gameObject.SetActive(false);
         }
