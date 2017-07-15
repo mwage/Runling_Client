@@ -1,8 +1,8 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Drones.DroneTypes;
 using Drones.Pattern;
+using UnityEngine;
 
 namespace Drones
 {

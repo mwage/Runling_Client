@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Launcher;
+﻿using Launcher;
 using UnityEngine;
 
 namespace UI

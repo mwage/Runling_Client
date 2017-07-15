@@ -1,9 +1,9 @@
 ﻿using Launcher;
-using SLA;
+using UI.SLA_Menus;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace UI.SLA_Menus
+namespace SLA
 {
     public class WinSLA : MonoBehaviour
     {

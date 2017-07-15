@@ -10,12 +10,12 @@ namespace Players.Camera
     {
         public SetCamera SetCamera;
 
-        void Start()
+        private void Start()
         {
             SetCameraHandlePosition(GetWatchedPoint());
         }
 
-        void LateUpdate()
+        private void LateUpdate()
         {
             MoveCameraUsingInput();
             RotateCameraUsingInput();
