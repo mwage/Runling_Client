@@ -4,17 +4,22 @@ using UnityEngine;
 
 namespace UI.Main_Menu
 {
-    public class SLAMenu : MonoBehaviour {
+    public class SLAMenu : MonoBehaviour
+    {
+        [SerializeField] private MainMenuManager _mainMenuManager;
 
-        public HighScoreMenuSLA HighScoreMenuSLA;
-        public SceneLoader SceneLoader;
-        public MainMenuManager MainMenuManager;
+        public GameObject PrevMenu;
+        
+        private SceneLoader _sceneLoader;
+        private HighScoreMenuSLA _highScoreMenu;
 
-        public GameObject MainMenu;
-        public GameObject HighScoreMenu;
-        public GameObject Menus;
+        private void Awake()
+        {
+            _highScoreMenu = _mainMenuManager.HighScoreMenuSLA;
+            _sceneLoader = _mainMenuManager.SceneLoader;
+        }
 
-        public bool SLAMenuActive;
+        #region Buttons
 
         public void StartGame()
         {
@@ -22,8 +27,8 @@ namespace UI.Main_Menu
             GameControl.State.CurrentLevel = 1;
             GameControl.State.SetGameMode = Gamemode.Classic;
 
-            SceneLoader.LoadScene("SLA", 1);
-            Menus.SetActive(false);
+            _sceneLoader.LoadScene("SLA", 1);
+            _mainMenuManager.gameObject.SetActive(false);
         }
 
         public void Practice()
@@ -32,24 +37,22 @@ namespace UI.Main_Menu
             GameControl.State.CurrentLevel = 1;
             GameControl.State.SetGameMode = Gamemode.Practice;
 
-            SceneLoader.LoadScene("SLA", 1);
-            Menus.SetActive(false);
+            _sceneLoader.LoadScene("SLA", 1);
+            _mainMenuManager.gameObject.SetActive(false);
         }
 
         public void HighScores()
         {
             gameObject.SetActive(false);
-            SLAMenuActive = false;
-            HighScoreMenu.gameObject.SetActive(true);
-            HighScoreMenuSLA.HighScoreMenuActive = true;
+            _highScoreMenu.gameObject.SetActive(true);
         }
 
         public void BackToMenu()
         {
-            SLAMenuActive = false;
             gameObject.SetActive(false);
-            MainMenu.gameObject.SetActive(true);
-            MainMenuManager.MoveCamera(MainMenuManager.CameraPosMainMenu, MainMenuManager.CameraRotMainMenu);
+            PrevMenu.gameObject.SetActive(true);
+            _mainMenuManager.MoveCamera(_mainMenuManager.CameraPosMainMenu, _mainMenuManager.CameraRotMainMenu);
         }
+        #endregion
     }
 }

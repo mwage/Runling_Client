@@ -1,52 +1,47 @@
 ﻿using Launcher;
-using RLR;
 using UnityEngine;
 
 namespace UI.RLR_Menus
 {
+    using OptionsMenu;
+
     public class InGameMenuManagerRLR : MonoBehaviour
     {
         public InGameMenuRLR InGameMenu;
-        public ControlRLR ControlRLR;
-        public OptionsMenu.OptionsMenu OptionsMenu;
+        public OptionsMenu OptionsMenu;
         public ChooseLevelMenuRLR ChooseLevelMenu;
         public HighScoreMenuRLR HighScoreMenuRLR;
 
-        public GameObject InGameMenuObject;
-        public GameObject OptionsMenuObject;
-        public GameObject ChooseLevelMenuObject;
+        public GameObject ChooseLevel;
         public GameObject WinScreen;
         public GameObject PauseScreen;
-        public GameObject ChooseLevel;
-        public GameObject HighScoreMenuObject;
         public GameObject RestartGame;
-
+        
         public bool MenuOn;
+
         private bool _pause;
 
         private void Awake()
         {
             MenuOn = false;
-            OptionsMenu.OptionsMenuActive = false;
-            ChooseLevelMenu.ChooseLevelMenuActive = false;
             _pause = false;
         }
 
         public void CloseMenus()
         {
-            InGameMenuObject.SetActive(false);
-            OptionsMenuObject.SetActive(false);
-            ChooseLevelMenuObject.SetActive(false);
+            InGameMenu.gameObject.SetActive(false);
+            OptionsMenu.gameObject.SetActive(false);
+            ChooseLevelMenu.gameObject.SetActive(false);
         }
 
         private void Update()
         {
-            // Navigate menu with esc
+            #region NavigateMenu
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.NavigateMenu))
             {
                 if (!MenuOn && !WinScreen.gameObject.activeSelf)
                 {
-                    InGameMenuObject.SetActive(true);
+                    InGameMenu.gameObject.SetActive(true);
                     Time.timeScale = 0;
                     MenuOn = true;
                     if (GameControl.State.SetGameMode == Gamemode.Practice && !ChooseLevel.activeSelf)
@@ -55,15 +50,15 @@ namespace UI.RLR_Menus
                         ChooseLevel.SetActive(true);
                     }
                 }
-                else if (MenuOn && OptionsMenu.OptionsMenuActive)
+                else if (MenuOn && OptionsMenu.gameObject.activeSelf)
                 {
                     OptionsMenu.DiscardChanges();
                 }
-                else if (MenuOn && ChooseLevelMenu.ChooseLevelMenuActive)
+                else if (MenuOn && ChooseLevelMenu.gameObject.activeSelf)
                 {
                     ChooseLevelMenu.Back();
                 }
-                else if (MenuOn && HighScoreMenuRLR.HighScoreMenuActive)
+                else if (MenuOn && HighScoreMenuRLR.gameObject.activeSelf)
                 {
                     HighScoreMenuRLR.Back();
                 }
@@ -72,6 +67,7 @@ namespace UI.RLR_Menus
                     InGameMenu.BackToGame();
                 }
             }
+            #endregion
 
             //pause game
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.Pause))

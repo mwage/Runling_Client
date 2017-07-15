@@ -1,14 +1,13 @@
 ﻿using UI;
+using UnityEngine.SceneManagement;
 
 namespace Launcher
 {
-    public class GameControl : Singleton<GameControl>{
-
+    public class GameControl : Singleton<GameControl>
+    {
         protected GameControl()
         {
         }
-
-        public SceneLoader SceneLoader;
 
         private GameState _state;
         private InputManager _inputManager;
@@ -20,6 +19,7 @@ namespace Launcher
         public static Settings Settings { get { return Instance._settings; } }
         public static HighScores HighScores { get { return Instance._highScores; } }
 
+        public const int Version = 2;
 
         //Keep Game Manager active and destroy any additional copys
         private void Awake()
@@ -32,10 +32,10 @@ namespace Launcher
         }
 
         //Start Game
-         private void Start()
+        private void Start()
         {
-            if (SceneLoader != null)
-                SceneLoader.LoadScene("Mainmenu", 0.5f);
+            if (SceneManager.GetActiveScene().name == "Launcher")
+                SceneManager.LoadScene("Connect");
         }
     }
 }

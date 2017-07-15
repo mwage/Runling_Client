@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Characters;
@@ -12,7 +12,7 @@ namespace UI.RLR_Menus.Characters
     public class PickCharacterMenu : MonoBehaviour
     {
         public GameObject CreateCharacterMenu;
-        public List<Toggle> toggs;
+        public List<Toggle> Toggs;
         public Toggle ActiveSlot;
 
         public int? Id { get; private set; } // id of picked slot, value 1-8, if not set or respond to not valid character - 0

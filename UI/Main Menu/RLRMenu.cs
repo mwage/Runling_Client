@@ -1,4 +1,4 @@
-﻿using Launcher;
+using Launcher;
 using UI.RLR_Menus;
 using UI.RLR_Menus.Characters;
 using UnityEngine;
@@ -8,23 +8,52 @@ namespace UI.Main_Menu
 {
     public class RLRMenu : MonoBehaviour
     {
-        public HighScoreMenuRLR HighScoreMenuSLA;
-        public SceneLoader SceneLoader;
-        public MainMenuManager MainMenuManager;
+        [SerializeField] private MainMenuManager _mainMenuManager;
 
-        public GameObject MainMenu;
-        public GameObject HighScoreMenu;
+        public GameObject PrevMenu;
         public GameObject LaunchRLR;
-        public GameObject Menus;
-
         public GameObject PickCharacterMenu;
-
+        
+        private HighScoreMenuRLR _highScoreMenu;
+        private SceneLoader _sceneLoader;
 
         private Difficulty? _voteDifficulty;
         private Gamemode? _voteGameMode;
 
-        public bool RLRMenuActive;
+        private void Awake()
+        {
+            _highScoreMenu = _mainMenuManager.HighScoreMenuRLR;
+            _sceneLoader = _mainMenuManager.SceneLoader;
+        }
+
+        private void OnEnable()
+        {
+            _voteDifficulty = null;
+            _voteGameMode = null;
+        }
+
+        public void SetModes()
+        {
+            if (_voteDifficulty != null) GameControl.State.SetDifficulty = (Difficulty)_voteDifficulty;
+            if (_voteGameMode != null) GameControl.State.SetGameMode = (Gamemode)_voteGameMode;
+        }
         
+        public void Update()
+        {
+            if (_voteDifficulty != null && _voteGameMode != null &&
+                PickCharacterMenu.GetComponent<PickCharacterMenu>().Id != null)
+            {
+                LaunchRLR.GetComponentInChildren<Text>().text = "R U N";
+                LaunchRLR.GetComponent<Button>().interactable = true;
+            }
+            else
+            {
+                LaunchRLR.GetComponentInChildren<Text>().text = "Select Modes";
+                LaunchRLR.GetComponent<Button>().interactable = false;
+            }
+        }
+
+        #region Buttons
         public void StartGame()
         {
             GameControl.State.IsDead = true;
@@ -33,14 +62,8 @@ namespace UI.Main_Menu
             GameControl.State.CharacterDto = PickCharacterMenu.GetComponent<PickCharacterMenu>().GetCharacterDto();
             SetModes();
 
-            SceneLoader.LoadScene("RLR", 1);
-            Menus.SetActive(false);
-        }
-
-        private void OnEnable()
-        {
-            _voteDifficulty = null;
-            _voteGameMode = null;
+            _sceneLoader.LoadScene("RLR", 1);
+            _mainMenuManager.gameObject.SetActive(false);
         }
 
         public void VoteDifficultyNormal()
@@ -68,46 +91,26 @@ namespace UI.Main_Menu
             _voteGameMode = Gamemode.Practice;
         }
 
-        public void SetModes()
-        {
-            if (_voteDifficulty != null) GameControl.State.SetDifficulty = (Difficulty) _voteDifficulty;
-            if (_voteGameMode != null) GameControl.State.SetGameMode = (Gamemode) _voteGameMode;
-        }
-
         public void HighScores()
         {
             gameObject.SetActive(false);
-            RLRMenuActive = false;
-            HighScoreMenu.gameObject.SetActive(true);
-            HighScoreMenuSLA.HighScoreMenuActive = true;
+            _highScoreMenu.gameObject.SetActive(true);
         }
 
         public void BackToMenu()
         {
-            RLRMenuActive = false;
             gameObject.SetActive(false);
             PickCharacterMenu.SetActive(false);
-            MainMenu.gameObject.SetActive(true);
+            PrevMenu.gameObject.SetActive(true);
             transform.Find("Mode/Classic").GetComponent<Toggle>().isOn = false;
             transform.Find("Mode/Practice").GetComponent<Toggle>().isOn = false;
             transform.Find("Mode/Time").GetComponent<Toggle>().isOn = false;
             transform.Find("Difficulty/Normal").GetComponent<Toggle>().isOn = false;
             transform.Find("Difficulty/Hard").GetComponent<Toggle>().isOn = false;
-            MainMenuManager.MoveCamera(MainMenuManager.CameraPosMainMenu, MainMenuManager.CameraRotMainMenu);
+            _mainMenuManager.MoveCamera(_mainMenuManager.CameraPosMainMenu, _mainMenuManager.CameraRotMainMenu);
         }
+        #endregion
 
-        public void Update()
-        {
-            if (_voteDifficulty != null && _voteGameMode != null && PickCharacterMenu.GetComponent<PickCharacterMenu>().Id != null)
-            {
-                LaunchRLR.GetComponentInChildren<Text>().text = "R U N";
-                LaunchRLR.GetComponent<Button>().interactable = true;
-            }
-            else
-            {
-                LaunchRLR.GetComponentInChildren<Text>().text = "Select Modes";
-                LaunchRLR.GetComponent<Button>().interactable = false;
-            }
-        }
+  
     }
 }

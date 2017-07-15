@@ -13,7 +13,6 @@ namespace UI.SLA_Menus
         public GameObject Background;
         public ScoreSLA ScoreSLA;
 
-        public bool HighScoreMenuActive;
         private GameObject _descriptionText;
         private readonly GameObject[] _levelScore = new GameObject[LevelManagerSLA.NumLevels];
         private GameObject _gameScore;
@@ -111,7 +110,6 @@ namespace UI.SLA_Menus
 
         public void Back()
         {
-            HighScoreMenuActive = false;
             gameObject.SetActive(false);
             Menu.gameObject.SetActive(true);
         }

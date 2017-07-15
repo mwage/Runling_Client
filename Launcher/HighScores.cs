@@ -11,17 +11,17 @@ namespace Launcher
         public float[] HighScoreRLRNormal = new float[10];
         public float[] HighScoreRLRHard = new float[10];
 
-        private const int Version = 2;
+
 
         public HighScores()
         {
             var reset = PlayerPrefs.GetInt("Reset");
-            if (reset < Version)
+            if (reset < GameControl.Version)
             {
                 Debug.Log("resetting scores");
                 ResetHighscoresRLR();
                 ResetHighscoresSLA();
-                PlayerPrefs.SetInt("Reset", Version);
+                PlayerPrefs.SetInt("Reset", GameControl.Version);
             }
 
             LoadHighscoresSLA();

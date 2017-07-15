@@ -1,49 +1,70 @@
-﻿using UnityEngine;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace UI.Main_Menu
 {
+    using OptionsMenu;
+
     public class MainMenu : MonoBehaviour
     {
-        public GameObject OptionsMenuObject;
-        public OptionsMenu.OptionsMenu OptionsMenu;
-        public GameObject SLAMenuObject;
-        public SLAMenu SLAMenu;
-        public GameObject RLRMenuObject;
-        public RLRMenu RLRMenu;
-        public MainMenuManager MainMenuManager;
-        public GameObject PickCharacterMenu;
+        [SerializeField] private MainMenuManager _mainMenuManager;
+        [SerializeField] private Text _multiplayerButtonText;
 
-        public void SLA()
+        private OptionsMenu _optionsMenu;
+        private SoloMenu _soloMenu;
+        private MultiplayerMenu _multiplayerMenu;
+
+        private void Awake()
         {
-            gameObject.SetActive(false);
-            RLRMenuObject.gameObject.SetActive(false);
-            SLAMenuObject.gameObject.SetActive(true);
-            SLAMenu.SLAMenuActive = true;
-            MainMenuManager.MoveCamera(MainMenuManager.CameraPosSLA, MainMenuManager.CameraRotSLA);
+            _optionsMenu = _mainMenuManager.OptionsMenu;
+            _soloMenu = _mainMenuManager.SoloMenu;
+            _multiplayerMenu = _mainMenuManager.MultiplayerMenu;
         }
 
-        public void RLR()
+        private void Update()
         {
-            PickCharacterMenu.SetActive(true);
+            if (PhotonNetwork.connected && !PhotonNetwork.offlineMode)
+            {
+                _multiplayerButtonText.text = PhotonNetwork.room != null ? "Back to Lobby" : "Multiplayer";
+            }
+            else
+            {
+                _multiplayerButtonText.text = "Connect";
+            }
+        }
+
+        #region Buttons
+
+        public void Multiplayer()
+        {
+            if (PhotonNetwork.connected && !PhotonNetwork.offlineMode)
+            {
+                gameObject.SetActive(false);
+                _multiplayerMenu.gameObject.SetActive(true);
+            }
+            else
+            {
+                SceneManager.LoadScene("Connect");
+            }
+        }
+
+        public void Solo()
+        {
             gameObject.SetActive(false);
-            SLAMenuObject.gameObject.SetActive(false);
-            RLRMenuObject.gameObject.SetActive(true);
-            RLRMenu.RLRMenuActive = true;
-            MainMenuManager.MoveCamera(MainMenuManager.CameraPosRLR, MainMenuManager.CameraRotRLR);
+            _soloMenu.gameObject.SetActive(true);
         }
 
         public void Options()
         {
             gameObject.SetActive(false);
-            RLRMenuObject.gameObject.SetActive(false);
-            OptionsMenuObject.gameObject.SetActive(true);
-            OptionsMenu.OptionsMenuActive = true;
+            _optionsMenu.gameObject.SetActive(true);
         }
 
         public void Quit()
         {
             Application.Quit();
         }
-
+        #endregion
     }
 }

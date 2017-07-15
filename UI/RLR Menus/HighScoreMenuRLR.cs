@@ -13,7 +13,6 @@ namespace UI.RLR_Menus
         public GameObject Background;
         public ScoreRLR ScoreRLR;
 
-        public bool HighScoreMenuActive;
         private GameObject _descriptionText;
         private readonly GameObject[] _levelScore = new GameObject[LevelManagerRLR.NumLevels];
         private GameObject _timeModeScore;
@@ -233,11 +232,9 @@ namespace UI.RLR_Menus
             }
             _timeModeScore.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = GameControl.HighScores.HighScoreRLRHard[0].ToString("f0");
         }
-
-
+        
         public void Back()
         {
-            HighScoreMenuActive = false;
             gameObject.SetActive(false);
             Menu.gameObject.SetActive(true);
         }
