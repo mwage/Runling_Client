@@ -7,7 +7,7 @@ namespace Players
     {
         private bool _finishedLevel;
         private bool _onPlatform;
-        public bool OnNewPlatform;
+        public bool EnteredOnNewPlatform;
         public GameObject LastVisitedSafeZone;
 
         // Trigger
@@ -39,7 +39,7 @@ namespace Players
             if (other.CompareTag("SafeZone") && !_onPlatform)
             {
                 LastVisitedSafeZone = other.transform.parent.parent.gameObject;
-                OnNewPlatform = true;
+                EnteredOnNewPlatform = true;
                 _onPlatform = true;
             }
 

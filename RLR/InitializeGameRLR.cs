@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Launcher;
+using Players;
 using Players.Camera;
 using RLR.Levels;
 using TMPro;
@@ -38,6 +39,7 @@ namespace RLR
            if (GameControl.PlayerState.Player == null)
             {
                 GameControl.PlayerState.Player = PlayerFactory.Create(GameControl.State.CharacterDto, 1);
+                GameControl.PlayerState.PlayerTrigger = GameControl.PlayerState.Player.transform.Find("Trigger").gameObject.GetComponent<PlayerTrigger>();
             }
             var startPlatform = LevelManagerRLR.GenerateMapRLR.GetStartPlatform();
             GameControl.PlayerState.Player.transform.position =

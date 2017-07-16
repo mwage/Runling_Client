@@ -61,7 +61,7 @@ namespace RLR.Levels
         }
 
 
-        public void IsChaser(GameObject currentSafeZone, List<GameObject> safeZones)
+        public void CreateOrDestroyChaserIfNeed(GameObject currentSafeZone, List<GameObject> safeZones)
         {
             if (_chaserSpawnPlatformIdxs == null || _chaserDestroyPlatformIdxs == null) return;
 

@@ -43,11 +43,12 @@ namespace RLR.Levels
         private void Update()
         {
             if (_playerTrigger == null) return;
-            if (_playerTrigger.OnNewPlatform)
+            if (_playerTrigger.EnteredOnNewPlatform)
             {
-                RunlingChaser.IsChaser(_playerTrigger.LastVisitedSafeZone, _safeZones);
+                RunlingChaser.CreateOrDestroyChaserIfNeed(_playerTrigger.LastVisitedSafeZone, _safeZones);
+
                 ScoreRLR.AddScore(_playerTrigger.LastVisitedSafeZone, _safeZones);
-                _playerTrigger.OnNewPlatform = false;
+                _playerTrigger.EnteredOnNewPlatform = false;
             }
         }
     }
