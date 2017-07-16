@@ -40,6 +40,8 @@ namespace UI.Main_Menu.MP
             {
                 var roomListing = _roomList[index];
                 roomListing.SetRoomNameText(room.Name);
+                roomListing.SetPlayerCountText(room.PlayerCount, room.MaxPlayers);
+                roomListing.SetGameModeText((string)room.CustomProperties["GM"]);
                 roomListing.Updated = true;
             }
         }

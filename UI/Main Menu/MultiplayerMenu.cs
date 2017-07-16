@@ -152,6 +152,7 @@ namespace UI.Main_Menu
             }
 
             PhotonNetwork.room.SetCustomProperties(t);
+            PhotonNetwork.room.SetPropertiesListedInLobby(new[] {"GM"});
 
             CreatingLobby.SetActive(false);
             InLobby.SetActive(true);

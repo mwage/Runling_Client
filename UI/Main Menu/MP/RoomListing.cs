@@ -6,6 +6,8 @@ namespace UI.Main_Menu.MP
     public class RoomListing : MonoBehaviour
     {
         [SerializeField] private Text _roomNameText;
+        [SerializeField] private Text _gameModeText;
+        [SerializeField] private Text _playerCountText;
 
         public string RoomName { get; private set; }
         public bool Updated;
@@ -30,6 +32,28 @@ namespace UI.Main_Menu.MP
         {
             RoomName = text;
             _roomNameText.text = RoomName;
+        }
+
+        public void SetGameModeText(string text)
+        {
+            switch (text)
+            {
+                case "RR":
+                    _gameModeText.text = "Runling Run";
+                    break;
+                case "AR":
+                    _gameModeText.text = "Arena";
+                    break;
+                default:
+                    _gameModeText.text = "Unknown";
+                    Debug.Log(text + " - unknown key");
+                    break;
+            }
+        }
+
+        public void SetPlayerCountText(int current, int max)
+        {
+            _playerCountText.text = current + "/" + max;
         }
     }
 }
