@@ -14,85 +14,82 @@ namespace RLR.Levels
         public GameObject ChaserText;
         public CheckSafeZones CheckSafeZones;
 
-        private int[] _chaserSpawnPlatformIdxs;
-        private int[] _chaserDestroyPlatformIdxs;
+        private int[] _spawnChaser;
+        private int[] _destroyChaser;
         private int[] _chaserStartPosition;
         private IDrone _chaserBase;
         private bool[,] _reachedChaserPlatform;
-        private List <GameObject> _chasers;
+        private List <GameObject> _chaser;
         private IDrone _iDrone;
         private IPattern _pattern;
 
-        /// <summary>
-        /// Sets plaforms where chasers have start and destory position and which platforms spawn them.
-        /// </summary>
-        public void SetChaserPlatforms(IDrone chaserBase, int[] chaserSpawnPlatformIndex = null, int[] chaserDestroyPlatformIndex = null, int[] chaserStartPlatformIndex = null, IPattern pattern = null, IDrone iDrone = null) 
+
+        public void SetChaserPlatforms(IDrone chaserBase, int[] spawnChaser = null, int[] destroyChaser = null, int[] chaserStartPosition = null, IPattern pattern = null, IDrone iDrone = null) 
         {
-            _chaserSpawnPlatformIdxs = chaserSpawnPlatformIndex;
-            _chaserDestroyPlatformIdxs = chaserDestroyPlatformIndex;
+            _spawnChaser = spawnChaser;
+            _destroyChaser = destroyChaser;
             _chaserBase = chaserBase;
             _pattern = pattern;
             _iDrone = iDrone ?? new DefaultDrone(7, 1, DroneColor.Cyan);
 
 
-            if (_chaserSpawnPlatformIdxs == null || _chaserDestroyPlatformIdxs == null) return;
+            if (_spawnChaser == null || _destroyChaser == null) return;
 
-            _reachedChaserPlatform = new bool[_chaserSpawnPlatformIdxs.Length, 2];
-            _chasers = new List<GameObject>();
+            _reachedChaserPlatform = new bool[_spawnChaser.Length, 2];
+            _chaser = new List<GameObject>();
 
-            for (var i = 0; i < _chaserSpawnPlatformIdxs.Length; i++)
+            for (var i = 0; i < _spawnChaser.Length; i++)
             {
                 _reachedChaserPlatform[i, 0] = false;
                 _reachedChaserPlatform[i, 1] = false;
             }
 
-            if (chaserStartPlatformIndex == null || chaserStartPlatformIndex.Length != _chaserSpawnPlatformIdxs.Length)
+            if (chaserStartPosition == null || chaserStartPosition.Length != _spawnChaser.Length)
             {
-                _chaserStartPosition = new int[_chaserSpawnPlatformIdxs.Length];
-                for (var i = 0; i < _chaserSpawnPlatformIdxs.Length; i++)
+                _chaserStartPosition = new int[_spawnChaser.Length];
+                for (var i = 0; i < _spawnChaser.Length; i++)
                 {
-                    _chaserStartPosition[i] = _chaserSpawnPlatformIdxs[i] - 1;
+                    _chaserStartPosition[i] = _spawnChaser[i] - 1;
                 }
             }
             else
             {
-                _chaserStartPosition = chaserStartPlatformIndex;
+                _chaserStartPosition = chaserStartPosition;
             }
         }
 
 
-        public void CreateOrDestroyChaserIfNeed(GameObject currentSafeZone, List<GameObject> safeZones)
+        public void IsChaser(GameObject currentSafeZone, List<GameObject> safeZones)
         {
-            if (_chaserSpawnPlatformIdxs == null || _chaserDestroyPlatformIdxs == null) return;
+            if (_spawnChaser == null || _destroyChaser == null) return;
 
-            var platformIndex = CheckSafeZones.GetPlatformIndex(currentSafeZone, safeZones);
-            if (platformIndex == null) return;
-
-            for (var i = 0; i < _chaserSpawnPlatformIdxs.Length; i++)
+            var index = CheckSafeZones.GetPlatformIndex(currentSafeZone, safeZones);
+            if (index == null) return;
+            for (var i = 0; i < _spawnChaser.Length; i++)
             {
-                if (_chaserSpawnPlatformIdxs[i] == platformIndex.Value && !_reachedChaserPlatform[i, 0] && (i == 0 || _reachedChaserPlatform[i-1, 0]))
+                if (_spawnChaser[i] == index.Value && !_reachedChaserPlatform[i, 0] && (i == 0 || _reachedChaserPlatform[i-1, 0]))
                 {
-                    _chasers.AddRange(DroneFactory.SpawnDrones(_chaserBase)); // you add few objects (addrange), but you actyally add only one each time in loop, make it before loop or change to .Add()
+                    _chaser.AddRange(DroneFactory.SpawnDrones(_chaserBase));
                     
-                    if (_chaserSpawnPlatformIdxs[i] != 0) // sets start position of chaser
+                    if (_spawnChaser[i] != 0)
                     {
-                        _chasers[i].transform.position = safeZones[_chaserStartPosition[i]].transform.position + safeZones[_chaserStartPosition[i]].transform.rotation *
+                        _chaser[i].transform.position = safeZones[_chaserStartPosition[i]].transform.position + safeZones[_chaserStartPosition[i]].transform.rotation *
                                                         new Vector3(safeZones[_chaserStartPosition[i]].transform.Find("VisibleObjects/Ground").transform.localScale.x / 2 + _chaserBase.Size / 2 + 0.5f, 0.4f, 0);
                     }
                     if (_pattern != null)
                     {
-                        DroneFactory.AddPattern(_pattern, _chasers[i], _iDrone);
+                        DroneFactory.AddPattern(_pattern, _chaser[i], _iDrone);
                     }
-                    _chasers[i].tag = "Strong Enemy";
+                    _chaser[i].tag = "Strong Enemy";
                     _reachedChaserPlatform[i, 0] = true;
-                    safeZones[_chaserDestroyPlatformIdxs[i]].transform.Find("PlayerCollider/ChaserGlow").gameObject.SetActive(true);
+                    safeZones[_destroyChaser[i]].transform.Find("PlayerCollider/ChaserGlow").gameObject.SetActive(true);
                     DroneFactory.StartCoroutine(SpawnChaserText(3f));
                 }
-                if (_chaserDestroyPlatformIdxs[i] == platformIndex.Value && !_reachedChaserPlatform[i, 1] && _reachedChaserPlatform[i, 0])
+                if (_destroyChaser[i] == index.Value && !_reachedChaserPlatform[i, 1] && _reachedChaserPlatform[i, 0])
                 {
-                    Destroy(_chasers[i]);
+                    Destroy(_chaser[i]);
                     _reachedChaserPlatform[i, 1] = true;
-                    safeZones[_chaserDestroyPlatformIdxs[i]].transform.Find("PlayerCollider/ChaserGlow").gameObject.SetActive(false);
+                    safeZones[_destroyChaser[i]].transform.Find("PlayerCollider/ChaserGlow").gameObject.SetActive(false);
                     DroneFactory.StartCoroutine(DestroyChaserText(3f));
                 }
             }

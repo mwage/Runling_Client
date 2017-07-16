@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RLR.GenerateMap
 {
-    public class MapGeneratorRLR : MonoBehaviour
+    public class GenerateMapRLR : MonoBehaviour
     {
         public GameObject PlatformPrefab;
         public GameObject CenterPrefab;
@@ -57,9 +57,7 @@ namespace RLR.GenerateMap
 
         public List<GameObject> GetSafeZones()
         {
-            var safeZonesFromStartingPlatform = SafeZones;
-            safeZonesFromStartingPlatform.Reverse();
-            return safeZonesFromStartingPlatform;
+            return SafeZones;
         }
 
         public float GetAirColliderRange()

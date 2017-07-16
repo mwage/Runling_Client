@@ -13,8 +13,8 @@ namespace RLR
         public void Death(LevelManagerRLR manager, InitializeGameRLR initializeGame, ControlRLR control)
         {
             GameControl.State.IsImmobile = true;
-            GameControl.PlayerState.Player.GetComponent<PlayerMovement>().IsAutoClicking = false;
-            GameControl.PlayerState.Player.SetActive(false);
+            GameControl.State.Player.GetComponent<PlayerMovement>().IsAutoClicking = false;
+            GameControl.State.Player.SetActive(false);
 
 
             switch (GameControl.State.SetGameMode)
@@ -59,8 +59,8 @@ namespace RLR
                 countdown.GetComponent<TextMeshProUGUI>().text = (countdownFrom - i).ToString();
                 if (i == countdownFrom - 1)
                 {
-                    GameControl.PlayerState.Player.SetActive(true);
-                    GameControl.PlayerState.Player.transform.Find("Shield").gameObject.SetActive(true);
+                    GameControl.State.Player.SetActive(true);
+                    GameControl.State.Player.transform.Find("Shield").gameObject.SetActive(true);
                     GameControl.State.IsInvulnerable = true;
                     GameControl.State.IsDead = false;
                     control.StopUpdate = false;
@@ -72,7 +72,7 @@ namespace RLR
             
             GameControl.State.IsImmobile = false;
             yield return new WaitForSeconds(shieldDuration);
-            GameControl.PlayerState.Player.transform.Find("Shield").gameObject.SetActive(false);
+            GameControl.State.Player.transform.Find("Shield").gameObject.SetActive(false);
             GameControl.State.IsInvulnerable = false;
         }
     }

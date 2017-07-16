@@ -81,7 +81,7 @@ namespace SLA.Levels
             {
                 Destroy(t);
             }
-            Destroy(GameControl.PlayerState.Player);
+            Destroy(GameControl.State.Player);
             Score.CurrentScoreText.text = "0";
             if (GameControl.State.SetGameMode != Gamemode.Practice)
             {

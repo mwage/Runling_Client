@@ -9,26 +9,30 @@ namespace RLR.Levels
     public class CheckSafeZones : MonoBehaviour
     {
         private PlayerTrigger _playerTrigger;
-        public MapGeneratorRLR MapGenerator;
+        public GenerateMapRLR GenerateMap;
         public RunlingChaser RunlingChaser;
         public ScoreRLR ScoreRLR;
         public bool[] VisitedSafeZone;
 
+        private bool _createdInstance;
         private List<GameObject> _safeZones;
 
 
         private void Awake()
         {
+            _createdInstance = false;
         }
 
-        public void SetUpPlayerTrigger()
+        public void GetTriggerInstance()
         {
-            _playerTrigger = GameControl.PlayerState.Player.transform.Find("Trigger").gameObject.GetComponent<PlayerTrigger>();
+            _playerTrigger = GameControl.State.Player.transform.Find("Trigger").gameObject.GetComponent<PlayerTrigger>();
+            _createdInstance = true;
         }
 
         public void GetSafeZones()
         {
-            _safeZones = MapGenerator.GetSafeZones();
+            _safeZones = GenerateMap.GetSafeZones();
+            _safeZones.Reverse();
             VisitedSafeZone = new bool[_safeZones.Count];
         }
 
@@ -42,19 +46,12 @@ namespace RLR.Levels
 
         private void Update()
         {
-            if (_playerTrigger == null) return;
-            if (_playerTrigger.EnteredOnNewPlatform)
+            if (_playerTrigger.EnterSaveZone && _createdInstance)
             {
-                RunlingChaser.CreateOrDestroyChaserIfNeed(_playerTrigger.LastVisitedSafeZone, _safeZones);
-
-                ScoreRLR.AddScore(_playerTrigger.LastVisitedSafeZone, _safeZones);
-                _playerTrigger.EnteredOnNewPlatform = false;
+                RunlingChaser.IsChaser(_playerTrigger.SaveZone, _safeZones);
+                ScoreRLR.AddScore(_playerTrigger.SaveZone, _safeZones);
+                _playerTrigger.EnterSaveZone = false;
             }
-        }
-
-        public void CreateOrDestroyChaserIfNeed()
-        {
-            RunlingChaser.CreateOrDestroyChaserIfNeed(_playerTrigger.LastVisitedSafeZone, _safeZones);
         }
     }
 }

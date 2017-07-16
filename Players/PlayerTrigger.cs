@@ -7,8 +7,8 @@ namespace Players
     {
         private bool _finishedLevel;
         private bool _onPlatform;
-        public bool EnteredOnNewPlatform;
-        public GameObject LastVisitedSafeZone;
+        public bool EnterSaveZone;
+        public GameObject SaveZone;
 
         // Trigger
         private void OnTriggerStay(Collider other)
@@ -36,10 +36,10 @@ namespace Players
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("SafeZone") && !_onPlatform) // is _onPlatform really needed? // case when player moves on platform
+            if (other.CompareTag("SafeZone") && !_onPlatform)
             {
-                LastVisitedSafeZone = other.transform.parent.parent.gameObject;
-                EnteredOnNewPlatform = true;
+                SaveZone = other.transform.parent.parent.gameObject;
+                EnterSaveZone = true;
                 _onPlatform = true;
             }
 

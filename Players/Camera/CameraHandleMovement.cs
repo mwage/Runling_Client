@@ -127,9 +127,9 @@ namespace Players.Camera
             {
                 if (GameControl.Settings.FollowState)
                 {
-                    if (GameControl.PlayerState.Player != null)
+                    if (GameControl.State.Player != null)
                     {
-                        SetCameraHandlePosition(GameControl.PlayerState.Player.transform.position);
+                        SetCameraHandlePosition(GameControl.State.Player.transform.position);
                     }
                 }
             }
