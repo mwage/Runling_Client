@@ -56,7 +56,7 @@ namespace Drones.DroneTypes
             drone.transform.localScale = Size * Vector3.one;
 
             if (DroneType == DroneType.BouncingDrone || DroneType == DroneType.FlyingBouncingDrone ||
-                DroneType == DroneType.FlyingOnewayDrone)
+                DroneType == DroneType.FlyingOneWayDrone)
             {
                 if (Size > 1)
                 {
@@ -89,10 +89,10 @@ namespace Drones.DroneTypes
     {
         BouncingDrone,
         FlyingBouncingDrone,
-        FlyingOnewayDrone,
-        MineDrone,
-        MineDroneBouncing,
-        MineDroneOneway
+        FlyingOneWayDrone,
+        FlyingBouncingMine,
+        BouncingMine,
+        FlyingOneWayMine
     }
 
     public enum DroneColor

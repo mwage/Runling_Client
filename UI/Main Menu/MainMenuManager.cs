@@ -49,6 +49,16 @@ namespace UI.Main_Menu
             _targetPos = Camera.transform.position;
             _targetRot = Camera.transform.rotation;
             _cameraSpeed = 100;
+
+            if (!PhotonNetwork.connected)
+            {
+                PhotonNetwork.offlineMode = true;
+            }
+
+            if (PhotonNetwork.room != null)
+            {
+                PhotonNetwork.LeaveRoom();
+            }
         }
         #endregion
 

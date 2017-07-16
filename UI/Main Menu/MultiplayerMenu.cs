@@ -4,6 +4,7 @@ using ExitGames.Client.Photon;
 using Photon;
 using UI.Main_Menu.MP;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UI.Main_Menu
@@ -77,14 +78,14 @@ namespace UI.Main_Menu
 
         public void CreateRoomRLR()
         {
-            var roomOptions = new RoomOptions {IsVisible = true, IsOpen = true, MaxPlayers = 10};
+            var roomOptions = new RoomOptions {IsVisible = true, IsOpen = true, MaxPlayers = 12};
             _chooseGame = SelectGame.RunlingRun;
             OpenRoom(roomOptions);
         }
 
         public void CreateRoomSLA()
         {
-            var roomOptions = new RoomOptions { IsVisible = true, IsOpen = true, MaxPlayers = 10};
+            var roomOptions = new RoomOptions { IsVisible = true, IsOpen = true, MaxPlayers = 8};
             _chooseGame = SelectGame.Arena;
             OpenRoom(roomOptions);
         }
@@ -98,6 +99,9 @@ namespace UI.Main_Menu
 
         public void StartGame()
         {
+            PhotonNetwork.room.IsOpen = false;
+            PhotonNetwork.room.IsVisible = false;
+
             switch ((string) PhotonNetwork.room.CustomProperties["GM"])
             {
                 case "RR":
@@ -110,6 +114,7 @@ namespace UI.Main_Menu
                     break;
                 default:
                     Debug.Log("Couldn't load game, invalid selection");
+                    PhotonNetwork.LoadLevel(2);
                     break;
             }
         }

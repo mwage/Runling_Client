@@ -9,12 +9,15 @@ namespace Drones
     public class DroneFactory : MonoBehaviour
     { 
         //attach gameobjects
-        public GameObject BouncingDrone;
-        public GameObject FlyingBouncingDrone;
-        public GameObject FlyingOnewayDrone;
-        public GameObject MineDrone;
-        public GameObject MineDroneBouncing;
-        public GameObject MineDroneOneway;
+        private const string BouncingDrone = "BouncingDrone";
+        private const string FlyingBouncingDrone = "FlyingBouncingDrone";
+        private const string FlyingOneWayDrone = "FlyingOneWayDrone";
+        private const string FlyingBouncingMine = "FlyingBouncingMine";
+        private const string BouncingMine = "Bouncing Mine";
+        private const string FlyingOneWayMine = "FlyingOneWayMine";
+
+        public GameObject BouncingDronePrefab;
+        public GameObject OneWayDronePrefab;
 
         public Material GreyMaterial;
         public Material BlueMaterial;
@@ -25,17 +28,17 @@ namespace Drones
         public Material CyanMaterial;
         public Material BrightGreenMaterial;
 
-        public Dictionary<DroneType,GameObject> SetDroneType = new Dictionary<DroneType,GameObject>();
+        public Dictionary<DroneType,string> SetDroneType = new Dictionary<DroneType,string>();
         public Dictionary<DroneColor, Material> SetDroneMaterial = new Dictionary<DroneColor, Material>();
 
         private void Awake()
         {
             SetDroneType[DroneType.BouncingDrone] = BouncingDrone;
             SetDroneType[DroneType.FlyingBouncingDrone] = FlyingBouncingDrone;
-            SetDroneType[DroneType.FlyingOnewayDrone] = FlyingOnewayDrone;
-            SetDroneType[DroneType.MineDrone] = MineDrone;
-            SetDroneType[DroneType.MineDroneBouncing] = MineDroneBouncing;
-            SetDroneType[DroneType.MineDroneOneway] = MineDroneOneway;
+            SetDroneType[DroneType.FlyingOneWayDrone] = FlyingOneWayDrone;
+            SetDroneType[DroneType.FlyingBouncingMine] = FlyingBouncingMine;
+            SetDroneType[DroneType.BouncingMine] = BouncingMine;
+            SetDroneType[DroneType.FlyingOneWayMine] = FlyingOneWayMine;
 
             SetDroneMaterial[DroneColor.Grey] = GreyMaterial;
             SetDroneMaterial[DroneColor.Blue] = BlueMaterial;

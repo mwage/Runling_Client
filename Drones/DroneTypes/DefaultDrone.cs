@@ -1,5 +1,7 @@
-﻿using Drones.Movement;
+﻿using System.IO;
+using Drones.Movement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Drones.DroneTypes
 {
@@ -21,12 +23,17 @@ namespace Drones.DroneTypes
         {
             Position = position ?? new Vector3(0, 0.4f, 0);
             Direction = direction ?? 0;
-            DroneType = droneType ?? DroneType.FlyingOnewayDrone;
+            DroneType = droneType ?? DroneType.FlyingOneWayDrone;
         }
 
         public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null)
         {
-            return Object.Instantiate(factory.SetDroneType[DroneType], Position, Quaternion.Euler(0, Direction, 0));
+            if (PhotonNetwork.room != null && SceneManager.GetActiveScene().name != "MainMenu")
+            {
+                return PhotonNetwork.Instantiate(Path.Combine("Drones", factory.SetDroneType[DroneType]), Position,
+                    Quaternion.Euler(0, Direction, 0), 0);
+            }
+            return Object.Instantiate(factory.OneWayDronePrefab, Position, Quaternion.Euler(0, Direction, 0));
         }
     }
 }

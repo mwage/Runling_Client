@@ -19,7 +19,7 @@ namespace RLR.Levels.Hard
         {
             // Spawn blue drones
             DroneFactory.SetPattern(new PatContinuousSpawn(0.15f, 2),
-                new RandomDrone(10, 1, DroneColor.Blue, restrictedZone: 0, droneType: DroneType.FlyingOnewayDrone));
+                new RandomDrone(10, 1, DroneColor.Blue, restrictedZone: 0, droneType: DroneType.FlyingOneWayDrone));
 
             // Spawn red drones
             DroneFactory.SpawnDrones(new RedDrone(15, 1, DroneColor.Red, 3, LaneArea[0]), 100);

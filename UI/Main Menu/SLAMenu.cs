@@ -1,10 +1,11 @@
 ﻿using Launcher;
+using Photon;
 using UI.SLA_Menus;
 using UnityEngine;
 
 namespace UI.Main_Menu
 {
-    public class SLAMenu : MonoBehaviour
+    public class SLAMenu : PunBehaviour
     {
         [SerializeField] private MainMenuManager _mainMenuManager;
 
@@ -26,9 +27,7 @@ namespace UI.Main_Menu
             GameControl.State.IsDead = true;
             GameControl.State.CurrentLevel = 1;
             GameControl.State.SetGameMode = Gamemode.Classic;
-
-            _sceneLoader.LoadScene("SLA", 1);
-            _mainMenuManager.gameObject.SetActive(false);
+            PhotonNetwork.CreateRoom("SLA");
         }
 
         public void Practice()
@@ -36,9 +35,7 @@ namespace UI.Main_Menu
             GameControl.State.IsDead = true;
             GameControl.State.CurrentLevel = 1;
             GameControl.State.SetGameMode = Gamemode.Practice;
-
-            _sceneLoader.LoadScene("SLA", 1);
-            _mainMenuManager.gameObject.SetActive(false);
+            PhotonNetwork.CreateRoom("SLA");
         }
 
         public void HighScores()
@@ -54,5 +51,11 @@ namespace UI.Main_Menu
             _mainMenuManager.MoveCamera(_mainMenuManager.CameraPosMainMenu, _mainMenuManager.CameraRotMainMenu);
         }
         #endregion
+
+        public override void OnCreatedRoom()
+        {
+            _sceneLoader.LoadScene("SLA", 1);
+            _mainMenuManager.gameObject.SetActive(false);
+        }
     }
 }
