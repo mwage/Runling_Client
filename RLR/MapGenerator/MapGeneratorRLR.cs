@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RLR.GenerateMap
 {
-    public class GenerateMapRLR : MonoBehaviour
+    public class MapGeneratorRLR : MonoBehaviour
     {
         public GameObject PlatformPrefab;
         public GameObject CenterPrefab;

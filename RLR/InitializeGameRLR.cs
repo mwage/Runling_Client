@@ -41,11 +41,12 @@ namespace RLR
                 GameControl.PlayerState.Player = PlayerFactory.Create(GameControl.State.CharacterDto, 1);
                 GameControl.PlayerState.PlayerTrigger = GameControl.PlayerState.Player.transform.Find("Trigger").gameObject.GetComponent<PlayerTrigger>();
             }
-            var startPlatform = LevelManagerRLR.GenerateMapRLR.GetStartPlatform();
-            GameControl.PlayerState.Player.transform.position =
-                new Vector3(
-                    startPlatform.transform.position.x + startPlatform.transform.Find("VisibleObjects/Ground")
-                        .transform.localScale.x / 2 - 1, 0, startPlatform.transform.position.z);
+            var startPlatform = LevelManagerRLR.MapGeneratorRlr.GetStartPlatform();
+            GameControl.PlayerState.Player.transform.position = new Vector3(
+                    startPlatform.transform.position.x + startPlatform.transform.Find("VisibleObjects/Ground").transform.localScale.x / 2 - 1,
+                    0,
+                    startPlatform.transform.position.z);
+
             if (GameControl.State.GodModeActive && !GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.activeSelf)
             {
                 GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(true);
@@ -55,7 +56,7 @@ namespace RLR
             GameControl.State.IsImmobile = true;
 
             // set camera
-            GameControl.Settings.CameraRange = LevelManagerRLR.GenerateMapRLR.GetAirColliderRange() / 2.5f;
+            GameControl.Settings.CameraRange = LevelManagerRLR.MapGeneratorRlr.GetAirColliderRange() / 2.5f;
             CameraHandleMovement.SetCameraHandlePosition(new Vector3(GameControl.PlayerState.Player.transform.localPosition.x, 0, GameControl.PlayerState.Player.transform.localPosition.z));
 
             ControlRLR.StopUpdate = false;

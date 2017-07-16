@@ -1,6 +1,7 @@
 ﻿using Drones;
 using Drones.DroneTypes;
 using Drones.Movement;
+using Launcher;
 using RLR.GenerateMap;
 
 namespace RLR.Levels
@@ -9,7 +10,7 @@ namespace RLR.Levels
     {
         protected readonly LevelManagerRLR Manager;
         protected readonly DroneFactory DroneFactory;
-        protected readonly GenerateMapRLR GenerateMapRLR;
+        protected readonly MapGeneratorRLR MapGeneratorRlr;
         protected readonly RunlingChaser RunlingChaser;
 
         protected Area[] LaneArea;
@@ -18,7 +19,7 @@ namespace RLR.Levels
         {
             Manager = manager;
             DroneFactory = Manager.DroneFactory;
-            GenerateMapRLR = Manager.GenerateMapRLR;
+            MapGeneratorRlr = Manager.MapGeneratorRlr;
             RunlingChaser = Manager.RunlingChaser;
         }
 
@@ -26,8 +27,10 @@ namespace RLR.Levels
 
         public virtual void GenerateMap()
         {
-            GenerateMapRLR.GenerateMap(15,new float[] {8, 6, 8, 6, 8}, 1.2f, 0.3f, SetAirCollider());
-            LaneArea = GenerateMapRLR.GetDroneSpawnArea();
+            MapGeneratorRlr.GenerateMap(15,new float[] {8, 6, 8, 6, 8}, 1.2f, 0.3f, SetAirCollider());
+            GameControl.MapState.SafeZones = MapGeneratorRlr.GetSafeZones();
+            GameControl.MapState.VisitedSafeZones = new bool[GameControl.MapState.SafeZones.Count];
+            LaneArea = MapGeneratorRlr.GetDroneSpawnArea();
         }
 
         protected virtual float SetAirCollider()

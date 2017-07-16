@@ -36,7 +36,7 @@ namespace Players
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("SafeZone") && !_onPlatform)
+            if (other.CompareTag("SafeZone") && !_onPlatform) // is _onPlatform really needed? // case when player moves on platform
             {
                 LastVisitedSafeZone = other.transform.parent.parent.gameObject;
                 EnteredOnNewPlatform = true;

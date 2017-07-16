@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.IO;
 using Launcher;
 using Players.Camera;
 using SLA.Levels;
@@ -24,9 +25,13 @@ namespace SLA
         public Text CurrentPr;
         public CameraHandleMovement CameraHandleMovement;
 
+        private const string PlayerCharacter = "Cat";
+        
+
         //set Spawnimmunity once game starts
         public void InitializeGame()
         {
+            Debug.Log(StartingPosition());
             StartCoroutine(PrepareLevel());
         }
 
@@ -49,14 +54,14 @@ namespace SLA
 
             // Load drones and player
 
-            GameControl.PlayerState.Player = Instantiate(PlayerPrefab);
+            GameControl.State.Player = PhotonNetwork.Instantiate(Path.Combine("Characters", PlayerCharacter), StartingPosition(), Quaternion.LookRotation(Vector3.zero - StartingPosition()), 0);
             GameControl.State.IsDead = false;
             GameControl.State.IsInvulnerable = true;
             GameControl.State.IsSafe = false;
-            GameControl.PlayerState.Player.transform.Find("Shield").gameObject.SetActive(true);
-            if (GameControl.State.GodModeActive && !GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.activeSelf)
+            GameControl.State.Player.transform.Find("Shield").gameObject.SetActive(true);
+            if (GameControl.State.GodModeActive && !GameControl.State.Player.transform.Find("GodMode").gameObject.activeSelf)
             {
-                GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(true);
+                GameControl.State.Player.transform.Find("GodMode").gameObject.SetActive(true);
             }
             GameControl.State.IsImmobile = false;
             ControlSLA.StopUpdate = false;
@@ -71,9 +76,20 @@ namespace SLA
                 Destroy(countdown);
             }
 
-            GameControl.PlayerState.Player.transform.Find("Shield").gameObject.SetActive(false);
+            GameControl.State.Player.transform.Find("Shield").gameObject.SetActive(false);
             GameControl.State.IsInvulnerable = false;
             ScoreSLA.StartScore();
+        }
+
+        private static Vector3 StartingPosition()
+        {
+            if (PhotonNetwork.room.PlayerCount == 1)
+            {
+                return Vector3.zero;
+            }
+
+            return Vector3.zero + Quaternion.Euler
+                       (0, 360f * (PhotonNetwork.player.ID - 1) / PhotonNetwork.room.PlayerCount, 0) * Vector3.right * 2;
         }
     }
 }

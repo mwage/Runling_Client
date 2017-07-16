@@ -21,7 +21,7 @@ namespace RLR.Levels
         public CheckSafeZones CheckSafeZones;
         public GameObject Win;
         public DroneFactory DroneFactory;
-        public GenerateMapRLR GenerateMapRLR;
+        public MapGeneratorRLR MapGeneratorRlr;
 
         public GameObject LivesText;
 

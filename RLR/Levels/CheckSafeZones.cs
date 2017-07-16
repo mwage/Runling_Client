@@ -9,7 +9,7 @@ namespace RLR.Levels
     public class CheckSafeZones : MonoBehaviour
     {
         private PlayerTrigger _playerTrigger;
-        public GenerateMapRLR GenerateMap;
+        public MapGeneratorRLR MapGenerator;
         public RunlingChaser RunlingChaser;
         public ScoreRLR ScoreRLR;
         public bool[] VisitedSafeZone;
@@ -28,7 +28,7 @@ namespace RLR.Levels
 
         public void GetSafeZones()
         {
-            _safeZones = GenerateMap.GetSafeZones();
+            _safeZones = MapGenerator.GetSafeZones();
             VisitedSafeZone = new bool[_safeZones.Count];
         }
 
@@ -50,6 +50,11 @@ namespace RLR.Levels
                 ScoreRLR.AddScore(_playerTrigger.LastVisitedSafeZone, _safeZones);
                 _playerTrigger.EnteredOnNewPlatform = false;
             }
+        }
+
+        public void CreateOrDestroyChaserIfNeed()
+        {
+            RunlingChaser.CreateOrDestroyChaserIfNeed(_playerTrigger.LastVisitedSafeZone, _safeZones);
         }
     }
 }

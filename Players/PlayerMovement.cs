@@ -7,7 +7,6 @@ namespace Players
 {
     public class PlayerMovement : MonoBehaviour
     {
-
         #region Variables
         public static float ZeroTolerance = 0.001f;
 
@@ -35,6 +34,7 @@ namespace Players
         private Rigidbody _rb;
         private Coroutine _autoClickRoutine;
         private Animator _anim;
+        private PhotonView _photonView;
         public GameObject MouseClick;
         private readonly int _speedHash = Animator.StringToHash("Speed");
 
@@ -54,6 +54,7 @@ namespace Players
             IsAutoClicking = false;
             _currentSpeed = 0;
             _anim = GetComponent<Animator>();
+            _photonView = GetComponent<PhotonView>();
         }
 
         #endregion
@@ -61,6 +62,9 @@ namespace Players
         #region UserInput
         private void Update()
         {
+            if (!_photonView.isMine)
+                return;
+
             if (GameControl.State.AutoClickerActive)
             {
                 if (!IsAutoClicking)

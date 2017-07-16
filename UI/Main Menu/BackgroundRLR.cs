@@ -9,14 +9,14 @@ namespace UI.Main_Menu
 {
     public class BackgroundRLR : MonoBehaviour
     {
-        public GenerateMapRLR GenerateMap;
+        public MapGeneratorRLR MapGenerator;
         public DroneFactory DroneFactory;
 
         private void Start()
         {
-            GenerateMap.GenerateMap(15, new float[] { 8, 6, 8, 6, 8 }, 1.2f, 0.3f, 10);
+            MapGenerator.GenerateMap(15, new float[] { 8, 6, 8, 6, 8 }, 1.2f, 0.3f, 10);
 
-            var laneArea = GenerateMap.GetDroneSpawnArea();
+            var laneArea = MapGenerator.GetDroneSpawnArea();
 
             // Spawn bouncing drones
             for (var i = 1; i < laneArea.Length - 2; i++)
