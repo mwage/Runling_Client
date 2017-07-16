@@ -20,6 +20,11 @@ namespace UI.Main_Menu
             _optionsMenu = _mainMenuManager.OptionsMenu;
             _soloMenu = _mainMenuManager.SoloMenu;
             _multiplayerMenu = _mainMenuManager.MultiplayerMenu;
+
+            if (PhotonNetwork.room != null)
+            {
+                PhotonNetwork.LeaveRoom();
+            }
         }
 
         private void Update()

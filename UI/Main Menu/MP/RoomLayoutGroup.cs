@@ -29,8 +29,6 @@ namespace UI.Main_Menu.MP
                 if (room.IsVisible && room.PlayerCount < room.MaxPlayers)
                 {
                     var roomListingObject = Instantiate(_roomListingPrefab, transform, false);
-                    Debug.Log("instantiating prefab - " + roomListingObject);
-
                     var roomListing = roomListingObject.GetComponent<RoomListing>();
                     _roomList.Add(roomListing);
 
@@ -42,6 +40,8 @@ namespace UI.Main_Menu.MP
             {
                 var roomListing = _roomList[index];
                 roomListing.SetRoomNameText(room.Name);
+                roomListing.SetPlayerCountText(room.PlayerCount, room.MaxPlayers);
+                roomListing.SetGameModeText((string)room.CustomProperties["GM"]);
                 roomListing.Updated = true;
             }
         }

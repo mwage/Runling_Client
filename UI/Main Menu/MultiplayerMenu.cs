@@ -12,6 +12,7 @@ namespace UI.Main_Menu
     {
         [SerializeField] private MainMenuManager _mainMenuManager;
         [SerializeField] private PlayerLayoutGroup _playerLayoutGroup;
+        [SerializeField] private RoomNameInput _roomNameInput;
 
         public GameObject OutOfLobby;
         public GameObject CreatingLobby;
@@ -49,18 +50,22 @@ namespace UI.Main_Menu
             }
         }
 
-        private static void OpenRoom(string roomName, RoomOptions roomOptions)
+        private void OpenRoom(RoomOptions roomOptions)
         {
+            var roomName = PickRoomName(_roomNameInput.CustomRoomName);
             var rooms = PhotonNetwork.GetRoomList();
             var roomNames = rooms.Select(room => room.Name).ToList();
-            int i = 0;
 
-            while (roomNames.Contains(roomName + '#' + i))
+            if (roomNames.Contains(roomName))
             {
-                i++;
+                PhotonNetwork.JoinRoom(roomName);
             }
-            PhotonNetwork.CreateRoom(roomName + '#' + i, roomOptions, TypedLobby.Default);
+            else
+            {
+                PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default);
+            }
         }
+
 
         #region Buttons
 
@@ -74,14 +79,14 @@ namespace UI.Main_Menu
         {
             var roomOptions = new RoomOptions {IsVisible = true, IsOpen = true, MaxPlayers = 10};
             _chooseGame = SelectGame.RunlingRun;
-            OpenRoom("Runling Run", roomOptions);
+            OpenRoom(roomOptions);
         }
 
         public void CreateRoomSLA()
         {
             var roomOptions = new RoomOptions { IsVisible = true, IsOpen = true, MaxPlayers = 10};
             _chooseGame = SelectGame.Arena;
-            OpenRoom("Arena", roomOptions);
+            OpenRoom(roomOptions);
         }
 
         public void LeaveLobby()
@@ -107,7 +112,13 @@ namespace UI.Main_Menu
                     Debug.Log("Couldn't load game, invalid selection");
                     break;
             }
-        } 
+        }
+
+        public void Back()
+        {
+            CreatingLobby.SetActive(false);
+            OutOfLobby.SetActive(true);
+        }
 
         public void BackToMenu()
         {
@@ -141,6 +152,7 @@ namespace UI.Main_Menu
             }
 
             PhotonNetwork.room.SetCustomProperties(t);
+            PhotonNetwork.room.SetPropertiesListedInLobby(new[] {"GM"});
 
             CreatingLobby.SetActive(false);
             InLobby.SetActive(true);
@@ -154,6 +166,16 @@ namespace UI.Main_Menu
         }
 
         #endregion
+
+        private static string PickRoomName(string roomName)
+        {
+            if (roomName == "")
+            {
+                return PhotonNetwork.playerName + "'s Lobby";
+            }
+
+            return roomName;
+        }
 
         private enum SelectGame
         {

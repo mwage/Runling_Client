@@ -6,6 +6,8 @@ namespace UI.Main_Menu.MP
     public class RoomListing : MonoBehaviour
     {
         [SerializeField] private Text _roomNameText;
+        [SerializeField] private Text _gameModeText;
+        [SerializeField] private Text _playerCountText;
 
         public string RoomName { get; private set; }
         public bool Updated;
@@ -21,11 +23,6 @@ namespace UI.Main_Menu.MP
             _button.onClick.AddListener(() => lobby.JoinRoom(RoomName));
         }
 
-        private void Update()
-        {
-            _button.interactable = PhotonNetwork.room == null;
-        }
-
         private void OnDestroy()
         {
             _button.onClick.RemoveAllListeners();
@@ -34,21 +31,29 @@ namespace UI.Main_Menu.MP
         public void SetRoomNameText(string text)
         {
             RoomName = text;
-            _roomNameText.text = BuildRoomName(RoomName);
+            _roomNameText.text = RoomName;
         }
 
-        private static string BuildRoomName(string roomName)
+        public void SetGameModeText(string text)
         {
-            var newRoomName = "";
-            foreach (var ch in roomName)
+            switch (text)
             {
-                if (ch == '#')
-                {
+                case "RR":
+                    _gameModeText.text = "Runling Run";
                     break;
-                }
-                newRoomName += ch;
+                case "AR":
+                    _gameModeText.text = "Arena";
+                    break;
+                default:
+                    _gameModeText.text = "Unknown";
+                    Debug.Log(text + " - unknown key");
+                    break;
             }
-            return newRoomName;
+        }
+
+        public void SetPlayerCountText(int current, int max)
+        {
+            _playerCountText.text = current + "/" + max;
         }
     }
 }
