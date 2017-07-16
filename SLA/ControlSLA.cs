@@ -66,9 +66,9 @@ namespace SLA
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.State.GodModeActive)
             {
                 GameControl.State.GodModeActive = true;
-                if (GameControl.State.Player != null)
+                if (GameControl.PlayerState.Player != null)
                 {
-                    GameControl.State.Player.transform.Find("GodMode").gameObject.SetActive(true);
+                    GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(true);
                 }
             }
 
@@ -76,9 +76,9 @@ namespace SLA
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactiveGodmode) && GameControl.State.GodModeActive)
             {
                 GameControl.State.GodModeActive = false;
-                if (GameControl.State.Player != null)
+                if (GameControl.PlayerState.Player != null)
                 {
-                   GameControl.State.Player.transform.Find("GodMode").gameObject.SetActive(false);
+                   GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(false);
                 }
             }
             */

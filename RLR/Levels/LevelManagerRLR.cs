@@ -58,7 +58,7 @@ namespace RLR.Levels
 
         public void GenerateChasers(int level)
         {
-            CheckSafeZones.GetTriggerInstance();
+            CheckSafeZones.SetUpPlayerTrigger();
             CheckSafeZones.GetSafeZones();
             _levels[level - 1].SetChasers();
         }
@@ -80,7 +80,7 @@ namespace RLR.Levels
         {
             yield return new WaitForSeconds(delay);
             DroneFactory.StopAllCoroutines();
-            // Destroy(GameControl.State.Player); // dont destroy player. if exists playerfactory donest make new one, just move him on start position
+            // Destroy(GameControl.PlayerState.Player); // dont destroy player. if exists playerfactory donest make new one, just move him on start position
             var enemies = GameObject.FindGameObjectsWithTag("Enemy");
             var strongEnemies = GameObject.FindGameObjectsWithTag("Strong Enemy");
             foreach (var t in enemies)
@@ -136,7 +136,7 @@ namespace RLR.Levels
                 CheckSafeZones.ScoreRLR.SetHighScore();
             }
             GameControl.State.FinishedLevel = false;
-            GameControl.State.Player.SetActive(false);
+            GameControl.PlayerState.Player.SetActive(false);
             Win.gameObject.SetActive(true);
         }
     }

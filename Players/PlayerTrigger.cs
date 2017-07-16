@@ -7,8 +7,8 @@ namespace Players
     {
         private bool _finishedLevel;
         private bool _onPlatform;
-        public bool EnterSaveZone;
-        public GameObject SaveZone;
+        public bool OnNewPlatform;
+        public GameObject LastVisitedSafeZone;
 
         // Trigger
         private void OnTriggerStay(Collider other)
@@ -38,8 +38,8 @@ namespace Players
         {
             if (other.CompareTag("SafeZone") && !_onPlatform)
             {
-                SaveZone = other.transform.parent.parent.gameObject;
-                EnterSaveZone = true;
+                LastVisitedSafeZone = other.transform.parent.parent.gameObject;
+                OnNewPlatform = true;
                 _onPlatform = true;
             }
 

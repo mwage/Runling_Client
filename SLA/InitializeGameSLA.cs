@@ -49,14 +49,14 @@ namespace SLA
 
             // Load drones and player
 
-            GameControl.State.Player = Instantiate(PlayerPrefab);
+            GameControl.PlayerState.Player = Instantiate(PlayerPrefab);
             GameControl.State.IsDead = false;
             GameControl.State.IsInvulnerable = true;
             GameControl.State.IsSafe = false;
-            GameControl.State.Player.transform.Find("Shield").gameObject.SetActive(true);
-            if (GameControl.State.GodModeActive && !GameControl.State.Player.transform.Find("GodMode").gameObject.activeSelf)
+            GameControl.PlayerState.Player.transform.Find("Shield").gameObject.SetActive(true);
+            if (GameControl.State.GodModeActive && !GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.activeSelf)
             {
-                GameControl.State.Player.transform.Find("GodMode").gameObject.SetActive(true);
+                GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(true);
             }
             GameControl.State.IsImmobile = false;
             ControlSLA.StopUpdate = false;
@@ -71,7 +71,7 @@ namespace SLA
                 Destroy(countdown);
             }
 
-            GameControl.State.Player.transform.Find("Shield").gameObject.SetActive(false);
+            GameControl.PlayerState.Player.transform.Find("Shield").gameObject.SetActive(false);
             GameControl.State.IsInvulnerable = false;
             ScoreSLA.StartScore();
         }

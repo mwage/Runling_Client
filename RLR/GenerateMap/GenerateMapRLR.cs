@@ -57,7 +57,9 @@ namespace RLR.GenerateMap
 
         public List<GameObject> GetSafeZones()
         {
-            return SafeZones;
+            var safeZonesFromStartingPlatform = SafeZones;
+            safeZonesFromStartingPlatform.Reverse();
+            return safeZonesFromStartingPlatform;
         }
 
         public float GetAirColliderRange()
