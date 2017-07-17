@@ -58,15 +58,15 @@ namespace RLR
 
         public void AddScore(GameObject currentSafeZone, List<GameObject> safeZones)
         {
-            var index = CheckSafeZones.GetPlatformIndex(currentSafeZone, safeZones);
+            var index = CheckSafeZones.GetPlatformIndex(currentSafeZone);
             if (index == null) return;
-            if (!CheckSafeZones.VisitedSafeZone[index.Value] && index.Value != 0)
+            if (!GameControl.MapState.VisitedSafeZones[index.Value] && index.Value != 0)
             {
                 if (GameControl.State.SetGameMode == Gamemode.TimeMode)
                 {
                     GameControl.State.TotalScore += _difficultyMultiplier * GameControl.State.CurrentLevel;
                     CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + GameControl.State.TotalScore;
-                    CheckSafeZones.VisitedSafeZone[index.Value] = true;
+                    GameControl.MapState.VisitedSafeZones[index.Value] = true;
                     SetTimeModeHighScore();
                 }
             }

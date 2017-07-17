@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Drones;
 using Drones.DroneTypes;
 using Drones.Pattern;
+using Launcher;
 using TMPro;
 using UnityEngine;
 
@@ -61,11 +62,12 @@ namespace RLR.Levels
         }
 
 
-        public void CreateOrDestroyChaserIfNeed(GameObject currentSafeZone, List<GameObject> safeZones)
+        public void CreateOrDestroyChaserIfNeed(GameObject currentSafeZone)
         {
+            var safeZones = GameControl.MapState.SafeZones;
             if (_chaserSpawnPlatformIdxs == null || _chaserDestroyPlatformIdxs == null) return;
 
-            var platformIndex = CheckSafeZones.GetPlatformIndex(currentSafeZone, safeZones);
+            var platformIndex = CheckSafeZones.GetPlatformIndex(currentSafeZone);
             if (platformIndex == null) return;
 
             for (var i = 0; i < _chaserSpawnPlatformIdxs.Length; i++)

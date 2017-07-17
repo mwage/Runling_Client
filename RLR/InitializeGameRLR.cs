@@ -41,7 +41,7 @@ namespace RLR
                 GameControl.PlayerState.Player = PlayerFactory.Create(GameControl.State.CharacterDto, 1);
                 GameControl.PlayerState.PlayerTrigger = GameControl.PlayerState.Player.transform.Find("Trigger").gameObject.GetComponent<PlayerTrigger>();
             }
-            var startPlatform = LevelManagerRLR.MapGeneratorRlr.GetStartPlatform();
+            var startPlatform = GameControl.MapState.SafeZones[0];
             GameControl.PlayerState.Player.transform.position = new Vector3(
                     startPlatform.transform.position.x + startPlatform.transform.Find("VisibleObjects/Ground").transform.localScale.x / 2 - 1,
                     0,

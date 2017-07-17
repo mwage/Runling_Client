@@ -12,7 +12,6 @@ namespace RLR.Levels
         public MapGeneratorRLR MapGenerator;
         public RunlingChaser RunlingChaser;
         public ScoreRLR ScoreRLR;
-        public bool[] VisitedSafeZone;
 
         private List<GameObject> _safeZones;
 
@@ -26,16 +25,10 @@ namespace RLR.Levels
             _playerTrigger = GameControl.PlayerState.Player.transform.Find("Trigger").gameObject.GetComponent<PlayerTrigger>();
         }
 
-        public void GetSafeZones()
+        public int? GetPlatformIndex(GameObject currentSafeZone)
         {
-            _safeZones = MapGenerator.GetSafeZones();
-            VisitedSafeZone = new bool[_safeZones.Count];
-        }
-
-        public int? GetPlatformIndex(GameObject currentSafeZone, List<GameObject> safeZones)
-        {
-            if (safeZones.Contains(currentSafeZone))
-                return safeZones.IndexOf(currentSafeZone);
+            if (GameControl.MapState.SafeZones.Contains(currentSafeZone))
+                return GameControl.MapState.SafeZones.IndexOf(currentSafeZone);
 
             return null;
         }
@@ -45,7 +38,7 @@ namespace RLR.Levels
             if (_playerTrigger == null) return;
             if (_playerTrigger.EnteredOnNewPlatform)
             {
-                RunlingChaser.CreateOrDestroyChaserIfNeed(_playerTrigger.LastVisitedSafeZone, _safeZones);
+                RunlingChaser.CreateOrDestroyChaserIfNeed(_playerTrigger.LastVisitedSafeZone);
 
                 ScoreRLR.AddScore(_playerTrigger.LastVisitedSafeZone, _safeZones);
                 _playerTrigger.EnteredOnNewPlatform = false;
@@ -54,7 +47,7 @@ namespace RLR.Levels
 
         public void CreateOrDestroyChaserIfNeed()
         {
-            RunlingChaser.CreateOrDestroyChaserIfNeed(_playerTrigger.LastVisitedSafeZone, _safeZones);
+            RunlingChaser.CreateOrDestroyChaserIfNeed(_playerTrigger.LastVisitedSafeZone);
         }
     }
 }
