@@ -49,7 +49,7 @@ namespace Characters.Types
         public virtual void AddExp(int exp)
         {
             Exp += exp;
-            Debug.Log(string.Format("Added {0} exp", exp));
+            //Debug.Log(string.Format("Added {0} exp", exp));
 
             IncrementLevelIfPossible();
         }
@@ -60,7 +60,7 @@ namespace Characters.Types
             while (Exp >= LevelingSystem.LevelExperienceCurve[Level])
             {
                 Level++;
-                Debug.Log(string.Format("you lvled to {0} lvl", Level));
+                //Debug.Log(string.Format("you lvled to {0} lvl", Level));
                 UnspentPoints += LevelingSystem.NewPointsPerLevel;
             }
         }
