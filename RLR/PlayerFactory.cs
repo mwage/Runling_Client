@@ -33,6 +33,7 @@ namespace RLR
                     player.transform.SetParent(Player);
                     GameControl.PlayerState.CharacterController = player.AddComponent<Manticore>();
                     GameControl.PlayerState.CharacterController.Initizalize(character);
+
                     return player;
                 }
                 case "Unicorn":
@@ -41,6 +42,7 @@ namespace RLR
                     player.transform.SetParent(Player);
                     GameControl.PlayerState.CharacterController = player.AddComponent<Unicorn>();
                     GameControl.PlayerState.CharacterController.Initizalize(character);
+
                     return player;
                 }
                 default:
