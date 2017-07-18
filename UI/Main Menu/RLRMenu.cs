@@ -1,4 +1,5 @@
 using Launcher;
+using Photon;
 using UI.RLR_Menus;
 using UI.RLR_Menus.Characters;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 
 namespace UI.Main_Menu
 {
-    public class RLRMenu : MonoBehaviour
+    public class RLRMenu : PunBehaviour
     {
         [SerializeField] private MainMenuManager _mainMenuManager;
 
@@ -62,8 +63,7 @@ namespace UI.Main_Menu
             GameControl.State.CharacterDto = PickCharacterMenu.GetComponent<PickCharacterMenu>().GetCharacterDto();
             SetModes();
 
-            _sceneLoader.LoadScene("RLR", 1);
-            _mainMenuManager.gameObject.SetActive(false);
+            PhotonNetwork.CreateRoom(GameControl.GenerateRoomName("SoloRLR"));
         }
 
         public void VoteDifficultyNormal()
@@ -111,6 +111,12 @@ namespace UI.Main_Menu
         }
         #endregion
 
-  
+        public override void OnCreatedRoom()
+        {
+            PhotonNetwork.room.IsOpen = false;
+            PhotonNetwork.room.IsVisible = false;
+            _sceneLoader.LoadScene("RLR", 1);
+            _mainMenuManager.gameObject.SetActive(false);
+        }
     }
 }

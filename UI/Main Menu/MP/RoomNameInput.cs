@@ -6,23 +6,24 @@ namespace UI.Main_Menu.MP
     public class RoomNameInput : MonoBehaviour
     {
         public string CustomRoomName { get; private set; }
+        private InputField _inputField;
 
         private void Start()
         {
-            var inputField = GetComponent<InputField>();
+            _inputField = GetComponent<InputField>();
 
             if (PlayerPrefs.HasKey("RoomName"))
             {
                 CustomRoomName = PlayerPrefs.GetString("RoomName");
-                inputField.text = CustomRoomName;
+                _inputField.text = CustomRoomName;
             }
         }
 
         public void SetCustomRoomName(string value)
         {
             CustomRoomName = value;
+            _inputField.text = value;
             PlayerPrefs.SetString("RoomName", value);
-            Debug.Log(CustomRoomName);
         }
     }
 }

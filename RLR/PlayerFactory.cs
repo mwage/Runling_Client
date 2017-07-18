@@ -1,10 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Characters.Types;
-using Drones;
 using Launcher;
-using Players;
-using RLR.Levels;
 using UnityEngine;
 
 namespace RLR
@@ -12,10 +10,9 @@ namespace RLR
     public class PlayerFactory : MonoBehaviour
     {
         // class creates player gameobject in hierarchy
-        // returns Player to GameControl.PlayerState.Player - // TODO maybe we should change names here?
+        // returns Player to GameControl.State.Player - // TODO maybe we should change names here?
 
         public Transform Player; // top position in hierarchy
-        public GameObject DroneManager; // so initalize chasers
 
         public GameObject ManticorePrefab;
         public GameObject UnicornPrefab;
@@ -32,18 +29,19 @@ namespace RLR
             {
                 case "Manticore":
                 {
-                    GameObject player = Instantiate(ManticorePrefab, Player);
+                    var player = PhotonNetwork.Instantiate(Path.Combine("Characters", "Manticore"), Vector3.zero, Quaternion.identity, 0);
+                    player.transform.SetParent(Player);
                     GameControl.PlayerState.CharacterController = player.AddComponent<Manticore>();
                     GameControl.PlayerState.CharacterController.Initizalize(character);
-                        return player;
+                    return player;
                 }
                 case "Unicorn":
                 {
-                    GameObject player = Instantiate(UnicornPrefab, Player);
-                    GameControl.PlayerState.CharacterController = player.AddComponent<Unicorn>(); // attach script, and initialize it
+                    var player = PhotonNetwork.Instantiate(Path.Combine("Characters", "Cat"), Vector3.zero, Quaternion.identity, 0);
+                    player.transform.SetParent(Player);
+                    GameControl.PlayerState.CharacterController = player.AddComponent<Unicorn>();
                     GameControl.PlayerState.CharacterController.Initizalize(character);
-
-                        return player;
+                    return player;
                 }
                 default:
                 {
@@ -54,11 +52,5 @@ namespace RLR
             }
             
         }
-
-        //public void InitializeTrigger() // to deletet
-        //{
-        //    Player.GetComponentInChildren<PlayerTrigger>().RunlingChaser =
-        //        DroneManager.GetComponent<RunlingChaser>();
-        //}
     }
 }

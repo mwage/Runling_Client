@@ -25,13 +25,12 @@ namespace SLA
         public Text CurrentPr;
         public CameraHandleMovement CameraHandleMovement;
 
-        private const string PlayerCharacter = "Cat";
+        private const string PlayerCharacter = "Manticore";
         
 
         //set Spawnimmunity once game starts
         public void InitializeGame()
         {
-            Debug.Log(StartingPosition());
             StartCoroutine(PrepareLevel());
         }
 
@@ -54,7 +53,8 @@ namespace SLA
 
             // Load drones and player
 
-            GameControl.State.Player = PhotonNetwork.Instantiate(Path.Combine("Characters", PlayerCharacter), StartingPosition(), Quaternion.LookRotation(Vector3.zero - StartingPosition()), 0);
+            GameControl.State.Player = PhotonNetwork.Instantiate(Path.Combine("Characters", PlayerCharacter), StartingPosition(), 
+                PhotonNetwork.room.PlayerCount != 1 ? Quaternion.LookRotation(Vector3.zero - StartingPosition()) : Quaternion.identity, 0);
             GameControl.State.IsDead = false;
             GameControl.State.IsInvulnerable = true;
             GameControl.State.IsSafe = false;

@@ -33,6 +33,13 @@ namespace Characters.Bars
 
         public void UpdateEnergyBar()
         {
+            //if (EnergyBar == null) return;
+            //if (_characterController == null) return;
+            if (_characterController == null)
+            {
+                Start();
+                return;
+            }
             EnergyBar.SetText(string.Format("{0}/{1}", (int)_characterController.Energy.Current, _characterController.Energy.Max));
             EnergyBar.SetProgress(_characterController.Energy.Current / _characterController.Energy.Max);
         }

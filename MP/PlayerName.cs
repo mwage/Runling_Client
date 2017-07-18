@@ -5,16 +5,18 @@ namespace MP
 {
     public class PlayerName : MonoBehaviour
     {
+        private InputField _inputField;
+
         private void Start()
         {
 
             var playerName = "";
-            var inputField = GetComponent<InputField>();
+            _inputField = GetComponent<InputField>();
 
             if (PlayerPrefs.HasKey("PlayerName"))
             {
                 playerName = PlayerPrefs.GetString("PlayerName");
-                inputField.text = playerName;
+                _inputField.text = playerName;
             }
 
             PhotonNetwork.playerName = playerName;
@@ -22,6 +24,7 @@ namespace MP
 
         public void SetPlayerName(string value)
         {
+            _inputField.text = value;
             PhotonNetwork.playerName = value;
             PlayerPrefs.SetString("PlayerName", value);
         }
