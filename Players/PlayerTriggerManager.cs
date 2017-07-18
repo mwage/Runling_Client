@@ -6,23 +6,43 @@ using UnityEngine;
 
 namespace Players
 {
-    public class PlayerTriggerManager
+    public class PlayerTriggerManager : MonoBehaviour
     {
-        public bool IsSafeZoneVisitedEarlier(GameObject currentSafeZone)
+        public RunlingChaser RunlingChaser;
+
+        public bool IsSafeZoneVisitedFirstTime(GameObject currentSafeZone, out int currentSafeZoneIdx)
         {
             if (GameControl.MapState.SafeZones.Contains(currentSafeZone)) // always should contain
             {
-                var currentSafeZoneIdx = GameControl.MapState.SafeZones.IndexOf(currentSafeZone);
+                currentSafeZoneIdx = GameControl.MapState.SafeZones.IndexOf(currentSafeZone);
                 if (GameControl.MapState.VisitedSafeZones[currentSafeZoneIdx])
-                    return true; // you have been here, no exp for you
+                    return false; // you have been here, no exp for you
 
-                return false;
+                return true;
             }
             else
             {
                 Debug.Log("you gave not a safe zone to this function");
+                currentSafeZoneIdx = -1;
                 return false;
             }
+        }
+
+        public void MarkVisitedSafeZone(int currentSafeZoneIdx)
+        {
+            GameControl.MapState.VisitedSafeZones[currentSafeZoneIdx] = true;
+        }
+
+        public void AddExp(int currentSafeZoneIdx)
+        {
+            GameControl.PlayerState.CharacterController.AddExp(LevelingSystem.CalculateExp(currentSafeZoneIdx,
+                GameControl.State.CurrentLevel, GameControl.State.SetDifficulty,
+                GameControl.State.SetGameMode));
+        }
+
+        public void CreateOrDestroyChaserIfNeed(GameObject currentSafeZone)
+        {
+            RunlingChaser.CreateOrDestroyChaserIfNeed(currentSafeZone);
         }
     }
 }

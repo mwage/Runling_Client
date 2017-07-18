@@ -40,7 +40,7 @@ namespace RLR
            if (GameControl.PlayerState.Player == null)
             {
                 GameControl.PlayerState.Player = PlayerFactory.Create(GameControl.State.CharacterDto, 1);
-                PlayerFactory.InitializeTrigger();
+                //PlayerFactory.InitializeTrigger(); // to delte
                 GameControl.PlayerState.PlayerTrigger = GameControl.PlayerState.Player.transform.Find("Trigger").gameObject.GetComponent<PlayerTrigger>();
             }
            

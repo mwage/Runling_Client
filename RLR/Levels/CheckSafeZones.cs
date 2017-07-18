@@ -6,9 +6,9 @@ using UnityEngine;
 
 namespace RLR.Levels
 {
-    public class CheckSafeZones : MonoBehaviour
+    public class CheckSafeZones : MonoBehaviour // all class to delete probably
     {
-        private PlayerTrigger _playerTrigger;
+
         public MapGeneratorRLR MapGenerator;
         public RunlingChaser RunlingChaser;
         public ScoreRLR ScoreRLR;
@@ -20,10 +20,10 @@ namespace RLR.Levels
         {
         }
 
-        public void SetUpPlayerTrigger()
-        {
-            _playerTrigger = GameControl.PlayerState.Player.transform.Find("Trigger").gameObject.GetComponent<PlayerTrigger>();
-        }
+        //public void SetUpPlayerTrigger()
+        //{
+        //    _playerTrigger = GameControl.PlayerState.Player.transform.Find("Trigger").gameObject.GetComponent<PlayerTrigger>();
+        //}
 
         public int? GetPlatformIndex(GameObject currentSafeZone)
         {
@@ -33,17 +33,17 @@ namespace RLR.Levels
             return null;
         }
 
-        private void Update()
-        {
-            if (_playerTrigger == null) return;
-            if (_playerTrigger.EnteredOnNewPlatform)
-            {
-                //RunlingChaser.CreateOrDestroyChaserIfNeed(_playerTrigger.LastVisitedSafeZone);
+        //private void Update()
+        //{
+        //    if (_playerTrigger == null) return;
+        //    if (_playerTrigger.EnteredOnNewPlatform)
+        //    {
+        //        //RunlingChaser.CreateOrDestroyChaserIfNeed(_playerTrigger.LastVisitedSafeZone);
 
-                //ScoreRLR.AddScore(_playerTrigger.LastVisitedSafeZone, _safeZones);
+        //        //ScoreRLR.AddScore(_playerTrigger.LastVisitedSafeZone, _safeZones);
                 
-            }
-        }
+        //    }
+        //}
 
     }
 }

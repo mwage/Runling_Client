@@ -8,13 +8,15 @@ namespace Players
 {
     public class PlayerTrigger : MonoBehaviour
     {
-        public RunlingChaser RunlingChaser; // initializded in InitializeGameRLR
+        public PlayerTriggerManager PlayerTriggerManager;
         public PlayerBarsManager PlayerBarsManager;
+
         private bool _finishedLevel;
-        public bool EnteredOnNewPlatform;
 
         private void Awake()
         {
+            PlayerTriggerManager = gameObject.transform.parent.parent.GetComponent<PlayerTriggerManager>();
+            PlayerBarsManager = gameObject.transform.parent.parent.GetComponent<PlayerBarsManager>();
         }
 
         // Trigger
@@ -47,27 +49,14 @@ namespace Players
             if (other.CompareTag("SafeZone")) // is _onPlatform really needed? // case when player moves on platform
             {
                 var currentSafeZone = other.transform.parent.parent.gameObject;
-
-                if (GameControl.MapState.SafeZones.Contains(currentSafeZone)) // always should contain
+                int currentSafeZoneIdx;
+                if (PlayerTriggerManager.IsSafeZoneVisitedFirstTime(currentSafeZone, out currentSafeZoneIdx))
                 {
-                    var currentSafeZoneIdx = GameControl.MapState.SafeZones.IndexOf(currentSafeZone);
-                    if (GameControl.MapState.VisitedSafeZones[currentSafeZoneIdx])
-                        return; // you have been here, no exp for you
-
-                    GameControl.MapState.VisitedSafeZones[currentSafeZoneIdx] = true;
-
-                    GameControl.PlayerState.CharacterController.AddExp(LevelingSystem.CalculateExp(currentSafeZoneIdx,
-                        GameControl.State.CurrentLevel, GameControl.State.SetDifficulty,
-                        GameControl.State.SetGameMode));
-
-                    RunlingChaser.CreateOrDestroyChaserIfNeed(currentSafeZone);
-                }
-                else
-                {
-                    Debug.Log("donest have safezone");
-                }
-                
-                
+                    PlayerTriggerManager.MarkVisitedSafeZone(currentSafeZoneIdx);
+                    PlayerTriggerManager.AddExp(currentSafeZoneIdx);
+                    PlayerTriggerManager.CreateOrDestroyChaserIfNeed(currentSafeZone);
+                    PlayerBarsManager.UpdateLevelBar();
+                }   
             }
 
             // Death Trigger

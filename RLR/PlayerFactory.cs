@@ -55,10 +55,10 @@ namespace RLR
             
         }
 
-        public void InitializeTrigger()
-        {
-            Player.GetComponentInChildren<PlayerTrigger>().RunlingChaser =
-                DroneManager.GetComponent<RunlingChaser>();
-        }
+        //public void InitializeTrigger() // to deletet
+        //{
+        //    Player.GetComponentInChildren<PlayerTrigger>().RunlingChaser =
+        //        DroneManager.GetComponent<RunlingChaser>();
+        //}
     }
 }

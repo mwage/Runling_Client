@@ -23,7 +23,10 @@ namespace Characters.Bars
 
         public void SetProgress(int level, int exp)
         {
-            _levelSlider.value = (float)(exp - LevelingSystem.LevelExperienceCurve[level]) / (LevelingSystem.LevelExperienceCurve[level + 1] - LevelingSystem.LevelExperienceCurve[level]);
+            //float val = (float) (exp - LevelingSystem.LevelExperienceCurve[level]) /
+            //            (LevelingSystem.LevelExperienceCurve[level + 1] - LevelingSystem.LevelExperienceCurve[level]);
+            _levelSlider.value = (float)(exp - LevelingSystem.LevelExperienceCurve[level-1]) / (LevelingSystem.LevelExperienceCurve[level] - LevelingSystem.LevelExperienceCurve[level-1]);
+           // Debug.Log(string.Format("lvl slider vlaue {0}", val));
         }
     }
 
