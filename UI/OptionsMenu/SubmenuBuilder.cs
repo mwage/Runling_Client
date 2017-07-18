@@ -11,7 +11,7 @@ namespace UI.OptionsMenu
             var hotkey = Object.Instantiate(setHotkeyPrefab, hotkeyList.transform);
             hotkey.transform.localScale = Vector3.one;
 
-            hotkey.transform.Find("HotkeyName").GetComponent<Text>().text = InputManager.GetFriendlyName(action.ToString());
+            hotkey.transform.Find("HotkeyName").GetComponent<Text>().text = GameControl.GetFriendlyName(action.ToString());
             var hotkeyText = hotkey.transform.Find("SetHotkey/KeyPressed").GetComponent<Text>();
             var kc = GameControl.InputManager.GetHotkey(action);
             hotkeyText.text = kc != null ? kc.ToString() : "<None>";

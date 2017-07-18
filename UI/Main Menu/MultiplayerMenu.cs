@@ -26,7 +26,6 @@ namespace UI.Main_Menu
         private void Awake()
         {
             _mainMenu = _mainMenuManager.MainMenu;
-            PhotonNetwork.automaticallySyncScene = true;
         }
 
         private void OnEnable()

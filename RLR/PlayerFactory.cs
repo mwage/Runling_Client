@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Characters.Types;
 using UnityEngine;
 
@@ -27,13 +28,15 @@ namespace RLR
             {
                 case "Manticore":
                 {
-                    GameObject player = Instantiate(ManticorePrefab, Player);
+                    var player = PhotonNetwork.Instantiate(Path.Combine("Characters", "Manticore"), Vector3.zero, Quaternion.identity, 0);
+                    player.transform.SetParent(Player);
                     player.AddComponent<Manticore>().Initizalize(character);
                     return player;
                 }
                 case "Unicorn":
                 {
-                    GameObject player = Instantiate(UnicornPrefab, Player);
+                    var player = PhotonNetwork.Instantiate(Path.Combine("Characters", "Cat"), Vector3.zero, Quaternion.identity, 0);
+                    player.transform.SetParent(Player);
                     player.AddComponent<Unicorn>().Initizalize(character);
                     return player;
                 }

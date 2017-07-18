@@ -40,6 +40,7 @@ namespace RLR
                 GameControl.State.Player = PlayerFactory.Create(GameControl.State.CharacterDto, 1);
             }
             var startPlatform = LevelManagerRLR.GenerateMapRLR.GetStartPlatform();
+            GameControl.State.Player.transform.rotation = Quaternion.Euler(new Vector3 (0, 90, 0));
             GameControl.State.Player.transform.position =
                 new Vector3(
                     startPlatform.transform.position.x + startPlatform.transform.Find("VisibleObjects/Ground")

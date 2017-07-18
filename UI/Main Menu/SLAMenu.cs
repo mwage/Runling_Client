@@ -27,7 +27,7 @@ namespace UI.Main_Menu
             GameControl.State.IsDead = true;
             GameControl.State.CurrentLevel = 1;
             GameControl.State.SetGameMode = Gamemode.Classic;
-            PhotonNetwork.CreateRoom("SLA");
+            PhotonNetwork.CreateRoom(GameControl.GenerateRoomName("SoloSLA"));
         }
 
         public void Practice()
@@ -35,7 +35,7 @@ namespace UI.Main_Menu
             GameControl.State.IsDead = true;
             GameControl.State.CurrentLevel = 1;
             GameControl.State.SetGameMode = Gamemode.Practice;
-            PhotonNetwork.CreateRoom("SLA");
+            PhotonNetwork.CreateRoom(GameControl.GenerateRoomName("SoloSLA"));
         }
 
         public void HighScores()
@@ -54,6 +54,8 @@ namespace UI.Main_Menu
 
         public override void OnCreatedRoom()
         {
+            PhotonNetwork.room.IsOpen = false;
+            PhotonNetwork.room.IsVisible = false;
             _sceneLoader.LoadScene("SLA", 1);
             _mainMenuManager.gameObject.SetActive(false);
         }

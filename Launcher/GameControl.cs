@@ -1,4 +1,5 @@
-﻿using UI;
+﻿using System.Linq;
+using System.Text;
 using UnityEngine.SceneManagement;
 
 namespace Launcher
@@ -37,5 +38,42 @@ namespace Launcher
             if (SceneManager.GetActiveScene().name == "Launcher")
                 SceneManager.LoadScene("Connect");
         }
+
+        #region HelperMethods
+
+        public static string GetFriendlyName(string input)
+        {
+            var sb = new StringBuilder();
+            foreach (var c in input)
+            {
+                if (char.IsUpper(c))
+                    sb.Append(" ");
+                sb.Append(c);
+            }
+
+            if (input.Length > 0 && char.IsUpper(input[0]))
+                sb.Remove(0, 1);
+
+            return sb.ToString();
+        }
+
+
+        public static string GenerateRoomName(string roomName)
+        {
+            if (PhotonNetwork.offlineMode)
+                return "SoloSLA";
+            var rooms = PhotonNetwork.GetRoomList();
+            var roomNames = rooms.Select(room => room.Name).ToList();
+            int i = 0;
+            var internalName = roomName + i;
+
+            if (roomNames.Contains(internalName))
+            {
+                i++;
+                internalName = roomName + i;
+            }
+            return internalName;
+        }
+        #endregion
     }
 }
