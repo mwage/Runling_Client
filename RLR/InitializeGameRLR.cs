@@ -44,7 +44,7 @@ namespace RLR
             }
 
             var startPlatform = GameControl.MapState.SafeZones[0];
-            GameControl.State.Player.transform.rotation = Quaternion.Euler(new Vector3 (0, 90, 0));
+            GameControl.PlayerState.Player.transform.rotation = Quaternion.Euler(new Vector3 (0, 90, 0));
             GameControl.PlayerState.Player.transform.position = new Vector3(
                     startPlatform.transform.position.x + startPlatform.transform.Find("VisibleObjects/Ground").transform.localScale.x / 2 - 1,
                     0,
