@@ -1,6 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Characters.Types;
+using Drones;
+using Launcher;
+using Players;
+using RLR.Levels;
 using UnityEngine;
 
 namespace RLR
@@ -11,6 +15,7 @@ namespace RLR
         // returns Player to GameControl.PlayerState.Player - // TODO maybe we should change names here?
 
         public Transform Player; // top position in hierarchy
+        public GameObject DroneManager; // so initalize chasers
 
         public GameObject ManticorePrefab;
         public GameObject UnicornPrefab;
@@ -28,14 +33,17 @@ namespace RLR
                 case "Manticore":
                 {
                     GameObject player = Instantiate(ManticorePrefab, Player);
-                    player.AddComponent<Manticore>().Initizalize(character);
-                    return player;
+                    GameControl.PlayerState.CharacterController = player.AddComponent<Manticore>();
+                    GameControl.PlayerState.CharacterController.Initizalize(character);
+                        return player;
                 }
                 case "Unicorn":
                 {
                     GameObject player = Instantiate(UnicornPrefab, Player);
-                    player.AddComponent<Unicorn>().Initizalize(character);
-                    return player;
+                    GameControl.PlayerState.CharacterController = player.AddComponent<Unicorn>(); // attach script, and initialize it
+                    GameControl.PlayerState.CharacterController.Initizalize(character);
+
+                        return player;
                 }
                 default:
                 {
@@ -45,6 +53,12 @@ namespace RLR
                     
             }
             
+        }
+
+        public void InitializeTrigger()
+        {
+            Player.GetComponentInChildren<PlayerTrigger>().RunlingChaser =
+                DroneManager.GetComponent<RunlingChaser>();
         }
     }
 }

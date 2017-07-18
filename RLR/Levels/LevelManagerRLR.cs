@@ -58,7 +58,6 @@ namespace RLR.Levels
 
         public void GenerateChasers(int level)
         {
-            CheckSafeZones.SetUpPlayerTrigger();
             _levels[level - 1].SetChasers();
         }
 

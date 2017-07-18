@@ -33,14 +33,17 @@ namespace RLR
 
         private IEnumerator PrepareLevel()
         {
+            // load map
             LevelManagerRLR.GenerateMap(GameControl.State.CurrentLevel);
 
             // Load player
            if (GameControl.PlayerState.Player == null)
             {
                 GameControl.PlayerState.Player = PlayerFactory.Create(GameControl.State.CharacterDto, 1);
+                PlayerFactory.InitializeTrigger();
                 GameControl.PlayerState.PlayerTrigger = GameControl.PlayerState.Player.transform.Find("Trigger").gameObject.GetComponent<PlayerTrigger>();
             }
+           
             var startPlatform = GameControl.MapState.SafeZones[0];
             GameControl.PlayerState.Player.transform.position = new Vector3(
                     startPlatform.transform.position.x + startPlatform.transform.Find("VisibleObjects/Ground").transform.localScale.x / 2 - 1,

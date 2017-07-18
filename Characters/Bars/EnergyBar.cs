@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Launcher;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Characters.Bars
@@ -25,14 +26,14 @@ namespace Characters.Bars
             _energyText = gameObject.GetComponentInChildren<Text>();
         }
 
-        public void SetText(int level)
+        public void SetText(string text)
         {
-            _energyText.text = level.ToString();
+            _energyText.text = text;
         }
 
-        public void SetProgress(int level, int exp)
+        public void SetProgress(float maxEnergyFraction)
         {
-            _energySlider.value = (float)(exp - LevelingSystem.LevelExperienceCurve[level]) / (LevelingSystem.LevelExperienceCurve[level + 1] - LevelingSystem.LevelExperienceCurve[level]);
+            _energySlider.value = maxEnergyFraction;
         }
     }
 }

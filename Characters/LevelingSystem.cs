@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
+using Launcher;
 
 namespace Characters
 {
@@ -17,5 +19,22 @@ namespace Characters
         public static readonly int AbilityMaxLevel = 3;
         
         public static readonly int AbilityPointsCostPerLevel = 5;
+
+        public static int CalculateExp(int platformIndex, int level, Difficulty difficulty, Gamemode mode)
+        {
+            if (platformIndex == 0) return 0;
+
+            int difficlutyMultiplier = difficulty == Difficulty.Hard ? 2 : 1;
+            if (platformIndex == GameControl.MapState.SafeZones.Count - 1) difficlutyMultiplier *= 10;
+
+            if (mode == Gamemode.Practice)
+            {
+                return level * difficlutyMultiplier; // set to 0 later
+            }
+            
+            return level * difficlutyMultiplier;
+
+            
+        }
     }
 }

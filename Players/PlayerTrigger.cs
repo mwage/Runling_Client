@@ -1,14 +1,21 @@
-﻿using Launcher;
+﻿using Characters;
+using Characters.Bars;
+using Launcher;
+using RLR.Levels;
 using UnityEngine;
 
 namespace Players
 {
     public class PlayerTrigger : MonoBehaviour
     {
+        public RunlingChaser RunlingChaser; // initializded in InitializeGameRLR
+        public PlayerBarsManager PlayerBarsManager;
         private bool _finishedLevel;
-        private bool _onPlatform;
         public bool EnteredOnNewPlatform;
-        public GameObject LastVisitedSafeZone;
+
+        private void Awake()
+        {
+        }
 
         // Trigger
         private void OnTriggerStay(Collider other)
@@ -36,11 +43,31 @@ namespace Players
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("SafeZone") && !_onPlatform) // is _onPlatform really needed? // case when player moves on platform
+
+            if (other.CompareTag("SafeZone")) // is _onPlatform really needed? // case when player moves on platform
             {
-                LastVisitedSafeZone = other.transform.parent.parent.gameObject;
-                EnteredOnNewPlatform = true;
-                _onPlatform = true;
+                var currentSafeZone = other.transform.parent.parent.gameObject;
+
+                if (GameControl.MapState.SafeZones.Contains(currentSafeZone)) // always should contain
+                {
+                    var currentSafeZoneIdx = GameControl.MapState.SafeZones.IndexOf(currentSafeZone);
+                    if (GameControl.MapState.VisitedSafeZones[currentSafeZoneIdx])
+                        return; // you have been here, no exp for you
+
+                    GameControl.MapState.VisitedSafeZones[currentSafeZoneIdx] = true;
+
+                    GameControl.PlayerState.CharacterController.AddExp(LevelingSystem.CalculateExp(currentSafeZoneIdx,
+                        GameControl.State.CurrentLevel, GameControl.State.SetDifficulty,
+                        GameControl.State.SetGameMode));
+
+                    RunlingChaser.CreateOrDestroyChaserIfNeed(currentSafeZone);
+                }
+                else
+                {
+                    Debug.Log("donest have safezone");
+                }
+                
+                
             }
 
             // Death Trigger
@@ -56,7 +83,6 @@ namespace Players
             if (other.CompareTag("SafeZone"))
             {
                 GameControl.State.IsSafe = false;
-                _onPlatform = false;
             }
         }
     }

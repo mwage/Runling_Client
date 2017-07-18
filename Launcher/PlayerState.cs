@@ -10,6 +10,7 @@ namespace Launcher
         public GameObject Player;
         public CharacterDto CharacterDto;
         public PlayerTrigger PlayerTrigger;
+        public ACharacter CharacterController;
         public float MoveSpeed = 0;
         public bool IsDead = true;
         public bool IsInvulnerable = false;

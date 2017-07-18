@@ -16,7 +16,7 @@ namespace Characters.Types
         public int Level { get; protected set; }
         public int AbilityFirstLevel { get; protected set; }
         public int AbilitySecondLevel { get; protected set; }
-        public int EnergyCurrent { get; protected set; }
+        public float EnergyCurrent { get; protected set; }
         public int EnergyMax { get; protected set; }
         public int BaseSpeed { get; protected set; }
         public int UnspentPoints { get; protected set; }
@@ -55,11 +55,20 @@ namespace Characters.Types
 
         public abstract void Initizalize(CharacterDto character);
 
+        public virtual void AddExp(int exp)
+        {
+            Exp += exp;
+            Debug.Log(string.Format("Added {0} exp", exp));
+
+            IncrementLevelIfPossible();
+        }
+
         public virtual void IncrementLevelIfPossible()
         {
             while (Exp > LevelingSystem.LevelExperienceCurve[Level])
             {
                 Level++;
+                Debug.Log(string.Format("you lvled to {0} lvl", Level));
                 UnspentPoints += LevelingSystem.NewPointsPerLevel;
             }
         }
@@ -109,6 +118,22 @@ namespace Characters.Types
             }
         }
 
+        public void Update()
+        {
+            //RegenerateEnergy();
+        }
+
+        private void RegenerateEnergy()
+        {
+            if (EnergyCurrent >= EnergyMax)
+            {
+                EnergyCurrent = EnergyMax;
+            }
+            else
+            {
+                EnergyCurrent += _regenPerSecondRatio * Time.deltaTime;
+            }
+        }
     }
 
    
