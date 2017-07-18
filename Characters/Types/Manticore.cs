@@ -22,9 +22,6 @@ namespace Characters.Types
 
         private Manticore(CharacterDto characterDto): base(characterDto)
         {
-            _baseSpeed = 10;
-            _regenPerSecondRatio = 0.3F;
-            _speedPointRatio = 0.05F;
             //AbilityFirst = a1;
             //AbilitySecond = a2;
         }
@@ -33,9 +30,6 @@ namespace Characters.Types
         {
             InitiazlizeBase(character);
             // something about abilities or in awake
-            _baseSpeed = 10;
-            _regenPerSecondRatio = 0.3F;
-            _speedPointRatio = 0.05F;
             //AbilityFirst = a1;
             //AbilitySecond = a2;
         }

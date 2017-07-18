@@ -6,52 +6,44 @@ using UnityEngine;
 
 namespace RLR.Levels
 {
-    public class CheckSafeZones : MonoBehaviour
+    public class CheckSafeZones : MonoBehaviour // all class to delete probably
     {
-        private PlayerTrigger _playerTrigger;
-        public GenerateMapRLR GenerateMap;
+
+        public MapGeneratorRLR MapGenerator;
         public RunlingChaser RunlingChaser;
         public ScoreRLR ScoreRLR;
-        public bool[] VisitedSafeZone;
 
-        private bool _createdInstance;
         private List<GameObject> _safeZones;
 
 
         private void Awake()
         {
-            _createdInstance = false;
         }
 
-        public void GetTriggerInstance()
-        {
-            _playerTrigger = GameControl.State.Player.transform.Find("Trigger").gameObject.GetComponent<PlayerTrigger>();
-            _createdInstance = true;
-        }
+        //public void SetUpPlayerTrigger()
+        //{
+        //    _playerTrigger = GameControl.PlayerState.Player.transform.Find("Trigger").gameObject.GetComponent<PlayerTrigger>();
+        //}
 
-        public void GetSafeZones()
+        public int? GetPlatformIndex(GameObject currentSafeZone)
         {
-            _safeZones = GenerateMap.GetSafeZones();
-            _safeZones.Reverse();
-            VisitedSafeZone = new bool[_safeZones.Count];
-        }
-
-        public int? GetPlatformIndex(GameObject currentSafeZone, List<GameObject> safeZones)
-        {
-            if (safeZones.Contains(currentSafeZone))
-                return safeZones.IndexOf(currentSafeZone);
+            if (GameControl.MapState.SafeZones.Contains(currentSafeZone))
+                return GameControl.MapState.SafeZones.IndexOf(currentSafeZone);
 
             return null;
         }
 
-        private void Update()
-        {
-            if (_playerTrigger.EnterSaveZone && _createdInstance)
-            {
-                RunlingChaser.IsChaser(_playerTrigger.SaveZone, _safeZones);
-                ScoreRLR.AddScore(_playerTrigger.SaveZone, _safeZones);
-                _playerTrigger.EnterSaveZone = false;
-            }
-        }
+        //private void Update()
+        //{
+        //    if (_playerTrigger == null) return;
+        //    if (_playerTrigger.EnteredOnNewPlatform)
+        //    {
+        //        //RunlingChaser.CreateOrDestroyChaserIfNeed(_playerTrigger.LastVisitedSafeZone);
+
+        //        //ScoreRLR.AddScore(_playerTrigger.LastVisitedSafeZone, _safeZones);
+                
+        //    }
+        //}
+
     }
 }

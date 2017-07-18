@@ -1,14 +1,23 @@
-﻿using Launcher;
+﻿using Characters;
+using Characters.Bars;
+using Launcher;
+using RLR.Levels;
 using UnityEngine;
 
 namespace Players
 {
     public class PlayerTrigger : MonoBehaviour
     {
+        public PlayerTriggerManager PlayerTriggerManager;
+        public PlayerBarsManager PlayerBarsManager;
+
         private bool _finishedLevel;
-        private bool _onPlatform;
-        public bool EnterSaveZone;
-        public GameObject SaveZone;
+
+        public void Start()
+        {
+            PlayerTriggerManager = gameObject.transform.parent.parent.GetComponent<PlayerTriggerManager>();
+            PlayerBarsManager = gameObject.transform.parent.parent.GetComponent<PlayerBarsManager>();
+        }
 
         // Trigger
         private void OnTriggerStay(Collider other)
@@ -36,11 +45,23 @@ namespace Players
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("SafeZone") && !_onPlatform)
+
+            if (other.CompareTag("SafeZone")) // is _onPlatform really needed? // case when player moves on platform
             {
-                SaveZone = other.transform.parent.parent.gameObject;
-                EnterSaveZone = true;
-                _onPlatform = true;
+                var currentSafeZone = other.transform.parent.parent.gameObject;
+                int currentSafeZoneIdx;
+                if (PlayerTriggerManager == null)
+                {
+                    Start();
+                    return;
+                }
+                if (PlayerTriggerManager.IsSafeZoneVisitedFirstTime(currentSafeZone, out currentSafeZoneIdx))
+                {
+                    PlayerTriggerManager.MarkVisitedSafeZone(currentSafeZoneIdx);
+                    PlayerTriggerManager.AddExp(currentSafeZoneIdx);
+                    PlayerTriggerManager.CreateOrDestroyChaserIfNeed(currentSafeZone);
+                    PlayerBarsManager.UpdateLevelBar();
+                }   
             }
 
             // Death Trigger
@@ -56,7 +77,6 @@ namespace Players
             if (other.CompareTag("SafeZone"))
             {
                 GameControl.State.IsSafe = false;
-                _onPlatform = false;
             }
         }
     }

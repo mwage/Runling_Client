@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Characters.Types;
+using Launcher;
 using UnityEngine;
 
 namespace RLR
@@ -30,14 +31,18 @@ namespace RLR
                 {
                     var player = PhotonNetwork.Instantiate(Path.Combine("Characters", "Manticore"), Vector3.zero, Quaternion.identity, 0);
                     player.transform.SetParent(Player);
-                    player.AddComponent<Manticore>().Initizalize(character);
+                    GameControl.PlayerState.CharacterController = player.AddComponent<Manticore>();
+                    GameControl.PlayerState.CharacterController.Initizalize(character);
+
                     return player;
                 }
                 case "Unicorn":
                 {
                     var player = PhotonNetwork.Instantiate(Path.Combine("Characters", "Cat"), Vector3.zero, Quaternion.identity, 0);
                     player.transform.SetParent(Player);
-                    player.AddComponent<Unicorn>().Initizalize(character);
+                    GameControl.PlayerState.CharacterController = player.AddComponent<Unicorn>();
+                    GameControl.PlayerState.CharacterController.Initizalize(character);
+
                     return player;
                 }
                 default:
