@@ -17,7 +17,7 @@ namespace RLR
             GameControl.PlayerState.Player.SetActive(false);
 
 
-            switch (GameControl.State.SetGameMode)
+            switch (GameControl.GameState.SetGameMode)
             {
                 case Gamemode.Classic:
                     manager.EndGame(1);

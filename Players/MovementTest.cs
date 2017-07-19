@@ -41,7 +41,7 @@ namespace Players
         private void Awake()
         {
             //////////////////////////////////////////////
-            //GameControl.State.MoveSpeed = 10;
+            //GameControl.GameState.MoveSpeed = 10;
             //////////////////////////////////////////////
 
             _rotationSpeed = 30;
@@ -69,19 +69,19 @@ namespace Players
             // Start autoclicking
             //if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateClicker)) TODO delete
             //{
-            //    if (!GameControl.State.AutoClickerActive)
-            //        GameControl.State.AutoClickerActive = true;
+            //    if (!GameControl.GameState.AutoClickerActive)
+            //        GameControl.GameState.AutoClickerActive = true;
             //}
 
             //// Stop autoclicking
             //if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactivateClicker))
             //{
-            //    if (GameControl.State.AutoClickerActive)
-            //        GameControl.State.AutoClickerActive = false;
+            //    if (GameControl.GameState.AutoClickerActive)
+            //        GameControl.GameState.AutoClickerActive = false;
             //}
             ////////////////////////////////////////////
              
-            if (GameControl.State.AutoClickerActive)
+            if (GameControl.GameState.AutoClickerActive)
             {
                 if (!IsAutoClicking)
                 {
@@ -90,7 +90,7 @@ namespace Players
                 }
             }
 
-            if (!GameControl.State.AutoClickerActive)
+            if (!GameControl.GameState.AutoClickerActive)
             {
                 if (IsAutoClicking)
                 {

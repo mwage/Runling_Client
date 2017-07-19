@@ -19,9 +19,9 @@ namespace SLA
             // Set current Level and movespeed, load drones and spawn immunity
             StopUpdate = true;
             GameControl.Settings.CameraRange = 15;
-            GameControl.State.GameActive = true;
-            GameControl.State.TotalScore = 0;
-            if (GameControl.State.SetGameMode == Gamemode.Practice)
+            GameControl.GameState.GameActive = true;
+            GameControl.GameState.TotalScore = 0;
+            if (GameControl.GameState.SetGameMode == Gamemode.Practice)
             {
                 PracticeMode.SetActive(true);
             }
@@ -35,7 +35,7 @@ namespace SLA
                 DeathSla.Death();
 
                 //in case of highscore, save and 
-                if (GameControl.State.SetGameMode != Gamemode.Practice)
+                if (GameControl.GameState.SetGameMode != Gamemode.Practice)
                 {
                     ScoreSla.SetHighScore();
                 }
@@ -50,22 +50,22 @@ namespace SLA
             //// Press Ctrl to start autoclicking // TODO: delete if works in InputServer
             //if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateClicker))
             //{
-            //    if (!GameControl.State.AutoClickerActive)
-            //        GameControl.State.AutoClickerActive = true;
+            //    if (!GameControl.GameState.AutoClickerActive)
+            //        GameControl.GameState.AutoClickerActive = true;
             //}
 
             //// Press Alt to stop autoclicking
             //if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactivateClicker))
             //{
-            //    if (GameControl.State.AutoClickerActive)
-            //        GameControl.State.AutoClickerActive = false;
+            //    if (GameControl.GameState.AutoClickerActive)
+            //        GameControl.GameState.AutoClickerActive = false;
             //} ------------------------------------------------------------------------------------------------
             
             /*
             // Press 1 to turn on Godmode
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.State.GodModeActive)
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.GameState.GodModeActive)
             {
-                GameControl.State.GodModeActive = true;
+                GameControl.GameState.GodModeActive = true;
                 if (GameControl.PlayerState.Player != null)
                 {
                     GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(true);
@@ -73,9 +73,9 @@ namespace SLA
             }
 
             // Press 2 to turn off Godmode
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactiveGodmode) && GameControl.State.GodModeActive)
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactiveGodmode) && GameControl.GameState.GodModeActive)
             {
-                GameControl.State.GodModeActive = false;
+                GameControl.GameState.GodModeActive = false;
                 if (GameControl.PlayerState.Player != null)
                 {
                    GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(false);

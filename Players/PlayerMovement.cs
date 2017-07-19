@@ -65,7 +65,7 @@ namespace Players
             if (!_photonView.isMine)
                 return;
 
-            if (GameControl.State.AutoClickerActive)
+            if (GameControl.GameState.AutoClickerActive)
             {
                 if (!IsAutoClicking)
                 {
@@ -74,7 +74,7 @@ namespace Players
                 }
             }
 
-            if (!GameControl.State.AutoClickerActive)
+            if (!GameControl.GameState.AutoClickerActive)
             {
                 if (IsAutoClicking)
                 {

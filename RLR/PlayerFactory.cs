@@ -10,7 +10,7 @@ namespace RLR
     public class PlayerFactory : MonoBehaviour
     {
         // class creates player gameobject in hierarchy
-        // returns Player to GameControl.State.Player - // TODO maybe we should change names here?
+        // returns Player to GameControl.GameState.Player - // TODO maybe we should change names here?
 
         public Transform Player; // top position in hierarchy
 

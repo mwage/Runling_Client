@@ -88,15 +88,15 @@ namespace Launcher
             // Start autoclicking
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateClicker))
             {
-                if (!GameControl.State.AutoClickerActive)
-                    GameControl.State.AutoClickerActive = true;
+                if (!GameControl.GameState.AutoClickerActive)
+                    GameControl.GameState.AutoClickerActive = true;
             }
 
             // Stop autoclicking
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactivateClicker))
             {
-                if (GameControl.State.AutoClickerActive)
-                    GameControl.State.AutoClickerActive = false;
+                if (GameControl.GameState.AutoClickerActive)
+                    GameControl.GameState.AutoClickerActive = false;
             }
         }
     }

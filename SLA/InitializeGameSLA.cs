@@ -38,13 +38,13 @@ namespace SLA
         private IEnumerator PrepareLevel()
         {
             // Set current movespeed and cameraposition
-            //GameControl.State.MoveSpeed = LevelManagerSLA.GetMovementSpeed(GameControl.State.CurrentLevel);
+            //GameControl.GameState.MoveSpeed = LevelManagerSLA.GetMovementSpeed(GameControl.GameState.CurrentLevel);
             CameraHandleMovement.SetCameraHandlePosition(Vector3.zero);
 
             // Show level highscore and current level
-            CurrentPr.text = GameControl.HighScores.HighScoreSLA[GameControl.State.CurrentLevel].ToString();
+            CurrentPr.text = GameControl.HighScores.HighScoreSLA[GameControl.GameState.CurrentLevel].ToString();
             var levelText = LevelTextObject.GetComponent<TextMeshProUGUI>();
-            levelText.text = "Level " + GameControl.State.CurrentLevel;
+            levelText.text = "Level " + GameControl.GameState.CurrentLevel;
             LevelTextObject.SetActive(true);
             CurrentPrWindow.SetActive(true);
             yield return new WaitForSeconds(2);
@@ -61,13 +61,13 @@ namespace SLA
             GameControl.PlayerState.IsInvulnerable = true;
             GameControl.PlayerState.IsSafe = false;
             GameControl.PlayerState.Player.transform.Find("Shield").gameObject.SetActive(true);
-            if (GameControl.State.GodModeActive && !GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.activeSelf)
+            if (GameControl.GameState.GodModeActive && !GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.activeSelf)
             {
                 GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(true);
             }
             GameControl.PlayerState.IsImmobile = false;
             ControlSLA.StopUpdate = false;
-            LevelManagerSLA.LoadDrones(GameControl.State.CurrentLevel);
+            LevelManagerSLA.LoadDrones(GameControl.GameState.CurrentLevel);
             
             // Countdown
             for (var i = 0; i < 3; i++)

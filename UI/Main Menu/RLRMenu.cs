@@ -36,8 +36,8 @@ namespace UI.Main_Menu
 
         public void SetModes()
         {
-            if (_voteDifficulty != null) GameControl.State.SetDifficulty = (Difficulty)_voteDifficulty;
-            if (_voteGameMode != null) GameControl.State.SetGameMode = (Gamemode)_voteGameMode;
+            if (_voteDifficulty != null) GameControl.GameState.SetDifficulty = (Difficulty)_voteDifficulty;
+            if (_voteGameMode != null) GameControl.GameState.SetGameMode = (Gamemode)_voteGameMode;
         }
         
         public void Update()
@@ -59,8 +59,8 @@ namespace UI.Main_Menu
         public void StartGame()
         {
             GameControl.PlayerState.IsDead = true;
-            GameControl.State.TotalScore = 0;
-            GameControl.State.CurrentLevel = 1;
+            GameControl.GameState.TotalScore = 0;
+            GameControl.GameState.CurrentLevel = 1;
             GameControl.PlayerState.CharacterDto = PickCharacterMenu.GetComponent<PickCharacterMenu>().GetCharacterDto();
             SetModes();
 
@@ -71,11 +71,11 @@ namespace UI.Main_Menu
         {
             //PhotonNetwork.LeaveRoom();
             GameControl.PlayerState.IsDead = true;
-            GameControl.State.TotalScore = 0;
-            GameControl.State.CurrentLevel = 1;
+            GameControl.GameState.TotalScore = 0;
+            GameControl.GameState.CurrentLevel = 1;
             GameControl.PlayerState.CharacterDto = PickCharacterMenu.GetComponent<PickCharacterMenu>().GetCharacterDto();
-            GameControl.State.SetDifficulty = Difficulty.Hard;
-            GameControl.State.SetGameMode = Gamemode.Practice;
+            GameControl.GameState.SetDifficulty = Difficulty.Hard;
+            GameControl.GameState.SetGameMode = Gamemode.Practice;
             PhotonNetwork.CreateRoom(GameControl.GenerateRoomName("SoloRLR"));
         }
 

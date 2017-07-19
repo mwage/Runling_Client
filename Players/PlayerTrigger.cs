@@ -25,7 +25,7 @@ namespace Players
             // Enter Finishzone
             if (other.CompareTag("Finish") && !_finishedLevel)
             {
-                GameControl.State.FinishedLevel = true;
+                GameControl.GameState.FinishedLevel = true;
                 _finishedLevel = true;
             }
 
@@ -37,7 +37,7 @@ namespace Players
             }
 
             // Safety Death Trigger
-            if (((other.CompareTag("Enemy") && !GameControl.PlayerState.IsSafe || other.CompareTag("Strong Enemy")) && !GameControl.PlayerState.IsInvulnerable) && !GameControl.State.GodModeActive)
+            if (((other.CompareTag("Enemy") && !GameControl.PlayerState.IsSafe || other.CompareTag("Strong Enemy")) && !GameControl.PlayerState.IsInvulnerable) && !GameControl.GameState.GodModeActive)
             {
                 GameControl.PlayerState.IsDead = true;
             }
@@ -65,7 +65,7 @@ namespace Players
             }
 
             // Death Trigger
-            if (((other.CompareTag("Enemy") && !GameControl.PlayerState.IsSafe || other.CompareTag("Strong Enemy")) && !GameControl.PlayerState.IsInvulnerable) && !GameControl.State.GodModeActive)
+            if (((other.CompareTag("Enemy") && !GameControl.PlayerState.IsSafe || other.CompareTag("Strong Enemy")) && !GameControl.PlayerState.IsInvulnerable) && !GameControl.GameState.GodModeActive)
             {
                 GameControl.PlayerState.IsDead = true;
             }

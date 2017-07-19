@@ -34,7 +34,7 @@ namespace RLR
         private IEnumerator PrepareLevel()
         {
             // load map
-            LevelManagerRLR.GenerateMap(GameControl.State.CurrentLevel);
+            LevelManagerRLR.GenerateMap(GameControl.GameState.CurrentLevel);
 
             // Load player
            if (GameControl.PlayerState.Player == null)
@@ -50,7 +50,7 @@ namespace RLR
                     0,
                     startPlatform.transform.position.z);
 
-            if (GameControl.State.GodModeActive && !GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.activeSelf)
+            if (GameControl.GameState.GodModeActive && !GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.activeSelf)
             {
                 GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(true);
             }
@@ -65,12 +65,12 @@ namespace RLR
             ControlRLR.StopUpdate = false;
 
             // generate drones
-            LevelManagerRLR.GenerateChasers(GameControl.State.CurrentLevel);
-            LevelManagerRLR.LoadDrones(GameControl.State.CurrentLevel);
+            LevelManagerRLR.GenerateChasers(GameControl.GameState.CurrentLevel);
+            LevelManagerRLR.LoadDrones(GameControl.GameState.CurrentLevel);
 
             // Show current level
             var levelText = LevelTextObject.GetComponent<TextMeshProUGUI>();
-            levelText.text = "Level " + GameControl.State.CurrentLevel;
+            levelText.text = "Level " + GameControl.GameState.CurrentLevel;
             LevelTextObject.SetActive(true);
             yield return new WaitForSeconds(2);
             LevelTextObject.SetActive(false);
