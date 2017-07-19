@@ -10,14 +10,14 @@ namespace Launcher
         {
         }
 
-        private GameState _state;
+        private GameState _gameState;
         private InputManager _inputManager;
         private Settings _settings;
         private HighScores _highScores;
         private PlayerState _playerState;
         private MapState _mapState;
 
-        public static GameState State { get { return Instance._state; } }
+        public static GameState GameState { get { return Instance._gameState; } }
         public static InputManager InputManager { get { return Instance._inputManager; } }
         public static Settings Settings { get { return Instance._settings; } }
         public static HighScores HighScores { get { return Instance._highScores; } }
@@ -30,7 +30,7 @@ namespace Launcher
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
-            _state = new GameState();
+            _gameState = new GameState();
             _inputManager = new InputManager();
             _settings = new Settings();
             _highScores = new HighScores();

@@ -13,8 +13,8 @@ namespace Launcher
         DeactivateClicker,
         NavigateMenu,
         Pause,
-        //ActivateGodmode,
-        //DeactiveGodmode,
+        ActivateGodmode,
+        DeactiveGodmode,
 
         // camera hotkeys
         CameraUp,
@@ -93,8 +93,8 @@ namespace Launcher
             LoadHotkey(HotkeyAction.DeactivateClicker, KeyCode.LeftAlt);
             LoadHotkey(HotkeyAction.NavigateMenu, KeyCode.Escape);
             LoadHotkey(HotkeyAction.Pause, KeyCode.Pause);
-            //LoadHotkey(HotkeyAction.ActivateGodmode, KeyCode.Alpha1);
-            //LoadHotkey(HotkeyAction.DeactiveGodmode, KeyCode.Alpha2);
+            LoadHotkey(HotkeyAction.ActivateGodmode, KeyCode.Alpha1);
+            LoadHotkey(HotkeyAction.DeactiveGodmode, KeyCode.Alpha2);
             LoadHotkey(HotkeyAction.CameraDown, KeyCode.S);
             LoadHotkey(HotkeyAction.CameraUp, KeyCode.W);
             LoadHotkey(HotkeyAction.CameraLeft, KeyCode.A);

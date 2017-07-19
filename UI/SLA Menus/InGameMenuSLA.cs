@@ -39,10 +39,10 @@ namespace UI.SLA_Menus
 
         public void RestartGame()
         {
-            GameControl.State.IsDead = true;
-            GameControl.State.TotalScore = 0;
-            GameControl.State.CurrentLevel = 1;
-            GameControl.State.AutoClickerActive = false;
+            GameControl.PlayerState.IsDead = true;
+            GameControl.PlayerState.TotalScore = 0;
+            GameControl.GameState.CurrentLevel = 1;
+            GameControl.PlayerState.AutoClickerActive = false;
             Time.timeScale = 1;
 
             SceneManager.LoadScene("SLA");
@@ -56,7 +56,7 @@ namespace UI.SLA_Menus
 
         public void BackToMenu()
         {
-            GameControl.State.GameActive = false;
+            GameControl.GameState.GameActive = false;
             Time.timeScale = 1;
             SceneManager.LoadScene("MainMenu");
         }

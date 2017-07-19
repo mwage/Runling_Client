@@ -32,7 +32,7 @@ namespace UI.RLR_Menus
             // Descriptions
             _descriptionText = Instantiate(ScorePrefab, background.transform);
             _descriptionText.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Level";
-            if (GameControl.State.GameActive && GameControl.State.SetGameMode != Gamemode.Practice)
+            if (GameControl.GameState.GameActive && GameControl.GameState.SetGameMode != Gamemode.Practice)
             {
                 _descriptionText.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "Cur:";
                 _descriptionText.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "PB:";
@@ -63,7 +63,7 @@ namespace UI.RLR_Menus
             _timeModeScore.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(100, 20);
 
 
-            if (!GameControl.State.GameActive)
+            if (!GameControl.GameState.GameActive)
             {
                 _descriptionText.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "Normal";
                 _descriptionText.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "Hard";
@@ -72,7 +72,7 @@ namespace UI.RLR_Menus
 
         public void SetNumbers()
         {
-            if (GameControl.State.GameActive && GameControl.State.SetGameMode != Gamemode.Practice)
+            if (GameControl.GameState.GameActive && GameControl.GameState.SetGameMode != Gamemode.Practice)
             {
                 SetHighScoresIngame();
                 SetCurrentScores();
@@ -85,7 +85,7 @@ namespace UI.RLR_Menus
 
         private void SetHighScoresIngame()
         {
-            switch (GameControl.State.SetDifficulty)
+            switch (GameControl.GameState.SetDifficulty)
             {
                 case Difficulty.Normal:
                     for (var i = 0; i < LevelManagerRLR.NumLevels; i++)
@@ -125,7 +125,7 @@ namespace UI.RLR_Menus
 
         private void SetCurrentScores()
         {
-            switch (GameControl.State.SetDifficulty)
+            switch (GameControl.GameState.SetDifficulty)
             {
                 case Difficulty.Normal:
                     for (var i = 0; i < LevelManagerRLR.NumLevels; i++)
@@ -147,10 +147,10 @@ namespace UI.RLR_Menus
                             _levelScore[i].transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = Color.green;
                         }
                     }
-                    if (GameControl.State.SetGameMode == Gamemode.TimeMode)
+                    if (GameControl.GameState.SetGameMode == Gamemode.TimeMode)
                     {
-                        _timeModeScore.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = GameControl.State.TotalScore.ToString();
-                        if (GameControl.State.TotalScore >= GameControl.HighScores.HighScoreRLRNormal[0] && GameControl.State.TotalScore != 0)
+                        _timeModeScore.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = GameControl.PlayerState.TotalScore.ToString();
+                        if (GameControl.PlayerState.TotalScore >= GameControl.HighScores.HighScoreRLRNormal[0] && GameControl.PlayerState.TotalScore != 0)
                         {
                             _timeModeScore.transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = Color.green;
                         }
@@ -181,10 +181,10 @@ namespace UI.RLR_Menus
                             _levelScore[i].transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = Color.green;
                         }
                     }
-                    if (GameControl.State.SetGameMode == Gamemode.TimeMode)
+                    if (GameControl.GameState.SetGameMode == Gamemode.TimeMode)
                     {
-                        _timeModeScore.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = GameControl.State.TotalScore.ToString();
-                        if (GameControl.State.TotalScore >= GameControl.HighScores.HighScoreRLRHard[0] && GameControl.State.TotalScore != 0)
+                        _timeModeScore.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = GameControl.PlayerState.TotalScore.ToString();
+                        if (GameControl.PlayerState.TotalScore >= GameControl.HighScores.HighScoreRLRHard[0] && GameControl.PlayerState.TotalScore != 0)
                         {
                             _timeModeScore.transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = Color.green;
                         }

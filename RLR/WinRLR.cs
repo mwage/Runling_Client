@@ -20,15 +20,15 @@ namespace RLR
 
         public void BackToMenu()
         {
-            GameControl.State.GameActive = false;
+            GameControl.GameState.GameActive = false;
             SceneManager.LoadScene("MainMenu");
         }
 
         public void RestartGame()
         {
-            GameControl.State.IsDead = true;
-            GameControl.State.AutoClickerActive = false;
-            GameControl.State.CurrentLevel = 1;
+            GameControl.PlayerState.IsDead = true;
+            GameControl.PlayerState.AutoClickerActive = false;
+            GameControl.GameState.CurrentLevel = 1;
 
             SceneManager.LoadScene("RLR");
         }

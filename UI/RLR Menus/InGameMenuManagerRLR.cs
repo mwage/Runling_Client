@@ -44,7 +44,7 @@ namespace UI.RLR_Menus
                     InGameMenu.gameObject.SetActive(true);
                     Time.timeScale = 0;
                     MenuOn = true;
-                    if (GameControl.State.SetGameMode == Gamemode.Practice && !ChooseLevel.activeSelf)
+                    if (GameControl.GameState.SetGameMode == Gamemode.Practice && !ChooseLevel.activeSelf)
                     {
                         RestartGame.SetActive(false);
                         ChooseLevel.SetActive(true);

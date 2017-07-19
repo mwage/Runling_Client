@@ -21,20 +21,20 @@ namespace RLR
         {
             // Set current Level and movespeed, load drones and spawn immunity
             StopUpdate = true;
-            GameControl.State.GameActive = true;
-            GameControl.State.MoveSpeed = 13;
-            GameControl.State.TotalScore = 0;
-            if (GameControl.State.SetGameMode == Gamemode.Practice)
+            GameControl.GameState.GameActive = true;
+            GameControl.PlayerState.MoveSpeed = 13;
+            GameControl.PlayerState.TotalScore = 0;
+            if (GameControl.GameState.SetGameMode == Gamemode.Practice)
             {
                 PracticeMode.SetActive(true);
             }
-            if (GameControl.State.SetGameMode == Gamemode.TimeMode)
+            if (GameControl.GameState.SetGameMode == Gamemode.TimeMode)
             {
-                GameControl.State.Lives = 3;
+                GameControl.PlayerState.Lives = 3;
                 TimeModeUI.SetActive(true);
-                CountDownText.GetComponent<TextMeshProUGUI>().text = "Countdown: " + (int)((285 + GameControl.State.CurrentLevel*15) / 60) + ":" + ((285 + GameControl.State.CurrentLevel*15) % 60).ToString("00.00");
-                HighScoreText.GetComponent<TextMeshProUGUI>().text = GameControl.State.SetDifficulty == Difficulty.Normal ? "Highscore: " + GameControl.HighScores.HighScoreRLRNormal[0].ToString("f0") : "Highscore: " + GameControl.HighScores.HighScoreRLRHard[0].ToString("f0");
-                LevelManager.LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + GameControl.State.Lives;
+                CountDownText.GetComponent<TextMeshProUGUI>().text = "Countdown: " + (int)((285 + GameControl.GameState.CurrentLevel*15) / 60) + ":" + ((285 + GameControl.GameState.CurrentLevel*15) % 60).ToString("00.00");
+                HighScoreText.GetComponent<TextMeshProUGUI>().text = GameControl.GameState.SetDifficulty == Difficulty.Normal ? "Highscore: " + GameControl.HighScores.HighScoreRLRNormal[0].ToString("f0") : "Highscore: " + GameControl.HighScores.HighScoreRLRHard[0].ToString("f0");
+                LevelManager.LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + GameControl.PlayerState.Lives;
             }
 
             InitializeGameRLR.InitializeGame();
@@ -43,13 +43,13 @@ namespace RLR
         //update when dead
         private void Update()
         {
-            if (GameControl.State.IsDead && !StopUpdate)
+            if (GameControl.PlayerState.IsDead && !StopUpdate)
             {
                 StopUpdate = true;
                 DeathRLR.Death(LevelManager, InitializeGameRLR, this);
             }
 
-            if (GameControl.State.FinishedLevel && !StopUpdate)
+            if (GameControl.GameState.FinishedLevel && !StopUpdate)
             {
                 StopUpdate = true;
                 LevelManager.EndLevel(0);
@@ -58,15 +58,15 @@ namespace RLR
             // Start autoclicking
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateClicker))
             {
-                if (!GameControl.State.AutoClickerActive)
-                    GameControl.State.AutoClickerActive = true;
+                if (!GameControl.PlayerState.AutoClickerActive)
+                    GameControl.PlayerState.AutoClickerActive = true;
             }
 
             // Stop autoclicking
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactivateClicker))
             {
-                if (GameControl.State.AutoClickerActive)
-                    GameControl.State.AutoClickerActive = false;
+                if (GameControl.PlayerState.AutoClickerActive)
+                    GameControl.PlayerState.AutoClickerActive = false;
             }
             /*
             // Become invulnerable

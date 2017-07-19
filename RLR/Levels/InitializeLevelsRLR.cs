@@ -9,7 +9,7 @@ namespace RLR.Levels
     {
         public List<ILevelRLR> SetDifficulty(LevelManagerRLR manager)
         {
-            return GameControl.State.SetDifficulty == Difficulty.Hard ? SetHard(manager) : SetNormal(manager);
+            return GameControl.GameState.SetDifficulty == Difficulty.Hard ? SetHard(manager) : SetNormal(manager);
         }
 
         private static List<ILevelRLR> SetNormal(LevelManagerRLR manager)
