@@ -5,6 +5,7 @@ using UI.RLR_Menus.Characters;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 namespace UI.Main_Menu
 {
     public class RLRMenu : PunBehaviour
@@ -57,12 +58,24 @@ namespace UI.Main_Menu
         #region Buttons
         public void StartGame()
         {
-            GameControl.State.IsDead = true;
+            GameControl.PlayerState.IsDead = true;
             GameControl.State.TotalScore = 0;
             GameControl.State.CurrentLevel = 1;
-            GameControl.State.CharacterDto = PickCharacterMenu.GetComponent<PickCharacterMenu>().GetCharacterDto();
+            GameControl.PlayerState.CharacterDto = PickCharacterMenu.GetComponent<PickCharacterMenu>().GetCharacterDto();
             SetModes();
 
+            PhotonNetwork.CreateRoom(GameControl.GenerateRoomName("SoloRLR"));
+        }
+
+        public void StartGameSOLOHARDRLRTEST()
+        {
+            //PhotonNetwork.LeaveRoom();
+            GameControl.PlayerState.IsDead = true;
+            GameControl.State.TotalScore = 0;
+            GameControl.State.CurrentLevel = 1;
+            GameControl.PlayerState.CharacterDto = PickCharacterMenu.GetComponent<PickCharacterMenu>().GetCharacterDto();
+            GameControl.State.SetDifficulty = Difficulty.Hard;
+            GameControl.State.SetGameMode = Gamemode.Practice;
             PhotonNetwork.CreateRoom(GameControl.GenerateRoomName("SoloRLR"));
         }
 

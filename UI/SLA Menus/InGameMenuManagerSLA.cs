@@ -45,7 +45,7 @@ namespace UI.SLA_Menus
                     InGameMenu.gameObject.SetActive(true);
                     Time.timeScale = 0;
                     MenuOn = true;
-                    if (GameControl.State.SetGameMode == Gamemode.Practice && !ChooseLevelButton.activeSelf)
+                    if (GameControl.GameState.SetGameMode == Gamemode.Practice && !ChooseLevelButton.activeSelf)
                     {
                         RestartGame.SetActive(false);
                         ChooseLevelButton.SetActive(true);

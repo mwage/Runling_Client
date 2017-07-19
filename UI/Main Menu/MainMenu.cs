@@ -1,3 +1,5 @@
+using Launcher;
+using UI.RLR_Menus.Characters;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -65,6 +67,18 @@ namespace UI.Main_Menu
         {
             Application.Quit();
         }
+
+        public void OnCreatedRoom() // need for test
+        {
+            PhotonNetwork.room.IsOpen = false;
+            PhotonNetwork.room.IsVisible = false;
+            SceneManager.LoadScene("RLR");
+            _mainMenuManager.gameObject.SetActive(false);
+        }
         #endregion
     }
+
+
 }
+
+

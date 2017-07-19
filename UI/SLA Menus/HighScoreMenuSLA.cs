@@ -60,7 +60,7 @@ namespace UI.SLA_Menus
             _combinedScore.GetComponent<RectTransform>().sizeDelta = new Vector2(80, 20);
             _combinedScore.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(80, 20);
 
-            if (!GameControl.State.GameActive || GameControl.State.SetGameMode == Gamemode.Practice)
+            if (!GameControl.GameState.GameActive || GameControl.GameState.SetGameMode == Gamemode.Practice)
             {
                 _descriptionText.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
                 _descriptionText.transform.GetChild(2).GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 15);
@@ -86,7 +86,7 @@ namespace UI.SLA_Menus
             _combinedScore.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = GameControl.HighScores.HighScoreSLA[14].ToString();
 
             // Current game scores
-            if (GameControl.State.GameActive && GameControl.State.SetGameMode != Gamemode.Practice)
+            if (GameControl.GameState.GameActive && GameControl.GameState.SetGameMode != Gamemode.Practice)
             {
                 for (var i = 0; i < LevelManagerSLA.NumLevels; i++)
                 {
@@ -99,8 +99,8 @@ namespace UI.SLA_Menus
                     }
                 }
 
-                _gameScore.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = GameControl.State.TotalScore.ToString();
-                if (GameControl.State.TotalScore > GameControl.HighScores.HighScoreSLA[0] && GameControl.State.TotalScore > 0)
+                _gameScore.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = GameControl.PlayerState.TotalScore.ToString();
+                if (GameControl.PlayerState.TotalScore > GameControl.HighScores.HighScoreSLA[0] && GameControl.PlayerState.TotalScore > 0)
                 {
                     _gameScore.transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = Color.green;
                 }

@@ -26,7 +26,7 @@ namespace RLR
 
         public void RestartGame()
         {
-            GameControl.State.IsDead = true;
+            GameControl.PlayerState.IsDead = true;
             GameControl.State.AutoClickerActive = false;
             GameControl.State.CurrentLevel = 1;
 

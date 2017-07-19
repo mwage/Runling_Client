@@ -67,7 +67,7 @@ namespace SLA.Levels
         //Load next level or end game
         public void EndLevel(float delay)
         {
-            StartCoroutine((GameControl.State.CurrentLevel == _levels.Count && GameControl.State.SetGameMode != Gamemode.Practice) ? EndGameSLA(delay) : NextLevel(delay));
+            StartCoroutine((GameControl.GameState.CurrentLevel == _levels.Count && GameControl.GameState.SetGameMode != Gamemode.Practice) ? EndGameSLA(delay) : NextLevel(delay));
         }
 
         //load in all but the last level
@@ -83,9 +83,9 @@ namespace SLA.Levels
             }
             Destroy(GameControl.PlayerState.Player);
             Score.CurrentScoreText.text = "0";
-            if (GameControl.State.SetGameMode != Gamemode.Practice)
+            if (GameControl.GameState.SetGameMode != Gamemode.Practice)
             {
-                GameControl.State.CurrentLevel++;
+                GameControl.GameState.CurrentLevel++;
             }
 
             InitializeGameSLA.InitializeGame();

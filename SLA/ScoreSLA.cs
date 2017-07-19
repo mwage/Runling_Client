@@ -33,7 +33,7 @@ namespace SLA
 
         private IEnumerator AddScore()
         {
-            while (GameControl.State.IsDead == false)
+            while (GameControl.PlayerState.IsDead == false)
             {
                 CurrentScore += 2;
                 GameControl.State.TotalScore += 2;

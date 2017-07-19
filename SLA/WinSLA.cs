@@ -25,7 +25,7 @@ namespace SLA
 
         public void RestartGame()
         {
-            GameControl.State.IsDead = true;
+            GameControl.PlayerState.IsDead = true;
             GameControl.State.AutoClickerActive = false;
             GameControl.State.TotalScore = 0;
             GameControl.State.CurrentLevel = 1;

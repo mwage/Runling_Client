@@ -30,7 +30,7 @@ namespace SLA
 
         private void Update()
         {
-            if (GameControl.State.IsDead && !StopUpdate)
+            if (GameControl.PlayerState.IsDead && !StopUpdate)
             {
                 DeathSla.Death();
 
@@ -47,19 +47,19 @@ namespace SLA
                 StopUpdate = true;
             }
 
-            // Press Ctrl to start autoclicking
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateClicker))
-            {
-                if (!GameControl.State.AutoClickerActive)
-                    GameControl.State.AutoClickerActive = true;
-            }
+            //// Press Ctrl to start autoclicking // TODO: delete if works in InputServer
+            //if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateClicker))
+            //{
+            //    if (!GameControl.State.AutoClickerActive)
+            //        GameControl.State.AutoClickerActive = true;
+            //}
 
-            // Press Alt to stop autoclicking
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactivateClicker))
-            {
-                if (GameControl.State.AutoClickerActive)
-                    GameControl.State.AutoClickerActive = false;
-            }
+            //// Press Alt to stop autoclicking
+            //if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactivateClicker))
+            //{
+            //    if (GameControl.State.AutoClickerActive)
+            //        GameControl.State.AutoClickerActive = false;
+            //} ------------------------------------------------------------------------------------------------
             
             /*
             // Press 1 to turn on Godmode

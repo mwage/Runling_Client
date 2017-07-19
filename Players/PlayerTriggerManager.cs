@@ -36,8 +36,8 @@ namespace Players
         public void AddExp(int currentSafeZoneIdx)
         {
             GameControl.PlayerState.CharacterController.AddExp(LevelingSystem.CalculateExp(currentSafeZoneIdx,
-                GameControl.State.CurrentLevel, GameControl.State.SetDifficulty,
-                GameControl.State.SetGameMode));
+                GameControl.GameState.CurrentLevel, GameControl.GameState.SetDifficulty,
+                GameControl.GameState.SetGameMode));
         }
 
         public void CreateOrDestroyChaserIfNeed(GameObject currentSafeZone)

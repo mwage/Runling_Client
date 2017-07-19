@@ -39,7 +39,7 @@ namespace RLR
             // Load player
            if (GameControl.PlayerState.Player == null)
             {
-                GameControl.PlayerState.Player = PlayerFactory.Create(GameControl.State.CharacterDto, 1);
+                GameControl.PlayerState.Player = PlayerFactory.Create(GameControl.PlayerState.CharacterDto, 1);
                 GameControl.PlayerState.PlayerTrigger = GameControl.PlayerState.Player.transform.Find("Trigger").gameObject.GetComponent<PlayerTrigger>();
             }
 
@@ -54,9 +54,9 @@ namespace RLR
             {
                 GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(true);
             }
-            GameControl.State.IsDead = false;
-            GameControl.State.IsInvulnerable = true;
-            GameControl.State.IsImmobile = true;
+            GameControl.PlayerState.IsDead = false;
+            GameControl.PlayerState.IsInvulnerable = true;
+            GameControl.PlayerState.IsImmobile = true;
 
             // set camera
             GameControl.Settings.CameraRange = LevelManagerRLR.MapGeneratorRlr.GetAirColliderRange() / 2.5f;
@@ -86,8 +86,8 @@ namespace RLR
                 Destroy(countdown);
             }
 
-            GameControl.State.IsInvulnerable = false;
-            GameControl.State.IsImmobile = false;
+            GameControl.PlayerState.IsInvulnerable = false;
+            GameControl.PlayerState.IsImmobile = false;
             ScoreRLR.StartTimer();
         }
     }

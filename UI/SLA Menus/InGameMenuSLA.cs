@@ -39,7 +39,7 @@ namespace UI.SLA_Menus
 
         public void RestartGame()
         {
-            GameControl.State.IsDead = true;
+            GameControl.PlayerState.IsDead = true;
             GameControl.State.TotalScore = 0;
             GameControl.State.CurrentLevel = 1;
             GameControl.State.AutoClickerActive = false;

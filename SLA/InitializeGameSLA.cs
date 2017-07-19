@@ -24,6 +24,7 @@ namespace SLA
         public GameObject CurrentPrWindow;
         public Text CurrentPr;
         public CameraHandleMovement CameraHandleMovement;
+        public Transform Player; // parent
 
         private const string PlayerCharacter = "Manticore";
         
@@ -37,7 +38,7 @@ namespace SLA
         private IEnumerator PrepareLevel()
         {
             // Set current movespeed and cameraposition
-            GameControl.State.MoveSpeed = LevelManagerSLA.GetMovementSpeed(GameControl.State.CurrentLevel);
+            //GameControl.State.MoveSpeed = LevelManagerSLA.GetMovementSpeed(GameControl.State.CurrentLevel);
             CameraHandleMovement.SetCameraHandlePosition(Vector3.zero);
 
             // Show level highscore and current level
@@ -53,17 +54,18 @@ namespace SLA
 
             // Load drones and player
 
-            GameControl.State.Player = PhotonNetwork.Instantiate(Path.Combine("Characters", PlayerCharacter), StartingPosition(), 
+            GameControl.PlayerState.Player = PhotonNetwork.Instantiate(Path.Combine("Characters", PlayerCharacter), StartingPosition(), 
                 PhotonNetwork.room.PlayerCount != 1 ? Quaternion.LookRotation(Vector3.zero - StartingPosition()) : Quaternion.identity, 0);
-            GameControl.State.IsDead = false;
-            GameControl.State.IsInvulnerable = true;
-            GameControl.State.IsSafe = false;
-            GameControl.State.Player.transform.Find("Shield").gameObject.SetActive(true);
-            if (GameControl.State.GodModeActive && !GameControl.State.Player.transform.Find("GodMode").gameObject.activeSelf)
+            GameControl.PlayerState.Player.transform.SetParent(Player);
+            GameControl.PlayerState.IsDead = false;
+            GameControl.PlayerState.IsInvulnerable = true;
+            GameControl.PlayerState.IsSafe = false;
+            GameControl.PlayerState.Player.transform.Find("Shield").gameObject.SetActive(true);
+            if (GameControl.State.GodModeActive && !GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.activeSelf)
             {
-                GameControl.State.Player.transform.Find("GodMode").gameObject.SetActive(true);
+                GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(true);
             }
-            GameControl.State.IsImmobile = false;
+            GameControl.PlayerState.IsImmobile = false;
             ControlSLA.StopUpdate = false;
             LevelManagerSLA.LoadDrones(GameControl.State.CurrentLevel);
             
@@ -76,8 +78,8 @@ namespace SLA
                 Destroy(countdown);
             }
 
-            GameControl.State.Player.transform.Find("Shield").gameObject.SetActive(false);
-            GameControl.State.IsInvulnerable = false;
+            GameControl.PlayerState.Player.transform.Find("Shield").gameObject.SetActive(false);
+            GameControl.PlayerState.IsInvulnerable = false;
             ScoreSLA.StartScore();
         }
 

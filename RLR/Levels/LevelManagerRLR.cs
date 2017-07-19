@@ -94,8 +94,8 @@ namespace RLR.Levels
             {
                 CheckSafeZones.ScoreRLR.AddRemainingCountdown();
                 CheckSafeZones.ScoreRLR.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + GameControl.State.TotalScore;
-                GameControl.State.Lives = 3;
-                LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + GameControl.State.Lives;
+                GameControl.PlayerState.Lives = 3;
+                LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + GameControl.PlayerState.Lives;
             }
             if (GameControl.State.SetGameMode != Gamemode.Practice)
             {
@@ -115,7 +115,7 @@ namespace RLR.Levels
                 CheckSafeZones.ScoreRLR.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + GameControl.State.TotalScore;
             }
 
-            if (!GameControl.State.IsDead)
+            if (!GameControl.PlayerState.IsDead)
             {
                 Win.transform.Find("Victory").gameObject.SetActive(true);
                 Win.transform.Find("Defeat").gameObject.SetActive(false);

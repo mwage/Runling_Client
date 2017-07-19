@@ -10,7 +10,7 @@ namespace Players
         {
             var anim = GetComponent<Animator>();
             anim.Play("Take 001");
-            float delay = GameControl.State.AutoClickerActive ? 0.5f : 1.666f / 2;
+            float delay = GameControl.PlayerState.AutoClickerActive ? 0.5f : 1.666f / 2;
             StartCoroutine(DestroyAnimation(delay));
         }
 

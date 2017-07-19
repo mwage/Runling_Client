@@ -110,12 +110,12 @@ namespace Players
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, _defLayer))
             {
-                _maxSpeed = GameControl.State.MoveSpeed;
+                _maxSpeed = GameControl.PlayerState.CharacterController.Speed.Current;
                 _clickPos = hit.point;
 
                 // Play click animation
                 var click = Instantiate(MouseClick, _clickPos, Quaternion.Euler(0, 45, 0));
-                if (GameControl.State.IsImmobile)
+                if (GameControl.PlayerState.IsImmobile)
                 {
                     foreach (Transform child in click.transform)
                     {
@@ -165,7 +165,7 @@ namespace Players
 
             GetRelativeDirection();
 
-            if (GameControl.State.IsImmobile)
+            if (GameControl.PlayerState.IsImmobile)
             {
                 _targetPos = _currentPos;
             }

@@ -22,7 +22,7 @@ namespace RLR
             // Set current Level and movespeed, load drones and spawn immunity
             StopUpdate = true;
             GameControl.State.GameActive = true;
-            GameControl.State.MoveSpeed = 13;
+            //GameControl.PlayerState.MoveSpeed = 13;
             GameControl.State.TotalScore = 0;
             if (GameControl.State.SetGameMode == Gamemode.Practice)
             {
@@ -30,11 +30,11 @@ namespace RLR
             }
             if (GameControl.State.SetGameMode == Gamemode.TimeMode)
             {
-                GameControl.State.Lives = 3;
+                GameControl.PlayerState.Lives = 3;
                 TimeModeUI.SetActive(true);
                 CountDownText.GetComponent<TextMeshProUGUI>().text = "Countdown: " + (int)((285 + GameControl.State.CurrentLevel*15) / 60) + ":" + ((285 + GameControl.State.CurrentLevel*15) % 60).ToString("00.00");
                 HighScoreText.GetComponent<TextMeshProUGUI>().text = GameControl.State.SetDifficulty == Difficulty.Normal ? "Highscore: " + GameControl.HighScores.HighScoreRLRNormal[0].ToString("f0") : "Highscore: " + GameControl.HighScores.HighScoreRLRHard[0].ToString("f0");
-                LevelManager.LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + GameControl.State.Lives;
+                LevelManager.LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + GameControl.PlayerState.Lives;
             }
 
             InitializeGameRLR.InitializeGame();
@@ -43,7 +43,7 @@ namespace RLR
         //update when dead
         private void Update()
         {
-            if (GameControl.State.IsDead && !StopUpdate)
+            if (GameControl.PlayerState.IsDead && !StopUpdate)
             {
                 StopUpdate = true;
                 DeathRLR.Death(LevelManager, InitializeGameRLR, this);
@@ -55,19 +55,7 @@ namespace RLR
                 LevelManager.EndLevel(0);
             }
 
-            // Start autoclicking
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateClicker))
-            {
-                if (!GameControl.State.AutoClickerActive)
-                    GameControl.State.AutoClickerActive = true;
-            }
-
-            // Stop autoclicking
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactivateClicker))
-            {
-                if (GameControl.State.AutoClickerActive)
-                    GameControl.State.AutoClickerActive = false;
-            }
+            //InputAutoClicker();
             /*
             // Become invulnerable
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.State.GodModeActive)
@@ -90,6 +78,8 @@ namespace RLR
             }
             */
         }
+
+
     }
 }
 
