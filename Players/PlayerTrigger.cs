@@ -13,7 +13,7 @@ namespace Players
 
         private bool _finishedLevel;
 
-        public void Start()
+        public void InitializeTrigger()
         {
             PlayerTriggerManager = gameObject.transform.parent.parent.GetComponent<PlayerTriggerManager>();
             PlayerBarsManager = gameObject.transform.parent.parent.GetComponent<PlayerBarsManager>();
@@ -52,7 +52,7 @@ namespace Players
                 int currentSafeZoneIdx;
                 if (PlayerTriggerManager == null)
                 {
-                    Start();
+                    InitializeTrigger();
                     return;
                 }
                 if (PlayerTriggerManager.IsSafeZoneVisitedFirstTime(currentSafeZone, out currentSafeZoneIdx))
