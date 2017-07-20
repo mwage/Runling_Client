@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +20,7 @@ namespace Characters.Abilities
 
         public bool IsActive;
 
-        public abstract void Enable(ACharacter character);
+        public abstract IEnumerator Enable(ACharacter character);
         public abstract void Disable(ACharacter character);
 
         public virtual void UpdateLevel(int currentAbilityLevel)
@@ -27,7 +28,7 @@ namespace Characters.Abilities
             Level = currentAbilityLevel;
         }
 
-        public virtual void RefreshLoading()
+        public virtual void RefreshCooldown()
         {
             if (IsLoaded) return;
             if (TimeToRenew <= 0)
@@ -40,6 +41,17 @@ namespace Characters.Abilities
                 TimeToRenew -= Time.deltaTime;
             }
 
+        }
+
+        public void SetLoaded()
+        {
+            TimeToRenew = 0F;
+            IsLoaded = true;
+        }
+
+        public virtual void IncrementLevel()
+        {
+            Level++;
         }
 
     }

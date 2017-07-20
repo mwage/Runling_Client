@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using Characters.Types;
 using Characters.Types.Features;
 
@@ -8,7 +10,7 @@ namespace Characters.Abilities
     {
         public float BoostSpeed
         {
-            get { return Level*5F; }
+            get { return Level*3F + 5F; }
         }
 
         public override int Cooldown
@@ -32,9 +34,9 @@ namespace Characters.Abilities
 
 
 
-        public override void Enable(ACharacter character)
+        public override IEnumerator Enable(ACharacter character)
         {
-            if (IsActive) return;
+            if (IsActive) yield return null;
             if (character.UseEnergy(EnergyCost)) // characterd had enough energy and used it
             {
                 character.Speed.ActivateBoost(BoostSpeed);
@@ -48,7 +50,14 @@ namespace Characters.Abilities
         {
             if (!IsActive) return;
             character.Speed.DeactivateBoost(BoostSpeed);
+            character.Energy.RegenStatus = RegenStatus.Regen;
             IsActive = false;
+        }
+
+        public override void IncrementLevel()
+        {
+            Level++;
+
         }
 
         

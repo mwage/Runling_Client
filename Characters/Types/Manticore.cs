@@ -29,14 +29,9 @@ namespace Characters.Types
             InitiazlizeBase(character);
             // something about abilities or in awake
             AbilityFirst = new Boost(this);
-            //AbilitySecond = a2;
+            AbilitySecond = new Shield(this);
         }
 
 
-
-        protected override void ActivateOrDeactivateAbility2()
-        {
-            Debug.Log("notimplenetd ability2");
-        }
     }
 }

@@ -14,6 +14,7 @@ namespace RLR
         {
             GameControl.PlayerState.IsImmobile = true;
             GameControl.PlayerState.Player.GetComponent<PlayerMovement>().IsAutoClicking = false;
+            GameControl.PlayerState.CharacterController.DisableAllSkills();
             GameControl.PlayerState.Player.SetActive(false);
 
 

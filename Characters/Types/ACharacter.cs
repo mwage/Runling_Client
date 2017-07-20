@@ -32,6 +32,7 @@ namespace Characters.Types
         public void Update()
         {
             Energy.RefreshEnergy();
+            RefreshCooldowns();
             if (Energy.IsExhausted)
             {
                 DisableAllSkills();
@@ -120,7 +121,7 @@ namespace Characters.Types
             return Energy.UseEnergy(value);
         }
 
-        private void DisableAllSkills()
+        public void DisableAllSkills()
         {
             AbilityFirst.Disable(this);
             AbilitySecond.Disable(this);
@@ -130,7 +131,7 @@ namespace Characters.Types
         {
             if (!AbilityFirst.IsActive)
             {
-                AbilityFirst.Enable(this);
+                StartCoroutine(AbilityFirst.Enable(this));
             }
             else
             {
@@ -143,7 +144,7 @@ namespace Characters.Types
         {
             if (!AbilitySecond.IsActive)
             {
-                AbilitySecond.Enable(this);
+                StartCoroutine(AbilitySecond.Enable(this));
             }
             else
             {
@@ -162,6 +163,12 @@ namespace Characters.Types
             {
                 ActivateOrDeactivateAbility2();
             }
+        }
+
+        public virtual void RefreshCooldowns()
+        {
+            AbilityFirst.RefreshCooldown();
+            AbilitySecond.RefreshCooldown();
         }
 
 
