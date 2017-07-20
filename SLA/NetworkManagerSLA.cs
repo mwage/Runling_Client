@@ -11,8 +11,6 @@ namespace SLA
         public PhotonPlayer[] PlayerList;
         public PlayerStateSLA[] PlayerState;
 
-        private bool _voting;
-
         private void Awake()
         {
             PhotonView = GetComponent<PhotonView>();
@@ -33,17 +31,12 @@ namespace SLA
         private void FinishedLoading(PhotonPlayer player)
         {
             PlayerState[player.ID - 1].FinishedLoading = true;
-            Debug.Log(player.NickName + " joined the game");
-        }
-
-        private void Update()
-        {
-            if (!PhotonNetwork.isMasterClient || _voting)
-                return;
-
+            Debug.Log(player.NickName + " loaded successfully!");
+            
             if (PlayerState.Any(state => !state.FinishedLoading))
                 return;
-            _voting = true;
+
+            if (PhotonNetwork.isMasterClient)
             _votingSystem.PhotonView.RPC("StartVoting", PhotonTargets.All);
         }
     }
