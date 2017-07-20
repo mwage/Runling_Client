@@ -24,9 +24,8 @@ namespace UI.Main_Menu
 
         public void StartGame()
         {
-            GameControl.PlayerState.IsDead = true;
-            GameControl.GameState.CurrentLevel = 1;
             GameControl.GameState.SetGameMode = Gamemode.Classic;
+            GameControl.GameState.Solo = true;
             PhotonNetwork.CreateRoom(GameControl.GenerateRoomName("SoloSLA"));
         }
 

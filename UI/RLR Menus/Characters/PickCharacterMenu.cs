@@ -29,7 +29,7 @@ namespace UI.RLR_Menus.Characters
             // TODO: set ID to last game picked id
             _characterRepository = new PlayerPrefsCharacterRepository();
             _characterRepository.Remove(0); // remove 0-id character
-            _slotsToggleGroup = CharacterController.FindObjectOfType<ToggleGroup>();
+            _slotsToggleGroup = gameObject.transform.Find("Slots").GetComponent<ToggleGroup>();
 
             _slotsText = new List<Text>();
             var slots = gameObject.transform.Find("Slots"); // get slots from unity
