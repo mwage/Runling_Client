@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using ExitGames.Client.Photon;
+using Launcher;
 using Photon;
 using UI.Main_Menu.MP;
 using UnityEngine;
@@ -164,6 +165,7 @@ namespace UI.Main_Menu
 
         public override void OnJoinedRoom()
         {
+            GameControl.GameState.Solo = false;
             OutOfLobby.SetActive(false);
             InLobby.SetActive(true);
             _playerLayoutGroup.JoinedRoom();

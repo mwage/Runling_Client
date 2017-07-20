@@ -13,9 +13,7 @@ namespace SLA
         [SerializeField] private NetworkManagerSLA _networkManagerSLA;
 
         [SerializeField] private GameObject _countdownPrefab;
-        [SerializeField] private GameObject _mode;
         [SerializeField] private GameObject _finishButton;
-        [SerializeField] private GameObject _game;
         [SerializeField] private Text _classicVoteText;
         [SerializeField] private Text _teamVoteText;
         [SerializeField] private Text _practiceVoteText;
@@ -37,15 +35,18 @@ namespace SLA
         {
             PhotonView = GetComponent<PhotonView>();
             _votes = new Gamemode?[PhotonNetwork.room.PlayerCount];
-            _votesPerMode = new Dictionary<Gamemode, int>();
-            _votesPerMode.Add(Gamemode.Classic, _classicVotes);
-            _votesPerMode.Add(Gamemode.Team, _teamVotes);
-            _votesPerMode.Add(Gamemode.Practice, _practiceVotes);
+            _votesPerMode = new Dictionary<Gamemode, int>
+            {
+                {Gamemode.Classic, _classicVotes},
+                {Gamemode.Team, _teamVotes},
+                {Gamemode.Practice, _practiceVotes}
+            };
         }
 
         [PunRPC]
         private void StartVoting()
         {
+            _networkManagerSLA.Voting = true;
             StartCoroutine(Voting());
         }
 
@@ -67,12 +68,14 @@ namespace SLA
 
         private void Update()
         {
-            if (!PhotonNetwork.isMasterClient || _networkManagerSLA.PlayerState == null || _starting)
+            if (_networkManagerSLA.PlayerState == null || _starting)
                 return;
-            if (_networkManagerSLA.PlayerState.Any(state => !state.FinishedVoting))
+            if (_networkManagerSLA.PlayerState.Where(state => state != null).Any(state => !state.FinishedVoting))
                 return;
-            PhotonView.RPC("StartGame", PhotonTargets.All);
+
             _starting = true;
+            if (PhotonNetwork.isMasterClient)
+                PhotonView.RPC("StartGame", PhotonTargets.All);
         }
 
         #region Buttons
@@ -152,7 +155,7 @@ namespace SLA
         [PunRPC]
         private void StartGame()
         {
-            //_mode.SetActive(false);
+            _starting = true;
             var random = new System.Random();
             var max = new[] {_classicVotes, _teamVotes, _practiceVotes}.Max();
             var mostVotes = _votesPerMode.Keys.Where(mode => _votesPerMode[mode] == max).ToList();
@@ -161,7 +164,7 @@ namespace SLA
             GameControl.PlayerState.IsDead = true;
             GameControl.GameState.CurrentLevel = 1;
             transform.parent.gameObject.SetActive(false);
-            _game.SetActive(true);
+            _networkManagerSLA.Game.SetActive(true);
         }
     }
 }

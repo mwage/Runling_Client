@@ -25,5 +25,6 @@ namespace Launcher
         public bool FinishedLevel = false;
         public Difficulty SetDifficulty = Difficulty.Hard;
         public Gamemode SetGameMode = Gamemode.Practice;
+        public bool Solo;
     }
 }
