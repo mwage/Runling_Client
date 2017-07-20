@@ -111,6 +111,8 @@ namespace Players
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, _defLayer))
             {
                 _maxSpeed = GameControl.PlayerState.CharacterController.Speed.Current;
+                Debug.Log(_maxSpeed);
+                Debug.Log(GameControl.PlayerState.CharacterController.Speed.Current);
                 _clickPos = hit.point;
 
                 // Play click animation

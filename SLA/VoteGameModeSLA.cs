@@ -24,7 +24,7 @@ namespace SLA
 
         public void VoteModeTeam()
         {
-            _voteGameMode = Gamemode.Team;
+        //    _voteGameMode = Gamemode.Team;
         }
 
         public void VoteModePractice()

@@ -22,12 +22,12 @@ namespace Characters.Types
             //AbilitySecond = a2;
         }
 
-        protected override void ActivateAbility1()
+        protected override void ActivateOrDeactivateAbility1()
         {
             throw new NotImplementedException();
         }
 
-        protected override void ActivateAbility2()
+        protected override void ActivateOrDeactivateAbility2()
         {
             throw new NotImplementedException();
         }

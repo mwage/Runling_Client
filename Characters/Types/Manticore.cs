@@ -32,12 +32,9 @@ namespace Characters.Types
             //AbilitySecond = a2;
         }
 
-        protected override void ActivateAbility1()
-        {
-            Speed.ActivateBoost(5F);
-        }
 
-        protected override void ActivateAbility2()
+
+        protected override void ActivateOrDeactivateAbility2()
         {
             Debug.Log("notimplenetd ability2");
         }

@@ -12,15 +12,16 @@ namespace Characters.Types.Features
         
         public float Current
         {
-            get { return _baseSpeed + _speedPointRatio * Points + _bonusSpeed; }
+            get { return _baseSpeed + _speedPointRatio * Points + _bonusSpeed; } // 
         }
         protected float _baseSpeed, _speedPointRatio;
-        private float _bonusSpeed = 0F;
+        private float _bonusSpeed;
 
         public Speed(float baseSpeed, float speedPointRatio)
         {
             _baseSpeed = baseSpeed;
             _speedPointRatio = speedPointRatio;
+            _bonusSpeed = 0F;
         }
 
         public void IncrementPoints()
@@ -37,6 +38,7 @@ namespace Characters.Types.Features
 
         public void ActivateBoost(float boostSpeed) // probably need also bool variable to verify if is actiave already
         {
+            
             _bonusSpeed += boostSpeed;
         }
 

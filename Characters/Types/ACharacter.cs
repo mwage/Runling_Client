@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Characters.Abilities;
 using Characters.Types.Features;
+using Launcher;
 using UnityEngine;
 
 namespace Characters.Types
@@ -42,7 +43,7 @@ namespace Characters.Types
         protected void InitiazlizeBase(CharacterDto chacterDto)
         {
             Energy = new Energy(chacterDto.EnergyPoints, chacterDto.RegenPoints, 20, 5, 0.5F, 1F);
-            Speed = new Speed(10, 0.1F);
+            Speed = new Speed(1F, 0.1F);
             Exp = chacterDto.Exp;
             Level = chacterDto.Level;
             AbilityFirstLevel = chacterDto.AbilityFirstLevel;
@@ -125,8 +126,45 @@ namespace Characters.Types
             AbilitySecond.Disable(this);
         }
 
-        protected abstract void ActivateAbility1();
-        protected abstract void ActivateAbility2();
+        protected virtual void ActivateOrDeactivateAbility1()
+        {
+            if (!AbilityFirst.IsActive)
+            {
+                AbilityFirst.Enable(this);
+            }
+            else
+            {
+                AbilityFirst.Disable(this);
+            }
+            
+        }
+
+        protected virtual void ActivateOrDeactivateAbility2()
+        {
+            if (!AbilitySecond.IsActive)
+            {
+                AbilitySecond.Enable(this);
+            }
+            else
+            {
+                AbilitySecond.Disable(this);
+            }
+            
+        }
+
+        public virtual void InputAbilities()
+        {
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.Ability1))
+            {
+                ActivateOrDeactivateAbility1();
+            }
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.Ability2))
+            {
+                ActivateOrDeactivateAbility2();
+            }
+        }
+
+
     }
 
    

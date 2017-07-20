@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Characters.Types;
+using Characters.Types.Features;
 
 namespace Characters.Abilities
 {
@@ -7,16 +8,25 @@ namespace Characters.Abilities
     {
         public float BoostSpeed
         {
-            get { return 5; }
+            get { return Level*5F; }
+        }
+
+        public override int Cooldown
+        {
+            get { return 1; }
+        }
+
+        public override int EnergyCost
+        {
+            get { return 6 - Level; }
         }
 
         public Boost(ACharacter character)
         {
             Name = "Boost";
             Level = character.AbilityFirstLevel;
-            Cooldown = CalculateCooldown();
-            EnergyCost = CalculateEnergyCost();
-            EnergyDrainPerSecond = 1;
+            //EnergyCost = CalculateEnergyCost();
+            EnergyDrainPerSecond = 1F;
             IsActive = false;
         }
 
@@ -30,6 +40,7 @@ namespace Characters.Abilities
                 character.Speed.ActivateBoost(BoostSpeed);
                 IsActive = true;
                 character.Energy.EnergyDrainPerSec = EnergyDrainPerSecond;
+                character.Energy.RegenStatus = RegenStatus.Drain;
             }
         }
 
@@ -40,19 +51,12 @@ namespace Characters.Abilities
             IsActive = false;
         }
 
+        
 
 
 
 
-        protected override int CalculateCooldown()
-        {
-            return 1;
-        }
 
-        protected override int CalculateEnergyCost()
-        {
-            return 5;
-        }
 
 
 

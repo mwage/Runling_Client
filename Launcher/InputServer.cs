@@ -17,7 +17,7 @@ namespace Launcher
         public CameraHandleMovement CameraHandleMovement;
         public GameObject Player; // lacking for SLA ;(
 
-        private ACharacter _character;
+        private ACharacter _characterController;
 
         private InGameMenuManagerRLR inGameMenuManagerRLR;
         private InGameMenuManagerSLA inGameMenuManagerSLA;
@@ -25,7 +25,7 @@ namespace Launcher
 
         public void Init()
         {
-            if (Player != null) _character = Player.gameObject.GetComponentInChildren<ACharacter>();
+            if (Player != null) _characterController = GameControl.PlayerState.CharacterController;
             if (SceneManager.GetActiveScene().name == "RLR")
             {
                 inGameMenuManagerRLR = Menus.GetComponent<InGameMenuManagerRLR>(); // takes first script - InGameMenuMangaerRLR/SLA
@@ -44,6 +44,7 @@ namespace Launcher
                 Init();
             }
             InputAutoClicker();
+            _characterController.InputAbilities();
         }
 
         public void LateUpdate()
@@ -53,7 +54,7 @@ namespace Launcher
                 Init();
             }
             if (IsMenuActive()) return; // options menu serve all inputs
-            if (_character != null)
+            if (_characterController != null)
             {
                 // serve character RLR
             }
