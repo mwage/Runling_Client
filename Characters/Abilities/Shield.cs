@@ -50,7 +50,7 @@ namespace Characters.Abilities
             if (IsActive) yield return null;
             if (!IsLoaded)
             {
-                Debug.Log(string.Format("colldown on: {0}", Cooldown));
+                Debug.Log(string.Format("colldown on: {0}", TimeToRenew));
                 yield return null;
             }
             if (character.UseEnergy(EnergyCost)) // characterd had enough energy and used it
