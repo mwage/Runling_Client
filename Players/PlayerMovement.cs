@@ -65,7 +65,7 @@ namespace Players
             if (!_photonView.isMine)
                 return;
 
-            if (GameControl.GameState.AutoClickerActive)
+            if (GameControl.PlayerState.AutoClickerActive)
             {
                 if (!IsAutoClicking)
                 {
@@ -74,7 +74,8 @@ namespace Players
                 }
             }
 
-            if (!GameControl.GameState.AutoClickerActive)
+
+            if (!GameControl.PlayerState.AutoClickerActive)
             {
                 if (IsAutoClicking)
                 {
@@ -110,9 +111,14 @@ namespace Players
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, _defLayer))
             {
-                _maxSpeed = GameControl.PlayerState.CharacterController.Speed.Current;
-                Debug.Log(_maxSpeed);
-                Debug.Log(GameControl.PlayerState.CharacterController.Speed.Current);
+                if (GameControl.PlayerState.CharacterController != null)
+                {
+                    _maxSpeed = GameControl.PlayerState.CharacterController.Speed.Current;
+                }
+                else
+                {
+                    _maxSpeed = GameControl.PlayerState.MoveSpeed;
+                }
                 _clickPos = hit.point;
 
                 // Play click animation

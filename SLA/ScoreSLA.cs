@@ -20,14 +20,14 @@ namespace SLA
 
         private void Awake()
         {
-            TotalScoreText.text = GameControl.GameState.TotalScore.ToString();
+            TotalScoreText.text = GameControl.PlayerState.TotalScore.ToString();
         }
 
         //count current and total score
         public void StartScore()
         {
             CurrentScore = -2;
-            GameControl.GameState.TotalScore -= 2;
+            GameControl.PlayerState.TotalScore -= 2;
             StartCoroutine(AddScore());
         }
 
@@ -36,9 +36,9 @@ namespace SLA
             while (GameControl.PlayerState.IsDead == false)
             {
                 CurrentScore += 2;
-                GameControl.GameState.TotalScore += 2;
+                GameControl.PlayerState.TotalScore += 2;
                 CurrentScoreText.text = CurrentScore.ToString();
-                TotalScoreText.text = GameControl.GameState.TotalScore.ToString();
+                TotalScoreText.text = GameControl.PlayerState.TotalScore.ToString();
             
                 yield return new WaitForSeconds(0.25f);
             }
@@ -71,9 +71,9 @@ namespace SLA
         //compare total score to best game and set highscore
         public void SetGameHighScore()
         {
-            if (GameControl.GameState.TotalScore > GameControl.HighScores.HighScoreSLA[0])
+            if (GameControl.PlayerState.TotalScore > GameControl.HighScores.HighScoreSLA[0])
             {
-                GameControl.HighScores.HighScoreSLA[0] = GameControl.GameState.TotalScore;
+                GameControl.HighScores.HighScoreSLA[0] = GameControl.PlayerState.TotalScore;
             }
             PlayerPrefs.SetInt("HighScoreSLAGame", GameControl.HighScores.HighScoreSLA[0]);
         }

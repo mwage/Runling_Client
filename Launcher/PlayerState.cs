@@ -11,6 +11,7 @@ namespace Launcher
         public CharacterDto CharacterDto;
         public PlayerTrigger PlayerTrigger;
         public ACharacter CharacterController;
+        public float MoveSpeed = 0;
         public bool IsDead = true;
         public bool IsInvulnerable = false;
         public bool IsSafe = false;

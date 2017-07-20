@@ -93,7 +93,7 @@ namespace RLR.Levels
             if (GameControl.GameState.SetGameMode == Gamemode.TimeMode)
             {
                 CheckSafeZones.ScoreRLR.AddRemainingCountdown();
-                CheckSafeZones.ScoreRLR.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + GameControl.GameState.TotalScore;
+                CheckSafeZones.ScoreRLR.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + GameControl.PlayerState.TotalScore;
                 GameControl.PlayerState.Lives = 3;
                 LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + GameControl.PlayerState.Lives;
             }
@@ -112,7 +112,7 @@ namespace RLR.Levels
             if (GameControl.GameState.SetGameMode == Gamemode.TimeMode)
             {
                 CheckSafeZones.ScoreRLR.AddRemainingCountdown();
-                CheckSafeZones.ScoreRLR.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + GameControl.GameState.TotalScore;
+                CheckSafeZones.ScoreRLR.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + GameControl.PlayerState.TotalScore;
             }
 
             if (!GameControl.PlayerState.IsDead)

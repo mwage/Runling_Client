@@ -33,8 +33,8 @@ namespace UI.RLR_Menus
         public void RestartGame()
         {
             GameControl.PlayerState.IsDead = true;
-            GameControl.GameState.TotalScore = 0;
-            GameControl.GameState.AutoClickerActive = false;
+            GameControl.PlayerState.TotalScore = 0;
+            GameControl.PlayerState.AutoClickerActive = false;
             GameControl.GameState.CurrentLevel = 1;
             Time.timeScale = 1;
 

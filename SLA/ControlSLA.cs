@@ -1,5 +1,7 @@
-﻿using Launcher;
+﻿using System.Collections;
+using Launcher;
 using SLA.Levels;
+using TMPro;
 using UnityEngine;
 
 namespace SLA
@@ -20,13 +22,14 @@ namespace SLA
             StopUpdate = true;
             GameControl.Settings.CameraRange = 15;
             GameControl.GameState.GameActive = true;
-            GameControl.GameState.TotalScore = 0;
+            GameControl.PlayerState.TotalScore = 0;
             if (GameControl.GameState.SetGameMode == Gamemode.Practice)
             {
                 PracticeMode.SetActive(true);
             }
             InitializeGameSLA.InitializeGame();
         }
+
 
         private void Update()
         {
@@ -47,25 +50,11 @@ namespace SLA
                 StopUpdate = true;
             }
 
-            //// Press Ctrl to start autoclicking // TODO: delete if works in InputServer
-            //if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateClicker))
-            //{
-            //    if (!GameControl.GameState.AutoClickerActive)
-            //        GameControl.GameState.AutoClickerActive = true;
-            //}
-
-            //// Press Alt to stop autoclicking
-            //if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactivateClicker))
-            //{
-            //    if (GameControl.GameState.AutoClickerActive)
-            //        GameControl.GameState.AutoClickerActive = false;
-            //} ------------------------------------------------------------------------------------------------
             
-            /*
             // Press 1 to turn on Godmode
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.GameState.GodModeActive)
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.PlayerState.GodModeActive)
             {
-                GameControl.GameState.GodModeActive = true;
+                GameControl.PlayerState.GodModeActive = true;
                 if (GameControl.PlayerState.Player != null)
                 {
                     GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(true);
@@ -73,15 +62,14 @@ namespace SLA
             }
 
             // Press 2 to turn off Godmode
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactiveGodmode) && GameControl.GameState.GodModeActive)
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactiveGodmode) && GameControl.PlayerState.GodModeActive)
             {
-                GameControl.GameState.GodModeActive = false;
+                GameControl.PlayerState.GodModeActive = false;
                 if (GameControl.PlayerState.Player != null)
                 {
                    GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(false);
                 }
             }
-            */
         }
     }
 }

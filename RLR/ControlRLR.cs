@@ -22,8 +22,8 @@ namespace RLR
             // Set current Level and movespeed, load drones and spawn immunity
             StopUpdate = true;
             GameControl.GameState.GameActive = true;
-            //GameControl.PlayerState.MoveSpeed = 13;
-            GameControl.GameState.TotalScore = 0;
+            GameControl.PlayerState.TotalScore = 0;
+
             if (GameControl.GameState.SetGameMode == Gamemode.Practice)
             {
                 PracticeMode.SetActive(true);
@@ -55,7 +55,6 @@ namespace RLR
                 LevelManager.EndLevel(0);
             }
 
-            //InputAutoClicker();
             /*
             // Become invulnerable
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.GameState.GodModeActive)

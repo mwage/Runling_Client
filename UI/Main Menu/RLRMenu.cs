@@ -59,7 +59,7 @@ namespace UI.Main_Menu
         public void StartGame()
         {
             GameControl.PlayerState.IsDead = true;
-            GameControl.GameState.TotalScore = 0;
+            GameControl.PlayerState.TotalScore = 0;
             GameControl.GameState.CurrentLevel = 1;
             GameControl.PlayerState.CharacterDto = PickCharacterMenu.GetComponent<PickCharacterMenu>().GetCharacterDto();
             SetModes();
@@ -71,7 +71,7 @@ namespace UI.Main_Menu
         {
             //PhotonNetwork.LeaveRoom();
             GameControl.PlayerState.IsDead = true;
-            GameControl.GameState.TotalScore = 0;
+            GameControl.PlayerState.TotalScore = 0;
             GameControl.GameState.CurrentLevel = 1;
             GameControl.PlayerState.CharacterDto = PickCharacterMenu.GetComponent<PickCharacterMenu>().GetCharacterDto();
             GameControl.GameState.SetDifficulty = Difficulty.Hard;

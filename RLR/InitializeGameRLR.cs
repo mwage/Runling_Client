@@ -50,7 +50,7 @@ namespace RLR
                     0,
                     startPlatform.transform.position.z);
 
-            if (GameControl.GameState.GodModeActive && !GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.activeSelf)
+            if (GameControl.PlayerState.GodModeActive && !GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.activeSelf)
             {
                 GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(true);
             }

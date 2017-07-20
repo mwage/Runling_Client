@@ -38,7 +38,7 @@ namespace SLA
         private IEnumerator PrepareLevel()
         {
             // Set current movespeed and cameraposition
-            //GameControl.GameState.MoveSpeed = LevelManagerSLA.GetMovementSpeed(GameControl.GameState.CurrentLevel);
+            GameControl.PlayerState.MoveSpeed = LevelManagerSLA.GetMovementSpeed(GameControl.GameState.CurrentLevel);
             CameraHandleMovement.SetCameraHandlePosition(Vector3.zero);
 
             // Show level highscore and current level
@@ -61,7 +61,7 @@ namespace SLA
             GameControl.PlayerState.IsInvulnerable = true;
             GameControl.PlayerState.IsSafe = false;
             GameControl.PlayerState.Player.transform.Find("Shield").gameObject.SetActive(true);
-            if (GameControl.GameState.GodModeActive && !GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.activeSelf)
+            if (GameControl.PlayerState.GodModeActive && !GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.activeSelf)
             {
                 GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(true);
             }

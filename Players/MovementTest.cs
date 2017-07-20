@@ -40,10 +40,6 @@ namespace Players
         
         private void Awake()
         {
-            //////////////////////////////////////////////
-            //GameControl.GameState.MoveSpeed = 10;
-            //////////////////////////////////////////////
-
             _rotationSpeed = 30;
             _acceleration = 100;
             _deceleration = 100;
@@ -65,23 +61,6 @@ namespace Players
         #region UserInput
         private void Update()
         {
-            ///////////////////////////////////////////
-            // Start autoclicking
-            //if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateClicker)) TODO delete
-            //{
-            //    if (!GameControl.GameState.AutoClickerActive)
-            //        GameControl.GameState.AutoClickerActive = true;
-            //}
-
-            //// Stop autoclicking
-            //if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactivateClicker))
-            //{
-            //    if (GameControl.GameState.AutoClickerActive)
-            //        GameControl.GameState.AutoClickerActive = false;
-            //}
-            ////////////////////////////////////////////
-             
-            if (GameControl.GameState.AutoClickerActive)
             {
                 if (!IsAutoClicking)
                 {
@@ -90,7 +69,7 @@ namespace Players
                 }
             }
 
-            if (!GameControl.GameState.AutoClickerActive)
+            if (!GameControl.PlayerState.AutoClickerActive)
             {
                 if (IsAutoClicking)
                 {

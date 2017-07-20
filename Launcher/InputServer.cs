@@ -44,7 +44,11 @@ namespace Launcher
                 Init();
             }
             InputAutoClicker();
-            _characterController.InputAbilities();
+            if (_characterController != null)
+            {
+                _characterController.InputAbilities();
+            }
+            
         }
 
         public void LateUpdate()
@@ -89,15 +93,15 @@ namespace Launcher
             // Start autoclicking
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateClicker))
             {
-                if (!GameControl.GameState.AutoClickerActive)
-                    GameControl.GameState.AutoClickerActive = true;
+                if (!GameControl.PlayerState.AutoClickerActive)
+                    GameControl.PlayerState.AutoClickerActive = true;
             }
 
             // Stop autoclicking
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactivateClicker))
             {
-                if (GameControl.GameState.AutoClickerActive)
-                    GameControl.GameState.AutoClickerActive = false;
+                if (GameControl.PlayerState.AutoClickerActive)
+                    GameControl.PlayerState.AutoClickerActive = false;
             }
         }
     }

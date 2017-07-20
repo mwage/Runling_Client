@@ -40,9 +40,9 @@ namespace UI.SLA_Menus
         public void RestartGame()
         {
             GameControl.PlayerState.IsDead = true;
-            GameControl.GameState.TotalScore = 0;
+            GameControl.PlayerState.TotalScore = 0;
             GameControl.GameState.CurrentLevel = 1;
-            GameControl.GameState.AutoClickerActive = false;
+            GameControl.PlayerState.AutoClickerActive = false;
             Time.timeScale = 1;
 
             SceneManager.LoadScene("SLA");
