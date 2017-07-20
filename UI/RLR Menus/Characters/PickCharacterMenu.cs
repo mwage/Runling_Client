@@ -141,13 +141,26 @@ namespace UI.RLR_Menus.Characters
 
         public CharacterDto GetCharacterDto()
         {
-            if (Id == null) PickFirstValidCharacterOrMakeNewOne();
+            if (Id == null)
+            {
+                return PickFirstValidCharacterOrMakeNewOne();
+            }
             return _characterRepository.Get((int)Id);
         }
 
-        public void PickFirstValidCharacterOrMakeNewOne()
+        public CharacterDto PickFirstValidCharacterOrMakeNewOne()
         {
-            
+            if (_characterRepository == null) _characterRepository = new PlayerPrefsCharacterRepository();
+            for (int i = 1; i < LevelingSystem.MaxCharactersAmount; i++)
+            {
+                if (_characterRepository.Get(i).Occupied)
+                {
+                    return _characterRepository.Get(i);
+                }
+            }
+            _characterRepository.Add(1, "Manticore");
+            return _characterRepository.Get(1);
+
         }
     }
 }

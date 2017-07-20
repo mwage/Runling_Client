@@ -50,19 +50,6 @@ namespace SLA
                 StopUpdate = true;
             }
 
-            // Press Ctrl to start autoclicking
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateClicker))
-            {
-                if (!GameControl.PlayerState.AutoClickerActive)
-                    GameControl.PlayerState.AutoClickerActive = true;
-            }
-
-            // Press Alt to stop autoclicking
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactivateClicker))
-            {
-                if (GameControl.PlayerState.AutoClickerActive)
-                    GameControl.PlayerState.AutoClickerActive = false;
-            }
             
             // Press 1 to turn on Godmode
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.PlayerState.GodModeActive)

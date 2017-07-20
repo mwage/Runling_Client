@@ -18,13 +18,13 @@ namespace SLA
         public ControlSLA ControlSLA;
         public InGameMenuManagerSLA InGameMenuManagerSLA;
 
-        public Transform Player;
         public GameObject PlayerPrefab;
         public GameObject LevelTextObject;
         public GameObject CountdownPrefab;
         public GameObject CurrentPrWindow;
         public Text CurrentPr;
         public CameraHandleMovement CameraHandleMovement;
+        public Transform Player; // parent
 
         private const string PlayerCharacter = "Manticore";
         

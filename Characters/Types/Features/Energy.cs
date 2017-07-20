@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace Characters.Types.Features
 {
@@ -15,6 +16,10 @@ namespace Characters.Types.Features
         private readonly float _regenPerSecondRatio;
         private readonly float _baseRegen;
 
+        public RegenStatus RegenStatus;
+        public float EnergyDrainPerSec;
+        public bool IsExhausted;
+
         public Energy(int pointsEnergy, int pointsRegen, int baseEnergy, int energyPointRatio, float regenPerSecondRatio, float baseRegen)
         {
             PointsEnergy = pointsEnergy;
@@ -24,6 +29,8 @@ namespace Characters.Types.Features
             _regenPerSecondRatio = regenPerSecondRatio;
             _baseRegen = baseRegen;
             Current = 0; // change to max later
+            RegenStatus = RegenStatus.Regen;
+            IsExhausted = false;
         }
 
         public void IncreasePointsEnergy()
@@ -36,14 +43,39 @@ namespace Characters.Types.Features
             PointsRegen++;
         }
 
-        public void RegenerateEnergy()
+        public void RefreshEnergy()
         {
-            if (Current >= Max)
+            // returns 
+            switch (RegenStatus)
             {
-                Current = Max;
-                return;
+                case (RegenStatus.Blocked):
+                {
+                    return;
+                }
+                case (RegenStatus.Regen):
+                {
+                    IsExhausted = false;
+                    if (Current >= Max)
+                    {
+                        Current = Max;
+                        return;
+                    }
+                    Current += _regen * Time.deltaTime;
+                    return;
+                }
+                case (RegenStatus.Drain):
+                {
+                    if (Current <= 0F)
+                    {
+                        IsExhausted = true;
+                        Current = 0F;
+                        RegenStatus = RegenStatus.Regen;
+
+                    }
+                    Current -= EnergyDrainPerSec * Time.deltaTime;
+                    return;
+                }
             }
-            Current += _regen * Time.deltaTime;
         }
 
         public void RefillEnergy()
@@ -51,8 +83,24 @@ namespace Characters.Types.Features
             Current = Max;
         }
 
+        public bool UseEnergy(int value)
+        {
+            if (value > Current) return false;
+            Current -= value;
+            return true;
+        }
+
+        
 
 
 
+
+    }
+
+    public enum RegenStatus
+    {
+        Regen,
+        Blocked,
+        Drain
     }
 }

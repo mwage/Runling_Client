@@ -10,15 +10,8 @@ namespace Characters.Types
 {
     public class Unicorn : ACharacter
     {
-        // ablitiy 1
-        // ablitiy 2
-        public AAbility AbilityFirst { get; protected set; }
-        public AAbility AbilitySecond { get; protected set; }
-
         private Unicorn(CharacterDto characterDto): base(characterDto)
         {
-            //AbilityFirst = a1;
-            //AbilitySecond = a2;
         }
 
         public override void Initizalize(CharacterDto character)
@@ -27,6 +20,16 @@ namespace Characters.Types
             // something about abilities or in awake
             //AbilityFirst = a1;
             //AbilitySecond = a2;
+        }
+
+        protected override void ActivateOrDeactivateAbility1()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void ActivateOrDeactivateAbility2()
+        {
+            throw new NotImplementedException();
         }
 
         public static Unicorn Create(CharacterDto character)

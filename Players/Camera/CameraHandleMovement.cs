@@ -17,10 +17,15 @@ namespace Players.Camera
 
         private void LateUpdate()
         {
-            MoveCameraUsingInput();
-            RotateCameraUsingInput();
-            ZoomCameraUsingInput();
-            De_activateFollowUsingInput();
+            //ServeInput(); - in InputServer
+        }
+
+        public void ServeInput()
+        {
+            InputMoveCamera();
+            InputRotateCamera();
+            InputZoomCamera();
+            InputActivateOrDeactivateFollow();
         }
 
         private void ZoomMore()
@@ -78,7 +83,7 @@ namespace Players.Camera
                 newWatchedPoint.z = GameControl.Settings.CameraRange - 0.1F;
         }
 
-        private void MoveCameraUsingInput()
+        private void InputMoveCamera()
         {
             var inputX = Input.GetAxis("Horizontal");
             var inputY = Input.GetAxis("Vertical");
@@ -89,7 +94,7 @@ namespace Players.Camera
             SetCameraHandlePosition(newWatchedPoint);
         }
 
-        private void RotateCameraUsingInput()
+        private void InputRotateCamera()
         {
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.RotateLeft))
             {
@@ -101,7 +106,7 @@ namespace Players.Camera
             }
         }
 
-        private void ZoomCameraUsingInput()
+        private void InputZoomCamera()
         {
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.ZoomMore))
             {
@@ -117,7 +122,7 @@ namespace Players.Camera
             }
         }
 
-        private void De_activateFollowUsingInput()
+        private void InputActivateOrDeactivateFollow()
         {
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateFollow))
             {

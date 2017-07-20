@@ -22,8 +22,8 @@ namespace RLR
             // Set current Level and movespeed, load drones and spawn immunity
             StopUpdate = true;
             GameControl.GameState.GameActive = true;
-            GameControl.PlayerState.MoveSpeed = 13;
             GameControl.PlayerState.TotalScore = 0;
+
             if (GameControl.GameState.SetGameMode == Gamemode.Practice)
             {
                 PracticeMode.SetActive(true);
@@ -55,24 +55,11 @@ namespace RLR
                 LevelManager.EndLevel(0);
             }
 
-            // Start autoclicking
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateClicker))
-            {
-                if (!GameControl.PlayerState.AutoClickerActive)
-                    GameControl.PlayerState.AutoClickerActive = true;
-            }
-
-            // Stop autoclicking
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactivateClicker))
-            {
-                if (GameControl.PlayerState.AutoClickerActive)
-                    GameControl.PlayerState.AutoClickerActive = false;
-            }
             /*
             // Become invulnerable
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.State.GodModeActive)
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.GameState.GodModeActive)
             {
-                GameControl.State.GodModeActive = true;
+                GameControl.GameState.GodModeActive = true;
                 if (GameControl.PlayerState.Player != null)
                 {
                     GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(true);
@@ -80,9 +67,9 @@ namespace RLR
             }
 
             // Become vulnerable
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactiveGodmode) && GameControl.State.GodModeActive)
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactiveGodmode) && GameControl.GameState.GodModeActive)
             {
-                GameControl.State.GodModeActive = false;
+                GameControl.GameState.GodModeActive = false;
                 if (GameControl.PlayerState.Player != null)
                 {
                     GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(false);
@@ -90,6 +77,8 @@ namespace RLR
             }
             */
         }
+
+
     }
 }
 

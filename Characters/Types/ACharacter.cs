@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Characters.Abilities;
 using Characters.Types.Features;
+using Launcher;
 using UnityEngine;
 
 namespace Characters.Types
@@ -10,34 +12,38 @@ namespace Characters.Types
     public abstract class ACharacter : MonoBehaviour
     {
         public int PlayerId { get; protected set; } 
-        
-
         public int Exp { get; protected set; }
         public int Level { get; protected set; }
         public int AbilityFirstLevel { get; protected set; }
         public int AbilitySecondLevel { get; protected set; }
-        
-        
         public int UnspentPoints { get; protected set; }
-
         public Energy Energy;
         public Speed Speed;
 
-        protected static GameObject _player;
+        public AAbility AbilityFirst { get; protected set; }
+        public AAbility AbilitySecond { get; protected set; }
 
-        protected ACharacter(CharacterDto chacterDto) // to delete prob.
+        protected static GameObject _player; // delete?
+
+        protected ACharacter(CharacterDto chacterDto) 
         {
-            
-            Exp = chacterDto.Exp;
-            Level = chacterDto.Level;
-            AbilityFirstLevel = chacterDto.AbilityFirstLevel;
-            AbilitySecondLevel = chacterDto.AbilitySecondLevel;
         }
+
+        public void Update()
+        {
+            Energy.RefreshEnergy();
+            if (Energy.IsExhausted)
+            {
+                DisableAllSkills();
+            }
+        }
+
+
 
         protected void InitiazlizeBase(CharacterDto chacterDto)
         {
             Energy = new Energy(chacterDto.EnergyPoints, chacterDto.RegenPoints, 20, 5, 0.5F, 1F);
-            Speed = new Speed(10, 0.1F);
+            Speed = new Speed(1F, 0.1F);
             Exp = chacterDto.Exp;
             Level = chacterDto.Level;
             AbilityFirstLevel = chacterDto.AbilityFirstLevel;
@@ -50,7 +56,6 @@ namespace Characters.Types
         {
             Exp += exp;
             //Debug.Log(string.Format("Added {0} exp", exp));
-
             IncrementLevelIfPossible();
         }
 
@@ -110,10 +115,55 @@ namespace Characters.Types
             }
         }
 
-        public void Update()
+        public virtual bool UseEnergy(int value)
         {
-            Energy.RegenerateEnergy();
+            return Energy.UseEnergy(value);
         }
+
+        private void DisableAllSkills()
+        {
+            AbilityFirst.Disable(this);
+            AbilitySecond.Disable(this);
+        }
+
+        protected virtual void ActivateOrDeactivateAbility1()
+        {
+            if (!AbilityFirst.IsActive)
+            {
+                AbilityFirst.Enable(this);
+            }
+            else
+            {
+                AbilityFirst.Disable(this);
+            }
+            
+        }
+
+        protected virtual void ActivateOrDeactivateAbility2()
+        {
+            if (!AbilitySecond.IsActive)
+            {
+                AbilitySecond.Enable(this);
+            }
+            else
+            {
+                AbilitySecond.Disable(this);
+            }
+            
+        }
+
+        public virtual void InputAbilities()
+        {
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.Ability1))
+            {
+                ActivateOrDeactivateAbility1();
+            }
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.Ability2))
+            {
+                ActivateOrDeactivateAbility2();
+            }
+        }
+
 
     }
 

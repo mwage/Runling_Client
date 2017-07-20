@@ -40,10 +40,6 @@ namespace Players
         
         private void Awake()
         {
-            //////////////////////////////////////////////
-            GameControl.PlayerState.MoveSpeed = 10;
-            //////////////////////////////////////////////
-
             _rotationSpeed = 30;
             _acceleration = 100;
             _deceleration = 100;
@@ -65,23 +61,6 @@ namespace Players
         #region UserInput
         private void Update()
         {
-            ///////////////////////////////////////////
-            // Start autoclicking
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateClicker))
-            {
-                if (!GameControl.PlayerState.AutoClickerActive)
-                    GameControl.PlayerState.AutoClickerActive = true;
-            }
-
-            // Stop autoclicking
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactivateClicker))
-            {
-                if (GameControl.PlayerState.AutoClickerActive)
-                    GameControl.PlayerState.AutoClickerActive = false;
-            }
-            ////////////////////////////////////////////
-             
-            if (GameControl.PlayerState.AutoClickerActive)
             {
                 if (!IsAutoClicking)
                 {
@@ -126,7 +105,7 @@ namespace Players
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, _defLayer))
             {
-                _maxSpeed = GameControl.PlayerState.MoveSpeed;
+                _maxSpeed = GameControl.PlayerState.CharacterController.Speed.Current;
                 _clickPos = hit.point;
 
                 // Play click animation

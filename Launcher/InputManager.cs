@@ -13,6 +13,8 @@ namespace Launcher
         DeactivateClicker,
         NavigateMenu,
         Pause,
+        Ability1,
+        Ability2,
         ActivateGodmode,
         DeactiveGodmode,
 
@@ -104,6 +106,8 @@ namespace Launcher
             LoadHotkey(HotkeyAction.RotateRight, KeyCode.K);
             LoadHotkey(HotkeyAction.RotateLeft, KeyCode.L);
             LoadHotkey(HotkeyAction.ActivateFollow, KeyCode.F);
+            LoadHotkey(HotkeyAction.Ability1, KeyCode.C);
+            LoadHotkey(HotkeyAction.Ability2, KeyCode.V);
             // write lacking hotkeys if need to have them chosen
         }
 
