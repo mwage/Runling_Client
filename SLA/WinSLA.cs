@@ -19,16 +19,16 @@ namespace SLA
 
         public void BackToMenu()
         {
-            GameControl.State.GameActive = false;
+            GameControl.GameState.GameActive = false;
             SceneManager.LoadSceneAsync("MainMenu");
         }
 
         public void RestartGame()
         {
-            GameControl.State.IsDead = true;
-            GameControl.State.AutoClickerActive = false;
-            GameControl.State.TotalScore = 0;
-            GameControl.State.CurrentLevel = 1;
+            GameControl.PlayerState.IsDead = true;
+            GameControl.PlayerState.AutoClickerActive = false;
+            GameControl.PlayerState.TotalScore = 0;
+            GameControl.GameState.CurrentLevel = 1;
 
             SceneManager.LoadSceneAsync("SLA");
         }

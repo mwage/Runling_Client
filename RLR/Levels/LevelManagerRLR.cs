@@ -64,7 +64,7 @@ namespace RLR.Levels
         // Load next level
         public void EndLevel(float delay)
         {
-            StartCoroutine((GameControl.State.CurrentLevel == _levels.Count) ? EndGameRLR(delay) : LoadNextLevel(0));
+            StartCoroutine((GameControl.GameState.CurrentLevel == _levels.Count) ? EndGameRLR(delay) : LoadNextLevel(0));
         }
 
         // End game
@@ -90,32 +90,32 @@ namespace RLR.Levels
                 Destroy(t);
             }
 
-            if (GameControl.State.SetGameMode == Gamemode.TimeMode)
+            if (GameControl.GameState.SetGameMode == Gamemode.TimeMode)
             {
                 CheckSafeZones.ScoreRLR.AddRemainingCountdown();
-                CheckSafeZones.ScoreRLR.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + GameControl.State.TotalScore;
-                GameControl.State.Lives = 3;
-                LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + GameControl.State.Lives;
+                CheckSafeZones.ScoreRLR.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + GameControl.PlayerState.TotalScore;
+                GameControl.PlayerState.Lives = 3;
+                LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + GameControl.PlayerState.Lives;
             }
-            if (GameControl.State.SetGameMode != Gamemode.Practice)
+            if (GameControl.GameState.SetGameMode != Gamemode.Practice)
             {
                 CheckSafeZones.ScoreRLR.SetHighScore();
             }
-            GameControl.State.FinishedLevel = false;
-            GameControl.State.CurrentLevel++;
+            GameControl.GameState.FinishedLevel = false;
+            GameControl.GameState.CurrentLevel++;
             InitializeGameRLR.InitializeGame();
         }
 
         // Load after the last level
         private IEnumerator EndGameRLR(float delay)
         {
-            if (GameControl.State.SetGameMode == Gamemode.TimeMode)
+            if (GameControl.GameState.SetGameMode == Gamemode.TimeMode)
             {
                 CheckSafeZones.ScoreRLR.AddRemainingCountdown();
-                CheckSafeZones.ScoreRLR.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + GameControl.State.TotalScore;
+                CheckSafeZones.ScoreRLR.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + GameControl.PlayerState.TotalScore;
             }
 
-            if (!GameControl.State.IsDead)
+            if (!GameControl.PlayerState.IsDead)
             {
                 Win.transform.Find("Victory").gameObject.SetActive(true);
                 Win.transform.Find("Defeat").gameObject.SetActive(false);
@@ -129,11 +129,11 @@ namespace RLR.Levels
             // Load win screen
             yield return new WaitForSeconds(delay);
             InGameMenuManagerRLR.CloseMenus();
-            if (GameControl.State.SetGameMode != Gamemode.Practice)
+            if (GameControl.GameState.SetGameMode != Gamemode.Practice)
             {
                 CheckSafeZones.ScoreRLR.SetHighScore();
             }
-            GameControl.State.FinishedLevel = false;
+            GameControl.GameState.FinishedLevel = false;
             GameControl.PlayerState.Player.SetActive(false);
             Win.gameObject.SetActive(true);
         }

@@ -41,7 +41,7 @@ namespace Players
         private void Awake()
         {
             //////////////////////////////////////////////
-            GameControl.State.MoveSpeed = 10;
+            GameControl.PlayerState.MoveSpeed = 10;
             //////////////////////////////////////////////
 
             _rotationSpeed = 30;
@@ -69,19 +69,19 @@ namespace Players
             // Start autoclicking
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateClicker))
             {
-                if (!GameControl.State.AutoClickerActive)
-                    GameControl.State.AutoClickerActive = true;
+                if (!GameControl.PlayerState.AutoClickerActive)
+                    GameControl.PlayerState.AutoClickerActive = true;
             }
 
             // Stop autoclicking
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactivateClicker))
             {
-                if (GameControl.State.AutoClickerActive)
-                    GameControl.State.AutoClickerActive = false;
+                if (GameControl.PlayerState.AutoClickerActive)
+                    GameControl.PlayerState.AutoClickerActive = false;
             }
             ////////////////////////////////////////////
              
-            if (GameControl.State.AutoClickerActive)
+            if (GameControl.PlayerState.AutoClickerActive)
             {
                 if (!IsAutoClicking)
                 {
@@ -90,7 +90,7 @@ namespace Players
                 }
             }
 
-            if (!GameControl.State.AutoClickerActive)
+            if (!GameControl.PlayerState.AutoClickerActive)
             {
                 if (IsAutoClicking)
                 {
@@ -126,12 +126,12 @@ namespace Players
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, _defLayer))
             {
-                _maxSpeed = GameControl.State.MoveSpeed;
+                _maxSpeed = GameControl.PlayerState.MoveSpeed;
                 _clickPos = hit.point;
 
                 // Play click animation
                 var click = Instantiate(MouseClick, _clickPos, Quaternion.Euler(0, 45, 0));
-                if (GameControl.State.IsImmobile)
+                if (GameControl.PlayerState.IsImmobile)
                 {
                     foreach (Transform child in click.transform)
                     {
@@ -181,7 +181,7 @@ namespace Players
 
             GetRelativeDirection();
 
-            if (GameControl.State.IsImmobile)
+            if (GameControl.PlayerState.IsImmobile)
             {
                 _targetPos = _currentPos;
             }

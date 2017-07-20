@@ -35,8 +35,8 @@ namespace UI.Main_Menu
 
         public void SetModes()
         {
-            if (_voteDifficulty != null) GameControl.State.SetDifficulty = (Difficulty)_voteDifficulty;
-            if (_voteGameMode != null) GameControl.State.SetGameMode = (Gamemode)_voteGameMode;
+            if (_voteDifficulty != null) GameControl.GameState.SetDifficulty = (Difficulty)_voteDifficulty;
+            if (_voteGameMode != null) GameControl.GameState.SetGameMode = (Gamemode)_voteGameMode;
         }
         
         public void Update()
@@ -57,10 +57,10 @@ namespace UI.Main_Menu
         #region Buttons
         public void StartGame()
         {
-            GameControl.State.IsDead = true;
-            GameControl.State.TotalScore = 0;
-            GameControl.State.CurrentLevel = 1;
-            GameControl.State.CharacterDto = PickCharacterMenu.GetComponent<PickCharacterMenu>().GetCharacterDto();
+            GameControl.PlayerState.IsDead = true;
+            GameControl.PlayerState.TotalScore = 0;
+            GameControl.GameState.CurrentLevel = 1;
+            GameControl.PlayerState.CharacterDto = PickCharacterMenu.GetComponent<PickCharacterMenu>().GetCharacterDto();
             SetModes();
 
             PhotonNetwork.CreateRoom(GameControl.GenerateRoomName("SoloRLR"));

@@ -28,7 +28,7 @@ namespace Drones.Movement
             {
                 return;
             }
-            if (!GameControl.PlayerState.Player.activeSelf || GameControl.State.IsImmobile)
+            if (!GameControl.PlayerState.Player.activeSelf || GameControl.PlayerState.IsImmobile)
             {
                 _rb.velocity = Vector3.zero;
             }

@@ -32,10 +32,10 @@ namespace UI.RLR_Menus
 
         public void RestartGame()
         {
-            GameControl.State.IsDead = true;
-            GameControl.State.TotalScore = 0;
-            GameControl.State.AutoClickerActive = false;
-            GameControl.State.CurrentLevel = 1;
+            GameControl.PlayerState.IsDead = true;
+            GameControl.PlayerState.TotalScore = 0;
+            GameControl.PlayerState.AutoClickerActive = false;
+            GameControl.GameState.CurrentLevel = 1;
             Time.timeScale = 1;
 
             SceneManager.LoadScene("RLR");
@@ -49,7 +49,7 @@ namespace UI.RLR_Menus
 
         public void BackToMenu()
         {
-            GameControl.State.GameActive = false;
+            GameControl.GameState.GameActive = false;
             Time.timeScale = 1;
             SceneManager.LoadScene("MainMenu");
         }

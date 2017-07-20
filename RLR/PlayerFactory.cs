@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using Characters.Types;
 using Launcher;
+using Players;
 using UnityEngine;
 
 namespace RLR
@@ -20,7 +19,6 @@ namespace RLR
 
         private PlayerFactory()
         {
-            
         }
 
         public GameObject Create(CharacterDto character,  int? playerId = null)
@@ -31,6 +29,7 @@ namespace RLR
                 {
                     var player = PhotonNetwork.Instantiate(Path.Combine("Characters", "Manticore"), Vector3.zero, Quaternion.identity, 0);
                     player.transform.SetParent(Player);
+                    player.GetComponentInChildren<PlayerTrigger>().InitializeTrigger();
                     GameControl.PlayerState.CharacterController = player.AddComponent<Manticore>();
                     GameControl.PlayerState.CharacterController.Initizalize(character);
 

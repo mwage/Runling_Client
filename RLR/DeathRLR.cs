@@ -12,12 +12,12 @@ namespace RLR
         //events following Deathtrigger
         public void Death(LevelManagerRLR manager, InitializeGameRLR initializeGame, ControlRLR control)
         {
-            GameControl.State.IsImmobile = true;
+            GameControl.PlayerState.IsImmobile = true;
             GameControl.PlayerState.Player.GetComponent<PlayerMovement>().IsAutoClicking = false;
             GameControl.PlayerState.Player.SetActive(false);
 
 
-            switch (GameControl.State.SetGameMode)
+            switch (GameControl.GameState.SetGameMode)
             {
                 case Gamemode.Classic:
                     manager.EndGame(1);
@@ -26,15 +26,15 @@ namespace RLR
                     StartCoroutine(Respawn(3, 3, initializeGame, control));
                     break;
                 case Gamemode.TimeMode:
-                    if (GameControl.State.Lives == 0)
+                    if (GameControl.PlayerState.Lives == 0)
                     {
                         manager.EndGame(1);
                         break;
                     }
                     else
                     {
-                        GameControl.State.Lives -= 1;
-                        manager.LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + GameControl.State.Lives;
+                        GameControl.PlayerState.Lives -= 1;
+                        manager.LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + GameControl.PlayerState.Lives;
                         StartCoroutine(Respawn(10, 3, initializeGame, control));
                         break;
                     }
@@ -61,8 +61,8 @@ namespace RLR
                 {
                     GameControl.PlayerState.Player.SetActive(true);
                     GameControl.PlayerState.Player.transform.Find("Shield").gameObject.SetActive(true);
-                    GameControl.State.IsInvulnerable = true;
-                    GameControl.State.IsDead = false;
+                    GameControl.PlayerState.IsInvulnerable = true;
+                    GameControl.PlayerState.IsDead = false;
                     control.StopUpdate = false;
                 }
                 yield return new WaitForSeconds(1);
@@ -70,10 +70,10 @@ namespace RLR
             }
             Destroy(respawnIn);
             
-            GameControl.State.IsImmobile = false;
+            GameControl.PlayerState.IsImmobile = false;
             yield return new WaitForSeconds(shieldDuration);
             GameControl.PlayerState.Player.transform.Find("Shield").gameObject.SetActive(false);
-            GameControl.State.IsInvulnerable = false;
+            GameControl.PlayerState.IsInvulnerable = false;
         }
     }
 }

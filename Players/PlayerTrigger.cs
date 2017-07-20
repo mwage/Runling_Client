@@ -13,7 +13,7 @@ namespace Players
 
         private bool _finishedLevel;
 
-        public void Start()
+        public void InitializeTrigger()
         {
             PlayerTriggerManager = gameObject.transform.parent.parent.GetComponent<PlayerTriggerManager>();
             PlayerBarsManager = gameObject.transform.parent.parent.GetComponent<PlayerBarsManager>();
@@ -25,21 +25,21 @@ namespace Players
             // Enter Finishzone
             if (other.CompareTag("Finish") && !_finishedLevel)
             {
-                GameControl.State.FinishedLevel = true;
+                GameControl.GameState.FinishedLevel = true;
                 _finishedLevel = true;
             }
 
             // Enter Safezone
-            if (other.CompareTag("SafeZone") && !GameControl.State.IsInvulnerable)
+            if (other.CompareTag("SafeZone") && !GameControl.PlayerState.IsInvulnerable)
             {
-                GameControl.State.IsSafe = true;
+                GameControl.PlayerState.IsSafe = true;
 
             }
 
             // Safety Death Trigger
-            if (((other.CompareTag("Enemy") && !GameControl.State.IsSafe || other.CompareTag("Strong Enemy")) && !GameControl.State.IsInvulnerable) && !GameControl.State.GodModeActive)
+            if (((other.CompareTag("Enemy") && !GameControl.PlayerState.IsSafe || other.CompareTag("Strong Enemy")) && !GameControl.PlayerState.IsInvulnerable) && !GameControl.PlayerState.GodModeActive)
             {
-                GameControl.State.IsDead = true;
+                GameControl.PlayerState.IsDead = true;
             }
         }
 
@@ -52,7 +52,7 @@ namespace Players
                 int currentSafeZoneIdx;
                 if (PlayerTriggerManager == null)
                 {
-                    Start();
+                    InitializeTrigger();
                     return;
                 }
                 if (PlayerTriggerManager.IsSafeZoneVisitedFirstTime(currentSafeZone, out currentSafeZoneIdx))
@@ -65,9 +65,9 @@ namespace Players
             }
 
             // Death Trigger
-            if (((other.CompareTag("Enemy") && !GameControl.State.IsSafe || other.CompareTag("Strong Enemy")) && !GameControl.State.IsInvulnerable) && !GameControl.State.GodModeActive)
+            if (((other.CompareTag("Enemy") && !GameControl.PlayerState.IsSafe || other.CompareTag("Strong Enemy")) && !GameControl.PlayerState.IsInvulnerable) && !GameControl.PlayerState.GodModeActive)
             {
-                GameControl.State.IsDead = true;
+                GameControl.PlayerState.IsDead = true;
             }
         }
 
@@ -76,7 +76,7 @@ namespace Players
         {
             if (other.CompareTag("SafeZone"))
             {
-                GameControl.State.IsSafe = false;
+                GameControl.PlayerState.IsSafe = false;
             }
         }
     }

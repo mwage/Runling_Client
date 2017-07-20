@@ -17,5 +17,8 @@ namespace Launcher
         public bool IsSafe = false;
         public bool IsImmobile = false;
         public int Lives = 0;
+        public bool AutoClickerActive = false;
+        public bool GodModeActive = false;
+        public int TotalScore = 0;
     }
 }
