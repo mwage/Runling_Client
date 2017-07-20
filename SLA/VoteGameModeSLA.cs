@@ -13,6 +13,7 @@ namespace SLA
         [SerializeField] private NetworkManagerSLA _networkManagerSLA;
 
         [SerializeField] private GameObject _countdownPrefab;
+        [SerializeField] private GameObject _mode;
         [SerializeField] private GameObject _finishButton;
         [SerializeField] private GameObject _game;
         [SerializeField] private Text _classicVoteText;
@@ -25,6 +26,12 @@ namespace SLA
         private int _teamVotes;
         private int _practiceVotes;
         private Dictionary<Gamemode, int> _votesPerMode;
+        private bool _starting;
+
+        public VoteGameModeSLA(bool starting)
+        {
+            _starting = starting;
+        }
 
         private void Awake()
         {
@@ -56,6 +63,16 @@ namespace SLA
             }
 
             Finish();
+        }
+
+        private void Update()
+        {
+            if (!PhotonNetwork.isMasterClient || _networkManagerSLA.PlayerState == null || _starting)
+                return;
+            if (_networkManagerSLA.PlayerState.Any(state => !state.FinishedVoting))
+                return;
+            PhotonView.RPC("StartGame", PhotonTargets.All);
+            _starting = true;
         }
 
         #region Buttons
@@ -130,11 +147,6 @@ namespace SLA
         {
             Debug.Log(_networkManagerSLA.PlayerList[playerID - 1].NickName + " is ready");
             _networkManagerSLA.PlayerState[playerID - 1].FinishedVoting = true;
-            
-            if (_networkManagerSLA.PlayerState.Any(state => !state.FinishedVoting))
-                return;
-            if (PhotonNetwork.isMasterClient)
-                PhotonView.RPC("StartGame", PhotonTargets.All);
         }
 
         [PunRPC]
