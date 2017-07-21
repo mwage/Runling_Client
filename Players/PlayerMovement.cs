@@ -111,14 +111,8 @@ namespace Players
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, _defLayer))
             {
-                if (GameControl.PlayerState.CharacterController != null)
-                {
-                    _maxSpeed = GameControl.PlayerState.CharacterController.Speed.Current;
-                }
-                else
-                {
-                    _maxSpeed = GameControl.PlayerState.MoveSpeed;
-                }
+                _maxSpeed = GameControl.PlayerState.CharacterController != null ? 
+                    GameControl.PlayerState.CharacterController.Speed.Current : GameControl.PlayerState.MoveSpeed;
                 _clickPos = hit.point;
 
                 // Play click animation
@@ -168,6 +162,10 @@ namespace Players
         #region Physics
         private void FixedUpdate()
         {
+            if (GameControl.PlayerState.CharacterController != null)
+            {
+                _maxSpeed = GameControl.PlayerState.CharacterController.Speed.Current;
+            }
             _currentPos = new Vector3(_rb.transform.position.x, 0, _rb.transform.position.z);
             _currentSpeed = _rb.velocity.magnitude;
 
@@ -189,7 +187,7 @@ namespace Players
             {
                 Accelerate();
             }
-            if (_distance < _highestSpeedReached * _highestSpeedReached / (2 * _deceleration) && !_stop)
+            if (_distance < _highestSpeedReached * _highestSpeedReached / (2 * _deceleration) && !_stop || _currentSpeed > _maxSpeed + 0.2f)
             {
                 Decelerate();
             }
@@ -226,7 +224,7 @@ namespace Players
             }
             else
             {
-                _currentSpeed = _maxSpeed;
+                _currentSpeed = _rb.velocity.magnitude;
             }
         }
 

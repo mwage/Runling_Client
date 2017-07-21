@@ -6,17 +6,6 @@ namespace Characters.Bars
 {
     public class EnergyBar : MonoBehaviour
     {
-        // Use this for initialization
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
         private Slider _energySlider;
         private Text _energyText;
 

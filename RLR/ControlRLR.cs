@@ -55,27 +55,8 @@ namespace RLR
                 LevelManager.EndLevel(0);
             }
 
-            /*
-            // Become invulnerable
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.GameState.GodModeActive)
-            {
-                GameControl.GameState.GodModeActive = true;
-                if (GameControl.PlayerState.Player != null)
-                {
-                    GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(true);
-                }
-            }
+            
 
-            // Become vulnerable
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactiveGodmode) && GameControl.GameState.GodModeActive)
-            {
-                GameControl.GameState.GodModeActive = false;
-                if (GameControl.PlayerState.Player != null)
-                {
-                    GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(false);
-                }
-            }
-            */
         }
 
 

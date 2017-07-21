@@ -1,12 +1,12 @@
 ﻿using Characters.Types;
+using Launcher;
 using Players.Camera;
-using RLR;
 using UI.RLR_Menus;
 using UI.SLA_Menus;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Launcher
+namespace Players
 {
     /// <summary>
     /// Class serve all user inputs: camera, player hotkeys, chat, etc
@@ -19,8 +19,8 @@ namespace Launcher
 
         private ACharacter _characterController;
 
-        private InGameMenuManagerRLR inGameMenuManagerRLR;
-        private InGameMenuManagerSLA inGameMenuManagerSLA;
+        private InGameMenuManagerRLR _inGameMenuManagerRLR;
+        private InGameMenuManagerSLA _inGameMenuManagerSLA;
 
 
         public void Init()
@@ -28,22 +28,22 @@ namespace Launcher
             if (Player != null) _characterController = GameControl.PlayerState.CharacterController;
             if (SceneManager.GetActiveScene().name == "RLR")
             {
-                inGameMenuManagerRLR = Menus.GetComponent<InGameMenuManagerRLR>(); // takes first script - InGameMenuMangaerRLR/SLA
+                _inGameMenuManagerRLR = Menus.GetComponent<InGameMenuManagerRLR>(); // takes first script - InGameMenuMangaerRLR/SLA
             }
             else
             {
-                inGameMenuManagerSLA = Menus.GetComponent<InGameMenuManagerSLA>(); // takes first script - InGameMenuMangaerRLR/SLA
+                _inGameMenuManagerSLA = Menus.GetComponent<InGameMenuManagerSLA>(); // takes first script - InGameMenuMangaerRLR/SLA
             }
-            
         }
 
         public void Update()
         {
-            if (inGameMenuManagerRLR == null && inGameMenuManagerSLA == null)
+            if (_inGameMenuManagerRLR == null && _inGameMenuManagerSLA == null)
             {
                 Init();
             }
             InputAutoClicker();
+            InputGodMode();
             if (_characterController != null)
             {
                 _characterController.InputAbilities();
@@ -53,10 +53,6 @@ namespace Launcher
 
         public void LateUpdate()
         {
-            if (inGameMenuManagerRLR == null && inGameMenuManagerSLA == null)
-            {
-                Init();
-            }
             if (IsMenuActive()) return; // options menu serve all inputs
             if (_characterController != null)
             {
@@ -71,22 +67,17 @@ namespace Launcher
 
         private bool IsMenuActive()
         {
-            if (inGameMenuManagerRLR != null)
+            if (_inGameMenuManagerRLR != null)
             {
-                if (inGameMenuManagerRLR.MenuOn) return true;
+                if (_inGameMenuManagerRLR.MenuOn) return true;
             }
             else
             {
-                if (inGameMenuManagerSLA.MenuOn) return true;
+                if (_inGameMenuManagerSLA.MenuOn) return true;
             }
             return false;
         }
-
-
-
-
-
-
+       
 
         public void InputAutoClicker()
         {
@@ -103,6 +94,30 @@ namespace Launcher
                 if (GameControl.PlayerState.AutoClickerActive)
                     GameControl.PlayerState.AutoClickerActive = false;
             }
+        }
+
+        private void InputGodMode()
+        {
+            // Become invulnerable
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.PlayerState.GodModeActive)
+            {
+                GameControl.PlayerState.GodModeActive = true;
+                if (GameControl.PlayerState.Player != null)
+                {
+                    GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(true);
+                }
+            }
+
+            // Become vulnerable
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactiveGodmode) && GameControl.PlayerState.GodModeActive)
+            {
+                GameControl.PlayerState.GodModeActive = false;
+                if (GameControl.PlayerState.Player != null)
+                {
+                    GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(false);
+                }
+            }
+
         }
     }
 }
