@@ -4,7 +4,7 @@ using Launcher;
 using Players;
 using UnityEngine;
 
-namespace RLR
+namespace Characters
 {
     public class PlayerFactory : MonoBehaviour
     {
@@ -31,7 +31,7 @@ namespace RLR
                     player.transform.SetParent(Player);
                     player.GetComponentInChildren<PlayerTrigger>().InitializeTrigger();
                     GameControl.PlayerState.CharacterController = player.AddComponent<Manticore>();
-                    GameControl.PlayerState.CharacterController.Initizalize(character);
+                    GameControl.PlayerState.CharacterController.Initialize(character);
 
                     return player;
                 }
@@ -40,7 +40,7 @@ namespace RLR
                     var player = PhotonNetwork.Instantiate(Path.Combine("Characters", "Cat"), Vector3.zero, Quaternion.identity, 0);
                     player.transform.SetParent(Player);
                     GameControl.PlayerState.CharacterController = player.AddComponent<Unicorn>();
-                    GameControl.PlayerState.CharacterController.Initizalize(character);
+                    GameControl.PlayerState.CharacterController.Initialize(character);
 
                     return player;
                 }
@@ -49,9 +49,7 @@ namespace RLR
                     Debug.Log("you want create non-existed character");
                     return null;
                 }
-                    
             }
-            
         }
     }
 }

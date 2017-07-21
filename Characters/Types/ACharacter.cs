@@ -41,17 +41,17 @@ namespace Characters.Types
 
 
 
-        protected void InitiazlizeBase(CharacterDto chacterDto)
+        protected void InitializeBase(CharacterDto chacterDto)
         {
             Energy = new Energy(chacterDto.EnergyPoints, chacterDto.RegenPoints, 20, 5, 0.5F, 1F);
-            Speed = new Speed(1F, 0.1F);
+            Speed = new Speed(3F, 0.05F);
             Exp = chacterDto.Exp;
             Level = chacterDto.Level;
             AbilityFirstLevel = chacterDto.AbilityFirstLevel;
             AbilitySecondLevel = chacterDto.AbilitySecondLevel;
         }
 
-        public abstract void Initizalize(CharacterDto character);
+        public abstract void Initialize(CharacterDto character);
 
         public virtual void AddExp(int exp)
         {

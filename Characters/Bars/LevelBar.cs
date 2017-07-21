@@ -29,5 +29,4 @@ namespace Characters.Bars
            // Debug.Log(string.Format("lvl slider vlaue {0}", val));
         }
     }
-
 }

@@ -14,9 +14,9 @@ namespace Characters.Types
         {
         }
 
-        public override void Initizalize(CharacterDto character)
+        public override void Initialize(CharacterDto character)
         {
-            InitiazlizeBase(character);
+            InitializeBase(character);
             // something about abilities or in awake
             //AbilityFirst = a1;
             //AbilitySecond = a2;
