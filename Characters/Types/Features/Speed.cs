@@ -39,12 +39,12 @@ namespace Characters.Types.Features
         public void ActivateBoost(float boostSpeed) // probably need also bool variable to verify if is actiave already
         {
             
-            _bonusSpeed += boostSpeed;
+            _bonusSpeed = boostSpeed;
         }
 
         public void DeactivateBoost(float boostSpeed)
         {
-            _bonusSpeed -= boostSpeed;
+            _bonusSpeed = 0F;
         }
 
     }

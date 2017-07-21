@@ -224,6 +224,10 @@ namespace Players
                 _currentSpeed = _rb.velocity.magnitude;
                 _highestSpeedReached = _currentSpeed;
             }
+            else
+            {
+                _currentSpeed = _maxSpeed;
+            }
         }
 
         // Decelerate Player

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using Characters.Types;
 using Characters.Types.Features;
 using Launcher;
@@ -19,30 +21,53 @@ namespace Characters.Abilities
             get { return 10 - Level; }
         }
 
+        public float DurationTime
+        {
+            get { return Level + 3F; }
+        }
+
         public Shield(ACharacter character)
         {
             Name = "Boost";
             Level = character.AbilitySecondLevel;
             EnergyDrainPerSecond = 0;
             IsActive = false;
-            ShieldModel = GameControl.PlayerState.Player.transform.Find("Shield").gameObject;
+            SetLoaded();
+        }
+
+        private void Initialize()
+        {
+            if (ShieldModel == null)
+            {
+                ShieldModel = GameControl.PlayerState.Player.transform.Find("Shield").gameObject;
+            }
         }
 
 
 
-
-        public override void Enable(ACharacter character)
+        public override IEnumerator Enable(ACharacter character)
         {
-            if (IsActive) return;
-            if (!IsLoaded) return;
+            if (IsActive) yield return null;
+            if (!IsLoaded)
+            {
+                Debug.Log(string.Format("colldown on: {0}", TimeToRenew));
+                yield return null;
+            }
             if (character.UseEnergy(EnergyCost)) // characterd had enough energy and used it
             {
                 ActivateShieldModel();
+                GameControl.PlayerState.IsInvulnerable = true;
                 TimeToRenew = Cooldown;
                 IsLoaded = false;
                 IsActive = true;
                 character.Energy.EnergyDrainPerSec = 0F;
-                character.Energy.RegenStatus = RegenStatus.Blocked;
+                if (character.Energy.RegenStatus == RegenStatus.Regen)
+                {
+                    character.Energy.RegenStatus = RegenStatus.Blocked;
+                }
+                yield return new WaitForSeconds(DurationTime);
+                Disable(character);
+
             }
         }
 
@@ -50,6 +75,7 @@ namespace Characters.Abilities
         {
             if (!IsActive) return;
             DeactivateShieldModel();
+            GameControl.PlayerState.IsInvulnerable = false;
             character.Energy.RegenStatus = RegenStatus.Regen;
             IsActive = false;
         }
@@ -59,6 +85,7 @@ namespace Characters.Abilities
 
         private void ActivateShieldModel()
         {
+            Initialize();
             ShieldModel.SetActive(true);
         }
 
@@ -66,6 +93,12 @@ namespace Characters.Abilities
         {
             ShieldModel.SetActive(false);
         }
+
+        IEnumerator Wait3s()
+        {
+            yield return new WaitForSeconds(3);
+        }
+
 
 
 
