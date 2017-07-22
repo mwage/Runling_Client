@@ -31,6 +31,7 @@ namespace Characters.Abilities
         public virtual void RefreshCooldown()
         {
             if (IsLoaded) return;
+            if (IsActive) return; // no loading while active
             if (TimeToRenew <= 0)
             {
                 IsLoaded = true;
@@ -52,6 +53,13 @@ namespace Characters.Abilities
         public virtual void IncrementLevel()
         {
             Level++;
+        }
+
+        public virtual float GetLoadingProgress()
+        {
+            if (Level == 0) return 0F;
+            if (IsLoaded) return 1F;
+            return 1 - TimeToRenew / Cooldown;
         }
 
     }

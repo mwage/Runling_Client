@@ -37,8 +37,8 @@ namespace Characters.Repositories
                                   PlayerPrefs.GetInt(PrefsStringBuilder(id, "EnergyPoints")),
                                   PlayerPrefs.GetInt(PrefsStringBuilder(id, "Exp")),
                                   PlayerPrefs.GetInt(PrefsStringBuilder(id, "Level")),
-                                  PlayerPrefs.GetInt(PrefsStringBuilder(id, "AbilityFirstLevel")),
-                                  PlayerPrefs.GetInt(PrefsStringBuilder(id, "AbilitySecondLevel")),
+                                  PlayerPrefs.GetInt(PrefsStringBuilder(id, "Ability1Level")),
+                                  PlayerPrefs.GetInt(PrefsStringBuilder(id, "Ability2Level")),
                                   true);
             }
             else
@@ -82,8 +82,8 @@ namespace Characters.Repositories
             PlayerPrefs.SetInt(PrefsStringBuilder(id, "EnergyPoints"), energyPoints);
             PlayerPrefs.SetInt(PrefsStringBuilder(id, "Exp"), exp);
             PlayerPrefs.SetInt(PrefsStringBuilder(id, "Level"), level);
-            PlayerPrefs.SetInt(PrefsStringBuilder(id, "AbilityFirstLevel"), abilityFirstLevel);
-            PlayerPrefs.SetInt(PrefsStringBuilder(id, "AbilitySecondLevel"), abilitySecondLevel);
+            PlayerPrefs.SetInt(PrefsStringBuilder(id, "Ability1Level"), abilityFirstLevel);
+            PlayerPrefs.SetInt(PrefsStringBuilder(id, "Ability2Level"), abilitySecondLevel);
         }
 
         private string PrefsStringBuilder(int id, string attribute)
