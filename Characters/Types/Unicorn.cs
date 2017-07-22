@@ -18,8 +18,8 @@ namespace Characters.Types
         {
             InitializeBase(character);
             // something about abilities or in awake
-            //AbilityFirst = a1;
-            //AbilitySecond = a2;
+            //Ability1 = a1;
+            //Ability2 = a2;
         }
 
         protected override void ActivateOrDeactivateAbility1()

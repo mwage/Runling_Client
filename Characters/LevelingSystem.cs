@@ -13,11 +13,13 @@ namespace Characters
         public static readonly int CharactersAmount = 8;
         public static readonly int MaxLevel = 50;
         // LevelExperienceCurve[1] tells about exp you must exceed to be promoted at 1 level (to gain 2nd Level)
-        public static readonly List<int> LevelExperienceCurve = new List<int>{ 0, 0, 1, 5, 12, 25, 48, 81, 131, 199, 292, 414, 571, 768, 1012, 1310, 1670, 2099, 2606, 3199, 3889, 4685, 5596, 6635, 7812, 9139, 10628, 12293, 14145, 16199, 18470, 20971, 23718, 26726, 30012, 33592, 37483, 41702, 46268, 51199, 56515, 62233, 68376, 74961, 82012, 89549, 97593, 106168, 115296, 124999 };
+        public static readonly List<int> LevelExperienceCurve = new List<int>{ 0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 167, 217, 271, 329, 391, 457, 527, 601, 679, 761, 2234, 3843, 5594, 7493, 9546, 11759, 14138, 16689, 19418, 22331, 25434, 28733, 32234, 35943, 39866, 44009, 48378, 52979, 57818, 62901, 68234, 73823, 79674, 85793, 92186, 98859, 105818, 113069, 120618 };
         public static readonly int NewPointsPerLevel = 5;
-        public static readonly int MaximumPoints = 50;
+        public static readonly int MaximumPoints = 80;
         public static readonly int AbilityMaxLevel = 3;
-        
+        public static readonly int[] PropertyCostModifierLevels = {15, 25};
+
+
         public static readonly int AbilityPointsCostPerLevel = 5;
 
         public static int CalculateExp(int platformIndex, int level, Difficulty difficulty, Gamemode mode)

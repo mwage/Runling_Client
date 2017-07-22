@@ -7,6 +7,9 @@ namespace Launcher
     {
         public List<GameObject> SafeZones;
         public bool[] VisitedSafeZones;
+        public GameObject DronesParent;
+
+        //private Game
 
         public MapState()
         {
