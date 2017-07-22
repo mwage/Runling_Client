@@ -29,8 +29,6 @@ namespace Drones
         public Material CyanMaterial;
         public Material BrightGreenMaterial;
 
-        public GameObject DronesParent;
-
         public Dictionary<DroneType,string> SetDroneType = new Dictionary<DroneType,string>();
         public Dictionary<DroneColor, Material> SetDroneMaterial = new Dictionary<DroneColor, Material>();
 
