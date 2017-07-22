@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.IO;
 using Characters;
 using Characters.Types;
 using Launcher;
@@ -7,7 +6,6 @@ using Players.Camera;
 using TMPro;
 using UI.SLA_Menus;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.UI;
 
 namespace SLA
@@ -27,10 +25,23 @@ namespace SLA
         public PlayerFactory PlayerFactory;
 
         private PhotonView _photonView;
+        private int _myID;
+        private double _startingTime;
+
 
         private void Awake()
         {
             _photonView = GetComponent<PhotonView>();
+            _myID = PhotonNetwork.player.ID;
+        }
+
+        private void Update()
+        {
+            if (_startingTime > 0.1 && PhotonNetwork.time > _startingTime + 2)
+            {
+                StartCoroutine(StartCountdown());
+                _startingTime = 0;
+            }
         }
 
         //set Spawnimmunity once game starts
@@ -41,10 +52,6 @@ namespace SLA
 
         private IEnumerator PrepareLevel()
         {
-            // Set current movespeed and cameraposition
-
-            // TODO: GetMovespeed from SLA character
-            GameControl.PlayerState.MoveSpeed = ControlSLA.LevelManager.GetMovementSpeed(GameControl.GameState.CurrentLevel);
             CameraHandleMovement.SetCameraHandlePosition(Vector3.zero);
 
             // Show level highscore and current level
@@ -64,43 +71,24 @@ namespace SLA
 
             //Spawn players and start countdown
             if (PhotonNetwork.isMasterClient)
-                _photonView.RPC("SpawnPlayers", PhotonTargets.All);
+                _photonView.RPC("StartLevel", PhotonTargets.AllViaServer);
         }
 
 
         [PunRPC]
-        private void SpawnPlayers()
+        private void StartLevel(PhotonMessageInfo info)
         {
-            if (ControlSLA.NetworkManager.PlayerState[PhotonNetwork.player.ID - 1].Player == null)
-            {
-                GameControl.PlayerState.CharacterDto = new CharacterDto(0, "Arena", 0, 0, 0, 0, 1, 0, 0);
-                ControlSLA.NetworkManager.PlayerState[PhotonNetwork.player.ID - 1].Player =
-                    PlayerFactory.Create(GameControl.PlayerState.CharacterDto);
-            }
+            _startingTime = info.timestamp;
 
-            ControlSLA.NetworkManager.PlayerState[PhotonNetwork.player.ID - 1].Player.transform.position = StartingPosition();
-            ControlSLA.NetworkManager.PlayerState[PhotonNetwork.player.ID - 1].Player.transform.rotation =
-                PhotonNetwork.room.PlayerCount != 1 ? Quaternion.LookRotation(Vector3.zero - StartingPosition()) : Quaternion.identity;
+            SpawnPlayer();
 
-            foreach (var state in ControlSLA.NetworkManager.PlayerState)
-            {
-                state.IsDead = false;
-                state.Player.transform.Find("Shield").gameObject.SetActive(true);
-            }
-
-            GameControl.PlayerState.IsInvulnerable = true;
-            GameControl.PlayerState.IsSafe = false;
-            GameControl.PlayerState.IsImmobile = false;
-
-            // TODO: Might need this as RPC to others
             if (GameControl.PlayerState.GodModeActive && !GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.activeSelf)
             {
-                ControlSLA.NetworkManager.PlayerState[PhotonNetwork.player.ID - 1].Player.transform.Find("GodMode").gameObject.SetActive(true);
+                GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(true);
+
             }
 
             ControlSLA.StopUpdate = false;
-
-            StartCoroutine(StartCountdown());
         }
 
         private static Vector3 StartingPosition()
@@ -114,8 +102,35 @@ namespace SLA
                        (0, 360f * (PhotonNetwork.player.ID - 1) / PhotonNetwork.room.PlayerCount, 0) * Vector3.right * 2;
         }
 
+        private void SpawnPlayer()
+        {
+            if (GameControl.PlayerState.Player == null)
+            {
+                GameControl.PlayerState.CharacterDto = new CharacterDto(0, "Arena", 0, 0, 0, 0, 1, 0, 0);
+                GameControl.PlayerState.Player = PlayerFactory.Create(GameControl.PlayerState.CharacterDto);
+            }
+            GameControl.PlayerState.IsSafe = false;
+            GameControl.PlayerState.IsImmobile = true;
+            GameControl.PlayerState.IsInvulnerable = true;
+            GameControl.PlayerState.Player.transform.Find("Shield").gameObject.SetActive(true);
+            _photonView.RPC("InitializePlayer", PhotonTargets.All, _myID);
+
+            GameControl.PlayerState.CharacterController.Speed.SetBaseSpeed(ControlSLA.LevelManager.GetMovementSpeed(GameControl.GameState.CurrentLevel));
+            GameControl.PlayerState.Player.transform.position = StartingPosition();
+            GameControl.PlayerState.Player.transform.rotation = PhotonNetwork.room.PlayerCount != 1 ? 
+                Quaternion.LookRotation(Vector3.zero - StartingPosition()) : Quaternion.identity;
+        }
+
+        [PunRPC]
+        private void InitializePlayer(int playerID)
+        {
+            ControlSLA.NetworkManager.SyncVars[playerID - 1].IsDead = false;
+        }
+
         private IEnumerator StartCountdown()
         {
+            GameControl.PlayerState.IsImmobile = false;
+
             // Countdown
             for (var i = 0; i < 3; i++)
             {
@@ -124,19 +139,12 @@ namespace SLA
                 yield return new WaitForSeconds(1);
                 Destroy(countdown);
             }
-
-            if (PhotonNetwork.isMasterClient)
-                _photonView.RPC("StartScore", PhotonTargets.All);
+            StartScore();
         }
-
-        [PunRPC]
+        
         private void StartScore()
         {
-            foreach (var state in ControlSLA.NetworkManager.PlayerState)
-            {
-                state.Player.transform.Find("Shield").gameObject.SetActive(false);
-            }
-
+            GameControl.PlayerState.Player.transform.Find("Shield").gameObject.SetActive(false);
             GameControl.PlayerState.IsInvulnerable = false;
             ControlSLA.Score.StartScore();
         }

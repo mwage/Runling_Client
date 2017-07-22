@@ -18,25 +18,25 @@ namespace SLA
 
         private void Awake()
         {
-            TotalScoreText.text = NetworkManager.PlayerState[PhotonNetwork.player.ID - 1].TotalScore.ToString();
+            TotalScoreText.text = NetworkManager.SyncVars[PhotonNetwork.player.ID - 1].TotalScore.ToString();
         }
 
         //count current and total score
         public void StartScore()
         {
             CurrentScore = -2;
-            NetworkManager.PlayerState[PhotonNetwork.player.ID - 1].TotalScore -= 2;
+            NetworkManager.SyncVars[PhotonNetwork.player.ID - 1].TotalScore -= 2;
             StartCoroutine(AddScore());
         }
 
         private IEnumerator AddScore()
         {
-            while (NetworkManager.PlayerState[PhotonNetwork.player.ID - 1].IsDead == false)
+            while (NetworkManager.SyncVars[PhotonNetwork.player.ID - 1].IsDead == false)
             {
                 CurrentScore += 2;
-                NetworkManager.PlayerState[PhotonNetwork.player.ID - 1].TotalScore += 2;
+                NetworkManager.SyncVars[PhotonNetwork.player.ID - 1].TotalScore += 2;
                 CurrentScoreText.text = CurrentScore.ToString();
-                TotalScoreText.text = NetworkManager.PlayerState[PhotonNetwork.player.ID - 1].TotalScore.ToString();
+                TotalScoreText.text = NetworkManager.SyncVars[PhotonNetwork.player.ID - 1].TotalScore.ToString();
             
                 yield return new WaitForSeconds(0.25f);
             }

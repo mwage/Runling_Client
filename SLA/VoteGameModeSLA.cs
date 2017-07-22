@@ -68,9 +68,9 @@ namespace SLA
 
         private void Update()
         {
-            if (_networkManagerSLA.PlayerState == null || _starting)
+            if (_networkManagerSLA.SyncVars == null || _starting)
                 return;
-            if (_networkManagerSLA.PlayerState.Where(state => state != null).Any(state => !state.FinishedVoting))
+            if (_networkManagerSLA.SyncVars.Where(state => state != null).Any(state => !state.FinishedVoting))
                 return;
 
             _starting = true;
@@ -142,14 +142,14 @@ namespace SLA
         public void Finish()
         {
             _finishButton.SetActive(false);
-            PhotonView.RPC("FinishedVoting", PhotonTargets.All, PhotonNetwork.player.ID);
+            PhotonView.RPC("FinishedVoting", PhotonTargets.AllViaServer, PhotonNetwork.player.ID);
         }
 
         [PunRPC]
         private void FinishedVoting(int playerID)
         {
             Debug.Log(_networkManagerSLA.PlayerList[playerID - 1].NickName + " is ready");
-            _networkManagerSLA.PlayerState[playerID - 1].FinishedVoting = true;
+            _networkManagerSLA.SyncVars[playerID - 1].FinishedVoting = true;
         }
 
         [PunRPC]

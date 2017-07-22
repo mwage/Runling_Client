@@ -11,7 +11,7 @@ namespace SLA
         public GameObject Game;
         public PhotonView PhotonView;
         public PhotonPlayer[] PlayerList;
-        public PlayerStateSLA[] PlayerState;
+        public SyncVarsSLA[] SyncVars;
         public bool Voting;
 
 
@@ -19,7 +19,7 @@ namespace SLA
         {
             PhotonView = GetComponent<PhotonView>();
             PlayerList = new PhotonPlayer[PhotonNetwork.room.PlayerCount];
-            PlayerState = new PlayerStateSLA[PhotonNetwork.room.PlayerCount];
+            SyncVars = new SyncVarsSLA[PhotonNetwork.room.PlayerCount];
             if (GameControl.GameState.Solo)
             {
                 _votingSystem.gameObject.SetActive(false);
@@ -31,7 +31,7 @@ namespace SLA
             }
             foreach (var player in PlayerList)
             {
-                PlayerState[player.ID - 1] = new PlayerStateSLA(player);
+                SyncVars[player.ID - 1] = new SyncVarsSLA(player);
             }
             PhotonView.RPC("FinishedLoading", PhotonTargets.All, PhotonNetwork.player);
         }
@@ -39,21 +39,15 @@ namespace SLA
         [PunRPC]
         private void FinishedLoading(PhotonPlayer player)
         {
-            PlayerState[player.ID - 1].FinishedLoading = true;
-            Debug.Log(player.NickName + " joined the game");
+            SyncVars[player.ID - 1].FinishedLoading = true;
         }
 
         private void Update()
         {
             if (Voting)
                 return;
-            foreach (var state in PlayerState)
-            {
-                if (!state.FinishedLoading)
-                    Debug.Log(state.Owner.NickName);
-            }
 
-            if (PlayerState.Where(state => state != null).Any(state => !state.FinishedLoading))
+            if (SyncVars.Where(state => state != null).Any(state => !state.FinishedLoading))
             {
                 return;
             }
@@ -69,7 +63,7 @@ namespace SLA
             else
             {
                 if (PhotonNetwork.isMasterClient)
-                    _votingSystem.PhotonView.RPC("StartVoting", PhotonTargets.All);
+                    _votingSystem.PhotonView.RPC("StartVoting", PhotonTargets.AllViaServer);
             }
         }
 
@@ -77,7 +71,7 @@ namespace SLA
         {
             Debug.Log(player.NickName + " has left the game.");
             PlayerList[player.ID - 1] = null;
-            PlayerState[player.ID - 1] = null;
+            SyncVars[player.ID - 1] = null;
         }
     }
 }

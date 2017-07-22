@@ -33,7 +33,10 @@ namespace SLA
             StopUpdate = true;
             GameControl.Settings.CameraRange = 15;
             GameControl.GameState.GameActive = true;
-            NetworkManager.PlayerState[PhotonNetwork.player.ID - 1].TotalScore = 0;
+            foreach (var state in NetworkManager.SyncVars)
+            {
+                state.TotalScore = 0;
+            }
             if (GameControl.GameState.SetGameMode == Gamemode.Practice)
             {
                 PracticeMode.SetActive(true);
@@ -44,7 +47,7 @@ namespace SLA
 
         private void Update()
         {
-            if (NetworkManager.PlayerState[PhotonNetwork.player.ID - 1].IsDead && !StopUpdate)
+            if (NetworkManager.SyncVars[PhotonNetwork.player.ID - 1].IsDead && !StopUpdate)
             {
                 Death.Death();
 

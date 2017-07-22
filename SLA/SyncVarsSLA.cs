@@ -1,20 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace SLA
 {
-    public class PlayerStateSLA
+    public class SyncVarsSLA
     {
         public PhotonPlayer Owner;
-        public GameObject Player;
         public bool FinishedVoting;
         public bool FinishedLoading;
-        public int TotalScore;
+        public int TotalScore = 0;
         public bool IsDead = true;
         public int Lives = 0;
 
-        public PlayerStateSLA(PhotonPlayer owner)
+
+        public SyncVarsSLA(PhotonPlayer owner)
         {
             Owner = owner;
         }

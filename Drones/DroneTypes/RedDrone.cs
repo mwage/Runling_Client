@@ -25,7 +25,8 @@ namespace Drones.DroneTypes
         public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null)
         {
             var direction = Random.Range(0, 4);
-            var newDrone = PhotonNetwork.Instantiate(Path.Combine("Drones", factory.SetDroneType[DroneType]), DroneStartPosition.GetRandomPosition(Size, Area), Quaternion.Euler(0, -45 + 90 * direction, 0), 0);
+            var newDrone = PhotonNetwork.InstantiateSceneObject(Path.Combine("Drones", factory.SetDroneType[DroneType]), 
+                DroneStartPosition.GetRandomPosition(Size, Area), Quaternion.Euler(0, -45 + 90 * direction, 0), 0, new object[0]);
             var instance = newDrone.AddComponent<PointToPointMovement>();
             instance.Acceleration = Acceleration;
             instance.MaxVelocity = Speed;
