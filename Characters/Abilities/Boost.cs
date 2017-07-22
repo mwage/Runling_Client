@@ -26,7 +26,7 @@ namespace Characters.Abilities
         public Boost(ACharacter character)
         {
             Name = "Boost";
-            Level = character.AbilityFirstLevel;
+            Level = character.Ability1Level;
             //EnergyCost = CalculateEnergyCost();
             EnergyDrainPerSecond = 1F;
             IsActive = false;
@@ -41,6 +41,8 @@ namespace Characters.Abilities
             {
                 character.Speed.ActivateBoost(BoostSpeed);
                 IsActive = true;
+                TimeToRenew = Cooldown;
+                IsLoaded = false;
                 character.Energy.EnergyDrainPerSec = EnergyDrainPerSecond;
                 character.Energy.RegenStatus = RegenStatus.Drain;
             }

@@ -29,7 +29,7 @@ namespace Characters.Abilities
         public Shield(ACharacter character)
         {
             Name = "Boost";
-            Level = character.AbilitySecondLevel;
+            Level = character.Ability2Level;
             EnergyDrainPerSecond = 0;
             IsActive = false;
             SetLoaded();

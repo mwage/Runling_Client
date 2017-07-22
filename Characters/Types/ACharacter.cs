@@ -14,16 +14,14 @@ namespace Characters.Types
         public int PlayerId { get; protected set; } 
         public int Exp { get; protected set; }
         public int Level { get; protected set; }
-        public int AbilityFirstLevel { get; protected set; }
-        public int AbilitySecondLevel { get; protected set; }
+        public int Ability1Level { get; protected set; }
+        public int Ability2Level { get; protected set; }
         public int UnspentPoints { get; protected set; }
         public Energy Energy;
         public Speed Speed;
 
-        public AAbility AbilityFirst { get; protected set; }
-        public AAbility AbilitySecond { get; protected set; }
-
-        protected static GameObject _player; // delete?
+        public AAbility Ability1 { get; protected set; }
+        public AAbility Ability2 { get; protected set; }
 
         protected ACharacter(CharacterDto chacterDto) 
         {
@@ -39,16 +37,22 @@ namespace Characters.Types
             }
         }
 
-
-
         protected void InitializeBase(CharacterDto chacterDto)
         {
             Energy = new Energy(chacterDto.EnergyPoints, chacterDto.RegenPoints, 20, 5, 0.5F, 1F);
-            Speed = new Speed(3F, 0.05F);
+            Speed = new Speed(10F, 0.05F);
             Exp = chacterDto.Exp;
             Level = chacterDto.Level;
-            AbilityFirstLevel = chacterDto.AbilityFirstLevel;
-            AbilitySecondLevel = chacterDto.AbilitySecondLevel;
+            Ability1Level = chacterDto.AbilityFirstLevel;
+            Ability2Level = chacterDto.AbilitySecondLevel;
+
+            TESTMODE();
+        }
+
+        protected void TESTMODE()
+        {
+            Ability1Level = 1;
+            Ability2Level = 1;
         }
 
         public abstract void Initialize(CharacterDto character);
@@ -62,56 +66,48 @@ namespace Characters.Types
 
         public virtual void IncrementLevelIfPossible()
         {
-            if (Exp == 0) return;
             while (Exp >= LevelingSystem.LevelExperienceCurve[Level])
             {
                 Level++;
-                //Debug.Log(string.Format("you lvled to {0} lvl", Level));
                 UnspentPoints += LevelingSystem.NewPointsPerLevel;
             }
         }
 
         public virtual void IncrementSpeedPoints()
         {
-            if (UnspentPoints > 0)
-            {
-                Speed.IncrementPoints();
-                UnspentPoints--;
-            }
+            if (UnspentPoints < GetSpeedPropertyCost()) return;
+            Speed.IncrementPoints();
+            UnspentPoints -= GetSpeedPropertyCost();
         }
 
         public virtual void IncrementRegenPoints()
         {
-            if (UnspentPoints > 0)
-            {
-                Energy.IncreasePointsRegen();
-                UnspentPoints--;
-            }
+            if (UnspentPoints < GetRegenPropertyCost()) return;
+            Energy.IncreasePointsRegen();
+            UnspentPoints -= GetRegenPropertyCost();
         }
 
         public virtual void IncrementEnergyPoints()
         {
-            if (UnspentPoints > 0)
-            {
-                Energy.IncreasePointsEnergy();
-                UnspentPoints--;
-            }
+            if (UnspentPoints < GetEnergyPropertyCost()) return;
+            Energy.IncreasePointsEnergy();
+            UnspentPoints -= GetEnergyPropertyCost();
         }
 
         public virtual void IncrementAbilityFirstLevel()
         {
-            if (UnspentPoints > LevelingSystem.AbilityPointsCostPerLevel && AbilityFirstLevel < LevelingSystem.AbilityMaxLevel)
+            if (UnspentPoints > LevelingSystem.AbilityPointsCostPerLevel && Ability1Level < LevelingSystem.AbilityMaxLevel)
             {
-                AbilityFirstLevel++;
+                Ability1Level++;
                 UnspentPoints-= LevelingSystem.AbilityPointsCostPerLevel;
             }
         }
 
         public virtual void IncrementAbilitySecondLevel()
         {
-            if (UnspentPoints > LevelingSystem.AbilityPointsCostPerLevel && AbilitySecondLevel < LevelingSystem.AbilityMaxLevel)
+            if (UnspentPoints > LevelingSystem.AbilityPointsCostPerLevel && Ability2Level < LevelingSystem.AbilityMaxLevel)
             {
-                AbilitySecondLevel++;
+                Ability2Level++;
                 UnspentPoints -= LevelingSystem.AbilityPointsCostPerLevel;
             }
         }
@@ -123,32 +119,32 @@ namespace Characters.Types
 
         public void DisableAllSkills()
         {
-            AbilityFirst.Disable(this);
-            AbilitySecond.Disable(this);
+            Ability1.Disable(this);
+            Ability2.Disable(this);
         }
 
         protected virtual void ActivateOrDeactivateAbility1()
         {
-            if (!AbilityFirst.IsActive)
+            if (!Ability1.IsActive)
             {
-                StartCoroutine(AbilityFirst.Enable(this));
+                StartCoroutine(Ability1.Enable(this));
             }
             else
             {
-                AbilityFirst.Disable(this);
+                Ability1.Disable(this);
             }
             
         }
 
         protected virtual void ActivateOrDeactivateAbility2()
         {
-            if (!AbilitySecond.IsActive)
+            if (!Ability2.IsActive)
             {
-                StartCoroutine(AbilitySecond.Enable(this));
+                StartCoroutine(Ability2.Enable(this));
             }
             else
             {
-                AbilitySecond.Disable(this);
+                Ability2.Disable(this);
             }
             
         }
@@ -167,9 +163,38 @@ namespace Characters.Types
 
         public virtual void RefreshCooldowns()
         {
-            AbilityFirst.RefreshCooldown();
-            AbilitySecond.RefreshCooldown();
+            Ability1.RefreshCooldown();
+            Ability2.RefreshCooldown();
         }
+
+        public virtual int GetSpeedPropertyCost()
+        {
+            return GetPropertyCost(Speed.Points);
+        }
+
+        public virtual int GetEnergyPropertyCost()
+        {
+            return GetPropertyCost(Energy.PointsEnergy);
+        }
+
+        public virtual int GetRegenPropertyCost()
+        {
+            return GetPropertyCost(Energy.PointsRegen);
+        }
+
+        protected virtual int GetPropertyCost(int propertyPoints)
+        {
+            for (int i = 0; i < LevelingSystem.PropertyCostModifierLevels.Length; i++)
+            {
+                if (propertyPoints < LevelingSystem.PropertyCostModifierLevels[i])
+                {
+                    return i + 1;
+                }
+            }
+            return LevelingSystem.PropertyCostModifierLevels.Length + 1;
+        }
+
+
 
 
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Drones.DroneTypes;
 using Drones.Pattern;
+using Launcher;
 using UnityEngine;
 
 namespace Drones
@@ -27,6 +28,8 @@ namespace Drones
         public Material DarkGreenMaterial;
         public Material CyanMaterial;
         public Material BrightGreenMaterial;
+
+        public GameObject DronesParent;
 
         public Dictionary<DroneType,string> SetDroneType = new Dictionary<DroneType,string>();
         public Dictionary<DroneColor, Material> SetDroneMaterial = new Dictionary<DroneColor, Material>();
@@ -58,7 +61,9 @@ namespace Drones
             {
                 var newDrone = drone.CreateDroneInstance(this, isAdded, area, posDelegate);
                 if (newDrone != null)
+                {
                     drone.ConfigureDrone(newDrone, this);
+                }
                 drones.Add(newDrone);
             }
 
