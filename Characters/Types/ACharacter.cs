@@ -195,13 +195,5 @@ namespace Characters.Types
             }
             return LevelingSystem.PropertyCostModifierLevels.Length + 1;
         }
-
-
-
-
-    }
-
-   
+    }   
 }
-
-
