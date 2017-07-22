@@ -162,7 +162,6 @@ namespace SLA
             var idx = mostVotes.Count == 1 ? 0 : random.Next(0, mostVotes.Count);
             GameControl.GameState.SetGameMode = mostVotes[idx];
             GameControl.PlayerState.IsDead = true;
-            GameControl.GameState.CurrentLevel = 1;
             transform.parent.gameObject.SetActive(false);
             _networkManagerSLA.Game.SetActive(true);
         }

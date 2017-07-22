@@ -67,11 +67,10 @@ namespace SLA
 
             // Spawn Drones
             if (PhotonNetwork.isMasterClient)
+            {
                 ControlSLA.LevelManager.LoadDrones(GameControl.GameState.CurrentLevel);
-
-            //Spawn players and start countdown
-            if (PhotonNetwork.isMasterClient)
                 _photonView.RPC("StartLevel", PhotonTargets.AllViaServer);
+            }
         }
 
 

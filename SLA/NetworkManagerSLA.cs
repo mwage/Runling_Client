@@ -56,7 +56,6 @@ namespace SLA
             if (GameControl.GameState.Solo)
             {
                 GameControl.PlayerState.IsDead = true;
-                GameControl.GameState.CurrentLevel = 1;
                 _votingSystem.transform.parent.gameObject.SetActive(false);
                 Game.SetActive(true);
             }

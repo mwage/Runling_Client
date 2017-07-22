@@ -26,14 +26,17 @@ namespace UI.Main_Menu
         {
             GameControl.GameState.SetGameMode = Gamemode.Classic;
             GameControl.GameState.Solo = true;
+            GameControl.GameState.CurrentLevel = 1;
+
             PhotonNetwork.CreateRoom(GameControl.GenerateRoomName("SoloSLA"));
         }
 
         public void Practice()
         {
-            GameControl.PlayerState.IsDead = true;
-            GameControl.GameState.CurrentLevel = 1;
             GameControl.GameState.SetGameMode = Gamemode.Practice;
+            GameControl.GameState.Solo = true;
+            GameControl.GameState.CurrentLevel = 1;
+
             PhotonNetwork.CreateRoom(GameControl.GenerateRoomName("SoloSLA"));
         }
 

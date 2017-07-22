@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Drones;
 using Launcher;
 using UI.SLA_Menus;
@@ -42,6 +43,12 @@ namespace SLA.Levels
 
         public void Awake()
         {
+            if (PhotonNetwork.isMasterClient)
+            {
+                DroneFactory = PhotonNetwork.InstantiateSceneObject(Path.Combine("Drones", "Drone Manager"), 
+                    Vector3.zero, Quaternion.identity, 0, new object[0]).GetComponent<DroneFactory>();
+                DroneFactory.transform.SetParent(transform);
+            }
             InitializeLevels();
         }
 
