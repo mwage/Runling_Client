@@ -1,4 +1,7 @@
 ﻿using System.Collections;
+using Characters;
+using Characters.Repositories;
+using Characters.Types;
 using Launcher;
 using SLA.Levels;
 using TMPro;
@@ -9,12 +12,20 @@ namespace SLA
     public class ControlSLA : MonoBehaviour
     {
         public LevelManagerSLA LevelManager;
-        public ScoreSLA ScoreSla;
-        public InitializeGameSLA InitializeGameSLA;
-        public DeathSLA DeathSla;
+        public ScoreSLA Score;
+        public InitializeGameSLA InitializeGame;
+        public DeathSLA Death;
         public GameObject PracticeMode;
+        public NetworkManagerSLA NetworkManager;
+
+        private PhotonView _photonView;
 
         public bool StopUpdate;
+
+        private void Awake()
+        {
+            _photonView = GetComponent<PhotonView>();
+        }
 
         private void Start()
         {
@@ -22,25 +33,25 @@ namespace SLA
             StopUpdate = true;
             GameControl.Settings.CameraRange = 15;
             GameControl.GameState.GameActive = true;
-            GameControl.PlayerState.TotalScore = 0;
+            NetworkManager.PlayerState[PhotonNetwork.player.ID - 1].TotalScore = 0;
             if (GameControl.GameState.SetGameMode == Gamemode.Practice)
             {
                 PracticeMode.SetActive(true);
             }
-            InitializeGameSLA.InitializeGame();
+            InitializeGame.InitializeGame();
         }
 
 
         private void Update()
         {
-            if (GameControl.PlayerState.IsDead && !StopUpdate)
+            if (NetworkManager.PlayerState[PhotonNetwork.player.ID - 1].IsDead && !StopUpdate)
             {
-                DeathSla.Death();
+                Death.Death();
 
                 //in case of highscore, save and 
                 if (GameControl.GameState.SetGameMode != Gamemode.Practice)
                 {
-                    ScoreSla.SetHighScore();
+                    Score.SetHighScore();
                 }
                 
                 //change level
@@ -71,6 +82,7 @@ namespace SLA
                 }
             }
         }
+
     }
 }
 

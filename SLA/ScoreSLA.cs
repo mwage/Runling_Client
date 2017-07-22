@@ -8,10 +8,8 @@ namespace SLA
 {
     public class ScoreSLA : MonoBehaviour
     {
-        //attach gameobjects
+        public NetworkManagerSLA NetworkManager;
         public GameObject HighScore;
-
-        //attach scripts
         public int CurrentScore;
         public Text CurrentScoreText;
         public Text TotalScoreText;
@@ -20,25 +18,25 @@ namespace SLA
 
         private void Awake()
         {
-            TotalScoreText.text = GameControl.PlayerState.TotalScore.ToString();
+            TotalScoreText.text = NetworkManager.PlayerState[PhotonNetwork.player.ID - 1].TotalScore.ToString();
         }
 
         //count current and total score
         public void StartScore()
         {
             CurrentScore = -2;
-            GameControl.PlayerState.TotalScore -= 2;
+            NetworkManager.PlayerState[PhotonNetwork.player.ID - 1].TotalScore -= 2;
             StartCoroutine(AddScore());
         }
 
         private IEnumerator AddScore()
         {
-            while (GameControl.PlayerState.IsDead == false)
+            while (NetworkManager.PlayerState[PhotonNetwork.player.ID - 1].IsDead == false)
             {
                 CurrentScore += 2;
-                GameControl.PlayerState.TotalScore += 2;
+                NetworkManager.PlayerState[PhotonNetwork.player.ID - 1].TotalScore += 2;
                 CurrentScoreText.text = CurrentScore.ToString();
-                TotalScoreText.text = GameControl.PlayerState.TotalScore.ToString();
+                TotalScoreText.text = NetworkManager.PlayerState[PhotonNetwork.player.ID - 1].TotalScore.ToString();
             
                 yield return new WaitForSeconds(0.25f);
             }

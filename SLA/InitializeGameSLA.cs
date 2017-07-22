@@ -1,33 +1,37 @@
 ﻿using System.Collections;
 using System.IO;
+using Characters;
+using Characters.Types;
 using Launcher;
 using Players.Camera;
-using SLA.Levels;
 using TMPro;
 using UI.SLA_Menus;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 namespace SLA
 {
-    public class InitializeGameSLA : MonoBehaviour {
-
-        // Attach scripts
-        public LevelManagerSLA LevelManagerSLA;
-        public ScoreSLA ScoreSLA;
+    public class InitializeGameSLA : MonoBehaviour
+    {
         public ControlSLA ControlSLA;
-        public InGameMenuManagerSLA InGameMenuManagerSLA;
+
+        public InGameMenuManagerSLA InGameMenuManager;
+        public CameraHandleMovement CameraHandleMovement;
 
         public GameObject PlayerPrefab;
         public GameObject LevelTextObject;
         public GameObject CountdownPrefab;
         public GameObject CurrentPrWindow;
         public Text CurrentPr;
-        public CameraHandleMovement CameraHandleMovement;
-        public Transform Player; // parent
+        public PlayerFactory PlayerFactory;
 
-        private const string PlayerCharacter = "Manticore";
-        
+        private PhotonView _photonView;
+
+        private void Awake()
+        {
+            _photonView = GetComponent<PhotonView>();
+        }
 
         //set Spawnimmunity once game starts
         public void InitializeGame()
@@ -38,7 +42,9 @@ namespace SLA
         private IEnumerator PrepareLevel()
         {
             // Set current movespeed and cameraposition
-            GameControl.PlayerState.MoveSpeed = LevelManagerSLA.GetMovementSpeed(GameControl.GameState.CurrentLevel);
+
+            // TODO: GetMovespeed from SLA character
+            GameControl.PlayerState.MoveSpeed = ControlSLA.LevelManager.GetMovementSpeed(GameControl.GameState.CurrentLevel);
             CameraHandleMovement.SetCameraHandlePosition(Vector3.zero);
 
             // Show level highscore and current level
@@ -52,35 +58,49 @@ namespace SLA
             CurrentPrWindow.SetActive(false);
             yield return new WaitForSeconds(1);
 
-            // Load drones and player
+            // Spawn Drones
+            if (PhotonNetwork.isMasterClient)
+                ControlSLA.LevelManager.LoadDrones(GameControl.GameState.CurrentLevel);
 
-            GameControl.PlayerState.Player = PhotonNetwork.Instantiate(Path.Combine("Characters", PlayerCharacter), StartingPosition(), 
-                PhotonNetwork.room.PlayerCount != 1 ? Quaternion.LookRotation(Vector3.zero - StartingPosition()) : Quaternion.identity, 0);
-            GameControl.PlayerState.Player.transform.SetParent(Player);
-            GameControl.PlayerState.IsDead = false;
+            //Spawn players and start countdown
+            if (PhotonNetwork.isMasterClient)
+                _photonView.RPC("SpawnPlayers", PhotonTargets.All);
+        }
+
+
+        [PunRPC]
+        private void SpawnPlayers()
+        {
+            if (ControlSLA.NetworkManager.PlayerState[PhotonNetwork.player.ID - 1].Player == null)
+            {
+                GameControl.PlayerState.CharacterDto = new CharacterDto(0, "Arena", 0, 0, 0, 0, 1, 0, 0);
+                ControlSLA.NetworkManager.PlayerState[PhotonNetwork.player.ID - 1].Player =
+                    PlayerFactory.Create(GameControl.PlayerState.CharacterDto);
+            }
+
+            ControlSLA.NetworkManager.PlayerState[PhotonNetwork.player.ID - 1].Player.transform.position = StartingPosition();
+            ControlSLA.NetworkManager.PlayerState[PhotonNetwork.player.ID - 1].Player.transform.rotation =
+                PhotonNetwork.room.PlayerCount != 1 ? Quaternion.LookRotation(Vector3.zero - StartingPosition()) : Quaternion.identity;
+
+            foreach (var state in ControlSLA.NetworkManager.PlayerState)
+            {
+                state.IsDead = false;
+                state.Player.transform.Find("Shield").gameObject.SetActive(true);
+            }
+
             GameControl.PlayerState.IsInvulnerable = true;
             GameControl.PlayerState.IsSafe = false;
-            GameControl.PlayerState.Player.transform.Find("Shield").gameObject.SetActive(true);
+            GameControl.PlayerState.IsImmobile = false;
+
+            // TODO: Might need this as RPC to others
             if (GameControl.PlayerState.GodModeActive && !GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.activeSelf)
             {
-                GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(true);
-            }
-            GameControl.PlayerState.IsImmobile = false;
-            ControlSLA.StopUpdate = false;
-            LevelManagerSLA.LoadDrones(GameControl.GameState.CurrentLevel);
-            
-            // Countdown
-            for (var i = 0; i < 3; i++)
-            {
-                var countdown = Instantiate(CountdownPrefab, GameObject.Find("Canvas").transform);
-                countdown.GetComponent<TextMeshProUGUI>().text = (3 - i).ToString();
-                yield return new WaitForSeconds(1);
-                Destroy(countdown);
+                ControlSLA.NetworkManager.PlayerState[PhotonNetwork.player.ID - 1].Player.transform.Find("GodMode").gameObject.SetActive(true);
             }
 
-            GameControl.PlayerState.Player.transform.Find("Shield").gameObject.SetActive(false);
-            GameControl.PlayerState.IsInvulnerable = false;
-            ScoreSLA.StartScore();
+            ControlSLA.StopUpdate = false;
+
+            StartCoroutine(StartCountdown());
         }
 
         private static Vector3 StartingPosition()
@@ -92,6 +112,33 @@ namespace SLA
 
             return Vector3.zero + Quaternion.Euler
                        (0, 360f * (PhotonNetwork.player.ID - 1) / PhotonNetwork.room.PlayerCount, 0) * Vector3.right * 2;
+        }
+
+        private IEnumerator StartCountdown()
+        {
+            // Countdown
+            for (var i = 0; i < 3; i++)
+            {
+                var countdown = Instantiate(CountdownPrefab, GameObject.Find("Canvas").transform);
+                countdown.GetComponent<TextMeshProUGUI>().text = (3 - i).ToString();
+                yield return new WaitForSeconds(1);
+                Destroy(countdown);
+            }
+
+            if (PhotonNetwork.isMasterClient)
+                _photonView.RPC("StartScore", PhotonTargets.All);
+        }
+
+        [PunRPC]
+        private void StartScore()
+        {
+            foreach (var state in ControlSLA.NetworkManager.PlayerState)
+            {
+                state.Player.transform.Find("Shield").gameObject.SetActive(false);
+            }
+
+            GameControl.PlayerState.IsInvulnerable = false;
+            ControlSLA.Score.StartScore();
         }
     }
 }

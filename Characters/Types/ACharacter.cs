@@ -167,8 +167,10 @@ namespace Characters.Types
 
         public virtual void RefreshCooldowns()
         {
-            AbilityFirst.RefreshCooldown();
-            AbilitySecond.RefreshCooldown();
+            if (AbilityFirst != null)
+                AbilityFirst.RefreshCooldown();
+            if (AbilitySecond != null)
+                AbilitySecond.RefreshCooldown();
         }
 
 

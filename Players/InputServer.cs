@@ -48,11 +48,14 @@ namespace Players
             {
                 _characterController.InputAbilities();
             }
-            
         }
 
         public void LateUpdate()
         {
+            if (_inGameMenuManagerRLR == null && _inGameMenuManagerSLA == null)
+            {
+                Init();
+            }
             if (IsMenuActive()) return; // options menu serve all inputs
             if (_characterController != null)
             {

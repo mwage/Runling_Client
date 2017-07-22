@@ -40,7 +40,7 @@ namespace RLR
             // Load player
            if (GameControl.PlayerState.Player == null)
             {
-                GameControl.PlayerState.Player = PlayerFactory.Create(GameControl.PlayerState.CharacterDto, 1);
+                GameControl.PlayerState.Player = PlayerFactory.Create(GameControl.PlayerState.CharacterDto);
                 GameControl.PlayerState.PlayerTrigger = GameControl.PlayerState.Player.transform.Find("Trigger").gameObject.GetComponent<PlayerTrigger>();
             }
 
