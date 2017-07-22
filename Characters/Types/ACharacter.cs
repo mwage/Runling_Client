@@ -163,8 +163,10 @@ namespace Characters.Types
 
         public virtual void RefreshCooldowns()
         {
-            Ability1.RefreshCooldown();
-            Ability2.RefreshCooldown();
+            if (Ability1 != null)
+                Ability1.RefreshCooldown();
+            if (Ability2 != null)
+                Ability2.RefreshCooldown();
         }
 
         public virtual int GetSpeedPropertyCost()

@@ -11,7 +11,7 @@ namespace RLR.Levels
 {
     public class RunlingChaser : MonoBehaviour
     {
-        public DroneFactory DroneFactory;
+        public LevelManagerRLR LevelManager;
         public GameObject ChaserText;
         public CheckSafeZones CheckSafeZones;
 
@@ -74,7 +74,7 @@ namespace RLR.Levels
             {
                 if (_chaserSpawnPlatformIdxs[i] == platformIndex.Value && !_reachedChaserPlatform[i, 0] && (i == 0 || _reachedChaserPlatform[i-1, 0]))
                 {
-                    _chasers.AddRange(DroneFactory.SpawnDrones(_chaserBase)); // you add few objects (addrange), but you actyally add only one each time in loop, make it before loop or change to .Add()
+                    _chasers.AddRange(LevelManager.DroneFactory.SpawnDrones(_chaserBase)); // you add few objects (addrange), but you actyally add only one each time in loop, make it before loop or change to .Add()
                     
                     if (_chaserSpawnPlatformIdxs[i] != 0) // sets start position of chaser
                     {
@@ -83,19 +83,19 @@ namespace RLR.Levels
                     }
                     if (_pattern != null)
                     {
-                        DroneFactory.AddPattern(_pattern, _chasers[i], _iDrone);
+                        LevelManager.DroneFactory.AddPattern(_pattern, _chasers[i], _iDrone);
                     }
                     _chasers[i].tag = "Strong Enemy";
                     _reachedChaserPlatform[i, 0] = true;
                     safeZones[_chaserDestroyPlatformIdxs[i]].transform.Find("PlayerCollider/ChaserGlow").gameObject.SetActive(true);
-                    DroneFactory.StartCoroutine(SpawnChaserText(3f));
+                    LevelManager.DroneFactory.StartCoroutine(SpawnChaserText(3f));
                 }
                 if (_chaserDestroyPlatformIdxs[i] == platformIndex.Value && !_reachedChaserPlatform[i, 1] && _reachedChaserPlatform[i, 0])
                 {
                     Destroy(_chasers[i]);
                     _reachedChaserPlatform[i, 1] = true;
                     safeZones[_chaserDestroyPlatformIdxs[i]].transform.Find("PlayerCollider/ChaserGlow").gameObject.SetActive(false);
-                    DroneFactory.StartCoroutine(DestroyChaserText(3f));
+                    LevelManager.DroneFactory.StartCoroutine(DestroyChaserText(3f));
                 }
             }
         }

@@ -47,7 +47,6 @@ namespace SLA.Levels
             {
                 DroneFactory = PhotonNetwork.InstantiateSceneObject(Path.Combine("Drones", "Drone Manager"), 
                     Vector3.zero, Quaternion.identity, 0, new object[0]).GetComponent<DroneFactory>();
-                DroneFactory.transform.SetParent(transform);
             }
             InitializeLevels();
         }

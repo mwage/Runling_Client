@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Drones;
 using Launcher;
 using RLR.GenerateMap;
@@ -33,7 +34,8 @@ namespace RLR.Levels
 
         public void Awake()
         {
-            //GameControl.SetDifficulty = GameControl.Difficulty.Hard;
+            DroneFactory = PhotonNetwork.InstantiateSceneObject(Path.Combine("Drones", "Drone Manager"),
+                Vector3.zero, Quaternion.identity, 0, new object[0]).GetComponent<DroneFactory>();
             _levels = _initializeLevelsRLR.SetDifficulty(this);
         }
 
