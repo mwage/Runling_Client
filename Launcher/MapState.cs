@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Characters.Types;
 using UnityEngine;
 
 namespace Launcher

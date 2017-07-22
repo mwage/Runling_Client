@@ -11,14 +11,17 @@ namespace Launcher
         public CharacterDto CharacterDto;
         public PlayerTrigger PlayerTrigger;
         public ACharacter CharacterController;
-        public float MoveSpeed = 0;
-        public bool IsDead = true;
+
         public bool IsInvulnerable = false;
         public bool IsSafe = false;
         public bool IsImmobile = false;
-        public int Lives = 0;
         public bool AutoClickerActive = false;
         public bool GodModeActive = false;
+        
+        //Synced via network, should be removed
+        public float MoveSpeed = 0;
+        public bool IsDead = true;
         public int TotalScore = 0;
+        public int Lives = 0;
     }
 }

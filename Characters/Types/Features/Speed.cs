@@ -45,5 +45,10 @@ namespace Characters.Types.Features
         {
             _bonusSpeed = 0F;
         }
+
+        public void SetBaseSpeed (float newSpeed)
+        {
+            BaseSpeed = newSpeed;
+        }
     }
 }

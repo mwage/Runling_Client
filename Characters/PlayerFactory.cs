@@ -8,27 +8,18 @@ namespace Characters
 {
     public class PlayerFactory : MonoBehaviour
     {
-        // class creates player gameobject in hierarchy
-        // returns Player to GameControl.GameState.Player - // TODO maybe we should change names here?
-
-        public Transform Player; // top position in hierarchy
-
-        public GameObject ManticorePrefab;
-        public GameObject UnicornPrefab;
-        
-
         private PlayerFactory()
         {
         }
 
-        public GameObject Create(CharacterDto character,  int? playerId = null)
+        public GameObject Create(CharacterDto character)
         {
             switch (character.Character)
             {
                 case "Manticore":
                 {
                     var player = PhotonNetwork.Instantiate(Path.Combine("Characters", "Manticore"), Vector3.zero, Quaternion.identity, 0);
-                    player.transform.SetParent(Player);
+                    player.transform.SetParent(transform);
                     player.GetComponentInChildren<PlayerTrigger>().InitializeTrigger();
                     GameControl.PlayerState.CharacterController = player.AddComponent<Manticore>();
                     GameControl.PlayerState.CharacterController.Initialize(character);
@@ -38,8 +29,17 @@ namespace Characters
                 case "Unicorn":
                 {
                     var player = PhotonNetwork.Instantiate(Path.Combine("Characters", "Cat"), Vector3.zero, Quaternion.identity, 0);
-                    player.transform.SetParent(Player);
+                    player.transform.SetParent(transform);
                     GameControl.PlayerState.CharacterController = player.AddComponent<Unicorn>();
+                    GameControl.PlayerState.CharacterController.Initialize(character);
+
+                    return player;
+                }
+                case "Arena":
+                {
+                    var player = PhotonNetwork.Instantiate(Path.Combine("Characters", "Manticore"), Vector3.zero, Quaternion.identity, 0);
+                    player.transform.SetParent(transform);
+                    GameControl.PlayerState.CharacterController = player.AddComponent<ArenaCharacter>();
                     GameControl.PlayerState.CharacterController.Initialize(character);
 
                     return player;

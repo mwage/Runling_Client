@@ -30,7 +30,8 @@ namespace Drones.DroneTypes
 
         public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null)
         {
-            var newDrone = PhotonNetwork.room != null && SceneManager.GetActiveScene().name != "MainMenu" ? PhotonNetwork.Instantiate(Path.Combine("Drones", factory.SetDroneType[DroneType]), Vector3.zero,Quaternion.identity, 0) :
+            var newDrone = PhotonNetwork.room != null && SceneManager.GetActiveScene().name != "MainMenu" ? 
+                PhotonNetwork.InstantiateSceneObject(Path.Combine("Drones", factory.SetDroneType[DroneType]), Vector3.zero,Quaternion.identity, 0, new object[0]) :
                 Object.Instantiate(factory.BouncingDronePrefab);
 
             Vector3 pos;

@@ -1,5 +1,6 @@
 ﻿using Drones.Movement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Drones.DroneTypes
 {
@@ -38,21 +39,28 @@ namespace Drones.DroneTypes
 
         public void ConfigureDrone(GameObject drone, DroneFactory factory)
         {
-            // Adjust drone color and size
-            var model = drone.transform.GetChild(0);
-            foreach (Transform child in model)
+            var applyMaterials = drone.GetComponent<ApplyMaterials>();
+            if (SceneManager.GetActiveScene().name != "MainMenu")
             {
-                if (child.name == "Top") continue;
-                if (child.name == "Sphere")
-                {
-                    foreach (Transform ch in child)
-                    {
-                        ch.GetComponent<Renderer>().material = factory.SetDroneMaterial[Color];
-                    }
-                }
-                child.GetComponent<Renderer>().material = factory.SetDroneMaterial[Color];
+                applyMaterials.PhotonView.RPC("ChangeColor", PhotonTargets.All, Color);
             }
-
+            else
+            {
+                var model = drone.transform.GetChild(0);
+                foreach (Transform child in model)
+                {
+                    if (child.name == "Top") continue;
+                    if (child.name == "Sphere")
+                    {
+                        foreach (Transform ch in child)
+                        {
+                            ch.GetComponent<Renderer>().material = factory.SetDroneMaterial[Color];
+                        }
+                    }
+                    child.GetComponent<Renderer>().material = factory.SetDroneMaterial[Color];
+                }
+            }
+            
             drone.transform.localScale = Size * Vector3.one;
 
             if (DroneType == DroneType.BouncingDrone || DroneType == DroneType.FlyingBouncingDrone ||
@@ -83,6 +91,7 @@ namespace Drones.DroneTypes
                 SinFrequency = rhs.SinFrequency;
             }
         }
+
     }
 
     public enum DroneType

@@ -54,12 +54,7 @@ namespace RLR
                 StopUpdate = true;
                 LevelManager.EndLevel(0);
             }
-
-            
-
         }
-
-
     }
 }
 

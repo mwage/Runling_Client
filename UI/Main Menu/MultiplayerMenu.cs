@@ -166,6 +166,7 @@ namespace UI.Main_Menu
         public override void OnJoinedRoom()
         {
             GameControl.GameState.Solo = false;
+            GameControl.GameState.CurrentLevel = 1;
             OutOfLobby.SetActive(false);
             InLobby.SetActive(true);
             _playerLayoutGroup.JoinedRoom();

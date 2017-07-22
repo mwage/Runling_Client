@@ -30,8 +30,8 @@ namespace Drones.DroneTypes
         {
             if (PhotonNetwork.room != null && SceneManager.GetActiveScene().name != "MainMenu")
             {
-                return PhotonNetwork.Instantiate(Path.Combine("Drones", factory.SetDroneType[DroneType]), Position,
-                    Quaternion.Euler(0, Direction, 0), 0);
+                return PhotonNetwork.InstantiateSceneObject(Path.Combine("Drones", factory.SetDroneType[DroneType]), Position,
+                    Quaternion.Euler(0, Direction, 0), 0, new object[0]);
             }
             return Object.Instantiate(factory.OneWayDronePrefab, Position, Quaternion.Euler(0, Direction, 0));
         }
