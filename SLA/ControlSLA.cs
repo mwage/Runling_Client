@@ -1,10 +1,6 @@
-﻿using System.Collections;
-using Characters;
-using Characters.Repositories;
-using Characters.Types;
+﻿using System.Linq;
 using Launcher;
 using SLA.Levels;
-using TMPro;
 using UnityEngine;
 
 namespace SLA
@@ -16,11 +12,11 @@ namespace SLA
         public InitializeGameSLA InitializeGame;
         public DeathSLA Death;
         public GameObject PracticeMode;
-        public NetworkManagerSLA NetworkManager;
 
         private PhotonView _photonView;
-
-        public bool StopUpdate;
+        public bool LoadingNextLevel;
+        public bool CheckIfDead;
+        public bool CheckIfAllDead;
 
         private void Awake()
         {
@@ -30,14 +26,15 @@ namespace SLA
         private void Start()
         {
             // Set current Level and movespeed, load drones and spawn immunity
-            StopUpdate = true;
+            CheckIfDead = false;
+            CheckIfAllDead = false;
             GameControl.Settings.CameraRange = 15;
             GameControl.GameState.GameActive = true;
-            foreach (var state in NetworkManager.SyncVars)
+            foreach (var state in GameControl.PlayerState.SyncVars)
             {
                 state.TotalScore = 0;
             }
-            if (GameControl.GameState.SetGameMode == Gamemode.Practice)
+            if (GameControl.GameState.SetGameMode == GameMode.Practice)
             {
                 PracticeMode.SetActive(true);
             }
@@ -47,24 +44,24 @@ namespace SLA
 
         private void Update()
         {
-            if (NetworkManager.SyncVars[PhotonNetwork.player.ID - 1].IsDead && !StopUpdate)
+            if (CheckIfDead && GameControl.PlayerState.SyncVars[PhotonNetwork.player.ID - 1].IsDead)
             {
-                Death.Death();
+                CheckIfDead = false;
+                //Death.Death();
 
                 //in case of highscore, save and 
-                if (GameControl.GameState.SetGameMode != Gamemode.Practice)
+                if (GameControl.GameState.SetGameMode != GameMode.Practice)
                 {
                     Score.SetHighScore();
                 }
-                
-                //change level
-                LevelManager.EndLevel(2f);
-
-                //dont repeat above once player dead
-                StopUpdate = true;
             }
 
-            
+            if (PhotonNetwork.isMasterClient && CheckIfAllDead)
+            {
+                CheckDead();
+            }
+
+            // TODO: substitute with InputServer
             // Press 1 to turn on Godmode
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.PlayerState.GodModeActive)
             {
@@ -86,6 +83,27 @@ namespace SLA
             }
         }
 
+        private void CheckDead()
+        {
+            if (GameControl.PlayerState.SyncVars.Where(state => state != null).Any(state => !state.IsDead))
+                return;
+
+            CheckIfAllDead = false;
+            _photonView.RPC("LevelOver", PhotonTargets.All);
+        }
+
+        [PunRPC]
+        private void LevelOver()
+        {
+            CheckIfAllDead = false;
+            GameControl.GameState.AllDead = true;
+            Debug.Log("loading next level");
+            if (!LoadingNextLevel)
+            {
+                LoadingNextLevel = true;
+                LevelManager.EndLevel(2f);
+            }
+        }
     }
 }
 

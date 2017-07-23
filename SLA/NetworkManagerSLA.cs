@@ -9,17 +9,14 @@ namespace SLA
     {
         [SerializeField] private VoteGameModeSLA _votingSystem;
         public GameObject Game;
-        public PhotonView PhotonView;
-        public PhotonPlayer[] PlayerList;
-        public SyncVarsSLA[] SyncVars;
+        private PhotonView _photonView;
         public bool Voting;
 
 
         private void Awake()
         {
-            PhotonView = GetComponent<PhotonView>();
-            PlayerList = new PhotonPlayer[PhotonNetwork.room.PlayerCount];
-            SyncVars = new SyncVarsSLA[PhotonNetwork.room.PlayerCount];
+            _photonView = GetComponent<PhotonView>();
+            GameControl.PlayerState.SyncVars = new SyncVarsSLA[PhotonNetwork.room.PlayerCount];
             if (GameControl.GameState.Solo)
             {
                 _votingSystem.gameObject.SetActive(false);
@@ -27,19 +24,15 @@ namespace SLA
 
             foreach (var player in PhotonNetwork.playerList)
             {
-                PlayerList[player.ID - 1] = player;
+                GameControl.PlayerState.SyncVars[player.ID - 1] = new SyncVarsSLA(player);
             }
-            foreach (var player in PlayerList)
-            {
-                SyncVars[player.ID - 1] = new SyncVarsSLA(player);
-            }
-            PhotonView.RPC("FinishedLoading", PhotonTargets.All, PhotonNetwork.player);
+            _photonView.RPC("FinishedLoading", PhotonTargets.All, PhotonNetwork.player);
         }
 
         [PunRPC]
         private void FinishedLoading(PhotonPlayer player)
         {
-            SyncVars[player.ID - 1].FinishedLoading = true;
+            GameControl.PlayerState.SyncVars[player.ID - 1].FinishedLoading = true;
         }
 
         private void Update()
@@ -47,7 +40,7 @@ namespace SLA
             if (Voting)
                 return;
 
-            if (SyncVars.Where(state => state != null).Any(state => !state.FinishedLoading))
+            if (GameControl.PlayerState.SyncVars.Where(state => state != null).Any(state => !state.FinishedLoading))
             {
                 return;
             }
@@ -69,8 +62,7 @@ namespace SLA
         public override void OnPhotonPlayerDisconnected(PhotonPlayer player)
         {
             Debug.Log(player.NickName + " has left the game.");
-            PlayerList[player.ID - 1] = null;
-            SyncVars[player.ID - 1] = null;
+            GameControl.PlayerState.SyncVars[player.ID - 1] = null;
         }
     }
 }

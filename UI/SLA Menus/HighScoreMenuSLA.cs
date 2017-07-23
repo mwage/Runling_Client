@@ -60,7 +60,7 @@ namespace UI.SLA_Menus
             _combinedScore.GetComponent<RectTransform>().sizeDelta = new Vector2(80, 20);
             _combinedScore.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(80, 20);
 
-            if (!GameControl.GameState.GameActive || GameControl.GameState.SetGameMode == Gamemode.Practice)
+            if (!GameControl.GameState.GameActive || GameControl.GameState.SetGameMode == GameMode.Practice)
             {
                 _descriptionText.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
                 _descriptionText.transform.GetChild(2).GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 15);
@@ -86,7 +86,7 @@ namespace UI.SLA_Menus
             _combinedScore.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = GameControl.HighScores.HighScoreSLA[14].ToString();
 
             // Current game scores
-            if (GameControl.GameState.GameActive && GameControl.GameState.SetGameMode != Gamemode.Practice)
+            if (GameControl.GameState.GameActive && GameControl.GameState.SetGameMode != GameMode.Practice)
             {
                 for (var i = 0; i < LevelManagerSLA.NumLevels; i++)
                 {

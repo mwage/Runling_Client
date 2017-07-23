@@ -22,14 +22,14 @@ namespace Characters
 
         public static readonly int AbilityPointsCostPerLevel = 5;
 
-        public static int CalculateExp(int platformIndex, int level, Difficulty difficulty, Gamemode mode)
+        public static int CalculateExp(int platformIndex, int level, Difficulty difficulty, GameMode mode)
         {
             if (platformIndex == 0) return 0;
 
             int difficlutyMultiplier = difficulty == Difficulty.Hard ? 2 : 1;
             if (platformIndex == GameControl.MapState.SafeZones.Count - 1) difficlutyMultiplier *= 10;
 
-            if (mode == Gamemode.Practice)
+            if (mode == GameMode.Practice)
             {
                 return level * difficlutyMultiplier; // set to 0 later
             }

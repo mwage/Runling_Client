@@ -20,13 +20,13 @@ namespace RLR
 
             switch (GameControl.GameState.SetGameMode)
             {
-                case Gamemode.Classic:
+                case GameMode.Classic:
                     manager.EndGame(1);
                     break;
-                case Gamemode.Practice:
+                case GameMode.Practice:
                     StartCoroutine(Respawn(3, 3, initializeGame, control));
                     break;
-                case Gamemode.TimeMode:
+                case GameMode.TimeMode:
                     if (GameControl.PlayerState.Lives == 0)
                     {
                         manager.EndGame(1);

@@ -24,7 +24,7 @@ namespace UI.Main_Menu
 
         public void StartGame()
         {
-            GameControl.GameState.SetGameMode = Gamemode.Classic;
+            GameControl.GameState.SetGameMode = GameMode.Classic;
             GameControl.GameState.Solo = true;
             GameControl.GameState.CurrentLevel = 1;
 
@@ -33,7 +33,7 @@ namespace UI.Main_Menu
 
         public void Practice()
         {
-            GameControl.GameState.SetGameMode = Gamemode.Practice;
+            GameControl.GameState.SetGameMode = GameMode.Practice;
             GameControl.GameState.Solo = true;
             GameControl.GameState.CurrentLevel = 1;
 
