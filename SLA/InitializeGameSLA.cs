@@ -34,6 +34,7 @@ namespace SLA
         //set Spawnimmunity once game starts
         public void InitializeGame()
         {
+            ControlSLA.PhotonView.RPC("DebugThis", PhotonTargets.All, PhotonNetwork.player.NickName, "Initialize Game");
             StartCoroutine(PrepareLevel());
         }
 
@@ -62,7 +63,7 @@ namespace SLA
 
 
         [PunRPC]
-        private void StartLevel(PhotonMessageInfo info)
+        private void StartLevel()
         {
             SpawnPlayer();
 
@@ -92,6 +93,7 @@ namespace SLA
 
         private void SpawnPlayer()
         {
+            ControlSLA.PhotonView.RPC("DebugThis", PhotonTargets.All, PhotonNetwork.player.NickName, "SpawnPlayer");
             if (GameControl.PlayerState.Player == null)
             {
                 GameControl.PlayerState.CharacterDto = new CharacterDto(0, "Arena", 0, 0, 0, 0, 1, 0, 0);
@@ -120,6 +122,7 @@ namespace SLA
         [PunRPC]
         private IEnumerator StartCountdown()
         {
+            ControlSLA.PhotonView.RPC("DebugThis", PhotonTargets.All, PhotonNetwork.player.NickName, "Starting Countdown");
             // Countdown
             for (var i = 0; i < 3; i++)
             {
@@ -136,6 +139,7 @@ namespace SLA
         [PunRPC]
         private void StartScore()
         {
+            ControlSLA.PhotonView.RPC("DebugThis", PhotonTargets.All, PhotonNetwork.player.NickName, "Starting Score");
             GameControl.PlayerState.Player.transform.Find("Shield").gameObject.SetActive(false);
             foreach (var state in GameControl.PlayerState.SyncVars)
             {

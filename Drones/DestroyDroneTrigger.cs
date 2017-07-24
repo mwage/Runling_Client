@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Drones
 {
@@ -7,7 +8,14 @@ namespace Drones
 
         private void OnTriggerStay(Collider other)
         {
-            Destroy(transform.parent.gameObject);
+            if (SceneManager.GetActiveScene().name == "MainMenu")
+            {
+                Destroy(transform.parent.gameObject);
+            }
+            else
+            {
+                PhotonNetwork.Destroy(transform.parent.gameObject);
+            }
         }
     }
 }

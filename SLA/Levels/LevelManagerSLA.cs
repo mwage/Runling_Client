@@ -58,6 +58,7 @@ namespace SLA.Levels
         //Spawn Drones according to what level is active
         public void LoadDrones(int level)
         {
+            InitializeGameSLA.ControlSLA.PhotonView.RPC("DebugThis", PhotonTargets.All, PhotonNetwork.player.NickName, "Spawning Drones");
             if (!PhotonNetwork.isMasterClient)
                 return;
 
@@ -68,6 +69,7 @@ namespace SLA.Levels
             catch (Exception e)
             {
                 Debug.Log("Failed to load level " + level + ": " + e.Message + " - " + e.StackTrace);
+                InitializeGameSLA.ControlSLA.PhotonView.RPC("DebugThis", PhotonTargets.All, PhotonNetwork.player.NickName, "Failed to Spawn drones");
                 PhotonNetwork.LeaveRoom();
                 SceneManager.LoadScene("MainMenu");
             }
@@ -81,6 +83,7 @@ namespace SLA.Levels
         //Load next level or end game
         public void EndLevel(float delay)
         {
+            InitializeGameSLA.ControlSLA.PhotonView.RPC("DebugThis", PhotonTargets.All, PhotonNetwork.player.NickName, "EndLevel");
             StartCoroutine((GameControl.GameState.CurrentLevel == _levels.Count && GameControl.GameState.SetGameMode != GameMode.Practice) ? EndGameSLA(delay) : NextLevel(delay));
         }
 
@@ -109,7 +112,8 @@ namespace SLA.Levels
                 GameControl.GameState.CurrentLevel++;
             }
 
-            _photonView.RPC("StartNewLevel", PhotonTargets.AllViaServer);
+            if (PhotonNetwork.isMasterClient)
+                _photonView.RPC("StartNewLevel", PhotonTargets.AllViaServer);
         }
 
         //load after the last level

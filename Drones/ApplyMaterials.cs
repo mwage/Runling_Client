@@ -16,7 +16,7 @@ namespace Drones
         }
 
         [PunRPC]
-        public void ChangeColor(DroneColor color)
+        public void ChangeColorAndSize(DroneColor color, float size)
         {
             var model = transform.GetChild(0);
             foreach (Transform child in model)
@@ -31,6 +31,7 @@ namespace Drones
                 }
                 child.GetComponent<Renderer>().material = _droneFactory.SetDroneMaterial[color];
             }
+            transform.localScale = size * Vector3.one;
         }
     }
 }

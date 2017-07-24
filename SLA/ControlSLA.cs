@@ -13,14 +13,14 @@ namespace SLA
         public DeathSLA Death;
         public GameObject PracticeMode;
 
-        private PhotonView _photonView;
+        public PhotonView PhotonView;
         public bool LoadingNextLevel;
         public bool CheckIfDead;
         public bool CheckIfAllDead;
 
         private void Awake()
         {
-            _photonView = GetComponent<PhotonView>();
+            PhotonView = GetComponent<PhotonView>();
         }
 
         private void Start()
@@ -89,7 +89,7 @@ namespace SLA
                 return;
 
             CheckIfAllDead = false;
-            _photonView.RPC("LevelOver", PhotonTargets.All);
+            PhotonView.RPC("LevelOver", PhotonTargets.All);
         }
 
         [PunRPC]
@@ -97,12 +97,19 @@ namespace SLA
         {
             CheckIfAllDead = false;
             GameControl.GameState.AllDead = true;
-            Debug.Log("loading next level");
+            PhotonView.RPC("DebugThis", PhotonTargets.All, PhotonNetwork.player.NickName, "LevelOver, load next");
             if (!LoadingNextLevel)
             {
                 LoadingNextLevel = true;
                 LevelManager.EndLevel(2f);
             }
+        }
+
+
+        [PunRPC]
+        public void DebugThis(string playerName, string message)
+        {
+            Debug.Log(playerName + " - " + message);
         }
     }
 }
