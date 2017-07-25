@@ -138,8 +138,6 @@ namespace Players
             }
             else
             {
-                Debug.Log("checking for safe");
-                Debug.Log(other.tag);
                 if (other.CompareTag("SafeZone") && GameControl.PlayerState.IsSafe)
                 {
                     GameControl.PlayerState.IsSafe = false;
