@@ -9,7 +9,7 @@ namespace Launcher
         Hard
     }
 
-    public enum Gamemode
+    public enum GameMode
     {
         Classic,
         TimeMode,
@@ -23,8 +23,10 @@ namespace Launcher
         public bool GameActive = false;
         public int CurrentLevel = 1;
         public bool FinishedLevel = false;
+        public bool AllDead = false;
         public Difficulty SetDifficulty = Difficulty.Hard;
-        public Gamemode SetGameMode = Gamemode.Practice;
+        public GameMode SetGameMode = GameMode.Practice;
         public bool Solo;
+
     }
 }

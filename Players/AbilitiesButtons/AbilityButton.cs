@@ -1,8 +1,6 @@
-﻿using System.Text;
-using Characters.Abilities;
+﻿using Characters.Abilities;
 using Characters.Types;
 using Launcher;
-using UnityEditor;
 using UnityEngine.UI;
 
 namespace Players.AbilitiesButtons

@@ -30,10 +30,6 @@ namespace Drones.DroneTypes
 
         public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null)
         {
-            var newDrone = PhotonNetwork.room != null && SceneManager.GetActiveScene().name != "MainMenu" ? 
-                PhotonNetwork.InstantiateSceneObject(Path.Combine("Drones", factory.SetDroneType[DroneType]), Vector3.zero,Quaternion.identity, 0, new object[0]) :
-                Object.Instantiate(factory.BouncingDronePrefab);
-
             Vector3 pos;
             if (posDelegate != null)
                 pos = posDelegate(Size, area);
@@ -42,12 +38,12 @@ namespace Drones.DroneTypes
                 pos = isAdded
                     ? DroneStartPosition.GetRandomCorner(Size, area)
                     : DroneStartPosition.GetRandomPosition(Size, area);
-               
             }
 
-            newDrone.transform.position = pos;
-            newDrone.transform.rotation = Quaternion.Euler(0, StartDirection + DroneDirection.RandomDirection(RestrictedZone, ConeRange), 0);
-
+            var newDrone = PhotonNetwork.room != null && SceneManager.GetActiveScene().name != "MainMenu" ?
+                PhotonNetwork.InstantiateSceneObject(Path.Combine("Drones", factory.SetDroneType[DroneType]), pos, 
+                Quaternion.Euler(0, StartDirection + DroneDirection.RandomDirection(RestrictedZone, ConeRange), 0), 0, new object[0]) :
+                Object.Instantiate(factory.BouncingDronePrefab, pos, Quaternion.Euler(0, StartDirection + DroneDirection.RandomDirection(RestrictedZone, ConeRange), 0));
             return newDrone;
         }
     }

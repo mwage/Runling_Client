@@ -24,11 +24,11 @@ namespace RLR
             GameControl.GameState.GameActive = true;
             GameControl.PlayerState.TotalScore = 0;
 
-            if (GameControl.GameState.SetGameMode == Gamemode.Practice)
+            if (GameControl.GameState.SetGameMode == GameMode.Practice)
             {
                 PracticeMode.SetActive(true);
             }
-            if (GameControl.GameState.SetGameMode == Gamemode.TimeMode)
+            if (GameControl.GameState.SetGameMode == GameMode.TimeMode)
             {
                 GameControl.PlayerState.Lives = 3;
                 TimeModeUI.SetActive(true);

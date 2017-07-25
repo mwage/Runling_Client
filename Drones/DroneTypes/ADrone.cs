@@ -42,7 +42,7 @@ namespace Drones.DroneTypes
             var applyMaterials = drone.GetComponent<ApplyMaterials>();
             if (SceneManager.GetActiveScene().name != "MainMenu")
             {
-                applyMaterials.PhotonView.RPC("ChangeColor", PhotonTargets.All, Color);
+                applyMaterials.PhotonView.RPC("ChangeColorAndSize", PhotonTargets.All, Color, Size);
             }
             else
             {
@@ -59,9 +59,9 @@ namespace Drones.DroneTypes
                     }
                     child.GetComponent<Renderer>().material = factory.SetDroneMaterial[Color];
                 }
+
+                drone.transform.localScale = Size * Vector3.one;
             }
-            
-            drone.transform.localScale = Size * Vector3.one;
 
             if (DroneType == DroneType.BouncingDrone || DroneType == DroneType.FlyingBouncingDrone ||
                 DroneType == DroneType.FlyingOneWayDrone)

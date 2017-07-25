@@ -4,6 +4,7 @@ namespace Characters.Abilities
 {
     public class AbilityManager : MonoBehaviour
     {
+        [HideInInspector]
         public PhotonView PhotonView;
         private GameObject _shield;
         private GameObject _godMode;

@@ -48,7 +48,7 @@ namespace RLR
             if (_countdown > 0 && !GameControl.GameState.FinishedLevel && GameControl.GameState.GameActive)
             {
                 _timer = Time.time - _initializationTime;
-                if (GameControl.GameState.SetGameMode == Gamemode.TimeMode)
+                if (GameControl.GameState.SetGameMode == GameMode.TimeMode)
                 {
                     _countdown = _timeLimit - _timer;
                     CountDownText.GetComponent<TextMeshProUGUI>().text = "Countdown: " + (int)_countdown / 60 + ":" + (_countdown % 60).ToString("00.00");
@@ -62,7 +62,7 @@ namespace RLR
             if (index == null) return;
             if (!GameControl.MapState.VisitedSafeZones[index.Value] && index.Value != 0)
             {
-                if (GameControl.GameState.SetGameMode == Gamemode.TimeMode)
+                if (GameControl.GameState.SetGameMode == GameMode.TimeMode)
                 {
                     GameControl.PlayerState.TotalScore += _difficultyMultiplier * GameControl.GameState.CurrentLevel;
                     CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + GameControl.PlayerState.TotalScore;
@@ -81,7 +81,7 @@ namespace RLR
         //Checks for a new highscore and saves it
         public void SetHighScore()
         {
-            if (GameControl.GameState.FinishedLevel && GameControl.GameState.SetGameMode != Gamemode.Practice)
+            if (GameControl.GameState.FinishedLevel && GameControl.GameState.SetGameMode != GameMode.Practice)
             {
                 FinishTimeCurGame[GameControl.GameState.CurrentLevel - 1] = _timer;
 
@@ -107,7 +107,7 @@ namespace RLR
                         break;
                 }
             }
-            if (GameControl.GameState.SetGameMode == Gamemode.TimeMode)
+            if (GameControl.GameState.SetGameMode == GameMode.TimeMode)
             {
                 SetTimeModeHighScore();
             }

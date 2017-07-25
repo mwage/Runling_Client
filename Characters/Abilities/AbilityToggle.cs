@@ -5,13 +5,7 @@ namespace Characters.Abilities
     public class AbilityToggle : MonoBehaviour
     {
         private AbilityManager _abilityManager;
-/*
-        private void Awake()
-        {
-            Initialize();
-            gameObject.SetActive(false);
-        }
-        */
+
         private void Initialize()
         {
             _abilityManager = transform.parent.GetComponent<AbilityManager>();

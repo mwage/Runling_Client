@@ -18,12 +18,13 @@ namespace SLA
         [SerializeField] private Text _teamVoteText;
         [SerializeField] private Text _practiceVoteText;
 
+        [HideInInspector]
         public PhotonView PhotonView;
-        private Gamemode?[] _votes;
+        private GameMode?[] _votes;
         private int _classicVotes;
         private int _teamVotes;
         private int _practiceVotes;
-        private Dictionary<Gamemode, int> _votesPerMode;
+        private Dictionary<GameMode, int> _votesPerMode;
         private bool _starting;
 
         public VoteGameModeSLA(bool starting)
@@ -34,12 +35,12 @@ namespace SLA
         private void Awake()
         {
             PhotonView = GetComponent<PhotonView>();
-            _votes = new Gamemode?[PhotonNetwork.room.PlayerCount];
-            _votesPerMode = new Dictionary<Gamemode, int>
+            _votes = new GameMode?[PhotonNetwork.room.PlayerCount];
+            _votesPerMode = new Dictionary<GameMode, int>
             {
-                {Gamemode.Classic, _classicVotes},
-                {Gamemode.Team, _teamVotes},
-                {Gamemode.Practice, _practiceVotes}
+                {GameMode.Classic, _classicVotes},
+                {GameMode.Team, _teamVotes},
+                {GameMode.Practice, _practiceVotes}
             };
         }
 
@@ -68,42 +69,42 @@ namespace SLA
 
         private void Update()
         {
-            if (_networkManagerSLA.SyncVars == null || _starting)
+            if (GameControl.PlayerState.SyncVars == null || _starting)
                 return;
-            if (_networkManagerSLA.SyncVars.Where(state => state != null).Any(state => !state.FinishedVoting))
+            if (GameControl.PlayerState.SyncVars.Where(state => state != null).Any(state => !state.FinishedVoting))
                 return;
 
             _starting = true;
             if (PhotonNetwork.isMasterClient)
-                PhotonView.RPC("StartGame", PhotonTargets.All);
+                PhotonView.RPC("StartGame", PhotonTargets.AllViaServer, SetGameMode());
         }
 
         #region Buttons
         public void VoteModeClassic()
         {
-            ChangeVote(Gamemode.Classic, PhotonNetwork.player.ID);
+            ChangeVote(GameMode.Classic, PhotonNetwork.player.ID);
         }
 
         public void VoteModeTeam()
         {
-            ChangeVote(Gamemode.Team, PhotonNetwork.player.ID);
+            ChangeVote(GameMode.Team, PhotonNetwork.player.ID);
         }
 
         public void VoteModePractice()
         {
-            ChangeVote(Gamemode.Practice, PhotonNetwork.player.ID);
+            ChangeVote(GameMode.Practice, PhotonNetwork.player.ID);
         }
         #endregion
 
-        private void ChangeVote(Gamemode mode, int playerID)
+        private void ChangeVote(GameMode mode, int playerID)
         {
             PhotonView.RPC("SubmitVote", PhotonTargets.All, mode, playerID);
         }
 
         [PunRPC]
-        private void SubmitVote(Gamemode mode, int playerID)
+        private void SubmitVote(GameMode mode, int playerID)
         {
-            Debug.Log(_networkManagerSLA.PlayerList[playerID - 1].NickName + " voted for " + mode);
+            Debug.Log(GameControl.PlayerState.SyncVars[playerID - 1].Owner.NickName + " voted for " + mode);
             _votes[playerID - 1] = mode;
             UpdateVotes();
         }
@@ -118,13 +119,13 @@ namespace SLA
             {
                 switch (vote)
                 {
-                    case Gamemode.Classic:
+                    case GameMode.Classic:
                         _classicVotes++;
                         break;
-                    case Gamemode.Team:
+                    case GameMode.Team:
                         _teamVotes++;
                         break;
-                    case Gamemode.Practice:
+                    case GameMode.Practice:
                         _practiceVotes++;
                         break;
                 }
@@ -134,9 +135,9 @@ namespace SLA
             _teamVoteText.text = _teamVotes.ToString();
             _practiceVoteText.text = _practiceVotes.ToString();
 
-            _votesPerMode[Gamemode.Classic] = _classicVotes;
-            _votesPerMode[Gamemode.Team] = _teamVotes;
-            _votesPerMode[Gamemode.Practice] = _practiceVotes;
+            _votesPerMode[GameMode.Classic] = _classicVotes;
+            _votesPerMode[GameMode.Team] = _teamVotes;
+            _votesPerMode[GameMode.Practice] = _practiceVotes;
         }
 
         public void Finish()
@@ -148,22 +149,26 @@ namespace SLA
         [PunRPC]
         private void FinishedVoting(int playerID)
         {
-            Debug.Log(_networkManagerSLA.PlayerList[playerID - 1].NickName + " is ready");
-            _networkManagerSLA.SyncVars[playerID - 1].FinishedVoting = true;
+            Debug.Log(GameControl.PlayerState.SyncVars[playerID - 1].Owner.NickName + " is ready");
+            GameControl.PlayerState.SyncVars[playerID - 1].FinishedVoting = true;
         }
 
         [PunRPC]
-        private void StartGame()
+        private void StartGame(GameMode gameMode)
         {
             _starting = true;
-            var random = new System.Random();
-            var max = new[] {_classicVotes, _teamVotes, _practiceVotes}.Max();
-            var mostVotes = _votesPerMode.Keys.Where(mode => _votesPerMode[mode] == max).ToList();
-            var idx = mostVotes.Count == 1 ? 0 : random.Next(0, mostVotes.Count);
-            GameControl.GameState.SetGameMode = mostVotes[idx];
-            GameControl.PlayerState.IsDead = true;
+            GameControl.GameState.SetGameMode = gameMode;
             transform.parent.gameObject.SetActive(false);
             _networkManagerSLA.Game.SetActive(true);
+        }
+
+        private GameMode SetGameMode()
+        {
+            var random = new System.Random();
+            var max = new[] { _classicVotes, _teamVotes, _practiceVotes }.Max();
+            var mostVotes = _votesPerMode.Keys.Where(mode => _votesPerMode[mode] == max).ToList();
+            var idx = mostVotes.Count == 1 ? 0 : random.Next(0, mostVotes.Count);
+            return mostVotes[idx];
         }
     }
 }

@@ -20,7 +20,7 @@ namespace UI.Main_Menu
         private SceneLoader _sceneLoader;
 
         private Difficulty? _voteDifficulty;
-        private Gamemode? _voteGameMode;
+        private GameMode? _voteGameMode;
 
         private void Awake()
         {
@@ -37,7 +37,7 @@ namespace UI.Main_Menu
         public void SetModes()
         {
             if (_voteDifficulty != null) GameControl.GameState.SetDifficulty = (Difficulty)_voteDifficulty;
-            if (_voteGameMode != null) GameControl.GameState.SetGameMode = (Gamemode)_voteGameMode;
+            if (_voteGameMode != null) GameControl.GameState.SetGameMode = (GameMode)_voteGameMode;
         }
         
         public void Update()
@@ -75,7 +75,7 @@ namespace UI.Main_Menu
             GameControl.GameState.CurrentLevel = 1;
             GameControl.PlayerState.CharacterDto = PickCharacterMenu.GetComponent<PickCharacterMenu>().GetCharacterDto();
             GameControl.GameState.SetDifficulty = Difficulty.Hard;
-            GameControl.GameState.SetGameMode = Gamemode.Practice;
+            GameControl.GameState.SetGameMode = GameMode.Practice;
             PhotonNetwork.CreateRoom(GameControl.GenerateRoomName("SoloRLR"));
         }
 
@@ -91,17 +91,17 @@ namespace UI.Main_Menu
 
         public void VoteModeClassic()
         {
-            _voteGameMode = Gamemode.Classic;
+            _voteGameMode = GameMode.Classic;
         }
 
         public void VoteModeTime()
         {
-            _voteGameMode = Gamemode.TimeMode;
+            _voteGameMode = GameMode.TimeMode;
         }
 
         public void VoteModePractice()
         {
-            _voteGameMode = Gamemode.Practice;
+            _voteGameMode = GameMode.Practice;
         }
 
         public void HighScores()
