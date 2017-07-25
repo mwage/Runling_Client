@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-
-namespace SLA
+﻿namespace MP
 {
-    public class SyncVarsSLA
+    public class SyncVars
     {
         public PhotonPlayer Owner;
         public bool FinishedVoting = false;
@@ -16,7 +14,7 @@ namespace SLA
         public bool IsInvulnerable;
         public bool GodModeActive;
 
-        public SyncVarsSLA(PhotonPlayer owner)
+        public SyncVars(PhotonPlayer owner)
         {
             Owner = owner;
         }

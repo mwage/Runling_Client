@@ -101,14 +101,25 @@ namespace Players
             }
 
             // Death Trigger
-            if (!_setPlayerState.PhotonView.isMine)
+            if (!PhotonNetwork.isMasterClient)
                 return;
 
-            if (((other.CompareTag("Enemy") && !GameControl.PlayerState.SyncVars[_setPlayerState.PhotonView.owner.ID - 1].IsSafe || other.CompareTag("Strong Enemy"))
-                 && !GameControl.PlayerState.SyncVars[_setPlayerState.PhotonView.owner.ID - 1].IsInvulnerable)
-                && !GameControl.PlayerState.SyncVars[_setPlayerState.PhotonView.owner.ID - 1].GodModeActive)
+            if (SceneManager.GetActiveScene().name == "SLA")
             {
-                _setPlayerState.PhotonView.RPC("SetDead", PhotonTargets.All, _setPlayerState.PhotonView.owner.ID);
+                if (((other.CompareTag("Enemy") && !GameControl.PlayerState.SyncVars[_setPlayerState.PhotonView.owner.ID - 1].IsSafe || other.CompareTag("Strong Enemy"))
+                     && !GameControl.PlayerState.SyncVars[_setPlayerState.PhotonView.owner.ID - 1].IsInvulnerable)
+                    && !GameControl.PlayerState.SyncVars[_setPlayerState.PhotonView.owner.ID - 1].GodModeActive)
+                {
+                    _setPlayerState.PhotonView.RPC("SetDead", PhotonTargets.All, _setPlayerState.PhotonView.owner.ID);
+                }
+            }
+            else
+            {
+                if (((other.CompareTag("Enemy") && !GameControl.PlayerState.IsSafe || other.CompareTag("Strong Enemy"))
+                     && !GameControl.PlayerState.IsInvulnerable) && !GameControl.PlayerState.GodModeActive)
+                {
+                    _setPlayerState.PhotonView.RPC("SetDead", PhotonTargets.All, PhotonNetwork.player.ID);
+                }
             }
         }
 
@@ -127,13 +138,13 @@ namespace Players
             }
             else
             {
-                if (other.CompareTag("SafeZone") && !GameControl.PlayerState.IsSafe)
+                Debug.Log("checking for safe");
+                Debug.Log(other.tag);
+                if (other.CompareTag("SafeZone") && GameControl.PlayerState.IsSafe)
                 {
                     GameControl.PlayerState.IsSafe = false;
                 }
             }
-
-
         }
     }
 }

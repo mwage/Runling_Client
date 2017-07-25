@@ -5,7 +5,6 @@ namespace Drones
 {
     public class DestroyDroneTrigger : MonoBehaviour
     {
-
         private void OnTriggerStay(Collider other)
         {
             if (SceneManager.GetActiveScene().name == "MainMenu")
@@ -14,7 +13,8 @@ namespace Drones
             }
             else
             {
-                PhotonNetwork.Destroy(transform.parent.gameObject);
+                if (PhotonNetwork.isMasterClient)
+                    PhotonNetwork.Destroy(transform.parent.gameObject);
             }
         }
     }

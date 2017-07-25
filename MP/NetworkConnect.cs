@@ -11,6 +11,7 @@ namespace MP
         public Text FeedbackText;
         public LoadingAnimation LoadingAnimation;
         public Button ConnectButton;
+        public Button OfflineButton;
         public GameObject CancelButton;
         public Toggle AutoConnect;
 
@@ -18,13 +19,15 @@ namespace MP
 
         private void Update()
         {
-            if (PhotonNetwork.playerName.Length >= 2 && !ConnectButton.IsInteractable())
+            if (PhotonNetwork.playerName.Length >= 2 && (!ConnectButton.IsInteractable() || !OfflineButton.IsInteractable()))
             {
                 ConnectButton.interactable = true;
+                OfflineButton.interactable = true;
             }
-            if (PhotonNetwork.playerName.Length < 2 && ConnectButton.IsInteractable())
+            if (PhotonNetwork.playerName.Length < 2 && (ConnectButton.IsInteractable() || !OfflineButton.IsInteractable()))
             {
                 ConnectButton.interactable = false;
+                OfflineButton.interactable = false;
             }
         }
 
@@ -63,6 +66,7 @@ namespace MP
             {
                 FeedbackText.text = "Connecting...";
                 PhotonNetwork.ConnectUsingSettings(GameControl.Version.ToString());
+//                PhotonNetwork.ConnectToRegion(CloudRegionCode.us, GameControl.Version.ToString());
             }
         }
 

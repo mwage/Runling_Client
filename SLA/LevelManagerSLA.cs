@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.IO;
 using Drones;
 using Launcher;
+using SLA.Levels;
 using UI.SLA_Menus;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace SLA.Levels
+namespace SLA
 {
     public class LevelManagerSLA : MonoBehaviour {
 
@@ -17,7 +18,7 @@ namespace SLA.Levels
         public InitializeGameSLA InitializeGameSLA;
         public GameObject Win;
 
-        [NonSerialized]
+        [HideInInspector]
         public DroneFactory DroneFactory;
         public static int NumLevels = 13;             //currently last level available in SLA
         private List<ILevelSLA> _levels;
@@ -51,7 +52,16 @@ namespace SLA.Levels
             {
                 DroneFactory = PhotonNetwork.InstantiateSceneObject(Path.Combine("Drones", "Drone Manager"), 
                     Vector3.zero, Quaternion.identity, 0, new object[0]).GetComponent<DroneFactory>();
+                InitializeLevels();
+                _photonView.RPC("SetDroneFactory", PhotonTargets.Others);
             }
+        }
+
+        [PunRPC]
+        private void SetDroneFactory()
+        {
+            DroneFactory = GameObject.Find("Drone Manager(Clone)").GetComponent<DroneFactory>();
+            Debug.Log(DroneFactory);
             InitializeLevels();
         }
 

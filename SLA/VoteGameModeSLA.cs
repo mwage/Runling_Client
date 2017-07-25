@@ -18,6 +18,7 @@ namespace SLA
         [SerializeField] private Text _teamVoteText;
         [SerializeField] private Text _practiceVoteText;
 
+        [HideInInspector]
         public PhotonView PhotonView;
         private GameMode?[] _votes;
         private int _classicVotes;

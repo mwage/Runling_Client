@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Launcher;
+using MP;
 using Photon;
 using UnityEngine;
 
@@ -9,14 +10,14 @@ namespace SLA
     {
         [SerializeField] private VoteGameModeSLA _votingSystem;
         public GameObject Game;
+
         private PhotonView _photonView;
         public bool Voting;
-
 
         private void Awake()
         {
             _photonView = GetComponent<PhotonView>();
-            GameControl.PlayerState.SyncVars = new SyncVarsSLA[PhotonNetwork.room.PlayerCount];
+            GameControl.PlayerState.SyncVars = new SyncVars[PhotonNetwork.room.PlayerCount];
             if (GameControl.GameState.Solo)
             {
                 _votingSystem.gameObject.SetActive(false);
@@ -24,7 +25,7 @@ namespace SLA
 
             foreach (var player in PhotonNetwork.playerList)
             {
-                GameControl.PlayerState.SyncVars[player.ID - 1] = new SyncVarsSLA(player);
+                GameControl.PlayerState.SyncVars[player.ID - 1] = new SyncVars(player);
             }
             _photonView.RPC("FinishedLoading", PhotonTargets.All, PhotonNetwork.player);
         }

@@ -9,6 +9,7 @@ namespace Players
     {
         [SerializeField] private PlayerTrigger _playerTrigger;
 
+        [HideInInspector]
         public PhotonView PhotonView;
         private GameObject _model;
         private GameObject _trigger;
@@ -22,6 +23,11 @@ namespace Players
 
         private void Update()
         {
+            Debug.Log("Dead: " + GameControl.PlayerState.IsDead);
+            Debug.Log("Safe: " + GameControl.PlayerState.IsSafe);
+            Debug.Log("Invul: " + GameControl.PlayerState.IsInvulnerable);
+            Debug.Log("GM: " + GameControl.PlayerState.GodModeActive);
+
             if (SceneManager.GetActiveScene().name == "SLA")
             {
                 _model.SetActive(!GameControl.PlayerState.SyncVars[PhotonView.owner.ID - 1].IsDead);

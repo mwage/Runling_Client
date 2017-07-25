@@ -13,6 +13,7 @@ namespace SLA
         public DeathSLA Death;
         public GameObject PracticeMode;
 
+        [HideInInspector]
         public PhotonView PhotonView;
         public bool LoadingNextLevel;
         public bool CheckIfDead;
@@ -34,6 +35,7 @@ namespace SLA
             {
                 state.TotalScore = 0;
             }
+            Debug.Log(GameControl.GameState.SetGameMode);
             if (GameControl.GameState.SetGameMode == GameMode.Practice)
             {
                 PracticeMode.SetActive(true);

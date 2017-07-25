@@ -1,4 +1,5 @@
 ﻿using Characters.Types;
+using MP;
 using Players;
 using SLA;
 using UnityEngine;
@@ -19,7 +20,7 @@ namespace Launcher
         public bool AutoClickerActive = false;
         public bool GodModeActive = false;
 
-        public SyncVarsSLA[] SyncVars;
+        public SyncVars[] SyncVars;
 
         //Synced via network, should be removed
         public float MoveSpeed = 0;

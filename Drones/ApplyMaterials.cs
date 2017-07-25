@@ -5,6 +5,7 @@ namespace Drones
 { 
     public class ApplyMaterials : MonoBehaviour
     {
+        [HideInInspector]
         public PhotonView PhotonView;
         private DroneFactory _droneFactory;
 
