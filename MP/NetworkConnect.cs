@@ -17,20 +17,6 @@ namespace MP
 
         private bool _autoConnect;
 
-        private void Update()
-        {
-            if (PhotonNetwork.playerName.Length >= 2 && (!ConnectButton.IsInteractable() || !OfflineButton.IsInteractable()))
-            {
-                ConnectButton.interactable = true;
-                OfflineButton.interactable = true;
-            }
-            if (PhotonNetwork.playerName.Length < 2 && (ConnectButton.IsInteractable() || !OfflineButton.IsInteractable()))
-            {
-                ConnectButton.interactable = false;
-                OfflineButton.interactable = false;
-            }
-        }
-
         private void Awake()
         {
             PhotonNetwork.autoJoinLobby = true;
@@ -71,6 +57,20 @@ namespace MP
         }
 
         #region Buttons
+
+        private void Update()
+        {
+            if (PhotonNetwork.playerName.Length >= 2 && (!ConnectButton.IsInteractable() || !OfflineButton.IsInteractable()))
+            {
+                ConnectButton.interactable = true;
+                OfflineButton.interactable = true;
+            }
+            if (PhotonNetwork.playerName.Length < 2 && (ConnectButton.IsInteractable() || !OfflineButton.IsInteractable()))
+            {
+                ConnectButton.interactable = false;
+                OfflineButton.interactable = false;
+            }
+        }
 
         public void OfflineMode()
         {

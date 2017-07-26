@@ -22,7 +22,6 @@ namespace UI.Main_Menu.MP
         public void SetCustomRoomName(string value)
         {
             CustomRoomName = value;
-            _inputField.text = value;
             PlayerPrefs.SetString("RoomName", value);
         }
     }

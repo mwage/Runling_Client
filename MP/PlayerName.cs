@@ -24,7 +24,6 @@ namespace MP
 
         public void SetPlayerName(string value)
         {
-            _inputField.text = value;
             PhotonNetwork.playerName = value;
             PlayerPrefs.SetString("PlayerName", value);
         }

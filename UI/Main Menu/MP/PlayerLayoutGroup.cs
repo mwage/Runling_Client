@@ -8,7 +8,7 @@ namespace UI.Main_Menu.MP
     {
         [SerializeField] private GameObject _playerListingPrefab;
 
-        private List<PlayerListing> _playerList = new List<PlayerListing>();
+        private readonly List<PlayerListing> _playerList = new List<PlayerListing>();
 
         private void PlayerLeftRoom(PhotonPlayer photonPlayer)
         {

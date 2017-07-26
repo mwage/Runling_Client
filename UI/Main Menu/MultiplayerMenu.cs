@@ -39,17 +39,6 @@ namespace UI.Main_Menu
             }
         }
 
-        private void Update()
-        {
-            if (!PhotonNetwork.isMasterClient)
-            {
-                StartButton.interactable = false;
-            }
-            else
-            {
-                StartButton.interactable = true;
-            }
-        }
 
         private void OpenRoom(RoomOptions roomOptions)
         {
@@ -69,6 +58,12 @@ namespace UI.Main_Menu
 
 
         #region Buttons
+
+        private void Update()
+        {
+            StartButton.interactable = PhotonNetwork.isMasterClient;
+        }
+
 
         public void CreateRoom()
         {
