@@ -25,9 +25,6 @@ namespace SLA
 
         public void RestartGame()
         {
-            GameControl.PlayerState.IsDead = true;
-            GameControl.PlayerState.AutoClickerActive = false;
-            GameControl.PlayerState.TotalScore = 0;
             GameControl.GameState.CurrentLevel = 1;
 
             SceneManager.LoadSceneAsync("SLA");

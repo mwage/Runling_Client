@@ -8,140 +8,77 @@ namespace Players
 {
     public class PlayerTrigger : MonoBehaviour
     {
-        public PlayerTriggerManager PlayerTriggerManager;
-        public PlayerBarsManager PlayerBarsManager;
-
-        public bool FinishedLevel;
-        private SetPlayerState _setPlayerState;
-
+        private PlayerManager _playerManager;
+        private PlayerTriggerManager _playerTriggerManager;
+        private PlayerBarsManager _playerBarsManager;
 
         private void Awake()
         {
-            _setPlayerState = transform.parent.GetComponent<SetPlayerState>();
+            _playerManager = transform.parent.GetComponent<PlayerManager>();
         }
 
         public void InitializeTrigger()
         {
-            PlayerTriggerManager = gameObject.transform.parent.parent.GetComponent<PlayerTriggerManager>();
-            PlayerBarsManager = gameObject.transform.parent.parent.GetComponent<PlayerBarsManager>();
+            _playerTriggerManager = _playerManager.transform.parent.GetComponent<PlayerTriggerManager>();
+            _playerBarsManager = _playerManager.transform.parent.GetComponent<PlayerBarsManager>();
         }
 
         // Trigger
         private void OnTriggerStay(Collider other)
         {
-            if (!PhotonNetwork.isMasterClient)
-                return;
-
-            if (SceneManager.GetActiveScene().name == "SLA")
+            // Enter Finishzone
+            if (other.CompareTag("Finish"))
             {
-                // Enter Finishzone
-                if (other.CompareTag("Finish") && !FinishedLevel)
-                {
-                    _setPlayerState.PhotonView.RPC("SetFinished", PhotonTargets.AllViaServer);
-                }
-
-                // Enter Safezone
-                if (other.CompareTag("SafeZone") && !GameControl.PlayerState.SyncVars[_setPlayerState.PhotonView.owner.ID - 1].IsSafe)
-                {
-                    _setPlayerState.PhotonView.RPC("SetSafe", PhotonTargets.All, _setPlayerState.PhotonView.owner.ID,true);
-                }
-
-                // Safety Death Trigger
-                if (((other.CompareTag("Enemy") && !GameControl.PlayerState.SyncVars[_setPlayerState.PhotonView.owner.ID - 1].IsSafe || other.CompareTag("Strong Enemy"))
-                     && !GameControl.PlayerState.SyncVars[_setPlayerState.PhotonView.owner.ID - 1].IsInvulnerable) 
-                     && !GameControl.PlayerState.SyncVars[_setPlayerState.PhotonView.owner.ID - 1].GodModeActive)
-                {
-                    _setPlayerState.PhotonView.RPC("SetDead", PhotonTargets.All, _setPlayerState.PhotonView.owner.ID);
-                }
+                GameControl.GameState.FinishedLevel = true;
             }
-            else
+
+            // Enter Safezone
+            if (other.CompareTag("SafeZone"))
             {
-                // Enter Finishzone
-                if (other.CompareTag("Finish") && !FinishedLevel)
-                {
-                    _setPlayerState.PhotonView.RPC("SetFinished", PhotonTargets.AllViaServer);
-                }
+                _playerManager.IsSafe = true;
+            }
 
-                // Enter Safezone
-                if (other.CompareTag("SafeZone") && !GameControl.PlayerState.IsSafe)
-                {
-                    GameControl.PlayerState.IsSafe = true;
-                }
-
-                // Safety Death Trigger
-                if (((other.CompareTag("Enemy") && !GameControl.PlayerState.IsSafe || other.CompareTag("Strong Enemy"))
-                     && !GameControl.PlayerState.IsInvulnerable) && !GameControl.PlayerState.GodModeActive)
-                {
-                    _setPlayerState.PhotonView.RPC("SetDead", PhotonTargets.All, PhotonNetwork.player.ID);
-                }
+            // Safety Death Trigger
+            if (((other.CompareTag("Enemy") && !_playerManager.IsSafe || other.CompareTag("Strong Enemy"))
+                 && !_playerManager.IsInvulnerable) && !_playerManager.GodModeActive)
+            {
+                _playerManager.IsDead = true;
             }
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!_setPlayerState.PhotonView.isMine)
-                return;
-
             if (other.CompareTag("SafeZone"))
             {
                 var currentSafeZone = other.transform.parent.parent.gameObject;
                 int currentSafeZoneIdx;
-                if (PlayerTriggerManager == null)
+
+                if (_playerTriggerManager == null || _playerBarsManager == null)
                 {
                     InitializeTrigger();
-                    return;
                 }
-                if (PlayerTriggerManager.IsSafeZoneVisitedFirstTime(currentSafeZone, out currentSafeZoneIdx))
+                if (_playerTriggerManager.IsSafeZoneVisitedFirstTime(currentSafeZone, out currentSafeZoneIdx))
                 {
-                    PlayerTriggerManager.MarkVisitedSafeZone(currentSafeZoneIdx);
-                    PlayerTriggerManager.AddExp(currentSafeZoneIdx);
-                    PlayerTriggerManager.CreateOrDestroyChaserIfNeed(currentSafeZone);
-                    PlayerBarsManager.UpdateLevelBar();
-                }   
-            }
-
-            // Death Trigger
-            if (!PhotonNetwork.isMasterClient)
-                return;
-
-            if (SceneManager.GetActiveScene().name == "SLA")
-            {
-                if (((other.CompareTag("Enemy") && !GameControl.PlayerState.SyncVars[_setPlayerState.PhotonView.owner.ID - 1].IsSafe || other.CompareTag("Strong Enemy"))
-                     && !GameControl.PlayerState.SyncVars[_setPlayerState.PhotonView.owner.ID - 1].IsInvulnerable)
-                    && !GameControl.PlayerState.SyncVars[_setPlayerState.PhotonView.owner.ID - 1].GodModeActive)
-                {
-                    _setPlayerState.PhotonView.RPC("SetDead", PhotonTargets.All, _setPlayerState.PhotonView.owner.ID);
+                    _playerTriggerManager.MarkVisitedSafeZone(currentSafeZoneIdx);
+                    _playerTriggerManager.AddExp(currentSafeZoneIdx);
+                    _playerTriggerManager.CreateOrDestroyChaserIfNeed(currentSafeZone);
+                    _playerBarsManager.UpdateLevelBar();
                 }
             }
-            else
+
+            if (((other.CompareTag("Enemy") && !_playerManager.IsSafe || other.CompareTag("Strong Enemy"))
+                 && !_playerManager.IsInvulnerable) && !_playerManager.GodModeActive)
             {
-                if (((other.CompareTag("Enemy") && !GameControl.PlayerState.IsSafe || other.CompareTag("Strong Enemy"))
-                     && !GameControl.PlayerState.IsInvulnerable) && !GameControl.PlayerState.GodModeActive)
-                {
-                    _setPlayerState.PhotonView.RPC("SetDead", PhotonTargets.All, PhotonNetwork.player.ID);
-                }
+                _playerManager.IsDead = true;
             }
         }
 
         // Leave Safezone
         private void OnTriggerExit(Collider other)
         {
-            if (!PhotonNetwork.isMasterClient)
-                return;
-
-            if (SceneManager.GetActiveScene().name == "SLA")
+            if (other.CompareTag("SafeZone"))
             {
-                if (other.CompareTag("SafeZone") && !GameControl.PlayerState.SyncVars[_setPlayerState.PhotonView.owner.ID - 1].IsSafe)
-                {
-                    _setPlayerState.PhotonView.RPC("SetSafe", PhotonTargets.All, _setPlayerState.PhotonView.owner.ID, false);
-                }
-            }
-            else
-            {
-                if (other.CompareTag("SafeZone") && GameControl.PlayerState.IsSafe)
-                {
-                    GameControl.PlayerState.IsSafe = false;
-                }
+                _playerManager.IsSafe = false;
             }
         }
     }

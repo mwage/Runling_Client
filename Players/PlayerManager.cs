@@ -1,10 +1,9 @@
 ﻿using Characters.Types;
-using TrueSync;
 using UnityEngine;
 
-namespace MP.TSGame.Players
+namespace Players
 {
-    public class PlayerManager : TrueSyncBehaviour
+    public class PlayerManager : MonoBehaviour
     {
         public GameObject Model;
         public GameObject Trigger;
@@ -23,24 +22,13 @@ namespace MP.TSGame.Players
         public bool AutoClickerActive;
         public GameObject Chaser;
         public ACharacter CharacterController;
-        public PlayerMovement PlayerMovement;
 
-        private void Awake()
-        {
-            PlayerMovement = GetComponent<PlayerMovement>();
-        }
-
-        public void SetOwner(TSPlayerInfo player)
-        {
-//            owner = player;
-            PlayerMovement.owner = player;
-        }
 
         public void DestroyChaser()
         {
             if (Chaser != null)
             {
-                TrueSyncManager.SyncedDestroy(Chaser);
+                Destroy(Chaser);
             }
         }
     }

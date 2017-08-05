@@ -1,28 +1,32 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using Drones;
 using Launcher;
+using Drones;
 using SLA.Levels;
 using UI.SLA_Menus;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace SLA
 {
-    public class LevelManagerSLA : MonoBehaviour {
-
+    public class LevelManagerSLA : MonoBehaviour
+    {
         public InGameMenuManagerSLA InGameMenuManagerSLA;
-        public ScoreSLA Score;
-        public InitializeGameSLA InitializeGameSLA;
+        private ScoreSLA _score;
         public GameObject Win;
-
-        [HideInInspector]
         public DroneFactory DroneFactory;
+
+        private InitializeGameSLA _initializeGameSLA;
         public static int NumLevels = 13;             //currently last level available in SLA
         private List<ILevelSLA> _levels;
-        private PhotonView _photonView;
+
+
+        public void Awake()
+        {
+            _score = GetComponent<ScoreSLA>();
+            _initializeGameSLA = GetComponent<InitializeGameSLA>();
+            InitializeLevels();
+        }
 
         private void InitializeLevels()
         {
@@ -44,34 +48,9 @@ namespace SLA
             };
         }
 
-        public void Awake()
-        {
-            _photonView = GetComponent<PhotonView>();
-
-            if (PhotonNetwork.isMasterClient)
-            {
-                DroneFactory = PhotonNetwork.InstantiateSceneObject(Path.Combine("Drones", "Drone Manager"), 
-                    Vector3.zero, Quaternion.identity, 0, new object[0]).GetComponent<DroneFactory>();
-                InitializeLevels();
-                _photonView.RPC("SetDroneFactory", PhotonTargets.Others);
-            }
-        }
-
-        [PunRPC]
-        private void SetDroneFactory()
-        {
-            DroneFactory = GameObject.Find("Drone Manager(Clone)").GetComponent<DroneFactory>();
-            Debug.Log(DroneFactory);
-            InitializeLevels();
-        }
-
         //Spawn Drones according to what level is active
         public void LoadDrones(int level)
         {
-            InitializeGameSLA.ControlSLA.PhotonView.RPC("DebugThis", PhotonTargets.All, PhotonNetwork.player.NickName, "Spawning Drones");
-            if (!PhotonNetwork.isMasterClient)
-                return;
-
             try
             {
                 _levels[level - 1].CreateDrones();
@@ -79,9 +58,7 @@ namespace SLA
             catch (Exception e)
             {
                 Debug.Log("Failed to load level " + level + ": " + e.Message + " - " + e.StackTrace);
-                InitializeGameSLA.ControlSLA.PhotonView.RPC("DebugThis", PhotonTargets.All, PhotonNetwork.player.NickName, "Failed to Spawn drones");
                 PhotonNetwork.LeaveRoom();
-                SceneManager.LoadScene("MainMenu");
             }
         }
 
@@ -89,11 +66,10 @@ namespace SLA
         {
             return _levels[level - 1].GetMovementSpeed();
         }
-    
+
         //Load next level or end game
         public void EndLevel(float delay)
         {
-            InitializeGameSLA.ControlSLA.PhotonView.RPC("DebugThis", PhotonTargets.All, PhotonNetwork.player.NickName, "EndLevel");
             StartCoroutine((GameControl.GameState.CurrentLevel == _levels.Count && GameControl.GameState.SetGameMode != GameMode.Practice) ? EndGameSLA(delay) : NextLevel(delay));
         }
 
@@ -101,45 +77,32 @@ namespace SLA
         private IEnumerator NextLevel(float delay)
         {
             yield return new WaitForSeconds(delay);
-            Score.NewHighScore.transform.parent.gameObject.SetActive(false);
 
-            if (PhotonNetwork.isMasterClient)
+            _score.NewHighScore.transform.parent.gameObject.SetActive(false);
+
+            foreach (Transform child in DroneFactory.transform)
             {
-                DroneFactory.StopAllCoroutines();
-                var enemies = GameObject.FindGameObjectsWithTag("Enemy");
-                foreach (var t in enemies)
-                {
-                    PhotonNetwork.Destroy(t);
-                }
+                Destroy(child.gameObject);
             }
 
-            foreach (var text in Score.CurrentScoreText)
-            {
-                text.text = "0";
-            }
+            yield return new WaitForSeconds(delay);
+
+            _score.CurrentScoreText.text = "0";
             if (GameControl.GameState.SetGameMode != GameMode.Practice)
             {
                 GameControl.GameState.CurrentLevel++;
             }
 
-            if (PhotonNetwork.isMasterClient)
-                _photonView.RPC("StartNewLevel", PhotonTargets.AllViaServer);
+            _initializeGameSLA.InitializeGame();
         }
 
-        //load after the last level
+        //load win screen after the last level
         private IEnumerator EndGameSLA(float delay)
-        {                
-            //load win screen
-            yield return new WaitForSeconds(delay);
-            Score.NewHighScore.transform.parent.gameObject.SetActive(false);
+        {
+            yield return new WaitForSeconds (delay);
+            _score.NewHighScore.transform.parent.gameObject.SetActive(false);
             InGameMenuManagerSLA.CloseMenus();
             Win.gameObject.SetActive(true);
-        }
-
-        [PunRPC]
-        private void StartNewLevel()
-        {
-            InitializeGameSLA.InitializeGame();
         }
     }
 }

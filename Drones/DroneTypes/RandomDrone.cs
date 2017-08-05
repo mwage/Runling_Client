@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using Drones.Movement;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Drones.DroneTypes
 {
@@ -40,10 +39,7 @@ namespace Drones.DroneTypes
                     : DroneStartPosition.GetRandomPosition(Size, area);
             }
 
-            var newDrone = PhotonNetwork.room != null && SceneManager.GetActiveScene().name != "MainMenu" ?
-                PhotonNetwork.InstantiateSceneObject(Path.Combine("Drones", factory.SetDroneType[DroneType]), pos, 
-                Quaternion.Euler(0, StartDirection + DroneDirection.RandomDirection(RestrictedZone, ConeRange), 0), 0, new object[0]) :
-                Object.Instantiate(factory.BouncingDronePrefab, pos, Quaternion.Euler(0, StartDirection + DroneDirection.RandomDirection(RestrictedZone, ConeRange), 0));
+            var newDrone = Object.Instantiate(factory.SetDroneType[DroneType], pos, Quaternion.Euler(0, StartDirection + DroneDirection.RandomDirection(RestrictedZone, ConeRange), 0));
             return newDrone;
         }
     }

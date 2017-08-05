@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using Launcher;
 using TrueSync;
 using UnityEngine;
@@ -16,7 +15,7 @@ namespace MP.TSGame.Players
         private readonly FP _deceleration = 100;
         private readonly FP _stopSensitivity = 20;   // Adjust for better accuracy at other decelerations
 
-        public bool AutoClickerActive;
+
         public bool IsAutoClicking;
 
         private TSRigidBody _rb;
@@ -53,19 +52,17 @@ namespace MP.TSGame.Players
             // Start autoclicking
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateClicker))
             {
-                if (!AutoClickerActive)
-                    AutoClickerActive = true;
+                _playerManager.AutoClickerActive = true;
             }
 
             // Stop autoclicking
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactivateClicker))
             {
-                if (AutoClickerActive)
-                    AutoClickerActive = false;
+                _playerManager.AutoClickerActive = false;
             }
 
 
-            if (AutoClickerActive)
+            if (_playerManager.AutoClickerActive)
             {
                 if (!IsAutoClicking)
                 {
@@ -75,7 +72,7 @@ namespace MP.TSGame.Players
             }
 
 
-            if (!AutoClickerActive)
+            if (!_playerManager.AutoClickerActive)
             {
                 if (IsAutoClicking)
                 {

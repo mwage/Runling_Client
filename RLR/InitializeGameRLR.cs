@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Characters;
+using Characters.Types;
 using Launcher;
 using Players;
 using Players.Camera;
@@ -14,9 +15,9 @@ namespace RLR
     {
 
         // Attach scripts
-        public LevelManagerRLR LevelManagerRLR;
-        public ControlRLR ControlRLR;
-        public InGameMenuManagerRLR InGameMenuManagerRLR;
+        private LevelManagerRLR LevelManager;
+        private ControlRLR ControlRLR;
+        public InGameMenuManagerRLR InGameMenuManager;
         public CameraHandleMovement CameraHandleMovement;
         public ScoreRLR ScoreRLR;
         public PlayerFactory PlayerFactory;
@@ -24,18 +25,26 @@ namespace RLR
         public GameObject LevelTextObject;
         public GameObject CountdownPrefab;
 
-
+        public void InitializePlayer()
+        {
+            var playerManager = PlayerFactory.Create(new CharacterDto(0, "Arena", 0, 0, 0, 0, 1, 0, 0)).GetComponent<PlayerManager>();
+            playerManager.Model.SetActive(false);
+            playerManager.Trigger.SetActive(false);
+            ControlRLR.PlayerManager = playerManager;
+            GetComponent<InputServer>().Init(InGameMenuManager.gameObject, playerManager);
+        }
 
         //set Spawnimmunity once game starts
         public void InitializeGame()
         {
+            ControlRLR.CheckIfFinished = true;
             StartCoroutine(PrepareLevel());
         }
 
         private IEnumerator PrepareLevel()
         {
             // load map
-            LevelManagerRLR.GenerateMap(GameControl.GameState.CurrentLevel);
+            LevelManager.GenerateMap(GameControl.GameState.CurrentLevel);
 
             // Load player
            if (GameControl.PlayerState.Player == null)
@@ -60,14 +69,14 @@ namespace RLR
             GameControl.PlayerState.IsImmobile = true;
 
             // set camera
-            GameControl.Settings.CameraRange = LevelManagerRLR.MapGeneratorRlr.GetAirColliderRange() / 2.5f;
+            GameControl.Settings.CameraRange = LevelManager.MapGeneratorRlr.GetAirColliderRange() / 2.5f;
             CameraHandleMovement.SetCameraHandlePosition(new Vector3(GameControl.PlayerState.Player.transform.localPosition.x, 0, GameControl.PlayerState.Player.transform.localPosition.z));
 
             ControlRLR.StopUpdate = false;
 
             // generate drones
-            LevelManagerRLR.GenerateChasers(GameControl.GameState.CurrentLevel);
-            LevelManagerRLR.LoadDrones(GameControl.GameState.CurrentLevel);
+            LevelManager.GenerateChasers(GameControl.GameState.CurrentLevel);
+            LevelManager.LoadDrones(GameControl.GameState.CurrentLevel);
 
             // Show current level
             var levelText = LevelTextObject.GetComponent<TextMeshProUGUI>();

@@ -1,6 +1,7 @@
-﻿using Characters.Types;
-using Launcher;
+﻿using Launcher;
 using Players.Camera;
+using RLR;
+using SLA;
 using UI.RLR_Menus;
 using UI.SLA_Menus;
 using UnityEngine;
@@ -13,58 +14,47 @@ namespace Players
     /// </summary>
     public class InputServer : MonoBehaviour
     {
-        public GameObject Menus; // use to check if menu is active - then InputServer doesnt work
         public CameraHandleMovement CameraHandleMovement;
-        public GameObject Player; // lacking for SLA ;(
 
-        private ACharacter _characterController;
-
+        private PlayerManager _playerManager;
         private InGameMenuManagerRLR _inGameMenuManagerRLR;
         private InGameMenuManagerSLA _inGameMenuManagerSLA;
+        private bool _initialized;
 
 
-        public void Init()
+        public void Init(GameObject ingameMenuManager, PlayerManager playerManager)
         {
-            if (Player != null) _characterController = GameControl.PlayerState.CharacterController;
             if (SceneManager.GetActiveScene().name == "RLR")
             {
-                _inGameMenuManagerRLR = Menus.GetComponent<InGameMenuManagerRLR>(); // takes first script - InGameMenuMangaerRLR/SLA
+                _inGameMenuManagerRLR = ingameMenuManager.GetComponent<InGameMenuManagerRLR>();
+                _playerManager = GetComponent<ControlRLR>().PlayerManager;
             }
             else
             {
-                _inGameMenuManagerSLA = Menus.GetComponent<InGameMenuManagerSLA>(); // takes first script - InGameMenuMangaerRLR/SLA
+                _inGameMenuManagerSLA = ingameMenuManager.GetComponent<InGameMenuManagerSLA>();
+                _playerManager = GetComponent<ControlSLA>().PlayerManager;
             }
+            _initialized = true;
         }
 
         public void Update()
         {
-            if (_inGameMenuManagerRLR == null && _inGameMenuManagerSLA == null)
-            {
-                Init();
-            }
+            if (!_initialized)
+                return;
+
             InputAutoClicker();
             InputGodMode();
-            if (_characterController != null)
-            {
-                _characterController.InputAbilities();
-            }
+            _playerManager.CharacterController.InputAbilities();
         }
 
         public void LateUpdate()
         {
-            if (_inGameMenuManagerRLR == null && _inGameMenuManagerSLA == null)
-            {
-                Init();
-            }
-            if (IsMenuActive()) return; // options menu serve all inputs
-            if (_characterController != null)
-            {
-                // serve character RLR
-            }
-            else
-            {
-                // SLA
-            }
+            if (!_initialized)
+                return;
+
+            if (IsMenuActive())
+                return;
+
             CameraHandleMovement.ServeInput();
         }
 
@@ -72,11 +62,13 @@ namespace Players
         {
             if (_inGameMenuManagerRLR != null)
             {
-                if (_inGameMenuManagerRLR.MenuOn) return true;
+                if (_inGameMenuManagerRLR.MenuOn)
+                    return true;
             }
             else
             {
-                if (_inGameMenuManagerSLA.MenuOn) return true;
+                if (_inGameMenuManagerSLA.MenuOn)
+                    return true;
             }
             return false;
         }
@@ -87,40 +79,31 @@ namespace Players
             // Start autoclicking
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateClicker))
             {
-                if (!GameControl.PlayerState.AutoClickerActive)
-                    GameControl.PlayerState.AutoClickerActive = true;
+                _playerManager.AutoClickerActive = true;
             }
 
             // Stop autoclicking
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactivateClicker))
             {
-                if (GameControl.PlayerState.AutoClickerActive)
-                    GameControl.PlayerState.AutoClickerActive = false;
+                _playerManager.AutoClickerActive = false;
             }
         }
 
         private void InputGodMode()
         {
             // Become invulnerable
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateGodmode) && !GameControl.PlayerState.GodModeActive)
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateGodmode))
             {
-                GameControl.PlayerState.GodModeActive = true;
-                if (GameControl.PlayerState.Player != null)
-                {
-                    GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(true);
-                }
+                _playerManager.GodModeActive = true;
+                _playerManager.GodMode.SetActive(true);
             }
 
             // Become vulnerable
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactiveGodmode) && GameControl.PlayerState.GodModeActive)
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.DeactiveGodmode))
             {
-                GameControl.PlayerState.GodModeActive = false;
-                if (GameControl.PlayerState.Player != null)
-                {
-                    GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(false);
-                }
+                _playerManager.GodModeActive = false;
+                _playerManager.GodMode.SetActive(false);
             }
-
         }
     }
 }

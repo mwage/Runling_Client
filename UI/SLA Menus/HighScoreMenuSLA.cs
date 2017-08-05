@@ -11,7 +11,7 @@ namespace UI.SLA_Menus
         public GameObject Menu;
         public GameObject ScorePrefab;
         public GameObject Background;
-        public ScoreSLA ScoreSLA;
+        public ControlSLA ControlSLA;
 
         private GameObject _descriptionText;
         private readonly GameObject[] _levelScore = new GameObject[LevelManagerSLA.NumLevels];
@@ -90,17 +90,17 @@ namespace UI.SLA_Menus
             {
                 for (var i = 0; i < LevelManagerSLA.NumLevels; i++)
                 {
-                    _levelScore[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = ScoreSLA.LevelScoreCurGame[i].ToString();
+                    _levelScore[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = ControlSLA.Score.LevelScoreCurGame[i].ToString();
 
                     // New records are shown green
-                    if (ScoreSLA.LevelScoreCurGame[i] >= GameControl.HighScores.HighScoreSLA[i + 1] && ScoreSLA.LevelScoreCurGame[i] != 0)
+                    if (ControlSLA.Score.LevelScoreCurGame[i] >= GameControl.HighScores.HighScoreSLA[i + 1] && ControlSLA.Score.LevelScoreCurGame[i] != 0)
                     {
                         _levelScore[i].transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = Color.green;
                     }
                 }
 
-                _gameScore.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = GameControl.PlayerState.TotalScore.ToString();
-                if (GameControl.PlayerState.TotalScore > GameControl.HighScores.HighScoreSLA[0] && GameControl.PlayerState.TotalScore > 0)
+                _gameScore.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = ControlSLA.PlayerManager.TotalScore.ToString();
+                if (ControlSLA.PlayerManager.TotalScore > GameControl.HighScores.HighScoreSLA[0] && ControlSLA.PlayerManager.TotalScore > 0)
                 {
                     _gameScore.transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = Color.green;
                 }

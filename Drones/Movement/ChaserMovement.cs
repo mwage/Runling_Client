@@ -1,4 +1,5 @@
 ﻿using Launcher;
+using Players;
 using UnityEngine;
 
 namespace Drones.Movement
@@ -31,7 +32,7 @@ namespace Drones.Movement
             {
                 return;
             }
-            if (!GameControl.PlayerState.Player.activeSelf || GameControl.PlayerState.IsImmobile)
+            if (!GameControl.PlayerState.Player.activeSelf || GameControl.PlayerState.Player.GetComponent<PlayerManager>().IsImmobile)
             {
                 _rb.velocity = Vector3.zero;
             }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using Launcher;
-using MP;
 using UnityEngine;
 
 namespace Players
@@ -10,71 +9,48 @@ namespace Players
     {
         #region Variables
 
-        private PlayerSync _playerSync;
-        public GameObject MouseClick;
+        public GameObject MouseClickPrefab;
 
-        public static float ZeroTolerance = 0.001f;
-        [HideInInspector]
-        public Rigidbody Rb;
-        public float RotationSpeed;
+        private const float RotationSpeed = 30;
+        private const float Acceleration = 100;
+        private const float Deceleration = 100;
+        private const float StopSensitivity = 20; // Adjust for better accuracy at other decelerations
+        private const float ZeroTolerance = 0.001f;
+
         public bool IsAutoClicking;
-        private Vector3 _targetPos;
-        private Vector3 _clickPos;
-        private Vector3 _currentPos;
-        private Vector3 _normal;
-        private Vector3 _direction;
-        private Vector3 _rotatedDirection;
-        private float _targetRotation;
-        private float _maxSpeed;
-        private float _currentSpeed;
-        private float _highestSpeedReached;
-        private float _distance;
-        private float _lastDistance;
-        private int _distanceCounter;
-        private float _acceleration;
-        private float _deceleration;
-        private float _stopSensitivity;
-        private bool _accelerate;
-        private bool _stop;
-        private int _defLayer;
-        private Coroutine _autoClickRoutine;
-        private Animator _anim;
-        private PhotonView _photonView;
-        private readonly int _speedHash = Animator.StringToHash("Speed");
 
+        private PlayerManager _playerManager;
+        private Rigidbody _rb;
+
+        private Vector3 _targetPos, _clickPos, _currentPos;
+        private Vector3 _normal;
+        private Vector3 _direction, _rotatedDirection;
+        private float _targetRotation;
+        private float _maxSpeed, _currentSpeed, _highestSpeedReached;
+        private float _distance, _lastDistance;
+        private int _distanceCounter;
+
+        private bool _accelerate;
+        private bool _stop = true;
+
+        private Coroutine _autoClickRoutine;
+        private const int DefLayer = 1 << 15; // Ground Layer for Raycasting;
+        private Animator _anim;
+        private readonly int _speedHash = Animator.StringToHash("Speed");
+        
         private void Awake()
         {
-            RotationSpeed = 30;
-            _acceleration = 100;
-            _deceleration = 100;
-            _stopSensitivity = 20;          // Adjust for better accuracy at other decelerations
-            _defLayer = 1 << 15;            // Ground Layer for Raycasting
-
-            _playerSync = GetComponent<PlayerSync>();
-            Rb = GetComponent<Rigidbody>();
+            _playerManager = GetComponent<PlayerManager>();
+            _rb = GetComponent<Rigidbody>();
             _targetPos = transform.position;
-            _accelerate = false;
-            _stop = true;
-            _highestSpeedReached = 0;
-            IsAutoClicking = false;
-            _currentSpeed = 0;
             _anim = GetComponent<Animator>();
-            _photonView = GetComponent<PhotonView>();
         }
-
         #endregion
 
         #region UserInput
         private void Update()
         {
-            if (!_photonView.isMine)
-            {
-                _playerSync.NetworkPosition();
-                _playerSync.NetworkRotation();
-                return;
-            }
-
-            if (GameControl.PlayerState.AutoClickerActive)
+            if (_playerManager.AutoClickerActive)
             {
                 if (!IsAutoClicking)
                 {
@@ -84,7 +60,7 @@ namespace Players
             }
 
 
-            if (!GameControl.PlayerState.AutoClickerActive)
+            if (!_playerManager.AutoClickerActive)
             {
                 if (IsAutoClicking)
                 {
@@ -118,15 +94,13 @@ namespace Players
             RaycastHit hit;
             var ray = UnityEngine.Camera.main.ScreenPointToRay(position);
 
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, _defLayer))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, DefLayer))
             {
-                _maxSpeed = GameControl.PlayerState.CharacterController != null ? 
-                    GameControl.PlayerState.CharacterController.Speed.Current : GameControl.PlayerState.MoveSpeed;
                 _clickPos = hit.point;
 
                 // Play click animation
-                var click = Instantiate(MouseClick, _clickPos, Quaternion.Euler(0, 45, 0));
-                if (GameControl.PlayerState.IsImmobile)
+                var click = Instantiate(MouseClickPrefab, _clickPos, Quaternion.Euler(0, 45, 0));
+                if (_playerManager.IsImmobile)
                 {
                     foreach (Transform child in click.transform)
                     {
@@ -152,14 +126,14 @@ namespace Players
 
                     if ((_targetPos - transform.position).magnitude < 0.5f)
                     {
-                        Rb.velocity = _rotatedDirection * _currentSpeed / 2;
+                        _rb.velocity = _rotatedDirection * _currentSpeed / 2;
                     }
                     else
                     {
-                        Rb.velocity = _rotatedDirection * _currentSpeed;
+                        _rb.velocity = _rotatedDirection * _currentSpeed;
                     }
 
-                    _highestSpeedReached = Rb.velocity.magnitude;
+                    _highestSpeedReached = _rb.velocity.magnitude;
                     _lastDistance = Mathf.Infinity;
                     _distanceCounter = 3;
                 }
@@ -171,16 +145,13 @@ namespace Players
         #region Physics
         private void FixedUpdate()
         {
-            if (GameControl.PlayerState.CharacterController != null)
-            {
-                _maxSpeed = GameControl.PlayerState.CharacterController.Speed.Current;
-            }
-            _currentPos = new Vector3(Rb.transform.position.x, 0, Rb.transform.position.z);
-            _currentSpeed = Rb.velocity.magnitude;
+            _maxSpeed = GameControl.PlayerState.CharacterController.Speed.Current;
+            _currentPos = new Vector3(_rb.transform.position.x, 0, _rb.transform.position.z);
+            _currentSpeed = _rb.velocity.magnitude;
 
             GetRelativeDirection();
 
-            if (GameControl.PlayerState.IsImmobile)
+            if (_playerManager.IsImmobile)
             {
                 _targetPos = _currentPos;
             }
@@ -188,15 +159,15 @@ namespace Players
             _distance = (_targetPos - _currentPos).magnitude;
 
             // Stop - Accelerate - Decelerate Conditions
-            if (_distance < _highestSpeedReached / (10 * _stopSensitivity) || _distance < 0.02f || _lastDistance < _distance && _distanceCounter < 1)
+            if (_distance < _highestSpeedReached / (10 * StopSensitivity) || _distance < 0.02f || _lastDistance < _distance && _distanceCounter < 1)
             {
                 Stop();
             }
-            if (_accelerate && _distance > _currentSpeed * _currentSpeed / (2 * _deceleration))
+            if (_accelerate && _distance > _currentSpeed * _currentSpeed / (2 * Deceleration))
             {
                 Accelerate();
             }
-            if (_distance < _highestSpeedReached * _highestSpeedReached / (2 * _deceleration) && !_stop || _currentSpeed > _maxSpeed + 0.2f)
+            if (_distance < _highestSpeedReached * _highestSpeedReached / (2 * Deceleration) && !_stop || _currentSpeed > _maxSpeed + 0.2f)
             {
                 Decelerate();
             }
@@ -216,7 +187,7 @@ namespace Players
         // Stop Player
         private void Stop()
         {
-            Rb.velocity = Vector3.zero;
+            _rb.velocity = Vector3.zero;
             _stop = true;
             _accelerate = false;
             _currentSpeed = 0f;
@@ -227,40 +198,40 @@ namespace Players
         {
             if (_currentSpeed < _maxSpeed)
             {
-                Rb.AddForce(_rotatedDirection * _acceleration, ForceMode.Acceleration);
-                _currentSpeed = Rb.velocity.magnitude;
+                _rb.AddForce(_rotatedDirection * Acceleration, ForceMode.Acceleration);
+                _currentSpeed = _rb.velocity.magnitude;
                 _highestSpeedReached = _currentSpeed;
             }
             else
             {
-                _currentSpeed = Rb.velocity.magnitude;
+                _currentSpeed = _rb.velocity.magnitude;
             }
         }
 
         // Decelerate Player
         private void Decelerate()
         {
-            Rb.AddForce(-_rotatedDirection * _deceleration, ForceMode.Acceleration);
+            _rb.AddForce(-_rotatedDirection * Deceleration, ForceMode.Acceleration);
         }
 
         private void GetRelativeDirection()
         {
             RaycastHit hit;
 
-            if (Physics.Raycast(Rb.transform.position + Rb.rotation * new Vector3(0, 0.1f, 0), Vector3.down, out hit, Mathf.Infinity, _defLayer))
+            if (Physics.Raycast(_rb.transform.position + _rb.rotation * new Vector3(0, 0.1f, 0), Vector3.down, out hit, Mathf.Infinity, DefLayer))
             {
                 if (hit.collider.CompareTag("Ground"))
                 {
                     _normal = hit.normal;
                     Physics.gravity = -_normal * 100;
                     var angle = new Vector3(
-                        (90 - Vector3.Angle(_normal, Vector3.right)) * Mathf.Sin(Rb.rotation.eulerAngles.y * Mathf.PI / 180) +
-                        (90 - Vector3.Angle(_normal, Vector3.forward)) * Mathf.Sin((Rb.rotation.eulerAngles.y + 90) * Mathf.PI / 180),
-                        Rb.rotation.eulerAngles.y,
-                        (90 - Vector3.Angle(_normal, Vector3.right)) * Mathf.Sin((Rb.rotation.eulerAngles.y - 90) * Mathf.PI / 180) +
-                        (90 - Vector3.Angle(_normal, Vector3.forward)) * Mathf.Sin(Rb.rotation.eulerAngles.y * Mathf.PI / 180));
+                        (90 - Vector3.Angle(_normal, Vector3.right)) * Mathf.Sin(_rb.rotation.eulerAngles.y * Mathf.PI / 180) +
+                        (90 - Vector3.Angle(_normal, Vector3.forward)) * Mathf.Sin((_rb.rotation.eulerAngles.y + 90) * Mathf.PI / 180),
+                        _rb.rotation.eulerAngles.y,
+                        (90 - Vector3.Angle(_normal, Vector3.right)) * Mathf.Sin((_rb.rotation.eulerAngles.y - 90) * Mathf.PI / 180) +
+                        (90 - Vector3.Angle(_normal, Vector3.forward)) * Mathf.Sin(_rb.rotation.eulerAngles.y * Mathf.PI / 180));
 
-                    Rb.transform.rotation = Quaternion.Euler(angle);
+                    _rb.transform.rotation = Quaternion.Euler(angle);
 
                     _rotatedDirection = new Vector3(_direction.x,
                         -Mathf.Sin(((90 - Vector3.Angle(_normal, Vector3.right)) * Mathf.Sin(_targetRotation * Mathf.PI / 180) +
@@ -283,21 +254,21 @@ namespace Players
 
                 if (Math.Abs(collision.contacts[0].normal.x) < ZeroTolerance)
                 {
-                    Rb.velocity = new Vector3(1, 0, 0) * Rb.velocity.x;
-                    _targetPos = Rb.transform.position + new Vector3(0.1f, 0, 0) * Rb.velocity.x;
+                    _rb.velocity = new Vector3(1, 0, 0) * _rb.velocity.x;
+                    _targetPos = _rb.transform.position + new Vector3(0.1f, 0, 0) * _rb.velocity.x;
                     _direction = (_targetPos - transform.position).normalized;
-                    _highestSpeedReached = Rb.velocity.magnitude;
+                    _highestSpeedReached = _rb.velocity.magnitude;
                 }
                 else if (Math.Abs(collision.contacts[0].normal.z) < ZeroTolerance)
                 {
-                    Rb.velocity = new Vector3(0, 0, 1) * Rb.velocity.z;
-                    _targetPos = transform.position + new Vector3(0, 0, 0.1f) * Rb.velocity.z;
+                    _rb.velocity = new Vector3(0, 0, 1) * _rb.velocity.z;
+                    _targetPos = transform.position + new Vector3(0, 0, 0.1f) * _rb.velocity.z;
                     _direction = (_targetPos - transform.position).normalized;
-                    _highestSpeedReached = Rb.velocity.magnitude;
+                    _highestSpeedReached = _rb.velocity.magnitude;
                 }
                 else
                 {
-                    Rb.velocity = Vector3.zero;
+                    _rb.velocity = Vector3.zero;
                     _targetPos = transform.position;
                     _stop = true;
                     _accelerate = false;
@@ -308,7 +279,7 @@ namespace Players
         // Rotate Player
         private void Rotate()
         {
-            var lookRotation = Rb.transform.rotation.eulerAngles.y;
+            var lookRotation = _rb.transform.rotation.eulerAngles.y;
             int sign;
             float difference;
             lookRotation = lookRotation > 0 ? lookRotation : 360 - lookRotation;
@@ -328,7 +299,7 @@ namespace Players
 
             if (Mathf.Abs(_targetRotation - lookRotation) > RotationSpeed * difference / 90)
             {
-                Rb.transform.Rotate(0, sign * RotationSpeed * difference / 180, 0);
+                _rb.transform.Rotate(0, sign * RotationSpeed * difference / 180, 0);
             }
         }
     }

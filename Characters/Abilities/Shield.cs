@@ -39,7 +39,7 @@ namespace Characters.Abilities
         {
             if (ShieldModel == null)
             {
-                ShieldModel = GameControl.PlayerState.Player.transform.Find("Shield").gameObject;
+//                ShieldModel = GameControl.PlayerState.Player.transform.Find("Shield").gameObject;
             }
         }
 
@@ -56,7 +56,7 @@ namespace Characters.Abilities
             if (character.UseEnergy(EnergyCost)) // characterd had enough energy and used it
             {
                 ActivateShieldModel();
-                GameControl.PlayerState.IsInvulnerable = true;
+//                GameControl.PlayerState.IsInvulnerable = true;
                 TimeToRenew = Cooldown;
                 IsLoaded = false;
                 IsActive = true;
@@ -75,7 +75,7 @@ namespace Characters.Abilities
         {
             if (!IsActive) return;
             DeactivateShieldModel();
-            GameControl.PlayerState.IsInvulnerable = false;
+//            GameControl.PlayerState.IsInvulnerable = false;
             character.Energy.RegenStatus = RegenStatus.Regen;
             IsActive = false;
         }
@@ -98,12 +98,5 @@ namespace Characters.Abilities
         {
             yield return new WaitForSeconds(3);
         }
-
-
-
-
-
-
-
     }
 }

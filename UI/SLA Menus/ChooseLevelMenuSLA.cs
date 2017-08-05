@@ -14,7 +14,6 @@ namespace UI.SLA_Menus
         {
             GameControl.GameState.CurrentLevel = 1;
             Time.timeScale = 1;
-            GameControl.PlayerState.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 
@@ -22,7 +21,6 @@ namespace UI.SLA_Menus
         {
             GameControl.GameState.CurrentLevel = 2;
             Time.timeScale = 1;
-            GameControl.PlayerState.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 
@@ -30,7 +28,6 @@ namespace UI.SLA_Menus
         {
             GameControl.GameState.CurrentLevel = 3;
             Time.timeScale = 1;
-            GameControl.PlayerState.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 
@@ -38,7 +35,6 @@ namespace UI.SLA_Menus
         {
             GameControl.GameState.CurrentLevel = 4;
             Time.timeScale = 1;
-            GameControl.PlayerState.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 
@@ -46,7 +42,6 @@ namespace UI.SLA_Menus
         {
             GameControl.GameState.CurrentLevel = 5;
             Time.timeScale = 1;
-            GameControl.PlayerState.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 
@@ -54,7 +49,6 @@ namespace UI.SLA_Menus
         {
             GameControl.GameState.CurrentLevel = 6;
             Time.timeScale = 1;
-            GameControl.PlayerState.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 
@@ -62,7 +56,6 @@ namespace UI.SLA_Menus
         {
             GameControl.GameState.CurrentLevel = 7;
             Time.timeScale = 1;
-            GameControl.PlayerState.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 
@@ -70,7 +63,6 @@ namespace UI.SLA_Menus
         {
             GameControl.GameState.CurrentLevel = 8;
             Time.timeScale = 1;
-            GameControl.PlayerState.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 
@@ -78,7 +70,6 @@ namespace UI.SLA_Menus
         {
             GameControl.GameState.CurrentLevel = 9;
             Time.timeScale = 1;
-            GameControl.PlayerState.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 
@@ -86,7 +77,6 @@ namespace UI.SLA_Menus
         {
             GameControl.GameState.CurrentLevel = 10;
             Time.timeScale = 1;
-            GameControl.PlayerState.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 
@@ -94,7 +84,6 @@ namespace UI.SLA_Menus
         {
             GameControl.GameState.CurrentLevel = 11;
             Time.timeScale = 1;
-            GameControl.PlayerState.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 
@@ -102,7 +91,6 @@ namespace UI.SLA_Menus
         {
             GameControl.GameState.CurrentLevel = 12;
             Time.timeScale = 1;
-            GameControl.PlayerState.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 
@@ -110,7 +98,6 @@ namespace UI.SLA_Menus
         {
             GameControl.GameState.CurrentLevel = 13;
             Time.timeScale = 1;
-            GameControl.PlayerState.TotalScore = 0;
             SceneManager.LoadScene("SLA");
         }
 

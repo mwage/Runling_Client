@@ -10,12 +10,15 @@ namespace RLR
     public class DeathRLR : MonoBehaviour
     {
         //events following Deathtrigger
-        public void Death(LevelManagerRLR manager, InitializeGameRLR initializeGame, ControlRLR control)
+        public void Death(LevelManagerRLR manager, InitializeGameRLR initializeGame, PlayerManager playerManager)
         {
-            GameControl.PlayerState.IsImmobile = true;
-            GameControl.PlayerState.Player.GetComponent<PlayerMovement>().IsAutoClicking = false;
-            GameControl.PlayerState.CharacterController.DisableAllSkills();
-            GameControl.PlayerState.Player.SetActive(false);
+            playerManager.CheckIfDead = false;
+            playerManager.IsImmobile = true;
+            playerManager.CheckIfDead = false;
+            playerManager.IsImmobile = true;
+            playerManager.IsInvulnerable = true;
+            playerManager.Model.SetActive(false);
+            playerManager.CharacterController.DisableAllSkills();
 
 
             switch (GameControl.GameState.SetGameMode)
@@ -24,29 +27,27 @@ namespace RLR
                     manager.EndGame(1);
                     break;
                 case GameMode.Practice:
-                    StartCoroutine(Respawn(3, 3, initializeGame, control));
+                    StartCoroutine(Respawn(3, 3, initializeGame, playerManager));
                     break;
                 case GameMode.TimeMode:
-                    if (GameControl.PlayerState.Lives == 0)
+                    if (playerManager.Lives == 0)
                     {
                         manager.EndGame(1);
                         break;
                     }
                     else
                     {
-                        GameControl.PlayerState.Lives -= 1;
-                        manager.LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + GameControl.PlayerState.Lives;
-                        StartCoroutine(Respawn(10, 3, initializeGame, control));
+                        playerManager.Lives -= 1;
+                        manager.LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + playerManager.Lives;
+                        StartCoroutine(Respawn(10, 3, initializeGame, playerManager));
                         break;
                     }
             }
         }
 
-        private static IEnumerator Respawn(int countdownFrom, float shieldDuration, InitializeGameRLR initializeGame, ControlRLR control)
+        private static IEnumerator Respawn(int countdownFrom, float shieldDuration, InitializeGameRLR initializeGame, PlayerManager playerManager)
         {
             yield return new WaitForSeconds(1);
-
-
 
             // Countdown
             var respawnIn = Instantiate(initializeGame.CountdownPrefab, GameObject.Find("Canvas").transform);
@@ -60,21 +61,24 @@ namespace RLR
                 countdown.GetComponent<TextMeshProUGUI>().text = (countdownFrom - i).ToString();
                 if (i == countdownFrom - 1)
                 {
-                    GameControl.PlayerState.Player.SetActive(true);
-                    GameControl.PlayerState.Player.transform.Find("Shield").gameObject.SetActive(true);
-                    GameControl.PlayerState.IsInvulnerable = true;
-                    GameControl.PlayerState.IsDead = false;
-                    control.StopUpdate = false;
+                    playerManager.Model.SetActive(true);
+                    playerManager.Shield.SetActive(true);
+                    playerManager.IsDead = false;
+                    playerManager.IsInvulnerable = true;
+                    playerManager.CheckIfDead = true;
+                    
                 }
                 yield return new WaitForSeconds(1);
                 Destroy(countdown);
             }
             Destroy(respawnIn);
             
-            GameControl.PlayerState.IsImmobile = false;
+            playerManager.IsImmobile = false;
+
             yield return new WaitForSeconds(shieldDuration);
-            GameControl.PlayerState.Player.transform.Find("Shield").gameObject.SetActive(false);
-            GameControl.PlayerState.IsInvulnerable = false;
+
+            playerManager.Shield.SetActive(false);
+            playerManager.IsInvulnerable = false;
         }
     }
 }
