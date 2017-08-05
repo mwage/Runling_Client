@@ -23,6 +23,8 @@ namespace Drones.Movement
             if (moveDelegate == null)
             {
                 MoveStraight(drone, droneSpeed);
+                var instance = drone.AddComponent<StraightBouncingMovement>();
+                //instance.DroneSpeed = droneSpeed;
             }
             else
             {
@@ -43,6 +45,7 @@ namespace Drones.Movement
             }
             var rb = drone.GetComponent<Rigidbody>();
             rb.AddForce(drone.transform.forward * droneSpeed, ForceMode.VelocityChange);
+            
         }
 
         public static void ChaserMovement(GameObject drone, float droneSpeed, float? curving = null,
@@ -86,6 +89,7 @@ namespace Drones.Movement
             instance.SinFrequency = sinFrequency ?? 5;
             instance.SinForce = sinForce ?? 40;
             instance.DroneSpeed = droneSpeed;
+            instance.Initialized = true;
         }
 
         public static void FixedSinusoidalMovement(GameObject drone, float droneSpeed, float? curving = null,

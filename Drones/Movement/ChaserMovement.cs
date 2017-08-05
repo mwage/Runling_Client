@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Drones.Movement
 {
-    public class ChaserMovement : MonoBehaviour
+    public class ChaserMovement : ADroneMovement
     {
         public float Speed;
 
@@ -13,10 +13,13 @@ namespace Drones.Movement
         private Rigidbody _rb;
         private float _acceleration;
         private float _maxSpeed;
+        private DroneManager _droneManager;
+        private float _currentSpeed;
 
         private void Start()
         {
             _rb = GetComponent<Rigidbody>();
+            _droneManager = gameObject.GetComponent<DroneManager>();
             _rotationSpeed = 15f;
             _acceleration = 50f;
             _maxSpeed = Speed;
@@ -36,14 +39,15 @@ namespace Drones.Movement
             {
                 _targetPos = GameControl.PlayerState.Player.transform.position;
                 _targetPos.y += 0.4f;
-                var currentSpeed = _rb.velocity.magnitude;
+                _currentSpeed = _droneManager.IsFrozen ? 0F : _rb.velocity.magnitude;
+                
                 _direction = (_targetPos - transform.position).normalized;
 
                 if ((_targetPos - transform.position).magnitude > 0.1f)
                 {
-                    _rb.velocity = _direction * currentSpeed;
+                    _rb.velocity = _direction * _currentSpeed;
 
-                    if (currentSpeed < _maxSpeed)
+                    if (_currentSpeed < _maxSpeed)
                     {
                         _rb.AddForce(_direction * _acceleration);
                     }
@@ -51,11 +55,11 @@ namespace Drones.Movement
                     // Don't accelerate over maxSpeed
                     else
                     {
-                        currentSpeed = _maxSpeed;
-                        _rb.velocity = _direction * currentSpeed;
+                        _currentSpeed = _maxSpeed;
+                        _rb.velocity = _direction * _currentSpeed;
                     }
 
-                    if (Mathf.Abs(currentSpeed) > 0.00001)
+                    if (Mathf.Abs(_currentSpeed) > 0.00001)
                     {
                         Rotate();
                     }
@@ -73,5 +77,69 @@ namespace Drones.Movement
             var lookrotation = _targetPos - transform.position;
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookrotation), _rotationSpeed * Time.deltaTime);
         }
+
+        public override void Move()
+        {
+
+        }
+
+        public override void Freeze()
+        {
+            _isFrozen = true;
+            if (_isSlowed)
+            {
+                _velocityBeforeFreezeNotSlowed = _rb.velocity / (1 - _slowPercentage);
+            }
+            else
+            {
+                _velocityBeforeFreezeNotSlowed = _rb.velocity;
+            }
+            _rb.velocity = Vector3.zero;
+        }
+
+        public override void UnFreeze()
+        {
+            _isFrozen = false;
+            if (!_isSlowed)
+            {
+                _rb.velocity = _velocityBeforeFreezeNotSlowed;
+            }
+            else
+            {
+                _rb.velocity = _velocityBeforeFreezeNotSlowed;
+                _rb.velocity *= (1 - _slowPercentage);
+            }
+        }
+
+        public override void SlowDown(float percentage)
+        {
+            _isSlowed = true;
+            _slowPercentage = percentage;
+            if (_isFrozen)
+            {
+                // dont change speed
+            }
+            else
+            {
+                _rb.velocity *= (1 - percentage);
+            }
+        }
+
+        public override void UnSlowDown()
+        {
+            _isSlowed = false;
+
+            if (!_isFrozen)
+            {
+                _rb.velocity *= 1 / (1 - _slowPercentage);
+            }
+            else
+            {
+                // dont change speed
+            }
+            _slowPercentage = 0F;
+
+        }
     }
 }
+

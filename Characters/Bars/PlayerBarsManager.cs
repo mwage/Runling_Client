@@ -46,6 +46,7 @@ namespace Characters.Bars
 
         public void UpdateLevelBar()
         {
+            if (_characterController == null) _characterController = GameControl.PlayerState.CharacterController;
             LevelBar.SetText(_characterController.Level);
             LevelBar.SetProgress(_characterController.Level, _characterController.Exp);
         }

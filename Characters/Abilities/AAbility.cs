@@ -19,6 +19,7 @@ namespace Characters.Abilities
         public bool IsLoaded;
 
         public bool IsActive;
+        protected GameObject _player;
 
         public abstract IEnumerator Enable(ACharacter character);
         public abstract void Disable(ACharacter character);
