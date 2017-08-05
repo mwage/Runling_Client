@@ -23,7 +23,7 @@ namespace Characters.Abilities
 
         public float DurationTime
         {
-            get { return Level + 3F; }
+            get { return Level + 5F; }
         }
 
         public Shield(ACharacter character)

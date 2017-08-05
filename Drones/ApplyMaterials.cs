@@ -1,4 +1,5 @@
 ﻿using Drones.DroneTypes;
+using Launcher;
 using UnityEngine;
 
 namespace Drones
@@ -13,6 +14,7 @@ namespace Drones
             PhotonView = GetComponent<PhotonView>();
             _droneFactory = GameObject.Find("Drone Manager(Clone)").GetComponent<DroneFactory>();
             transform.SetParent(_droneFactory.transform);
+            GameControl.MapState.DronesParent = _droneFactory.gameObject;
         }
 
         [PunRPC]

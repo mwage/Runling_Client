@@ -2,7 +2,7 @@
 
 namespace Drones.Movement
 {
-    public class CurvedMovement : MonoBehaviour
+    public class CurvedMovement : ADroneMovement
     {
         private Rigidbody _rb;
         public float Curving;
@@ -26,6 +26,31 @@ namespace Drones.Movement
             {
                 Curving -= Time.fixedDeltaTime * Curving / CurvingDuration.Value;
             }
+        }
+
+        public override void Move()
+        {
+
+        }
+
+        public override void Freeze()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void UnFreeze()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void SlowDown(float percentage)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void UnSlowDown()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

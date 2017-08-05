@@ -3,7 +3,7 @@
 namespace Drones.Movement
 {
 
-    public class RotateBouncingDrone : MonoBehaviour
+    public class RotateBouncingDrone : ADroneMovement
     {
         public float DroneSpeed;
         private float _rotation;
@@ -29,6 +29,30 @@ namespace Drones.Movement
                 //_angle = Mathf.Atan2(Vector3.Dot(Vector3.up, Vector3.Cross(_rb.velocity, collision.contacts[0].normal)), Vector3.Dot(_rb.velocity, collision.contacts[0].normal)) * Mathf.Rad2Deg;
             }
         }
-        
+
+        public override void Move()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void Freeze()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void UnFreeze()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void SlowDown(float percentage)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void UnSlowDown()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

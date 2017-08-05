@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Drones.Movement
 {
-    public class PointToPointMovement : MonoBehaviour
+    public class PointToPointMovement : ADroneMovement
     {
         public float Acceleration;
         public float MaxVelocity;
@@ -126,6 +126,31 @@ namespace Drones.Movement
                 _inWay = false;
                 _accPhase = true;
             }
+        }
+
+        public override void Move()
+        {
+
+        }
+
+        public override void Freeze()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void UnFreeze()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void SlowDown(float percentage)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void UnSlowDown()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -61,6 +61,7 @@ namespace Drones
                 if (newDrone != null)
                 {
                     drone.ConfigureDrone(newDrone, this);
+                    newDrone.AddComponent<DroneManager>();
                 }
                 drones.Add(newDrone);
             }
