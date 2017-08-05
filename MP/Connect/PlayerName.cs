@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace MP
+namespace MP.Connect
 {
     public class PlayerName : MonoBehaviour
     {

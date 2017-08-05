@@ -137,5 +137,9 @@ namespace Launcher
                 }
             }
         }
+
+        // Multiplayer Input
+        public readonly byte MouseClick = 0;
+        public readonly byte ClickPosition = 1;
     }
 }

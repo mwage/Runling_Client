@@ -105,7 +105,7 @@ namespace UI.Main_Menu
                     break;
                 case "AR":
                     Debug.Log("Start Arena Game");
-                    PhotonNetwork.LoadLevel(4);
+                    PhotonNetwork.LoadLevel(5);
                     break;
                 default:
                     Debug.Log("Couldn't load game, invalid selection");

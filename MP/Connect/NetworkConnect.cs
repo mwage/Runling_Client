@@ -1,9 +1,9 @@
 ﻿using Launcher;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-namespace MP
+namespace MP.Connect
 {
     public class NetworkConnect : Photon.PunBehaviour
     {
@@ -52,7 +52,6 @@ namespace MP
             {
                 FeedbackText.text = "Connecting...";
                 PhotonNetwork.ConnectUsingSettings(GameControl.Version.ToString());
-//                PhotonNetwork.ConnectToRegion(CloudRegionCode.us, GameControl.Version.ToString());
             }
         }
 

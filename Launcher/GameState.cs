@@ -1,4 +1,5 @@
 ﻿using Characters.Types;
+using TrueSync;
 using UnityEngine;
 
 namespace Launcher
@@ -27,6 +28,6 @@ namespace Launcher
         public Difficulty SetDifficulty = Difficulty.Hard;
         public GameMode SetGameMode = GameMode.Practice;
         public bool Solo;
-
+        public TSRandom Random = TSRandom.New(0);
     }
 }

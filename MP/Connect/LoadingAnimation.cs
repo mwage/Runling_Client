@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace MP
+namespace MP.Connect
 {
     public class LoadingAnimation : MonoBehaviour
     {
