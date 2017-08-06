@@ -3,6 +3,7 @@ using Photon;
 using UI.RLR_Menus;
 using UI.RLR_Menus.Characters;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -62,7 +63,8 @@ namespace UI.Main_Menu
             GameControl.GameState.CharacterDto = PickCharacterMenu.GetComponent<PickCharacterMenu>().GetCharacterDto();
             SetModes();
 
-            PhotonNetwork.CreateRoom(GameControl.GenerateRoomName("SoloRLR"));
+            _sceneLoader.LoadScene("RLR", 1);
+            _mainMenuManager.gameObject.SetActive(false);
         }
 
         public void StartGameSOLOHARDRLRTEST()
@@ -71,7 +73,9 @@ namespace UI.Main_Menu
             GameControl.GameState.CharacterDto = PickCharacterMenu.GetComponent<PickCharacterMenu>().GetCharacterDto();
             GameControl.GameState.SetDifficulty = Difficulty.Hard;
             GameControl.GameState.SetGameMode = GameMode.Practice;
-            _sceneLoader.LoadScene("RLR", 0);
+
+            SceneManager.LoadScene("RLR");
+            _mainMenuManager.gameObject.SetActive(false);
         }
 
         public void VoteDifficultyNormal()

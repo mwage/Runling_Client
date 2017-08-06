@@ -20,21 +20,24 @@ namespace RLR
         public InGameMenuManagerRLR InGameMenuManager;
         public CameraHandleMovement CameraHandleMovement;
         public PlayerFactory PlayerFactory;
-        public PlayerBarsManager PlayerBarsManager;
-        public RunlingChaser RunlingChaser;
-        public AbilityButtonManager AbilityButtonManager;
         public GameObject LevelTextObject;
         public GameObject CountdownPrefab;
 
         private LevelManagerRLR _levelManager;
         private ControlRLR _controlRLR;
         private ScoreRLR _scoreRLR;
+        private RunlingChaser _runlingChaser;
+        private PlayerBarsManager _playerBarsManager;
+        private AbilityButtonManager _abilityButtonManager;
 
         private void Awake()
         {
             _levelManager = GetComponent<LevelManagerRLR>();
             _controlRLR = GetComponent<ControlRLR>();
             _scoreRLR = GetComponent<ScoreRLR>();
+            _runlingChaser = GetComponent<RunlingChaser>();
+            _playerBarsManager = PlayerFactory.GetComponent<PlayerBarsManager>();
+            _abilityButtonManager = PlayerFactory.GetComponent<AbilityButtonManager>();
         }
 
         public void InitializePlayer()
@@ -42,9 +45,9 @@ namespace RLR
             var playerManager = PlayerFactory.Create(GameControl.GameState.CharacterDto);
             _controlRLR.PlayerManager = playerManager;
             GetComponent<InputServer>().Init(InGameMenuManager.gameObject, playerManager);
-            PlayerBarsManager.Initialize(playerManager);
-            playerManager.Trigger.AddComponent<SafeZoneManager>().InitializeTrigger(PlayerBarsManager, RunlingChaser);
-            AbilityButtonManager.InitializeAbilityButtons(playerManager);
+            _playerBarsManager.Initialize(playerManager);
+            playerManager.Trigger.AddComponent<SafeZoneManager>().InitializeTrigger(_playerBarsManager, _runlingChaser);
+            _abilityButtonManager.InitializeAbilityButtons(playerManager);
         }
 
         //set Spawnimmunity once game starts

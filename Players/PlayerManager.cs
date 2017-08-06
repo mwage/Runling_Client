@@ -15,9 +15,9 @@ namespace Players
         public bool IsDead;
         public bool CheckIfDead;
         public int Lives;
-        public bool IsImmobile;
+        public bool IsImmobile = true;
         public bool IsSafe;
-        public bool IsInvulnerable;
+        public bool IsInvulnerable = true;
         public bool GodModeActive;
         public bool AutoClickerActive;
         public GameObject Chaser;

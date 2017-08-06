@@ -39,7 +39,8 @@ namespace Drones.DroneTypes
                     : DroneStartPosition.GetRandomPosition(Size, area);
             }
 
-            var newDrone = Object.Instantiate(factory.SetDroneType[DroneType], pos, Quaternion.Euler(0, StartDirection + DroneDirection.RandomDirection(RestrictedZone, ConeRange), 0));
+            var newDrone = Object.Instantiate(factory.SetDroneType[DroneType], pos, 
+                Quaternion.Euler(0, StartDirection + DroneDirection.RandomDirection(RestrictedZone, ConeRange), 0), factory.transform);
             return newDrone;
         }
     }

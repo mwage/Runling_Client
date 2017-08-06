@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Drones;
 using Drones.DroneTypes;
 using Drones.Pattern;
 using Launcher;
@@ -23,6 +22,7 @@ namespace RLR.Levels
         private List <GameObject> _chasers;
         private IDrone _iDrone;
         private IPattern _pattern;
+
 
         /// <summary>
         /// Sets plaforms where chasers have start and destory position and which platforms spawn them.
@@ -74,8 +74,8 @@ namespace RLR.Levels
             {
                 if (_chaserSpawnPlatformIdxs[i] == platformIndex.Value && !_reachedChaserPlatform[i, 0] && (i == 0 || _reachedChaserPlatform[i-1, 0]))
                 {
-                    _chasers.AddRange(LevelManager.DroneFactory.SpawnDrones(_chaserBase)); // you add few objects (addrange), but you actyally add only one each time in loop, make it before loop or change to .Add()
-                    
+                    _chasers.AddRange(LevelManager.DroneFactory.SpawnDrones(_chaserBase));
+
                     if (_chaserSpawnPlatformIdxs[i] != 0) // sets start position of chaser
                     {
                         _chasers[i].transform.position = safeZones[_chaserStartPosition[i]].transform.position + safeZones[_chaserStartPosition[i]].transform.rotation *

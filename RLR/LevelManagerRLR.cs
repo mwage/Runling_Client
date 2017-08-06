@@ -7,7 +7,6 @@ using Players;
 using RLR.GenerateMap;
 using RLR.Levels;
 using TMPro;
-using UI.RLR_Menus;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,14 +16,13 @@ namespace RLR
     {
         public DroneFactory DroneFactory;
         public MapGeneratorRLR MapGenerator;
-        public InGameMenuManagerRLR InGameMenuManager;
+        public RunlingChaser RunlingChaser;
         public GameObject Win;
         public GameObject LivesText;
 
         private InitializeGameRLR _initializeGame;
-        public RunlingChaser RunlingChaser;
         private CheckSafeZones _checkSafeZones;
-        private PlayerManager _playerManager;
+        public PlayerManager PlayerManager;
         private readonly InitializeLevelsRLR _initializeLevelsRLR = new InitializeLevelsRLR();
 
         public static int NumLevels = 9;             //currently last level available in RLR
@@ -34,9 +32,8 @@ namespace RLR
         public void Awake()
         {
             _initializeGame = GetComponent<InitializeGameRLR>();
-            RunlingChaser = GetComponent<RunlingChaser>();
             _checkSafeZones = GetComponent<CheckSafeZones>();
-            _playerManager = GetComponent<ControlRLR>().PlayerManager;
+            PlayerManager = GetComponent<ControlRLR>().PlayerManager;
 
             _levels = _initializeLevelsRLR.SetDifficulty(this);
         }
@@ -92,9 +89,9 @@ namespace RLR
             if (GameControl.GameState.SetGameMode == GameMode.TimeMode)
             {
                 _checkSafeZones.ScoreRLR.AddRemainingCountdown();
-                _checkSafeZones.ScoreRLR.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + _playerManager.TotalScore;
-                _playerManager.Lives = 3;
-                LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + _playerManager.Lives;
+                _checkSafeZones.ScoreRLR.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + PlayerManager.TotalScore;
+                PlayerManager.Lives = 3;
+                LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + PlayerManager.Lives;
             }
             if (GameControl.GameState.SetGameMode != GameMode.Practice)
             {
@@ -111,10 +108,10 @@ namespace RLR
             if (GameControl.GameState.SetGameMode == GameMode.TimeMode)
             {
                 _checkSafeZones.ScoreRLR.AddRemainingCountdown();
-                _checkSafeZones.ScoreRLR.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + _playerManager.TotalScore;
+                _checkSafeZones.ScoreRLR.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + PlayerManager.TotalScore;
             }
 
-            if (!_playerManager.IsDead)
+            if (!PlayerManager.IsDead)
             {
                 Win.transform.Find("Victory").gameObject.SetActive(true);
             }
@@ -125,13 +122,13 @@ namespace RLR
 
             // Load win screen
             yield return new WaitForSeconds(delay);
-            InGameMenuManager.CloseMenus();
+            _initializeGame.InGameMenuManager.CloseMenus();
             if (GameControl.GameState.SetGameMode != GameMode.Practice)
             {
                 _checkSafeZones.ScoreRLR.SetHighScore();
             }
             GameControl.GameState.FinishedLevel = false;
-            _playerManager.gameObject.SetActive(false);
+            PlayerManager.gameObject.SetActive(false);
             Win.gameObject.SetActive(true);
         }
     }

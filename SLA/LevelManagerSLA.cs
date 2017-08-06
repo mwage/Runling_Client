@@ -3,28 +3,29 @@ using System.Collections;
 using System.Collections.Generic;
 using Launcher;
 using Drones;
+using Players;
 using SLA.Levels;
-using UI.SLA_Menus;
 using UnityEngine;
 
 namespace SLA
 {
     public class LevelManagerSLA : MonoBehaviour
     {
-        public InGameMenuManagerSLA InGameMenuManagerSLA;
-        private ScoreSLA _score;
         public GameObject Win;
         public DroneFactory DroneFactory;
 
+        private ScoreSLA _score;
         private InitializeGameSLA _initializeGameSLA;
         public static int NumLevels = 13;             //currently last level available in SLA
         private List<ILevelSLA> _levels;
+        public PlayerManager PlayerManager;
 
 
         public void Awake()
         {
             _score = GetComponent<ScoreSLA>();
             _initializeGameSLA = GetComponent<InitializeGameSLA>();
+            PlayerManager = GetComponent<ControlSLA>().PlayerManager;
             InitializeLevels();
         }
 
@@ -80,6 +81,7 @@ namespace SLA
 
             _score.NewHighScore.transform.parent.gameObject.SetActive(false);
 
+            DroneFactory.StopAllCoroutines();
             foreach (Transform child in DroneFactory.transform)
             {
                 Destroy(child.gameObject);
@@ -101,7 +103,7 @@ namespace SLA
         {
             yield return new WaitForSeconds (delay);
             _score.NewHighScore.transform.parent.gameObject.SetActive(false);
-            InGameMenuManagerSLA.CloseMenus();
+            _initializeGameSLA.InGameMenuManager.CloseMenus();
             Win.gameObject.SetActive(true);
         }
     }

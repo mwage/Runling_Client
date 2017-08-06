@@ -72,7 +72,7 @@ namespace SLA
         private void SpawnPlayer(PlayerManager playerManager)
         {
             playerManager.IsDead = false;
-            playerManager.IsSafe = false;
+            playerManager.IsImmobile = false;
             playerManager.IsInvulnerable = true;
             playerManager.CheckIfDead = true;
             playerManager.Model.SetActive(true);
