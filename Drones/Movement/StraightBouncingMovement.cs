@@ -7,7 +7,7 @@ namespace Drones.Movement
         private void Start()
         {
             //_droneManager = GetComponent<DroneManager>();
-            _rb = gameObject.GetComponent<Rigidbody>();
+            Rb = gameObject.GetComponent<Rigidbody>();
         }
 
         public override void Move()
@@ -17,59 +17,59 @@ namespace Drones.Movement
 
         public override void Freeze()
         {
-            _isFrozen = true;
-            if (_isSlowed)
+            IsFrozen = true;
+            if (IsSlowed)
             {
-                _velocityBeforeFreezeNotSlowed = _rb.velocity / (1 - _slowPercentage);
+                VelocityBeforeFreezeNotSlowed = Rb.velocity / (1 - SlowPercentage);
             }
             else
             {
-                _velocityBeforeFreezeNotSlowed = _rb.velocity;
+                VelocityBeforeFreezeNotSlowed = Rb.velocity;
             }
-            _rb.velocity = Vector3.zero;
+            Rb.velocity = Vector3.zero;
         }
 
         public override void UnFreeze()
         {
-            _isFrozen = false;
-            if (!_isSlowed)
+            IsFrozen = false;
+            if (!IsSlowed)
             {
-                _rb.velocity = _velocityBeforeFreezeNotSlowed;
+                Rb.velocity = VelocityBeforeFreezeNotSlowed;
             }
             else
             {
-                _rb.velocity = _velocityBeforeFreezeNotSlowed;
-                _rb.velocity *= (1 - _slowPercentage);
+                Rb.velocity = VelocityBeforeFreezeNotSlowed;
+                Rb.velocity *= (1 - SlowPercentage);
             }
         }
 
         public override void SlowDown(float percentage)
         {
-            _isSlowed = true;
-            _slowPercentage = percentage;
-            if (_isFrozen)
+            IsSlowed = true;
+            SlowPercentage = percentage;
+            if (IsFrozen)
             {
                 // dont change speed
             }
             else
             {
-                _rb.velocity *= (1 - percentage);
+                Rb.velocity *= (1 - percentage);
             }
         }
 
         public override void UnSlowDown()
         {
-            _isSlowed = false;
+            IsSlowed = false;
             
-            if (!_isFrozen)
+            if (!IsFrozen)
             {
-                _rb.velocity *= 1 / (1 - _slowPercentage);
+                Rb.velocity *= 1 / (1 - SlowPercentage);
             }
             else
             {
                 // dont change speed
             }
-            _slowPercentage = 0F;
+            SlowPercentage = 0F;
 
         }
     }

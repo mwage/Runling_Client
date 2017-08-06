@@ -35,8 +35,8 @@ namespace MP.TSGame.Players.AbilitiesButtons
         {
             if (_characterController == null)
             {
-                if (GameControl.PlayerState.CharacterController == null) return false;
-                _characterController = GameControl.PlayerState.CharacterController;
+//                if (GameControl.PlayerState.CharacterController == null) return false;
+//                _characterController = GameControl.PlayerState.CharacterController;
                 InitializeAbility();
                 return true;
             }

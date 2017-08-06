@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Characters.Types;
 using Drones;
 using Launcher;
+using Players;
 using TMPro;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ namespace Characters.Abilities
     /// </summary>
     public class Freeze : AAbility
     {
-    // private GameObject SOMEANIMATION TODO;
+        private readonly PlayerManager _playerManager;       // TODO: Animation
 
         public override int Cooldown
         {
@@ -35,13 +36,13 @@ namespace Characters.Abilities
             get { return 150F; }
         }
 
-        public Freeze(ACharacter character)
+        public Freeze(ACharacter character, PlayerManager playerManager)
         {
             Name = "Freeze";
             Level = character.Ability1Level;
             EnergyDrainPerSecond = 0;
             IsActive = false;
-            _player = character.gameObject;
+            _playerManager = playerManager;
             SetLoaded();
         }
 
@@ -89,7 +90,7 @@ namespace Characters.Abilities
         private void FindDronesInRange(List<Transform> droneTransforms)
         {
             DronesInRange.Clear();
-            var playerTransform = _player.transform;
+            var playerTransform = _playerManager.transform;
             foreach (var drone in droneTransforms)
             {
                 if (IsInRange(playerTransform, drone, Range))

@@ -39,6 +39,7 @@ namespace SLA
             playerManager.Model.SetActive(false);
             _controlSLA.PlayerManager = playerManager;
             GetComponent<InputServer>().Init(InGameMenuManager.gameObject, playerManager);
+            CameraHandleMovement.InitializeFollowTarget(playerManager.gameObject);
         }
 
         public void InitializeGame()

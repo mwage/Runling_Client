@@ -1,5 +1,4 @@
-﻿using Launcher;
-using Players;
+﻿using Players;
 using UnityEngine;
 
 namespace Drones.Movement
@@ -7,6 +6,7 @@ namespace Drones.Movement
     public class ChaserMovement : ADroneMovement
     {
         public float Speed;
+        public PlayerManager ChaserTarget;
 
         private float _rotationSpeed;
         private Vector3 _targetPos;
@@ -28,17 +28,17 @@ namespace Drones.Movement
 
         private void FixedUpdate()
         {
-            if (GameControl.PlayerState.Player == null || _rb == null)
+            if (ChaserTarget == null || _rb == null)
             {
                 return;
             }
-            if (!GameControl.PlayerState.Player.activeSelf || GameControl.PlayerState.Player.GetComponent<PlayerManager>().IsImmobile)
+            if (ChaserTarget.IsDead)
             {
                 _rb.velocity = Vector3.zero;
             }
             else
             {
-                _targetPos = GameControl.PlayerState.Player.transform.position;
+                _targetPos = ChaserTarget.transform.position;
                 _targetPos.y += 0.4f;
                 _currentSpeed = _droneManager.IsFrozen ? 0F : _rb.velocity.magnitude;
                 
@@ -86,37 +86,37 @@ namespace Drones.Movement
 
         public override void Freeze()
         {
-            _isFrozen = true;
-            if (_isSlowed)
+            IsFrozen = true;
+            if (IsSlowed)
             {
-                _velocityBeforeFreezeNotSlowed = _rb.velocity / (1 - _slowPercentage);
+                VelocityBeforeFreezeNotSlowed = _rb.velocity / (1 - SlowPercentage);
             }
             else
             {
-                _velocityBeforeFreezeNotSlowed = _rb.velocity;
+                VelocityBeforeFreezeNotSlowed = _rb.velocity;
             }
             _rb.velocity = Vector3.zero;
         }
 
         public override void UnFreeze()
         {
-            _isFrozen = false;
-            if (!_isSlowed)
+            IsFrozen = false;
+            if (!IsSlowed)
             {
-                _rb.velocity = _velocityBeforeFreezeNotSlowed;
+                _rb.velocity = VelocityBeforeFreezeNotSlowed;
             }
             else
             {
-                _rb.velocity = _velocityBeforeFreezeNotSlowed;
-                _rb.velocity *= (1 - _slowPercentage);
+                _rb.velocity = VelocityBeforeFreezeNotSlowed;
+                _rb.velocity *= (1 - SlowPercentage);
             }
         }
 
         public override void SlowDown(float percentage)
         {
-            _isSlowed = true;
-            _slowPercentage = percentage;
-            if (_isFrozen)
+            IsSlowed = true;
+            SlowPercentage = percentage;
+            if (IsFrozen)
             {
                 // dont change speed
             }
@@ -128,17 +128,17 @@ namespace Drones.Movement
 
         public override void UnSlowDown()
         {
-            _isSlowed = false;
+            IsSlowed = false;
 
-            if (!_isFrozen)
+            if (!IsFrozen)
             {
-                _rb.velocity *= 1 / (1 - _slowPercentage);
+                _rb.velocity *= 1 / (1 - SlowPercentage);
             }
             else
             {
                 // dont change speed
             }
-            _slowPercentage = 0F;
+            SlowPercentage = 0F;
 
         }
     }

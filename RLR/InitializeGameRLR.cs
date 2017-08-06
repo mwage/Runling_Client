@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using Characters;
-using Characters.Types;
+using Characters.Bars;
 using Launcher;
 using Players;
+using Players.AbilitiesButtons;
 using Players.Camera;
 using RLR.Levels;
 using TMPro;
@@ -19,6 +20,9 @@ namespace RLR
         public InGameMenuManagerRLR InGameMenuManager;
         public CameraHandleMovement CameraHandleMovement;
         public PlayerFactory PlayerFactory;
+        public PlayerBarsManager PlayerBarsManager;
+        public RunlingChaser RunlingChaser;
+        public AbilityButtonManager AbilityButtonManager;
         public GameObject LevelTextObject;
         public GameObject CountdownPrefab;
 
@@ -35,9 +39,12 @@ namespace RLR
 
         public void InitializePlayer()
         {
-            var playerManager = PlayerFactory.Create(GameControl.GameState.CharacterDto).GetComponent<PlayerManager>();
+            var playerManager = PlayerFactory.Create(GameControl.GameState.CharacterDto);
             _controlRLR.PlayerManager = playerManager;
             GetComponent<InputServer>().Init(InGameMenuManager.gameObject, playerManager);
+            PlayerBarsManager.Initialize(playerManager);
+            playerManager.Trigger.AddComponent<SafeZoneManager>().InitializeTrigger(PlayerBarsManager, RunlingChaser);
+            AbilityButtonManager.InitializeAbilityButtons(playerManager);
         }
 
         //set Spawnimmunity once game starts

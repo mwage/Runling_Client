@@ -14,13 +14,14 @@ namespace Drones.DroneTypes
         protected float? Curving;
         protected float? SinForce;
         protected float? SinFrequency;
+        protected GameObject ChaserTarget;
 
         protected ADrone()
         {
         }
 
         protected ADrone(float speed, float size, DroneColor color, DroneType? droneType = null, DroneMovement.MovementDelegate moveDelegate = null, 
-            float? curving = null, float? sinForce = null, float? sinFrequency = null)
+            float? curving = null, float? sinForce = null, float? sinFrequency = null, GameObject chaserTarget = null)
         {
             Speed = speed;
             Size = size;
@@ -30,6 +31,7 @@ namespace Drones.DroneTypes
             Curving = curving;
             SinForce = sinForce;
             SinFrequency = sinFrequency;
+            ChaserTarget = chaserTarget;
         }
 
         public abstract GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null);
@@ -63,7 +65,7 @@ namespace Drones.DroneTypes
             }
 
             // Move drone
-            DroneMovement.Move(drone, Speed, MoveDelegate, Curving, SinForce, SinFrequency);
+            DroneMovement.Move(drone, Speed, MoveDelegate, Curving, SinForce, SinFrequency, ChaserTarget);
         }
 
         protected void CopyFrom(IDrone sourceDrone)
@@ -79,6 +81,7 @@ namespace Drones.DroneTypes
                 Curving = rhs.Curving;
                 SinForce = rhs.SinForce;
                 SinFrequency = rhs.SinFrequency;
+                ChaserTarget = rhs.ChaserTarget;
             }
         }
 

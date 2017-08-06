@@ -11,8 +11,8 @@ namespace Drones.DroneTypes
         protected readonly IDrone SpawnedDrones;
                 
         public MineDrone(float speed, float size, DroneColor color, IPattern pattern = null, IDrone spawnedDrones = null, DroneType? droneType = null, 
-            DroneMovement.MovementDelegate moveDelegate = null, float? curving = null, float? sinForce = null, float? sinFrequency = null) : 
-            base(speed, size, color, droneType, moveDelegate, curving, sinForce, sinFrequency)
+            DroneMovement.MovementDelegate moveDelegate = null, float? curving = null, float? sinForce = null, float? sinFrequency = null, GameObject chaserTarget = null) : 
+            base(speed, size, color, droneType, moveDelegate, curving, sinForce, sinFrequency, chaserTarget)
         {
             DroneType = droneType ?? DroneType.FlyingBouncingMine;
             Pattern = pattern;

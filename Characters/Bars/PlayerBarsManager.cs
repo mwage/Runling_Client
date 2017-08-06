@@ -1,9 +1,5 @@
-﻿
-
-
-
-using Characters.Types;
-using Launcher;
+﻿using Characters.Types;
+using Players;
 using UnityEngine;
 
 namespace Characters.Bars
@@ -15,38 +11,31 @@ namespace Characters.Bars
 
         private ACharacter _characterController;
 
-        public void Start()
+        public void Initialize(PlayerManager playerManager)
         {
-            _characterController = GameControl.PlayerState.CharacterController;
+            _characterController = playerManager.CharacterController;
         }
 
-        public void Update()
+        private void Update()
         {
-            UpdateEnergyBar();
+            if (_characterController != null)
+                UpdateEnergyBar();
         }
-
-        public void UpdateAll()
-        {
-            UpdateEnergyBar();
-            UpdateLevelBar();
-        }
+//
+//        public void UpdateAll()
+//        {
+//            UpdateEnergyBar();
+//            UpdateLevelBar();
+//        }
 
         public void UpdateEnergyBar()
         {
-            //if (EnergyBar == null) return;
-            //if (_characterController == null) return;
-            if (_characterController == null)
-            {
-                Start();
-                return;
-            }
             EnergyBar.SetText(string.Format("{0}/{1}", (int)_characterController.Energy.Current, _characterController.Energy.Max));
             EnergyBar.SetProgress(_characterController.Energy.Current / _characterController.Energy.Max);
         }
 
         public void UpdateLevelBar()
         {
-            if (_characterController == null) _characterController = GameControl.PlayerState.CharacterController;
             LevelBar.SetText(_characterController.Level);
             LevelBar.SetProgress(_characterController.Level, _characterController.Exp);
         }

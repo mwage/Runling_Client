@@ -16,8 +16,8 @@ namespace Drones.DroneTypes
         }
 
         public DefaultDrone(float speed, float size, DroneColor color, Vector3? position = null, float? direction = null, DroneType? droneType = null, 
-            DroneMovement.MovementDelegate moveDelegate = null, float? curving = null, float? sinForce = null, float? sinFrequency = null) : 
-            base(speed, size, color, droneType, moveDelegate, curving, sinForce, sinFrequency)
+            DroneMovement.MovementDelegate moveDelegate = null, float? curving = null, float? sinForce = null, float? sinFrequency = null, GameObject chaserTarget = null) : 
+            base(speed, size, color, droneType, moveDelegate, curving, sinForce, sinFrequency, chaserTarget)
         {
             Position = position ?? new Vector3(0, 0.4f, 0);
             Direction = direction ?? 0;

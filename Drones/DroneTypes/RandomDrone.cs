@@ -19,8 +19,8 @@ namespace Drones.DroneTypes
         }
 
         public RandomDrone(float speed, float size, DroneColor color, DroneType? droneType = null, float? restrictedZone = null, float? coneRange = null, float? startDirection = null,
-            DroneMovement.MovementDelegate moveDelegate = null, float? curving = null, float? sinForce = null, float? sinFrequency = null) : 
-            base(speed, size, color, droneType, moveDelegate, curving, sinForce, sinFrequency)
+            DroneMovement.MovementDelegate moveDelegate = null, float? curving = null, float? sinForce = null, float? sinFrequency = null, GameObject chaserTarget = null) : 
+            base(speed, size, color, droneType, moveDelegate, curving, sinForce, sinFrequency, chaserTarget)
         {
             RestrictedZone = restrictedZone ?? 1;
             ConeRange = coneRange;

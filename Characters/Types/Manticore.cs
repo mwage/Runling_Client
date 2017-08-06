@@ -1,22 +1,18 @@
 ﻿using Characters.Abilities;
+using Players;
 
 
 namespace Characters.Types
 {
     public class Manticore : ACharacter
     {
-        private Manticore(CharacterDto characterDto): base(characterDto)
-        {
-        }
-
-        public override void Initialize(CharacterDto character)
+        public override void Initialize(CharacterDto character, PlayerManager playerManager)
         {
             InitializeBase(character);
+
             // something about abilities or in awake
-            Ability1 = new Boost(this);
-            Ability2 = new Shield(this);
+            Ability1 = new Boost(this, playerManager);
+            Ability2 = new Shield(this, playerManager);
         }
-
-
     }
 }

@@ -4,7 +4,7 @@ using Characters.Types;
 using Characters.Types.Features;
 using Drones;
 using Launcher;
-using TMPro;
+using Players;
 using UnityEngine;
 
 namespace Characters.Abilities
@@ -14,7 +14,7 @@ namespace Characters.Abilities
     /// </summary>
     public class GravityField : AAbility
     {
-        // private GameObject SOMEANIMATION TODO;
+        private PlayerManager _playerManager;       // TODO: animation
 
         public override int Cooldown
         {
@@ -36,13 +36,14 @@ namespace Characters.Abilities
             get { return 0.8F; }
         }
 
-        public GravityField(ACharacter character)
+        public GravityField(ACharacter character, PlayerManager playerManager)
         {
+
             Name = "GravityField";
             Level = character.Ability2Level;
             EnergyDrainPerSecond = 1;
             IsActive = false;
-            _player = character.gameObject;
+            _playerManager = playerManager;
             SetLoaded();
         }
 
@@ -100,7 +101,7 @@ namespace Characters.Abilities
             List<Transform> drones = new List<Transform>();
             foreach (var drone in droneTransforms)
             {
-                if (IsInRange(_player.transform, drone, Range))
+                if (IsInRange(_playerManager.transform, drone, Range))
                 {
                     drones.Add(drone);
                 }
