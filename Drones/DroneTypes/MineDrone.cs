@@ -1,6 +1,6 @@
-﻿using System.IO;
-using Drones.Movement;
+﻿using Drones.Movement;
 using Drones.Pattern;
+using Players;
 using UnityEngine;
 
 namespace Drones.DroneTypes
@@ -11,7 +11,7 @@ namespace Drones.DroneTypes
         protected readonly IDrone SpawnedDrones;
                 
         public MineDrone(float speed, float size, DroneColor color, IPattern pattern = null, IDrone spawnedDrones = null, DroneType? droneType = null, 
-            DroneMovement.MovementDelegate moveDelegate = null, float? curving = null, float? sinForce = null, float? sinFrequency = null, GameObject chaserTarget = null) : 
+            DroneMovement.MovementDelegate moveDelegate = null, float? curving = null, float? sinForce = null, float? sinFrequency = null, PlayerManager chaserTarget = null) : 
             base(speed, size, color, droneType, moveDelegate, curving, sinForce, sinFrequency, chaserTarget)
         {
             DroneType = droneType ?? DroneType.FlyingBouncingMine;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Drones.DroneTypes;
 using Drones.Pattern;
 using Launcher;
+using Players;
 using TMPro;
 using UnityEngine;
 
@@ -61,8 +62,7 @@ namespace RLR.Levels
             }
         }
 
-
-        public void CreateOrDestroyChaserIfNeed(GameObject currentSafeZone)
+        public void CreateOrDestroyChaserIfNeed(GameObject currentSafeZone, PlayerManager playerManager)
         {
             var safeZones = GameControl.MapState.SafeZones;
             if (_chaserSpawnPlatformIdxs == null || _chaserDestroyPlatformIdxs == null) return;
@@ -74,7 +74,9 @@ namespace RLR.Levels
             {
                 if (_chaserSpawnPlatformIdxs[i] == platformIndex.Value && !_reachedChaserPlatform[i, 0] && (i == 0 || _reachedChaserPlatform[i-1, 0]))
                 {
-                    _chasers.AddRange(LevelManager.DroneFactory.SpawnDrones(_chaserBase));
+                    var newChaser = LevelManager.DroneFactory.SpawnDrones(new DefaultDrone(_chaserBase, Vector3.zero, 0, playerManager));
+                    _chasers.AddRange(newChaser);
+                    playerManager.Chaser.AddRange(newChaser);
 
                     if (_chaserSpawnPlatformIdxs[i] != 0) // sets start position of chaser
                     {
@@ -92,7 +94,9 @@ namespace RLR.Levels
                 }
                 if (_chaserDestroyPlatformIdxs[i] == platformIndex.Value && !_reachedChaserPlatform[i, 1] && _reachedChaserPlatform[i, 0])
                 {
+                    playerManager.Chaser.Remove(_chasers[i]);
                     Destroy(_chasers[i]);
+
                     _reachedChaserPlatform[i, 1] = true;
                     safeZones[_chaserDestroyPlatformIdxs[i]].transform.Find("PlayerCollider/ChaserGlow").gameObject.SetActive(false);
                     LevelManager.DroneFactory.StartCoroutine(DestroyChaserText(3f));

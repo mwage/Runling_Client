@@ -1,4 +1,5 @@
-﻿using Characters.Types;
+﻿using System.Collections.Generic;
+using Characters.Types;
 using UnityEngine;
 
 namespace Players
@@ -20,15 +21,19 @@ namespace Players
         public bool IsInvulnerable = true;
         public bool GodModeActive;
         public bool AutoClickerActive;
-        public GameObject Chaser;
+        public List<GameObject> Chaser = new List<GameObject>();
         public ACharacter CharacterController;
 
 
         public void DestroyChaser()
         {
-            if (Chaser != null)
+            foreach (var chaser in Chaser)
             {
-                Destroy(Chaser);
+                if (chaser != null)
+                {
+                    Destroy(chaser);
+                }
+                Chaser.Remove(chaser);
             }
         }
     }

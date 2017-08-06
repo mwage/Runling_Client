@@ -98,7 +98,7 @@ namespace Players
 
         public void CreateOrDestroyChaserIfNeed(GameObject currentSafeZone)
         {
-            RunlingChaser.CreateOrDestroyChaserIfNeed(currentSafeZone);
+            RunlingChaser.CreateOrDestroyChaserIfNeed(currentSafeZone, _playerManager);
         }
     }
 }

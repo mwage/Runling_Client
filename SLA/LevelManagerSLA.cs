@@ -13,19 +13,18 @@ namespace SLA
     {
         public GameObject Win;
         public DroneFactory DroneFactory;
+        public ControlSLA ControlSLA;
 
         private ScoreSLA _score;
         private InitializeGameSLA _initializeGameSLA;
         public static int NumLevels = 13;             //currently last level available in SLA
         private List<ILevelSLA> _levels;
-        public PlayerManager PlayerManager;
-
+        
 
         public void Awake()
         {
             _score = GetComponent<ScoreSLA>();
             _initializeGameSLA = GetComponent<InitializeGameSLA>();
-            PlayerManager = GetComponent<ControlSLA>().PlayerManager;
             InitializeLevels();
         }
 

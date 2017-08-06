@@ -41,7 +41,7 @@ namespace MP.TSGame.Players
 
         public void CreateOrDestroyChaserIfNeed(GameObject currentSafeZone)
         {
-            RunlingChaser.CreateOrDestroyChaserIfNeed(currentSafeZone);
+//            RunlingChaser.CreateOrDestroyChaserIfNeed(currentSafeZone);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Drones.Movement;
+using Players;
 using UnityEngine;
 
 namespace Drones.DroneTypes
@@ -14,14 +15,14 @@ namespace Drones.DroneTypes
         protected float? Curving;
         protected float? SinForce;
         protected float? SinFrequency;
-        protected GameObject ChaserTarget;
+        protected PlayerManager ChaserTarget;
 
         protected ADrone()
         {
         }
 
         protected ADrone(float speed, float size, DroneColor color, DroneType? droneType = null, DroneMovement.MovementDelegate moveDelegate = null, 
-            float? curving = null, float? sinForce = null, float? sinFrequency = null, GameObject chaserTarget = null)
+            float? curving = null, float? sinForce = null, float? sinFrequency = null, PlayerManager chaserTarget = null)
         {
             Speed = speed;
             Size = size;

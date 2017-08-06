@@ -45,7 +45,6 @@ namespace Players.Camera
 
         public void SetCameraHandlePosition(Vector3 watchedPoint)
         {
-            Debug.Log(watchedPoint);
             if (transform.GetComponentInChildren<UnityEngine.Camera>() != null)
             {
                 transform.position = new Vector3(
