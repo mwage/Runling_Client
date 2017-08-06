@@ -120,7 +120,5 @@ namespace RLR.Levels
             yield return new WaitForSeconds(duration);
             Destroy(chaserText);
         }
-
-
     }
 }
