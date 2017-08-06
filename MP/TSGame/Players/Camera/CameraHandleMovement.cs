@@ -9,15 +9,16 @@ namespace MP.TSGame.Players.Camera
         // CameraHandle Object allows to use arrows to move properly with Camera with any Y-axis rotation.
     {
         public SetCamera SetCamera;
+        private GameObject _followTarget;
 
         private void Start()
         {
             SetCameraHandlePosition(GetWatchedPoint());
         }
 
-        private void LateUpdate()
+        public void InitializeFollowTarget(GameObject followTarget)
         {
-            //ServeInput(); - in InputServer
+            _followTarget = followTarget;
         }
 
         public void ServeInput()
@@ -132,9 +133,9 @@ namespace MP.TSGame.Players.Camera
             {
                 if (GameControl.Settings.FollowState)
                 {
-                    if (GameControl.PlayerState.Player != null)
+                    if (_followTarget != null)
                     {
-                        SetCameraHandlePosition(GameControl.PlayerState.Player.transform.position);
+                        SetCameraHandlePosition(_followTarget.transform.position);
                     }
                 }
             }

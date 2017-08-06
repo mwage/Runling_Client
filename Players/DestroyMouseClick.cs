@@ -1,17 +1,15 @@
 ﻿using System.Collections;
-using Launcher;
 using UnityEngine;
 
 namespace Players
 {
     public class DestroyMouseClick : MonoBehaviour
     {
-        void Start()
+        private void Start()
         {
             var anim = GetComponent<Animator>();
             anim.Play("Take 001");
-            float delay = GameControl.PlayerState.AutoClickerActive ? 0.5f : 1.666f / 2;
-            StartCoroutine(DestroyAnimation(delay));
+            StartCoroutine(DestroyAnimation(0.5f));
         }
 
         private IEnumerator DestroyAnimation(float delay)

@@ -1,7 +1,6 @@
-﻿using System.IO;
-using Drones.Movement;
+﻿using Drones.Movement;
+using Players;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Drones.DroneTypes
 {
@@ -10,16 +9,17 @@ namespace Drones.DroneTypes
         protected readonly Vector3 Position;
         protected readonly float Direction;
 
-        public DefaultDrone(IDrone sourceDrone, Vector3 position, float direction)
+        public DefaultDrone(IDrone sourceDrone, Vector3 position, float direction, PlayerManager chaserTarget = null)
         {
             CopyFrom(sourceDrone);
             Position = position;
             Direction = direction;
+            ChaserTarget = chaserTarget;
         }
 
         public DefaultDrone(float speed, float size, DroneColor color, Vector3? position = null, float? direction = null, DroneType? droneType = null, 
-            DroneMovement.MovementDelegate moveDelegate = null, float? curving = null, float? sinForce = null, float? sinFrequency = null) : 
-            base(speed, size, color, droneType, moveDelegate, curving, sinForce, sinFrequency)
+            DroneMovement.MovementDelegate moveDelegate = null, float? curving = null, float? sinForce = null, float? sinFrequency = null, PlayerManager chaserTarget = null) : 
+            base(speed, size, color, droneType, moveDelegate, curving, sinForce, sinFrequency, chaserTarget)
         {
             Position = position ?? new Vector3(0, 0.4f, 0);
             Direction = direction ?? 0;
@@ -28,12 +28,7 @@ namespace Drones.DroneTypes
 
         public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null)
         {
-            if (PhotonNetwork.room != null && SceneManager.GetActiveScene().name != "MainMenu")
-            {
-                return PhotonNetwork.InstantiateSceneObject(Path.Combine("Drones", factory.SetDroneType[DroneType]), Position,
-                    Quaternion.Euler(0, Direction, 0), 0, new object[0]);
-            }
-            return Object.Instantiate(factory.OneWayDronePrefab, Position, Quaternion.Euler(0, Direction, 0));
+            return Object.Instantiate(factory.SetDroneType[DroneType], Position, Quaternion.Euler(0, Direction, 0), factory.transform);
         }
     }
 }

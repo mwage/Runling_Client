@@ -26,8 +26,6 @@ namespace RLR
 
         public void RestartGame()
         {
-            GameControl.PlayerState.IsDead = true;
-            GameControl.PlayerState.AutoClickerActive = false;
             GameControl.GameState.CurrentLevel = 1;
 
             SceneManager.LoadScene("RLR");

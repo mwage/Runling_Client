@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using Launcher;
-using SLA.Levels;
+using Players;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,119 +8,92 @@ namespace SLA
 {
     public class ScoreSLA : MonoBehaviour
     {
+        private ControlSLA _controlSLA;
         public GameObject PlayerScorePrefab;
         public Transform ScoreLayoutGroup;
         public Text NewHighScore;
 
         public int[] LevelScoreCurGame = new int[LevelManagerSLA.NumLevels];
-        private GameObject[] _playerScores;
-        public Text[] CurrentScoreText;
-        private Text[] _totalScoreText;
-        private Text[] _playerNameText;
-        private PhotonView _photonView;
+        private GameObject _playerScores;
+        public Text CurrentScoreText;
+        private Text _totalScoreText;
 
+//        TODO: get playername without photon
+//        private Text _playerNameText;
 
         private void Awake()
         {
-            _photonView = GetComponent<PhotonView>();
-            _playerScores = new GameObject[PhotonNetwork.room.PlayerCount];
-            CurrentScoreText = new Text[PhotonNetwork.room.PlayerCount];
-            _totalScoreText = new Text[PhotonNetwork.room.PlayerCount];
-            _playerNameText = new Text[PhotonNetwork.room.PlayerCount];
-
-            foreach (var state in GameControl.PlayerState.SyncVars)
-            {
-                if (state == null)
-                    continue;
-
-                _playerScores[state.Owner.ID - 1] = Instantiate(PlayerScorePrefab, ScoreLayoutGroup);
-                _playerNameText[state.Owner.ID - 1] = _playerScores[state.Owner.ID - 1].transform.Find("PlayerName").GetComponent<Text>();
-                CurrentScoreText[state.Owner.ID - 1] = _playerScores[state.Owner.ID - 1].transform.Find("CurrentScore").GetComponent<Text>();
-                _totalScoreText[state.Owner.ID - 1] = _playerScores[state.Owner.ID - 1].transform.Find("TotalScore").GetComponent<Text>();
-
-                _playerNameText[state.Owner.ID - 1].text = state.Owner.NickName;
-                _totalScoreText[state.Owner.ID - 1].text = state.TotalScore.ToString();
-            }
+            _controlSLA = GetComponent<ControlSLA>();
         }
 
-        //count current and total score
+        private void Start()
+        {
+                _playerScores = Instantiate(PlayerScorePrefab, ScoreLayoutGroup);
+//                _playerNameText = _playerScores.transform.Find("PlayerName").GetComponent<Text>();
+                CurrentScoreText = _playerScores.transform.Find("CurrentScore").GetComponent<Text>();
+                _totalScoreText = _playerScores.transform.Find("TotalScore").GetComponent<Text>();
+
+//                _playerNameText.text = PhotonNetwork.player.NickName;
+                CurrentScoreText.text = "0";
+                _totalScoreText.text = "0";
+        }
+
         public void StartScore()
         {
-            foreach (var state in GameControl.PlayerState.SyncVars)
-            {
-                if (state != null)
-                    state.CurrentScore = 0;
-            }
-
-            foreach (var text in CurrentScoreText)
-            {
-                text.text = "0";
-            }
-
+            _controlSLA.PlayerManager.CurrentScore = 0;
             StartCoroutine(AddScore());
         }
 
         private IEnumerator AddScore()
         {
-            while (!GameControl.GameState.AllDead)
+            while (!_controlSLA.PlayerManager.IsDead)
             {
-                yield return new WaitForSeconds(0.25f);
-
-                if (PhotonNetwork.isMasterClient)
-                    _photonView.RPC("UpdateScore", PhotonTargets.All);
+                yield return new WaitForSeconds (0.25f);
+                UpdateScore(_controlSLA.PlayerManager);
             }
         }
 
-        [PunRPC]
-        private void UpdateScore()
+        private void UpdateScore(PlayerManager playerManager)
         {
-            foreach (var state in GameControl.PlayerState.SyncVars)
-            {
-                if (state == null || state.IsDead)
-                    continue;
-
-                state.CurrentScore += 2;
-                state.TotalScore += 2;
-                CurrentScoreText[state.Owner.ID - 1].text = state.CurrentScore.ToString();
-                _totalScoreText[state.Owner.ID - 1].text = state.TotalScore.ToString();
-            }
+                playerManager.CurrentScore += 2;
+                playerManager.TotalScore += 2;
+                CurrentScoreText.text = playerManager.CurrentScore.ToString();
+                _totalScoreText.text = playerManager.TotalScore.ToString();
         }
 
-        //message that you got a new highscore
-        public void NewHighScoreSLA()
-        {
-            NewHighScore.text = "New Highscore: " + GameControl.PlayerState.SyncVars[PhotonNetwork.player.ID - 1].CurrentScore;
-            NewHighScore.transform.parent.gameObject.SetActive(true);
-        }
 
-        //Checks for a new highscore and saves it
         public void SetHighScore()
         {
-            LevelScoreCurGame[GameControl.GameState.CurrentLevel - 1] = GameControl.PlayerState.SyncVars[PhotonNetwork.player.ID - 1].CurrentScore;
+            var playerManager = _controlSLA.PlayerManager;
+            LevelScoreCurGame[GameControl.GameState.CurrentLevel - 1] = playerManager.CurrentScore;
 
-            if (GameControl.PlayerState.SyncVars[PhotonNetwork.player.ID - 1].CurrentScore > GameControl.HighScores.HighScoreSLA[GameControl.GameState.CurrentLevel])
+            if (playerManager.CurrentScore > GameControl.HighScores.HighScoreSLA[GameControl.GameState.CurrentLevel])
             {
-                NewHighScoreSLA();
-                GameControl.HighScores.HighScoreSLA[GameControl.GameState.CurrentLevel] = GameControl.PlayerState.SyncVars[PhotonNetwork.player.ID - 1].CurrentScore;
+                NewHighScoreSLA(playerManager);
+                GameControl.HighScores.HighScoreSLA[GameControl.GameState.CurrentLevel] = playerManager.CurrentScore;
                 PlayerPrefs.SetInt("HighScoreSLA" + GameControl.GameState.CurrentLevel, GameControl.HighScores.HighScoreSLA[GameControl.GameState.CurrentLevel]);
             }
 
-            SetGameHighScore();
+            SetGameHighScore(playerManager);
             SetCombinedScore();
             PlayerPrefs.Save();
         }
 
-        //compare total score to best game and set highscore
-        public void SetGameHighScore()
+        public void NewHighScoreSLA(PlayerManager playerManager)
         {
-            if (GameControl.PlayerState.SyncVars[PhotonNetwork.player.ID - 1].TotalScore > GameControl.HighScores.HighScoreSLA[0])
+            NewHighScore.text = "New Highscore: " + playerManager.CurrentScore;
+            NewHighScore.transform.parent.gameObject.SetActive(true);
+        }
+
+        public void SetGameHighScore(PlayerManager playerManager)
+        {
+            if (playerManager.TotalScore > GameControl.HighScores.HighScoreSLA[0])
             {
-                GameControl.HighScores.HighScoreSLA[0] = GameControl.PlayerState.SyncVars[PhotonNetwork.player.ID - 1].TotalScore;
+                GameControl.HighScores.HighScoreSLA[0] = playerManager.TotalScore;
             }
             PlayerPrefs.SetInt("HighScoreSLAGame", GameControl.HighScores.HighScoreSLA[0]);
         }
 
-        //add level highscores for combined score
         public void SetCombinedScore()
         {
             GameControl.HighScores.HighScoreSLA[14] = 0;

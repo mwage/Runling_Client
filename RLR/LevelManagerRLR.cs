@@ -1,31 +1,28 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using Drones;
 using Launcher;
+using Players;
 using RLR.GenerateMap;
+using RLR.Levels;
 using TMPro;
-using UI.RLR_Menus;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace RLR.Levels
+namespace RLR
 {
     public class LevelManagerRLR : MonoBehaviour
     {
-
-        //attach scripts
-        public InGameMenuManagerRLR InGameMenuManagerRLR;
-        public InitializeGameRLR InitializeGameRLR;
-        public RunlingChaser RunlingChaser;
-        public CheckSafeZones CheckSafeZones;
-        public GameObject Win;
         public DroneFactory DroneFactory;
-        public MapGeneratorRLR MapGeneratorRlr;
-
+        public MapGeneratorRLR MapGenerator;
+        public RunlingChaser RunlingChaser;
+        public GameObject Win;
         public GameObject LivesText;
 
+        private InitializeGameRLR _initializeGame;
+        private CheckSafeZones _checkSafeZones;
+        private PlayerManager _playerManager;
         private readonly InitializeLevelsRLR _initializeLevelsRLR = new InitializeLevelsRLR();
 
         public static int NumLevels = 9;             //currently last level available in RLR
@@ -34,8 +31,10 @@ namespace RLR.Levels
 
         public void Awake()
         {
-            DroneFactory = PhotonNetwork.InstantiateSceneObject(Path.Combine("Drones", "Drone Manager"),
-                Vector3.zero, Quaternion.identity, 0, new object[0]).GetComponent<DroneFactory>();
+            _initializeGame = GetComponent<InitializeGameRLR>();
+            _checkSafeZones = GetComponent<CheckSafeZones>();
+            _playerManager = GetComponent<ControlRLR>().PlayerManager;
+
             _levels = _initializeLevelsRLR.SetDifficulty(this);
         }
 
@@ -66,7 +65,7 @@ namespace RLR.Levels
         // Load next level
         public void EndLevel(float delay)
         {
-            StartCoroutine((GameControl.GameState.CurrentLevel == _levels.Count) ? EndGameRLR(delay) : LoadNextLevel(0));
+            StartCoroutine(GameControl.GameState.CurrentLevel == _levels.Count ? EndGameRLR(delay) : LoadNextLevel(0));
         }
 
         // End game
@@ -79,33 +78,28 @@ namespace RLR.Levels
         private IEnumerator LoadNextLevel(float delay)
         {
             yield return new WaitForSeconds(delay);
+
+            // Destroy all enemies and stop all pattern
             DroneFactory.StopAllCoroutines();
-            // Destroy(GameControl.PlayerState.Player); // dont destroy player. if exists playerfactory donest make new one, just move him on start position
-            var enemies = GameObject.FindGameObjectsWithTag("Enemy");
-            var strongEnemies = GameObject.FindGameObjectsWithTag("Strong Enemy");
-            foreach (var t in enemies)
+            foreach (Transform child in DroneFactory.transform)
             {
-                Destroy(t);
-            }
-            foreach (var t in strongEnemies)
-            {
-                Destroy(t);
+                Destroy(child.gameObject);
             }
 
             if (GameControl.GameState.SetGameMode == GameMode.TimeMode)
             {
-                CheckSafeZones.ScoreRLR.AddRemainingCountdown();
-                CheckSafeZones.ScoreRLR.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + GameControl.PlayerState.TotalScore;
-                GameControl.PlayerState.Lives = 3;
-                LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + GameControl.PlayerState.Lives;
+                _checkSafeZones.ScoreRLR.AddRemainingCountdown();
+                _checkSafeZones.ScoreRLR.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + _playerManager.TotalScore;
+                _playerManager.Lives = 3;
+                LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + _playerManager.Lives;
             }
             if (GameControl.GameState.SetGameMode != GameMode.Practice)
             {
-                CheckSafeZones.ScoreRLR.SetHighScore();
+                _checkSafeZones.ScoreRLR.SetHighScore();
             }
             GameControl.GameState.FinishedLevel = false;
             GameControl.GameState.CurrentLevel++;
-            InitializeGameRLR.InitializeGame();
+            _initializeGame.InitializeGame();
         }
 
         // Load after the last level
@@ -113,30 +107,28 @@ namespace RLR.Levels
         {
             if (GameControl.GameState.SetGameMode == GameMode.TimeMode)
             {
-                CheckSafeZones.ScoreRLR.AddRemainingCountdown();
-                CheckSafeZones.ScoreRLR.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + GameControl.PlayerState.TotalScore;
+                _checkSafeZones.ScoreRLR.AddRemainingCountdown();
+                _checkSafeZones.ScoreRLR.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + _playerManager.TotalScore;
             }
 
-            if (!GameControl.PlayerState.IsDead)
+            if (!_playerManager.IsDead)
             {
                 Win.transform.Find("Victory").gameObject.SetActive(true);
-                Win.transform.Find("Defeat").gameObject.SetActive(false);
             }
             else
             {
-                Win.transform.Find("Victory").gameObject.SetActive(false);
                 Win.transform.Find("Defeat").gameObject.SetActive(true);
             }
 
             // Load win screen
             yield return new WaitForSeconds(delay);
-            InGameMenuManagerRLR.CloseMenus();
+            _initializeGame.InGameMenuManager.CloseMenus();
             if (GameControl.GameState.SetGameMode != GameMode.Practice)
             {
-                CheckSafeZones.ScoreRLR.SetHighScore();
+                _checkSafeZones.ScoreRLR.SetHighScore();
             }
             GameControl.GameState.FinishedLevel = false;
-            GameControl.PlayerState.Player.SetActive(false);
+            _playerManager.gameObject.SetActive(false);
             Win.gameObject.SetActive(true);
         }
     }

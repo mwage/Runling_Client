@@ -25,19 +25,19 @@ namespace UI.Main_Menu
         public void StartGame()
         {
             GameControl.GameState.SetGameMode = GameMode.Classic;
-            GameControl.GameState.Solo = true;
             GameControl.GameState.CurrentLevel = 1;
 
-            PhotonNetwork.CreateRoom(GameControl.GenerateRoomName("SoloSLA"));
+            _sceneLoader.LoadScene("SLA", 1);
+            _mainMenuManager.gameObject.SetActive(false);
         }
 
         public void Practice()
         {
             GameControl.GameState.SetGameMode = GameMode.Practice;
-            GameControl.GameState.Solo = true;
             GameControl.GameState.CurrentLevel = 1;
 
-            PhotonNetwork.CreateRoom(GameControl.GenerateRoomName("SoloSLA"));
+            _sceneLoader.LoadScene("SLA", 1);
+            _mainMenuManager.gameObject.SetActive(false);
         }
 
         public void HighScores()
@@ -53,13 +53,5 @@ namespace UI.Main_Menu
             _mainMenuManager.MoveCamera(_mainMenuManager.CameraPosMainMenu, _mainMenuManager.CameraRotMainMenu);
         }
         #endregion
-
-        public override void OnCreatedRoom()
-        {
-            PhotonNetwork.room.IsOpen = false;
-            PhotonNetwork.room.IsVisible = false;
-            _sceneLoader.LoadScene("SLA", 1);
-            _mainMenuManager.gameObject.SetActive(false);
-        }
     }
 }

@@ -10,37 +10,22 @@ namespace Players.AbilitiesButtons
         private bool _isLoaded;
         private Slider _abilitySlider;
         private bool _shouldBeAnimated;
-        private ACharacter _characterController;
+        private PlayerManager _playerManager;
         private AAbility _ability;
         private string _abilityName;
 
-        public AbilityButton(Slider abilitySlider, string abilityName)
+        public AbilityButton(Slider abilitySlider, string abilityName, PlayerManager playerManager)
         {
             _abilitySlider = abilitySlider;
             _abilityName = abilityName;
-        }
-
-        public void Refresh()
-        {
-            
+            _playerManager = playerManager;
+            InitializeAbility();
         }
 
         public void SetProgress()
         {
-            if (Initialize() == false) return;
-            _abilitySlider.value = _ability.GetLoadingProgress();
-        }
-
-        private bool Initialize()
-        {
-            if (_characterController == null)
-            {
-                if (GameControl.PlayerState.CharacterController == null) return false;
-                _characterController = GameControl.PlayerState.CharacterController;
-                InitializeAbility();
-                return true;
-            }
-            return true;
+            if (_playerManager != null)
+                _abilitySlider.value = _ability.GetLoadingProgress();
         }
 
         private void InitializeAbility()
@@ -49,17 +34,17 @@ namespace Players.AbilitiesButtons
             {
                 case ("1"):
                 {
-                    _ability = _characterController.Ability1;
+                    _ability = _playerManager.CharacterController.Ability1;
                     break;
                 }
                 case "2":
                 {
-                    _ability = _characterController.Ability2;
+                    _ability = _playerManager.CharacterController.Ability2;
                     break;
                 }
                 case "Ultimatum":
                 {
-                    _ability = _characterController.Ability1;
+                    _ability = _playerManager.CharacterController.Ability1;
                     break;
                 }
             }

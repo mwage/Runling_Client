@@ -81,7 +81,7 @@ namespace MP.TSGame.Players
         // Leave Safezone
         public void OnSyncedTriggerExit(TSCollision other)
         {
-            if (other.gameObject.CompareTag("SafeZone") && GameControl.PlayerState.IsSafe)
+            if (other.gameObject.CompareTag("SafeZone") && _playerManager.IsSafe)
             {
                 _playerManager.IsSafe = false;
             }

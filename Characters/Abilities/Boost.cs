@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Characters.Types;
 using Characters.Types.Features;
+using Players;
 
 namespace Characters.Abilities
 {
     public class Boost : AAbility
     {
+        private readonly PlayerManager _playerManager;   // Use later for boost animation
+
         public float BoostSpeed
         {
             get { return Level*3F + 5F; }
@@ -23,16 +26,15 @@ namespace Characters.Abilities
             get { return 6 - Level; }
         }
 
-        public Boost(ACharacter character)
+        public Boost(ACharacter character, PlayerManager playerManager)
         {
             Name = "Boost";
             Level = character.Ability1Level;
             //EnergyCost = CalculateEnergyCost();
             EnergyDrainPerSecond = 1F;
             IsActive = false;
+            _playerManager = playerManager;
         }
-
-
 
         public override IEnumerator Enable(ACharacter character)
         {

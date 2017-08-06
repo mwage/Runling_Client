@@ -1,12 +1,10 @@
-﻿namespace Characters.Types
+﻿using Players;
+
+namespace Characters.Types
 {
     public class ArenaCharacter : ACharacter
     {
-        private ArenaCharacter(CharacterDto characterDto) : base(characterDto)
-        {
-        }
-
-        public override void Initialize(CharacterDto character)
+        public override void Initialize(CharacterDto character, PlayerManager playerManager)
         {
             InitializeBase(character);
         }

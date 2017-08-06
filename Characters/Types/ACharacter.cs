@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Characters.Abilities;
+﻿using Characters.Abilities;
 using Characters.Types.Features;
 using Launcher;
+using Players;
 using UnityEngine;
 
 namespace Characters.Types
 {
     public abstract class ACharacter : MonoBehaviour
     {
-        public int PlayerId { get; protected set; } 
         public int Exp { get; protected set; }
         public int Level { get; protected set; }
         public int Ability1Level { get; protected set; }
@@ -22,10 +18,6 @@ namespace Characters.Types
 
         public AAbility Ability1 { get; protected set; }
         public AAbility Ability2 { get; protected set; }
-
-        protected ACharacter(CharacterDto chacterDto) 
-        {
-        }
 
         public void Update()
         {
@@ -55,7 +47,7 @@ namespace Characters.Types
             Ability2Level = 1;
         }
 
-        public abstract void Initialize(CharacterDto character);
+        public abstract void Initialize(CharacterDto character, PlayerManager playerManager);
 
         public virtual void AddExp(int exp)
         {

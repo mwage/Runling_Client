@@ -34,14 +34,14 @@ namespace MP.TSGame.Players
 
         public void AddExp(int currentSafeZoneIdx)
         {
-            GameControl.PlayerState.CharacterController.AddExp(LevelingSystem.CalculateExp(currentSafeZoneIdx,
-                GameControl.GameState.CurrentLevel, GameControl.GameState.SetDifficulty,
-                GameControl.GameState.SetGameMode));
+//            GameControl.PlayerState.CharacterController.AddExp(LevelingSystem.CalculateExp(currentSafeZoneIdx,
+//                GameControl.GameState.CurrentLevel, GameControl.GameState.SetDifficulty,
+//                GameControl.GameState.SetGameMode));
         }
 
         public void CreateOrDestroyChaserIfNeed(GameObject currentSafeZone)
         {
-            RunlingChaser.CreateOrDestroyChaserIfNeed(currentSafeZone);
+//            RunlingChaser.CreateOrDestroyChaserIfNeed(currentSafeZone);
         }
     }
 }

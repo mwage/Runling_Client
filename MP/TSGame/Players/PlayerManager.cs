@@ -20,6 +20,7 @@ namespace MP.TSGame.Players
         public bool IsSafe;
         public bool IsInvulnerable;
         public bool GodModeActive;
+        public bool AutoClickerActive;
         public GameObject Chaser;
         public ACharacter CharacterController;
         public PlayerMovement PlayerMovement;

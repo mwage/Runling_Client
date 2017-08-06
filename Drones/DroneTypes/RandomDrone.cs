@@ -1,7 +1,6 @@
-﻿using System.IO;
-using Drones.Movement;
+﻿using Drones.Movement;
+using Players;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Drones.DroneTypes
 {
@@ -20,8 +19,8 @@ namespace Drones.DroneTypes
         }
 
         public RandomDrone(float speed, float size, DroneColor color, DroneType? droneType = null, float? restrictedZone = null, float? coneRange = null, float? startDirection = null,
-            DroneMovement.MovementDelegate moveDelegate = null, float? curving = null, float? sinForce = null, float? sinFrequency = null) : 
-            base(speed, size, color, droneType, moveDelegate, curving, sinForce, sinFrequency)
+            DroneMovement.MovementDelegate moveDelegate = null, float? curving = null, float? sinForce = null, float? sinFrequency = null, PlayerManager chaserTarget = null) : 
+            base(speed, size, color, droneType, moveDelegate, curving, sinForce, sinFrequency, chaserTarget)
         {
             RestrictedZone = restrictedZone ?? 1;
             ConeRange = coneRange;
@@ -40,10 +39,8 @@ namespace Drones.DroneTypes
                     : DroneStartPosition.GetRandomPosition(Size, area);
             }
 
-            var newDrone = PhotonNetwork.room != null && SceneManager.GetActiveScene().name != "MainMenu" ?
-                PhotonNetwork.InstantiateSceneObject(Path.Combine("Drones", factory.SetDroneType[DroneType]), pos, 
-                Quaternion.Euler(0, StartDirection + DroneDirection.RandomDirection(RestrictedZone, ConeRange), 0), 0, new object[0]) :
-                Object.Instantiate(factory.BouncingDronePrefab, pos, Quaternion.Euler(0, StartDirection + DroneDirection.RandomDirection(RestrictedZone, ConeRange), 0));
+            var newDrone = Object.Instantiate(factory.SetDroneType[DroneType], pos, 
+                Quaternion.Euler(0, StartDirection + DroneDirection.RandomDirection(RestrictedZone, ConeRange), 0), factory.transform);
             return newDrone;
         }
     }

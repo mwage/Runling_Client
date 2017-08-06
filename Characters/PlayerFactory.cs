@@ -8,41 +8,43 @@ namespace Characters
 {
     public class PlayerFactory : MonoBehaviour
     {
+        public GameObject ManticorePrefab;
+        public GameObject UnicornPrefab;
+
         private PlayerFactory()
         {
         }
 
-        public GameObject Create(CharacterDto character)
+        public PlayerManager Create(CharacterDto character)
         {
             switch (character.Character)
             {
                 case "Manticore":
                 {
-                    var player = PhotonNetwork.Instantiate(Path.Combine("Characters", "Manticore"), Vector3.zero, Quaternion.identity, 0);
-                    player.transform.SetParent(transform);
-                    player.GetComponentInChildren<PlayerTrigger>().InitializeTrigger();
-                    GameControl.PlayerState.CharacterController = player.AddComponent<Manticore>();
-                    GameControl.PlayerState.CharacterController.Initialize(character);
+                    var playerManager = Instantiate(ManticorePrefab, Vector3.zero, Quaternion.identity, transform).GetComponent<PlayerManager>();
 
-                    return player;
+                    playerManager.CharacterController = playerManager.gameObject.AddComponent<Manticore>();
+                    playerManager.CharacterController.Initialize(character, playerManager);
+
+                    return playerManager;
                 }
                 case "Unicorn":
                 {
-                    var player = PhotonNetwork.Instantiate(Path.Combine("Characters", "Cat"), Vector3.zero, Quaternion.identity, 0);
-                    player.transform.SetParent(transform);
-                    GameControl.PlayerState.CharacterController = player.AddComponent<Unicorn>();
-                    GameControl.PlayerState.CharacterController.Initialize(character);
+                    var playerManager = Instantiate(UnicornPrefab, Vector3.zero, Quaternion.identity, transform).GetComponent<PlayerManager>();
 
-                    return player;
-                }
+                    playerManager.CharacterController = playerManager.gameObject.AddComponent<Unicorn>();
+                    playerManager.CharacterController.Initialize(character, playerManager);
+
+                    return playerManager;
+                    }
                 case "Arena":
                 {
-                    var player = PhotonNetwork.Instantiate(Path.Combine("Characters", "Manticore"), Vector3.zero, Quaternion.identity, 0);
-                    player.transform.SetParent(transform);
-                    GameControl.PlayerState.CharacterController = player.AddComponent<ArenaCharacter>();
-                    GameControl.PlayerState.CharacterController.Initialize(character);
+                    var playerManager = Instantiate(ManticorePrefab, Vector3.zero, Quaternion.identity, transform).GetComponent<PlayerManager>();
 
-                    return player;
+                    playerManager.CharacterController = playerManager.gameObject.AddComponent<ArenaCharacter>();
+                    playerManager.CharacterController.Initialize(character, playerManager);
+
+                    return playerManager;
                 }
                 default:
                 {

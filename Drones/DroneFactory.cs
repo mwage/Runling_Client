@@ -10,15 +10,12 @@ namespace Drones
     public class DroneFactory : MonoBehaviour
     { 
         //attach gameobjects
-        private const string BouncingDrone = "BouncingDrone";
-        private const string FlyingBouncingDrone = "FlyingBouncingDrone";
-        private const string FlyingOneWayDrone = "FlyingOneWayDrone";
-        private const string FlyingBouncingMine = "FlyingBouncingMine";
-        private const string BouncingMine = "Bouncing Mine";
-        private const string FlyingOneWayMine = "FlyingOneWayMine";
-
-        public GameObject BouncingDronePrefab;
-        public GameObject OneWayDronePrefab;
+        public GameObject BouncingDrone;
+        public GameObject FlyingBouncingDrone;
+        public GameObject FlyingOneWayDrone;
+        public GameObject FlyingBouncingMine;
+        public GameObject BouncingMine;
+        public GameObject FlyingOneWayMine;
 
         public Material GreyMaterial;
         public Material BlueMaterial;
@@ -29,7 +26,7 @@ namespace Drones
         public Material CyanMaterial;
         public Material BrightGreenMaterial;
 
-        public Dictionary<DroneType,string> SetDroneType = new Dictionary<DroneType,string>();
+        public Dictionary<DroneType, GameObject> SetDroneType = new Dictionary<DroneType,GameObject>();
         public Dictionary<DroneColor, Material> SetDroneMaterial = new Dictionary<DroneColor, Material>();
 
         private void Awake()
