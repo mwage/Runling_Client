@@ -15,11 +15,6 @@ namespace MP.TSGame.Players.Camera
             SetCameraHandlePosition(GetWatchedPoint());
         }
 
-        private void LateUpdate()
-        {
-            //ServeInput(); - in InputServer
-        }
-
         public void ServeInput()
         {
             InputMoveCamera();

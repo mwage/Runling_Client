@@ -70,7 +70,7 @@ namespace RLR
         {
             if (PlayerManager.IsDead && PlayerManager.CheckIfDead)
             {
-                _death.Death(_levelManager, _initializeGame, PlayerManager);
+                _death.Death(PlayerManager);
             }
 
             if (GameControl.GameState.FinishedLevel && CheckIfFinished)

@@ -11,7 +11,6 @@ namespace SLA
         private LevelManagerSLA _levelManager;
         private InitializeGameSLA _initializeGame;
         private DeathSLA _death;
-
         public PlayerManager PlayerManager;
 
         private void Awake()

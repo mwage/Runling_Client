@@ -19,7 +19,7 @@ namespace RLR.Levels
         {
             Manager = manager;
             DroneFactory = Manager.DroneFactory;
-            MapGeneratorRlr = Manager.MapGeneratorRlr;
+            MapGeneratorRlr = Manager.MapGenerator;
             RunlingChaser = Manager.RunlingChaser;
         }
 

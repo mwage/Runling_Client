@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Launcher;
+using Players;
 using RLR.Levels;
 using TMPro;
 using UnityEngine;
@@ -15,8 +16,9 @@ namespace RLR
         public GameObject CountDownText;
         public Text NewHighScoreText;
         public GameObject NewHighScoreObject;
-        public float[] FinishTimeCurGame = new float[LevelManagerRLR.NumLevels];
 
+        public float[] FinishTimeCurGame = new float[LevelManagerRLR.NumLevels];
+        private PlayerManager _playerManager;
         private int _timeLimit;
         private float _countdown;
         private float _timer;
@@ -25,6 +27,7 @@ namespace RLR
 
         private void Awake()
         {
+            _playerManager = GetComponent<ControlRLR>().PlayerManager;
             switch (GameControl.GameState.SetDifficulty)
             {
                 case Difficulty.Normal:
@@ -64,8 +67,8 @@ namespace RLR
             {
                 if (GameControl.GameState.SetGameMode == GameMode.TimeMode)
                 {
-                    GameControl.PlayerState.TotalScore += _difficultyMultiplier * GameControl.GameState.CurrentLevel;
-                    CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + GameControl.PlayerState.TotalScore;
+                    _playerManager.TotalScore += _difficultyMultiplier * GameControl.GameState.CurrentLevel;
+                    CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + _playerManager.TotalScore;
                     GameControl.MapState.VisitedSafeZones[index.Value] = true;
                     SetTimeModeHighScore();
                 }
@@ -74,7 +77,7 @@ namespace RLR
 
         public void AddRemainingCountdown()
         {
-            GameControl.PlayerState.TotalScore += (int) _countdown;
+            _playerManager.TotalScore += (int) _countdown;
             _countdown = 0;
         }
 
@@ -120,16 +123,16 @@ namespace RLR
             switch (GameControl.GameState.SetDifficulty)
             {
                 case Difficulty.Normal:
-                    if (GameControl.PlayerState.TotalScore > GameControl.HighScores.HighScoreRLRNormal[0])
+                    if (_playerManager.TotalScore > GameControl.HighScores.HighScoreRLRNormal[0])
                     {
-                        GameControl.HighScores.HighScoreRLRNormal[0] = GameControl.PlayerState.TotalScore;
+                        GameControl.HighScores.HighScoreRLRNormal[0] = _playerManager.TotalScore;
                     }
                     PlayerPrefs.SetFloat("HighScoreRLRNormalTimeMode", GameControl.HighScores.HighScoreRLRNormal[0]);
                     break;
                 case Difficulty.Hard:
-                    if (GameControl.PlayerState.TotalScore >= GameControl.HighScores.HighScoreRLRHard[0])
+                    if (_playerManager.TotalScore >= GameControl.HighScores.HighScoreRLRHard[0])
                     {
-                        GameControl.HighScores.HighScoreRLRHard[0] = GameControl.PlayerState.TotalScore;
+                        GameControl.HighScores.HighScoreRLRHard[0] = _playerManager.TotalScore;
                     }
                     PlayerPrefs.SetFloat("HighScoreRLRHardTimeMode", GameControl.HighScores.HighScoreRLRHard[0]);
                     break;

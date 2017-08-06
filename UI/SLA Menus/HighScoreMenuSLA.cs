@@ -12,6 +12,7 @@ namespace UI.SLA_Menus
         public GameObject ScorePrefab;
         public GameObject Background;
         public ControlSLA ControlSLA;
+        public ScoreSLA Score;
 
         private GameObject _descriptionText;
         private readonly GameObject[] _levelScore = new GameObject[LevelManagerSLA.NumLevels];
@@ -90,10 +91,10 @@ namespace UI.SLA_Menus
             {
                 for (var i = 0; i < LevelManagerSLA.NumLevels; i++)
                 {
-                    _levelScore[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = ControlSLA.Score.LevelScoreCurGame[i].ToString();
+                    _levelScore[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = Score.LevelScoreCurGame[i].ToString();
 
                     // New records are shown green
-                    if (ControlSLA.Score.LevelScoreCurGame[i] >= GameControl.HighScores.HighScoreSLA[i + 1] && ControlSLA.Score.LevelScoreCurGame[i] != 0)
+                    if (Score.LevelScoreCurGame[i] >= GameControl.HighScores.HighScoreSLA[i + 1] && Score.LevelScoreCurGame[i] != 0)
                     {
                         _levelScore[i].transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = Color.green;
                     }

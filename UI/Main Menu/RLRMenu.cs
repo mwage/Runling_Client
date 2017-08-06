@@ -58,10 +58,8 @@ namespace UI.Main_Menu
         #region Buttons
         public void StartGame()
         {
-            GameControl.PlayerState.IsDead = true;
-            GameControl.PlayerState.TotalScore = 0;
             GameControl.GameState.CurrentLevel = 1;
-            GameControl.PlayerState.CharacterDto = PickCharacterMenu.GetComponent<PickCharacterMenu>().GetCharacterDto();
+            GameControl.GameState.CharacterDto = PickCharacterMenu.GetComponent<PickCharacterMenu>().GetCharacterDto();
             SetModes();
 
             PhotonNetwork.CreateRoom(GameControl.GenerateRoomName("SoloRLR"));
@@ -69,14 +67,11 @@ namespace UI.Main_Menu
 
         public void StartGameSOLOHARDRLRTEST()
         {
-            //PhotonNetwork.LeaveRoom();
-            GameControl.PlayerState.IsDead = true;
-            GameControl.PlayerState.TotalScore = 0;
             GameControl.GameState.CurrentLevel = 1;
-            GameControl.PlayerState.CharacterDto = PickCharacterMenu.GetComponent<PickCharacterMenu>().GetCharacterDto();
+            GameControl.GameState.CharacterDto = PickCharacterMenu.GetComponent<PickCharacterMenu>().GetCharacterDto();
             GameControl.GameState.SetDifficulty = Difficulty.Hard;
             GameControl.GameState.SetGameMode = GameMode.Practice;
-            PhotonNetwork.CreateRoom(GameControl.GenerateRoomName("SoloRLR"));
+            _sceneLoader.LoadScene("RLR", 0);
         }
 
         public void VoteDifficultyNormal()
@@ -123,13 +118,5 @@ namespace UI.Main_Menu
             _mainMenuManager.MoveCamera(_mainMenuManager.CameraPosMainMenu, _mainMenuManager.CameraRotMainMenu);
         }
         #endregion
-
-        public override void OnCreatedRoom()
-        {
-            PhotonNetwork.room.IsOpen = false;
-            PhotonNetwork.room.IsVisible = false;
-            _sceneLoader.LoadScene("RLR", 1);
-            _mainMenuManager.gameObject.SetActive(false);
-        }
     }
 }

@@ -25,7 +25,6 @@ namespace UI.Main_Menu
         public void StartGame()
         {
             GameControl.GameState.SetGameMode = GameMode.Classic;
-            GameControl.GameState.Solo = true;
             GameControl.GameState.CurrentLevel = 1;
 
             PhotonNetwork.CreateRoom(GameControl.GenerateRoomName("SoloSLA"));
@@ -34,7 +33,6 @@ namespace UI.Main_Menu
         public void Practice()
         {
             GameControl.GameState.SetGameMode = GameMode.Practice;
-            GameControl.GameState.Solo = true;
             GameControl.GameState.CurrentLevel = 1;
 
             PhotonNetwork.CreateRoom(GameControl.GenerateRoomName("SoloSLA"));

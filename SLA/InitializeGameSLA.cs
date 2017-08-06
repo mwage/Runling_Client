@@ -37,14 +37,12 @@ namespace SLA
         {
             var playerManager = PlayerFactory.Create(new CharacterDto(0, "Arena", 0, 0, 0, 0, 1, 0, 0)).GetComponent<PlayerManager>();
             playerManager.Model.SetActive(false);
-            playerManager.Trigger.SetActive(false);
             _controlSLA.PlayerManager = playerManager;
             GetComponent<InputServer>().Init(InGameMenuManager.gameObject, playerManager);
         }
 
         public void InitializeGame()
         {
-
             StartCoroutine(PrepareLevel());
         }
 
@@ -78,10 +76,6 @@ namespace SLA
             playerManager.CheckIfDead = true;
             playerManager.Model.SetActive(true);
             playerManager.Shield.SetActive(true);
-            playerManager.Trigger.SetActive(true);
-
-            if (playerManager.GodModeActive)
-                playerManager.GodMode.SetActive(true);
 
             playerManager.CharacterController.Speed.SetBaseSpeed(_levelManager.GetMovementSpeed(GameControl.GameState.CurrentLevel));
             playerManager.transform.position = Vector3.zero;

@@ -17,7 +17,9 @@ namespace SLA
         private GameObject _playerScores;
         public Text CurrentScoreText;
         private Text _totalScoreText;
-        private Text _playerNameText;
+
+//        TODO: get playername without photon
+//        private Text _playerNameText;
 
         private void Awake()
         {
@@ -27,7 +29,7 @@ namespace SLA
         private void Start()
         {
                 _playerScores = Instantiate(PlayerScorePrefab, ScoreLayoutGroup);
-                _playerNameText = _playerScores.transform.Find("PlayerName").GetComponent<Text>();
+//                _playerNameText = _playerScores.transform.Find("PlayerName").GetComponent<Text>();
                 CurrentScoreText = _playerScores.transform.Find("CurrentScore").GetComponent<Text>();
                 _totalScoreText = _playerScores.transform.Find("TotalScore").GetComponent<Text>();
 

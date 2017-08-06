@@ -15,68 +15,55 @@ namespace RLR
     {
 
         // Attach scripts
-        private LevelManagerRLR LevelManager;
-        private ControlRLR ControlRLR;
+
         public InGameMenuManagerRLR InGameMenuManager;
         public CameraHandleMovement CameraHandleMovement;
-        public ScoreRLR ScoreRLR;
         public PlayerFactory PlayerFactory;
-
         public GameObject LevelTextObject;
         public GameObject CountdownPrefab;
 
+        private LevelManagerRLR _levelManager;
+        private ControlRLR _controlRLR;
+        private ScoreRLR _scoreRLR;
+
+        private void Awake()
+        {
+            _levelManager = GetComponent<LevelManagerRLR>();
+            _controlRLR = GetComponent<ControlRLR>();
+            _scoreRLR = GetComponent<ScoreRLR>();
+        }
+
         public void InitializePlayer()
         {
-            var playerManager = PlayerFactory.Create(new CharacterDto(0, "Arena", 0, 0, 0, 0, 1, 0, 0)).GetComponent<PlayerManager>();
-            playerManager.Model.SetActive(false);
-            playerManager.Trigger.SetActive(false);
-            ControlRLR.PlayerManager = playerManager;
+            var playerManager = PlayerFactory.Create(GameControl.GameState.CharacterDto).GetComponent<PlayerManager>();
+            _controlRLR.PlayerManager = playerManager;
             GetComponent<InputServer>().Init(InGameMenuManager.gameObject, playerManager);
         }
 
         //set Spawnimmunity once game starts
         public void InitializeGame()
         {
-            ControlRLR.CheckIfFinished = true;
+            _controlRLR.CheckIfFinished = true;
             StartCoroutine(PrepareLevel());
         }
 
         private IEnumerator PrepareLevel()
         {
             // load map
-            LevelManager.GenerateMap(GameControl.GameState.CurrentLevel);
+            _levelManager.GenerateMap(GameControl.GameState.CurrentLevel);
 
             // Load player
-           if (GameControl.PlayerState.Player == null)
-            {
-                GameControl.PlayerState.Player = PlayerFactory.Create(GameControl.PlayerState.CharacterDto);
-                GameControl.PlayerState.PlayerTrigger = GameControl.PlayerState.Player.transform.Find("Trigger").gameObject.GetComponent<PlayerTrigger>();
-            }
-
-            var startPlatform = GameControl.MapState.SafeZones[0];
-            GameControl.PlayerState.Player.transform.rotation = Quaternion.Euler(new Vector3 (0, 90, 0));
-            GameControl.PlayerState.Player.transform.position = new Vector3(
-                    startPlatform.transform.position.x + startPlatform.transform.Find("VisibleObjects/Ground").transform.localScale.x / 2 - 1,
-                    0,
-                    startPlatform.transform.position.z);
-
-            if (GameControl.PlayerState.GodModeActive && !GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.activeSelf)
-            {
-                GameControl.PlayerState.Player.transform.Find("GodMode").gameObject.SetActive(true);
-            }
-            GameControl.PlayerState.IsDead = false;
-            GameControl.PlayerState.IsInvulnerable = true;
-            GameControl.PlayerState.IsImmobile = true;
+            SpawnPlayer(_controlRLR.PlayerManager);
 
             // set camera
-            GameControl.Settings.CameraRange = LevelManager.MapGeneratorRlr.GetAirColliderRange() / 2.5f;
-            CameraHandleMovement.SetCameraHandlePosition(new Vector3(GameControl.PlayerState.Player.transform.localPosition.x, 0, GameControl.PlayerState.Player.transform.localPosition.z));
-
-            ControlRLR.StopUpdate = false;
+            GameControl.Settings.CameraRange = _levelManager.MapGenerator.GetAirColliderRange() / 2.5f;
+            CameraHandleMovement.SetCameraHandlePosition(
+                new Vector3(_controlRLR.PlayerManager.transform.localPosition.x, 0,
+                    _controlRLR.PlayerManager.transform.localPosition.z));
 
             // generate drones
-            LevelManager.GenerateChasers(GameControl.GameState.CurrentLevel);
-            LevelManager.LoadDrones(GameControl.GameState.CurrentLevel);
+            _levelManager.GenerateChasers(GameControl.GameState.CurrentLevel);
+            _levelManager.LoadDrones(GameControl.GameState.CurrentLevel);
 
             // Show current level
             var levelText = LevelTextObject.GetComponent<TextMeshProUGUI>();
@@ -85,6 +72,28 @@ namespace RLR
             yield return new WaitForSeconds(2);
             LevelTextObject.SetActive(false);
 
+            StartCoroutine(StartCountdown());
+        }
+
+        private void SpawnPlayer(PlayerManager playerManager)
+        {
+            var startPlatform = GameControl.MapState.SafeZones[0];
+
+            playerManager.IsDead = false;
+            playerManager.IsImmobile = true;
+            playerManager.IsInvulnerable = true;
+            playerManager.CheckIfDead = true;
+            playerManager.Model.SetActive(true);
+
+            playerManager.transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
+            playerManager.transform.position = new Vector3(
+                startPlatform.transform.position.x + startPlatform.transform.Find("VisibleObjects/Ground")
+                    .transform.localScale.x / 2 - 1,
+                0, startPlatform.transform.position.z);
+        }
+
+        private IEnumerator StartCountdown()
+        {
             yield return new WaitForSeconds(1);
 
             // Countdown
@@ -96,9 +105,14 @@ namespace RLR
                 Destroy(countdown);
             }
 
-            GameControl.PlayerState.IsInvulnerable = false;
-            GameControl.PlayerState.IsImmobile = false;
-            ScoreRLR.StartTimer();
+            StartLevel();
+        }
+
+        private void StartLevel()
+        {
+            _controlRLR.PlayerManager.IsInvulnerable = false;
+            _controlRLR.PlayerManager.IsImmobile = false;
+            _scoreRLR.StartTimer();
         }
     }
 }

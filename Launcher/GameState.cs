@@ -24,10 +24,13 @@ namespace Launcher
         public bool GameActive = false;
         public int CurrentLevel = 1;
         public bool FinishedLevel = false;
-        public bool AllDead = false;
+        
+        // TS random placeholder
+        public TSRandom Random = TSRandom.New(0);
+
+        // Voting selection (mabe substitute via inscene vote later on)
         public Difficulty SetDifficulty = Difficulty.Hard;
         public GameMode SetGameMode = GameMode.Practice;
-        public bool Solo;
-        public TSRandom Random = TSRandom.New(0);
+        public CharacterDto CharacterDto;
     }
 }

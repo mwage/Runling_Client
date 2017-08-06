@@ -14,14 +14,12 @@ namespace Launcher
         private InputManager _inputManager;
         private Settings _settings;
         private HighScores _highScores;
-        private PlayerState _playerState;
         private MapState _mapState;
 
         public static GameState GameState { get { return Instance._gameState; } }
         public static InputManager InputManager { get { return Instance._inputManager; } }
         public static Settings Settings { get { return Instance._settings; } }
         public static HighScores HighScores { get { return Instance._highScores; } }
-        public static PlayerState PlayerState { get { return Instance._playerState; } }
         public static MapState MapState { get { return Instance._mapState; } }
 
         public const int Version = 2;
@@ -34,7 +32,6 @@ namespace Launcher
             _inputManager = new InputManager();
             _settings = new Settings();
             _highScores = new HighScores();
-            _playerState = new PlayerState();
             _mapState = new MapState();
         }
 

@@ -145,7 +145,7 @@ namespace Players
         #region Physics
         private void FixedUpdate()
         {
-            _maxSpeed = GameControl.PlayerState.CharacterController.Speed.Current;
+            _maxSpeed = _playerManager.CharacterController.Speed.Current;
             _currentPos = new Vector3(_rb.transform.position.x, 0, _rb.transform.position.z);
             _currentSpeed = _rb.velocity.magnitude;
 
