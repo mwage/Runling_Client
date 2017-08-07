@@ -1,4 +1,5 @@
-﻿using Characters.Types;
+﻿using System.Collections.Generic;
+using Characters.Types;
 using TrueSync;
 using UnityEngine;
 
@@ -24,7 +25,11 @@ namespace Launcher
         public bool GameActive = false;
         public int CurrentLevel = 1;
         public bool FinishedLevel = false;
-        
+
+        // MapState
+        public List<GameObject> SafeZones;
+        public GameObject DronesParent;
+
         // TS random placeholder
         public TSRandom Random = TSRandom.New(0);
 

@@ -7,7 +7,7 @@ namespace MP.TSGame.Players
     public class PlayerTrigger : TrueSyncBehaviour
     {
         private PlayerManager _playerManager;
-        private PlayerTriggerManager _playerTriggerManager;
+//        private PlayerTriggerManager _playerTriggerManager;
         private PlayerBarsManager _playerBarsManager;
 
         private void Awake()
@@ -17,7 +17,7 @@ namespace MP.TSGame.Players
 
         public void InitializeTrigger()
         {
-            _playerTriggerManager = _playerManager.transform.parent.GetComponent<PlayerTriggerManager>();
+//            _playerTriggerManager = _playerManager.transform.parent.GetComponent<PlayerTriggerManager>();
             _playerBarsManager = _playerManager.transform.parent.GetComponent<PlayerBarsManager>();
         }
 
@@ -53,21 +53,21 @@ namespace MP.TSGame.Players
                 _playerManager.IsSafe = true;
                 if (owner != TrueSyncManager.LocalPlayer)
                     return;
-
-                var currentSafeZone = other.gameObject.transform.parent.parent.gameObject;
-                int currentSafeZoneIdx;
-                if (_playerTriggerManager == null)
-                {
-                    InitializeTrigger();
-                    return;
-                }
-                if (_playerTriggerManager.IsSafeZoneVisitedFirstTime(currentSafeZone, out currentSafeZoneIdx))
-                {
-                    _playerTriggerManager.MarkVisitedSafeZone(currentSafeZoneIdx);
-                    _playerTriggerManager.AddExp(currentSafeZoneIdx);
-                    _playerTriggerManager.CreateOrDestroyChaserIfNeed(currentSafeZone);
-                    _playerBarsManager.UpdateLevelBar();
-                }   
+//
+//                var currentSafeZone = other.gameObject.transform.parent.parent.gameObject;
+//                int currentSafeZoneIdx;
+//                if (_playerTriggerManager == null)
+//                {
+//                    InitializeTrigger();
+//                    return;
+//                }
+//                if (_playerTriggerManager.IsSafeZoneVisitedFirstTime(currentSafeZone, out currentSafeZoneIdx))
+//                {
+//                    _playerTriggerManager.MarkVisitedSafeZone(currentSafeZoneIdx);
+//                    _playerTriggerManager.AddExp(currentSafeZoneIdx);
+//                    _playerTriggerManager.CreateOrDestroyChaserIfNeed(currentSafeZone);
+//                    _playerBarsManager.UpdateLevelBar();
+//                }   
             }
 
             // Death Trigger

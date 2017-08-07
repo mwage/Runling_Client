@@ -8,7 +8,6 @@ namespace RLR
 {
     public class ControlRLR : MonoBehaviour
     {
-
         public GameObject PracticeMode;
         public GameObject TimeModeUI;
         public GameObject CountDownText;

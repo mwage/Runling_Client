@@ -27,7 +27,7 @@ namespace Characters
             if (platformIndex == 0) return 0;
 
             int difficlutyMultiplier = difficulty == Difficulty.Hard ? 2 : 1;
-            if (platformIndex == GameControl.MapState.SafeZones.Count - 1) difficlutyMultiplier *= 10;
+            if (platformIndex == GameControl.GameState.SafeZones.Count - 1) difficlutyMultiplier *= 10;
 
             if (mode == GameMode.Practice)
             {

@@ -89,7 +89,7 @@ namespace Characters.Abilities
         private List<Transform> GetDronesTransforms()
         {
             List<Transform> drones = new List<Transform>();
-            foreach (Transform drone in GameControl.MapState.DronesParent.transform)
+            foreach (Transform drone in GameControl.GameState.DronesParent.transform)
             {
                 drones.Add(drone);
             }

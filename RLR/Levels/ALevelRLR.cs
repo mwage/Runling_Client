@@ -28,8 +28,7 @@ namespace RLR.Levels
         public virtual void GenerateMap()
         {
             MapGeneratorRlr.GenerateMap(15,new float[] {8, 6, 8, 6, 8}, 1.2f, 0.3f, SetAirCollider());
-            GameControl.MapState.SafeZones = MapGeneratorRlr.GetSafeZones();
-            GameControl.MapState.VisitedSafeZones = new bool[GameControl.MapState.SafeZones.Count];
+            GameControl.GameState.SafeZones = MapGeneratorRlr.GetSafeZones();
             LaneArea = MapGeneratorRlr.GetDroneSpawnArea();
         }
 

@@ -3,7 +3,6 @@ using Characters;
 using Characters.Bars;
 using Launcher;
 using RLR;
-using RLR.Levels;
 using UnityEngine;
 
 namespace Players
@@ -16,7 +15,7 @@ namespace Players
         private PlayerBarsManager _playerBarsManager;
         public bool[,] ReachedChaserPlatform;
         public List<GameObject> Chasers;
-
+        public bool[] VisitedSafeZones;
 
         private void Awake()
         {
@@ -54,7 +53,7 @@ namespace Players
 
                 if (IsSafeZoneVisitedFirstTime(currentSafeZone, out currentSafeZoneIdx))
                 {
-                    GameControl.MapState.VisitedSafeZones[currentSafeZoneIdx] = true;
+                    VisitedSafeZones[currentSafeZoneIdx] = true;
                     AddExp(currentSafeZoneIdx);
                     AddScore(currentSafeZoneIdx);
                     RunlingChaser.CreateOrDestroyChaserIfNeed(currentSafeZone, _playerManager, this, currentSafeZoneIdx);
@@ -76,10 +75,10 @@ namespace Players
 
         public bool IsSafeZoneVisitedFirstTime(GameObject currentSafeZone, out int currentSafeZoneIdx)
         {
-            if (GameControl.MapState.SafeZones.Contains(currentSafeZone)) // always should contain
+            if (GameControl.GameState.SafeZones.Contains(currentSafeZone)) // always should contain
             {
-                currentSafeZoneIdx = GameControl.MapState.SafeZones.IndexOf(currentSafeZone);
-                if (GameControl.MapState.VisitedSafeZones[currentSafeZoneIdx])
+                currentSafeZoneIdx = GameControl.GameState.SafeZones.IndexOf(currentSafeZone);
+                if (VisitedSafeZones[currentSafeZoneIdx])
                     return false; // you have been here, no exp for you
 
                 return true;

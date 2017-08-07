@@ -70,7 +70,7 @@ namespace RLR
 
         public void CreateOrDestroyChaserIfNeed(GameObject currentSafeZone, PlayerManager playerManager, SafeZoneManager safeZoneManager, int platformIndex)
         {
-            var safeZones = GameControl.MapState.SafeZones;
+            var safeZones = GameControl.GameState.SafeZones;
             if (_chaserSpawnPlatformIdxs == null || _chaserDestroyPlatformIdxs == null) return;
 
             for (var i = 0; i < _chaserSpawnPlatformIdxs.Length; i++)

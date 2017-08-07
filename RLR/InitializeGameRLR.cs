@@ -13,9 +13,6 @@ namespace RLR
 {
     public class InitializeGameRLR : MonoBehaviour
     {
-
-        // Attach scripts
-
         public InGameMenuManagerRLR InGameMenuManager;
         public CameraHandleMovement CameraHandleMovement;
         public PlayerFactory PlayerFactory;
@@ -89,7 +86,7 @@ namespace RLR
 
         private void SpawnPlayer(PlayerManager playerManager)
         {
-            var startPlatform = GameControl.MapState.SafeZones[0];
+            var startPlatform = GameControl.GameState.SafeZones[0];
 
             playerManager.IsDead = false;
             playerManager.IsImmobile = true;
@@ -102,6 +99,8 @@ namespace RLR
                 startPlatform.transform.position.x + startPlatform.transform.Find("VisibleObjects/Ground")
                     .transform.localScale.x / 2 - 1,
                 0, startPlatform.transform.position.z);
+
+            _safeZoneManager.VisitedSafeZones = new bool[GameControl.GameState.SafeZones.Count];
         }
 
         private IEnumerator StartCountdown()
