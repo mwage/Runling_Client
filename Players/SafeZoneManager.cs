@@ -1,6 +1,8 @@
-﻿using Characters;
+﻿using System.Collections.Generic;
+using Characters;
 using Characters.Bars;
 using Launcher;
+using RLR;
 using RLR.Levels;
 using UnityEngine;
 
@@ -10,7 +12,11 @@ namespace Players
     {
         public RunlingChaser RunlingChaser;
         private PlayerManager _playerManager;
+        private ScoreRLR _score;
         private PlayerBarsManager _playerBarsManager;
+        public bool[,] ReachedChaserPlatform;
+        public List<GameObject> Chasers;
+
 
         private void Awake()
         {
@@ -21,6 +27,7 @@ namespace Players
         {
             _playerBarsManager = playerBarsManager;
             RunlingChaser = runlingChaser;
+            _score = RunlingChaser.GetComponent<ScoreRLR>();
         }
 
         #region Trigger
@@ -47,9 +54,10 @@ namespace Players
 
                 if (IsSafeZoneVisitedFirstTime(currentSafeZone, out currentSafeZoneIdx))
                 {
-                    MarkVisitedSafeZone(currentSafeZoneIdx);
+                    GameControl.MapState.VisitedSafeZones[currentSafeZoneIdx] = true;
                     AddExp(currentSafeZoneIdx);
-                    CreateOrDestroyChaserIfNeed(currentSafeZone);
+                    AddScore(currentSafeZoneIdx);
+                    RunlingChaser.CreateOrDestroyChaserIfNeed(currentSafeZone, _playerManager, this, currentSafeZoneIdx);
                     _playerBarsManager.UpdateLevelBar();
                 }
             }
@@ -84,21 +92,24 @@ namespace Players
             }
         }
 
-        public void MarkVisitedSafeZone(int currentSafeZoneIdx)
-        {
-            GameControl.MapState.VisitedSafeZones[currentSafeZoneIdx] = true;
-        }
-
-        public void AddExp(int currentSafeZoneIdx)
+        private void AddExp(int currentSafeZoneIdx)
         {
             _playerManager.CharacterController.AddExp(LevelingSystem.CalculateExp(currentSafeZoneIdx,
                 GameControl.GameState.CurrentLevel, GameControl.GameState.SetDifficulty,
                 GameControl.GameState.SetGameMode));
         }
 
-        public void CreateOrDestroyChaserIfNeed(GameObject currentSafeZone)
+        private void AddScore(int currentSafeZoneIdx)
         {
-            RunlingChaser.CreateOrDestroyChaserIfNeed(currentSafeZone, _playerManager);
+            if (currentSafeZoneIdx == 0)
+                return;
+
+            if (GameControl.GameState.SetGameMode == GameMode.TimeMode)
+            {
+                _score.AddScore();
+            }
+
+//            TODO: Add score to character if we want to track total score, etc.
         }
     }
 }

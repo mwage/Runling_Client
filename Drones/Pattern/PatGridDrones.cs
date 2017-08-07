@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Drones.Pattern
 {
-    public class PatGridDrones : APattern
+    public class PatGridDrones : IPattern
     {
         protected int DroneCount;
         protected float Delay;
@@ -17,12 +17,17 @@ namespace Drones.Pattern
             AddDrones = addDrones ?? false;
         }
 
-        public override void SetPattern(DroneFactory factory, IDrone drone, Area area, StartPositionDelegate posDelegate = null)
+        public void SetPattern(DroneFactory factory, IDrone drone, Area area, StartPositionDelegate posDelegate = null)
         {
             factory.StartCoroutine(GenerateHorizontalGridDrones(drone, DroneCount, Delay, area, factory, AddDrones));
             factory.StartCoroutine(GenerateVerticalGridDrones(drone, DroneCount, Delay, area, factory, AddDrones));
         }
-        
+
+        public void AddPattern(DroneFactory factory, GameObject drone, IDrone addedDrone, Area area)
+        {
+            Debug.Log("AddPattern not implemented for GridDrones");
+        }
+
         private static IEnumerator GenerateHorizontalGridDrones(IDrone drone, int droneCount, float delay, Area area, DroneFactory factory, bool addDrones)
         {
             var height = area.TopBoundary - (0.5f + drone.Size / 2);

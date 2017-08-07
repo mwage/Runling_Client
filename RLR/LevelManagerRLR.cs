@@ -21,8 +21,8 @@ namespace RLR
         public GameObject LivesText;
 
         private InitializeGameRLR _initializeGame;
-        private CheckSafeZones _checkSafeZones;
-        private PlayerManager _playerManager;
+        private ScoreRLR _score;
+        private ControlRLR _controlRLR;
         private readonly InitializeLevelsRLR _initializeLevelsRLR = new InitializeLevelsRLR();
 
         public static int NumLevels = 9;             //currently last level available in RLR
@@ -32,8 +32,8 @@ namespace RLR
         public void Awake()
         {
             _initializeGame = GetComponent<InitializeGameRLR>();
-            _checkSafeZones = GetComponent<CheckSafeZones>();
-            _playerManager = GetComponent<ControlRLR>().PlayerManager;
+            _score = GetComponent<ScoreRLR>();
+            _controlRLR = GetComponent<ControlRLR>();
 
             _levels = _initializeLevelsRLR.SetDifficulty(this);
         }
@@ -88,14 +88,14 @@ namespace RLR
 
             if (GameControl.GameState.SetGameMode == GameMode.TimeMode)
             {
-                _checkSafeZones.ScoreRLR.AddRemainingCountdown();
-                _checkSafeZones.ScoreRLR.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + _playerManager.TotalScore;
-                _playerManager.Lives = 3;
-                LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + _playerManager.Lives;
+                _score.AddRemainingCountdown();
+                _score.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " +_controlRLR.PlayerManager.TotalScore;
+                _controlRLR.PlayerManager.Lives = 3;
+                LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + _controlRLR.PlayerManager.Lives;
             }
             if (GameControl.GameState.SetGameMode != GameMode.Practice)
             {
-                _checkSafeZones.ScoreRLR.SetHighScore();
+               _score.SetHighScore();
             }
             GameControl.GameState.FinishedLevel = false;
             GameControl.GameState.CurrentLevel++;
@@ -107,11 +107,11 @@ namespace RLR
         {
             if (GameControl.GameState.SetGameMode == GameMode.TimeMode)
             {
-                _checkSafeZones.ScoreRLR.AddRemainingCountdown();
-                _checkSafeZones.ScoreRLR.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + _playerManager.TotalScore;
+               _score.AddRemainingCountdown();
+                _score.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + _controlRLR.PlayerManager.TotalScore;
             }
 
-            if (!_playerManager.IsDead)
+            if (!_controlRLR.PlayerManager.IsDead)
             {
                 Win.transform.Find("Victory").gameObject.SetActive(true);
             }
@@ -125,10 +125,10 @@ namespace RLR
             _initializeGame.InGameMenuManager.CloseMenus();
             if (GameControl.GameState.SetGameMode != GameMode.Practice)
             {
-                _checkSafeZones.ScoreRLR.SetHighScore();
+                _score.SetHighScore();
             }
             GameControl.GameState.FinishedLevel = false;
-            _playerManager.gameObject.SetActive(false);
+            _controlRLR.PlayerManager.gameObject.SetActive(false);
             Win.gameObject.SetActive(true);
         }
     }

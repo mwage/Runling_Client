@@ -3,7 +3,7 @@ using Drones.DroneTypes;
 using UnityEngine;
 
 namespace Drones.Pattern {
-    public class PatContinuousSpawn : APattern
+    public class PatContinuousSpawn : IPattern
     {
         protected readonly float Delay;
         protected readonly int DroneCount;
@@ -14,7 +14,7 @@ namespace Drones.Pattern {
             DroneCount = droneCount;
         }
 
-        public override void SetPattern(DroneFactory factory, IDrone drone, Area area, StartPositionDelegate posDelegate = null)
+        public void SetPattern(DroneFactory factory, IDrone drone, Area area, StartPositionDelegate posDelegate = null)
         {
             if (posDelegate == null)
                 posDelegate = delegate { return new Vector3(0, 0.4f, 0); };
@@ -22,7 +22,7 @@ namespace Drones.Pattern {
             factory.StartCoroutine(GenerateDrones(factory, drone, posDelegate));
         }
 
-        public override void AddPattern(DroneFactory factory, GameObject drone, IDrone addedDrone, Area area)
+        public void AddPattern(DroneFactory factory, GameObject drone, IDrone addedDrone, Area area)
         {
             factory.StartCoroutine(GenerateDrones(factory, addedDrone, delegate { return Vector3.zero; }, drone));
         }

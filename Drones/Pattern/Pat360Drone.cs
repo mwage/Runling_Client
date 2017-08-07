@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Drones.Pattern
 {
-    public class Pat360Drones : APattern
+    public class Pat360Drones : IPattern
     {
         protected readonly float? Delay;
         protected readonly bool Repeat;
@@ -46,7 +46,7 @@ namespace Drones.Pattern
             PatternRepeats = patternRepeats;
         }
 
-        public override void SetPattern(DroneFactory factory, IDrone drone, Area area, StartPositionDelegate posDelegate = null)
+        public void SetPattern(DroneFactory factory, IDrone drone, Area area, StartPositionDelegate posDelegate = null)
         {
             if (posDelegate == null)
                 posDelegate = delegate { return new Vector3(0, 0.4f, 0); };
@@ -54,7 +54,7 @@ namespace Drones.Pattern
             factory.StartCoroutine(Generate360Drones(factory, drone, area, posDelegate));
         }
 
-        public override void AddPattern(DroneFactory factory, GameObject drone, IDrone addedDrone, Area area)
+        public void AddPattern(DroneFactory factory, GameObject drone, IDrone addedDrone, Area area)
         {
             factory.StartCoroutine(Generate360Drones(factory, addedDrone, area, delegate { return Vector3.zero; }, drone));
         }

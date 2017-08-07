@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Characters.Types;
 using Characters.Types.Features;
 using Players;
@@ -39,7 +37,7 @@ namespace Characters.Abilities
         public override IEnumerator Enable(ACharacter character)
         {
             if (IsActive) yield return null;
-            if (character.UseEnergy(EnergyCost)) // characterd had enough energy and used it
+            if (character.UseEnergy(EnergyCost)) // character had enough energy and used it
             {
                 character.Speed.ActivateBoost(BoostSpeed);
                 IsActive = true;

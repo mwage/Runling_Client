@@ -5,7 +5,6 @@ using Launcher;
 using Players;
 using Players.AbilitiesButtons;
 using Players.Camera;
-using RLR.Levels;
 using TMPro;
 using UI.RLR_Menus;
 using UnityEngine;
@@ -29,6 +28,7 @@ namespace RLR
         private RunlingChaser _runlingChaser;
         private PlayerBarsManager _playerBarsManager;
         private AbilityButtonManager _abilityButtonManager;
+        private SafeZoneManager _safeZoneManager;
 
         private void Awake()
         {
@@ -46,7 +46,8 @@ namespace RLR
             _controlRLR.PlayerManager = playerManager;
             GetComponent<InputServer>().Init(InGameMenuManager.gameObject, playerManager);
             _playerBarsManager.Initialize(playerManager);
-            playerManager.Trigger.AddComponent<SafeZoneManager>().InitializeTrigger(_playerBarsManager, _runlingChaser);
+            _safeZoneManager = playerManager.Trigger.AddComponent<SafeZoneManager>();
+            _safeZoneManager.InitializeTrigger(_playerBarsManager, _runlingChaser);
             _abilityButtonManager.InitializeAbilityButtons(playerManager);
         }
 
@@ -61,6 +62,8 @@ namespace RLR
         {
             // load map
             _levelManager.GenerateMap(GameControl.GameState.CurrentLevel);
+            _levelManager.GenerateChasers(GameControl.GameState.CurrentLevel);
+            _runlingChaser.InitializeChaserPlatforms(_safeZoneManager);
 
             // Load player
             SpawnPlayer(_controlRLR.PlayerManager);
@@ -72,7 +75,6 @@ namespace RLR
                     _controlRLR.PlayerManager.transform.localPosition.z));
 
             // generate drones
-            _levelManager.GenerateChasers(GameControl.GameState.CurrentLevel);
             _levelManager.LoadDrones(GameControl.GameState.CurrentLevel);
 
             // Show current level

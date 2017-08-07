@@ -1,8 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using Launcher;
-using Players;
-using RLR.Levels;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,14 +8,13 @@ namespace RLR
 {
     public class ScoreRLR : MonoBehaviour
     {
-        public CheckSafeZones CheckSafeZones;
         public GameObject CurrentScoreText;
         public GameObject CountDownText;
         public Text NewHighScoreText;
         public GameObject NewHighScoreObject;
 
         public float[] FinishTimeCurGame = new float[LevelManagerRLR.NumLevels];
-        private PlayerManager _playerManager;
+        private ControlRLR _controlRLR;
         private int _timeLimit;
         private float _countdown;
         private float _timer;
@@ -27,7 +23,7 @@ namespace RLR
 
         private void Awake()
         {
-            _playerManager = GetComponent<ControlRLR>().PlayerManager;
+            _controlRLR = GetComponent<ControlRLR>();
             switch (GameControl.GameState.SetDifficulty)
             {
                 case Difficulty.Normal:
@@ -59,25 +55,16 @@ namespace RLR
             }
         }
 
-        public void AddScore(GameObject currentSafeZone, List<GameObject> safeZones)
+        public void AddScore()
         {
-            var index = CheckSafeZones.GetPlatformIndex(currentSafeZone);
-            if (index == null) return;
-            if (!GameControl.MapState.VisitedSafeZones[index.Value] && index.Value != 0)
-            {
-                if (GameControl.GameState.SetGameMode == GameMode.TimeMode)
-                {
-                    _playerManager.TotalScore += _difficultyMultiplier * GameControl.GameState.CurrentLevel;
-                    CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + _playerManager.TotalScore;
-                    GameControl.MapState.VisitedSafeZones[index.Value] = true;
-                    SetTimeModeHighScore();
-                }
-            }
+                _controlRLR.PlayerManager.TotalScore += _difficultyMultiplier * GameControl.GameState.CurrentLevel;
+                CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + _controlRLR.PlayerManager.TotalScore;
+                SetTimeModeHighScore();
         }
 
         public void AddRemainingCountdown()
         {
-            _playerManager.TotalScore += (int) _countdown;
+            _controlRLR.PlayerManager.TotalScore += (int) _countdown;
             _countdown = 0;
         }
 
@@ -123,16 +110,16 @@ namespace RLR
             switch (GameControl.GameState.SetDifficulty)
             {
                 case Difficulty.Normal:
-                    if (_playerManager.TotalScore > GameControl.HighScores.HighScoreRLRNormal[0])
+                    if (_controlRLR.PlayerManager.TotalScore > GameControl.HighScores.HighScoreRLRNormal[0])
                     {
-                        GameControl.HighScores.HighScoreRLRNormal[0] = _playerManager.TotalScore;
+                        GameControl.HighScores.HighScoreRLRNormal[0] = _controlRLR.PlayerManager.TotalScore;
                     }
                     PlayerPrefs.SetFloat("HighScoreRLRNormalTimeMode", GameControl.HighScores.HighScoreRLRNormal[0]);
                     break;
                 case Difficulty.Hard:
-                    if (_playerManager.TotalScore >= GameControl.HighScores.HighScoreRLRHard[0])
+                    if (_controlRLR.PlayerManager.TotalScore >= GameControl.HighScores.HighScoreRLRHard[0])
                     {
-                        GameControl.HighScores.HighScoreRLRHard[0] = _playerManager.TotalScore;
+                        GameControl.HighScores.HighScoreRLRHard[0] = _controlRLR.PlayerManager.TotalScore;
                     }
                     PlayerPrefs.SetFloat("HighScoreRLRHardTimeMode", GameControl.HighScores.HighScoreRLRHard[0]);
                     break;
