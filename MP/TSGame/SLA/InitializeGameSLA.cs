@@ -2,7 +2,7 @@
 using Characters.Types;
 using Launcher;
 using MP.TSGame.Players;
-using MP.TSGame.Players.Camera;
+using Players.Camera;
 using TMPro;
 using TrueSync;
 using UI.SLA_Menus;
@@ -86,6 +86,7 @@ namespace MP.TSGame.SLA
                     _controlSLA.PlayerManager[player.Id - 1] = PlayerFactory.Create(new CharacterDto(0, "Arena", 0, 0, 0, 0, 1, 0, 0), player).GetComponent<PlayerManager>();
                 }
                 var playerManager = _controlSLA.PlayerManager[player.Id - 1];
+                GetComponent<InputServer>().Init(InGameMenuManager.gameObject, playerManager);
                 InitializePlayer(playerManager);
 
                 playerManager.CharacterController.Speed.SetBaseSpeed((float)_levelManager.GetMovementSpeed(GameControl.GameState.CurrentLevel));
@@ -105,6 +106,7 @@ namespace MP.TSGame.SLA
             playerManager.Model.SetActive(true);
             playerManager.Shield.SetActive(true);
             playerManager.Trigger.SetActive(true);
+
 
             if(playerManager.GodModeActive)
                 playerManager.GodMode.SetActive(true);

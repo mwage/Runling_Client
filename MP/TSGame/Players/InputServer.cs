@@ -1,5 +1,5 @@
 ﻿using Launcher;
-using MP.TSGame.Players.Camera;
+using Players.Camera;
 using MP.TSGame.SLA;
 using TrueSync;
 using UI.RLR_Menus;
@@ -32,7 +32,7 @@ namespace MP.TSGame.Players
             else
             {
                 _inGameMenuManagerSLA = ingameMenuManager.GetComponent<InGameMenuManagerSLA>();
-                _playerManager = GetComponent<ControlSLA>().PlayerManager[TrueSyncManager.LocalPlayer.Id];
+                _playerManager = GetComponent<ControlSLA>().PlayerManager[TrueSyncManager.LocalPlayer.Id - 1];
             }
             _initialized = true;
         }
