@@ -1,8 +1,7 @@
-﻿using System.IO;
-using Characters.Types;
-using Launcher;
+﻿using Characters.Types;
 using TrueSync;
 using UnityEngine;
+using Pl = Players;
 
 namespace MP.TSGame.Players
 {
@@ -39,8 +38,8 @@ namespace MP.TSGame.Players
                     playerObj.transform.SetParent(transform);
                     var playerManager = playerObj.GetComponent<PlayerManager>();
                     playerManager.SetOwner(player);
-//                    playerManager.CharacterController = playerObj.AddComponent<ArenaCharacter>();
-//                    playerManager.CharacterController.Initialize(character, playerManager);
+                    playerManager.CharacterController = playerObj.AddComponent<ArenaCharacter>();
+                    playerManager.CharacterController.Initialize(character, new Pl.PlayerManager());
 
                     return playerObj;
                 }
