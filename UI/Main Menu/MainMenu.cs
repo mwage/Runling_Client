@@ -47,7 +47,7 @@ namespace UI.Main_Menu
             }
             else
             {
-                SceneManager.LoadScene("Connect");
+                SceneManager.LoadScene("Connect TS");
             }
         }
 
