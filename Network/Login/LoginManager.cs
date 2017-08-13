@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using DarkRift;
-using UnityEngine.SceneManagement;
 
 namespace Network.Login
 {
@@ -10,13 +9,14 @@ namespace Network.Login
         public static bool IsLoggedIn { private set; get; }
 
         public delegate void SuccessfulLoginEventHandler(int userIP);
+        public delegate void FailedLoginEventHandler(int reason);
+        public delegate void SuccessfulAddUserEventHandler();
+        public delegate void FailedAddUserEventHandler(int reason);
 
         public static event SuccessfulLoginEventHandler onSuccessfulLogin;
-
-        private void Start()
-        {
-            onSuccessfulLogin += LoadMainMenu;
-        }
+        public static event FailedLoginEventHandler onFailedLogin;
+        public static event SuccessfulAddUserEventHandler onSuccessfulAddUser;
+        public static event FailedAddUserEventHandler onFailedAddUser;
 
         public static void Login(string username, string password)
         {
@@ -49,7 +49,6 @@ namespace Network.Login
 
         private static void OnDataHandler(byte tag, ushort subject, object data)
         {
-            Debug.Log(subject);
             if (tag == Tags.Login)
             {
                 if (subject == Subjects.LoginSuccess)
@@ -61,6 +60,23 @@ namespace Network.Login
                     if (onSuccessfulLogin != null)
                         onSuccessfulLogin(UserID);
                 }
+                if (subject == Subjects.LoginFailed)
+                {
+                    var reason = (int)data;
+                    if (onFailedLogin != null)
+                        onFailedLogin(reason);
+                }
+                if (subject == Subjects.AddUserSuccess)
+                {
+                    if (onSuccessfulAddUser != null)
+                        onSuccessfulAddUser();
+                }
+                if (subject == Subjects.AddUserFailed)
+                {
+                    var reason = (int)data;
+                    if (onFailedAddUser != null)
+                        onFailedAddUser(reason);
+                }
             }
         }
 
@@ -71,12 +87,6 @@ namespace Network.Login
                 DarkRiftAPI.onData -= OnDataHandler;
                 DarkRiftAPI.onData += OnDataHandler;
             }
-        }
-
-
-        private static void LoadMainMenu(int userID)
-        {
-            SceneManager.LoadScene("MainMenu");
         }
     }
 }

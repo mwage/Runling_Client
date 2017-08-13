@@ -5,9 +5,8 @@ namespace Launcher
 {
     public class NetworkManager : MonoBehaviour
     {
-        public const string IP = "127.0.0.1";
-        public const int Port = 4296;
-
+        public static string IP = "127.0.0.1";
+        public static int Port = 4296;
 
         private void Start()
         {
@@ -19,6 +18,5 @@ namespace Launcher
         {
             DarkRiftAPI.Disconnect();
         }
-
     }
 }
