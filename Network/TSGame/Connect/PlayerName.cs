@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace MP.Connect
+namespace MP.TSGame.Connect
 {
     public class PlayerName : MonoBehaviour
     {

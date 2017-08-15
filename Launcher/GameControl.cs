@@ -36,7 +36,7 @@ namespace Launcher
         private void Start()
         {
             if (SceneManager.GetActiveScene().name == "Launcher")
-                SceneManager.LoadScene("Connect");
+                SceneManager.LoadScene("Login");
         }
 
         #region HelperMethods

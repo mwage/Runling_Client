@@ -1,9 +1,10 @@
 ﻿using Launcher;
+using Network.Login;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace MP.Connect
+namespace MP.TSGame.Connect
 {
     public class NetworkConnect : Photon.PunBehaviour
     {

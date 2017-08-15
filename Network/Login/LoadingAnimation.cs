@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace MP.Connect
+namespace Network.Login
 {
     public class LoadingAnimation : MonoBehaviour
     {
@@ -12,11 +12,13 @@ namespace MP.Connect
         private Transform _transform;
         private Transform _particleTransform;
         private bool _isAnimating;
+        private Vector3 _particleStartPosition;
 
 
         private void Awake()
         {
             _particleTransform = Particles.GetComponent<Transform>();
+            _particleStartPosition = _particleTransform.position;
             _transform = GetComponent<Transform>();
         }
 
@@ -38,7 +40,9 @@ namespace MP.Connect
 
         public void StopLoaderAnimation()
         {
+            _isAnimating = false;
             Particles.SetActive(false);
+            Particles.transform.position = _particleStartPosition;
         }
     }
 }
