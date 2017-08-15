@@ -12,11 +12,14 @@ namespace Network.Login
         public delegate void FailedLoginEventHandler(int reason);
         public delegate void SuccessfulAddUserEventHandler();
         public delegate void FailedAddUserEventHandler(int reason);
+        public delegate void SuccessfulLogoutEventHandler();
 
         public static event SuccessfulLoginEventHandler onSuccessfulLogin;
         public static event FailedLoginEventHandler onFailedLogin;
         public static event SuccessfulAddUserEventHandler onSuccessfulAddUser;
         public static event FailedAddUserEventHandler onFailedAddUser;
+        public static event SuccessfulLogoutEventHandler onSuccessfulLogout;
+
 
         public static void Login(string username, string password)
         {
@@ -32,6 +35,11 @@ namespace Network.Login
             writer.Write(username);
             writer.Write(HashPassword.ReturnHash(password));
             SendToServer(Tags.Login, Subjects.AddUser, writer);
+        }
+
+        public static void Logout()
+        {
+            SendToServer(Tags.Login, Subjects.LogoutUser, new object[0]);
         }
 
         private static void SendToServer(byte tag, ushort subject, object data)
@@ -77,6 +85,9 @@ namespace Network.Login
                     if (onFailedAddUser != null)
                         onFailedAddUser(reason);
                 }
+                if (subject == Subjects.LogoutSuccess)
+                    if (onSuccessfulLogout != null)
+                        onSuccessfulLogout();
             }
         }
 

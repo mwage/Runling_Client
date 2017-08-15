@@ -4,6 +4,6 @@ namespace Network
 {
     public class Tags : MonoBehaviour
     {
-        public const byte Login = 10;
+        public const byte Login = 1;
     }
 }

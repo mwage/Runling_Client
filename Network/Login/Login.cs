@@ -38,18 +38,21 @@ namespace Network.Login
         private void Start()
         {
             LoginManager.onSuccessfulLogin += LoadMainMenu;
-            LoginManager.onFailedLogin += LoginFailed;
+            LoginManager.onFailedLogin += FailedLogin;
             LoginManager.onSuccessfulAddUser += SuccessfulRegister;
             LoginManager.onFailedAddUser += FailedAddUser;
+            LoginManager.onSuccessfulLogout += SuccessfulLogout;
         }
 
         private void OnApplicationQuit()
         {
             LoginManager.onSuccessfulLogin -= LoadMainMenu;
-            LoginManager.onFailedLogin -= LoginFailed;
+            LoginManager.onFailedLogin -= FailedLogin;
             LoginManager.onSuccessfulAddUser -= SuccessfulRegister;
             LoginManager.onFailedAddUser -= FailedAddUser;
+            LoginManager.onSuccessfulLogout -= SuccessfulLogout;
         }
+
 
         #region Buttons
 
@@ -69,7 +72,7 @@ namespace Network.Login
         public void Cancel()
         {
             LoginScreen("Runling Login", "Please enter Username and Password!", Color.white);
-//            TODO: Let server know you canceled the login / stop login
+//            TODO: Let server know you canceled the login / add user?
         }
 
         public void RememberPasswordToggle()
@@ -98,7 +101,7 @@ namespace Network.Login
 
         #region ProcessServerResponse
 
-        private void LoginFailed(int reason)
+        private void FailedLogin(int reason)
         {
             if (reason == 0)
             {
@@ -153,6 +156,11 @@ namespace Network.Login
         private static void LoadMainMenu(int userID)
         {
             SceneManager.LoadScene("MainMenu");
+        }
+
+        private static void SuccessfulLogout()
+        {
+            Debug.Log("Logged out successfully");
         }
     }
 }
