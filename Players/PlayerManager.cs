@@ -21,20 +21,24 @@ namespace Players
         public bool IsInvulnerable = true;
         public bool GodModeActive;
         public bool AutoClickerActive;
-        public List<GameObject> Chaser = new List<GameObject>();
+        public List<GameObject> Chaser;
         public ACharacter CharacterController;
 
+        private void Awake()
+        {
+            Chaser = new List<GameObject>();
+        }
 
         public void DestroyChaser()
         {
-            foreach (var chaser in Chaser)
+            for (var i=0; i< Chaser.Count; i++)
             {
-                if (chaser != null)
+                if (Chaser[i] != null)
                 {
-                    Destroy(chaser);
+                    Destroy(Chaser[i]);
                 }
-                Chaser.Remove(chaser);
             }
+            Chaser.Clear();
         }
     }
 }
