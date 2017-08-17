@@ -65,29 +65,24 @@ namespace Network.Login
                     UserID = reader.ReadInt32();
                     IsLoggedIn = true;
 
-                    if (onSuccessfulLogin != null)
-                        onSuccessfulLogin(UserID);
+                    onSuccessfulLogin?.Invoke(UserID);
                 }
                 if (subject == Subjects.LoginFailed)
                 {
                     var reason = (int)data;
-                    if (onFailedLogin != null)
-                        onFailedLogin(reason);
+                    onFailedLogin?.Invoke(reason);
                 }
                 if (subject == Subjects.AddUserSuccess)
                 {
-                    if (onSuccessfulAddUser != null)
-                        onSuccessfulAddUser();
+                    onSuccessfulAddUser?.Invoke();
                 }
                 if (subject == Subjects.AddUserFailed)
                 {
                     var reason = (int)data;
-                    if (onFailedAddUser != null)
-                        onFailedAddUser(reason);
+                    onFailedAddUser?.Invoke(reason);
                 }
                 if (subject == Subjects.LogoutSuccess)
-                    if (onSuccessfulLogout != null)
-                        onSuccessfulLogout();
+                    onSuccessfulLogout?.Invoke();
             }
         }
 

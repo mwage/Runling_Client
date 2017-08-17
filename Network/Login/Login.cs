@@ -61,6 +61,9 @@ namespace Network.Login
             LoginButton.interactable = DarkRiftAPI.isConnected && UsernameInput.text.Length >= 2 && PasswordInput.text.Length >= 2;
             AddUserButton.interactable = LoginButton.IsInteractable();
             OfflineButton.interactable = UsernameInput.text.Length >= 2;
+
+            if (!DarkRiftAPI.isConnected)
+                Debug.Log("not connected");
         }
 
         public void OfflineMode()
