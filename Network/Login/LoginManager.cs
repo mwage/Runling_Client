@@ -20,39 +20,34 @@ namespace Network.Login
         public static event FailedAddUserEventHandler onFailedAddUser;
         public static event SuccessfulLogoutEventHandler onSuccessfulLogout;
 
+        private void Awake()
+        {
+            DarkRiftAPI.onData += OnDataHandler;
+        }
 
         public static void Login(string username, string password)
         {
-            var writer = new DarkRiftWriter();
-            writer.Write(username);
-            writer.Write(HashPassword.ReturnHash(password));
-            SendToServer(Tags.Login, Subjects.LoginUser, writer);
+            using (var writer = new DarkRiftWriter())
+            {
+                writer.Write(username);
+                writer.Write(HashPassword.ReturnHash(password));
+                Helper.SendToServer(Tags.Login, Subjects.LoginUser, writer);
+            } 
         }
 
         public static void AddUser(string username, string password)
         {
-            var writer = new DarkRiftWriter();
-            writer.Write(username);
-            writer.Write(HashPassword.ReturnHash(password));
-            SendToServer(Tags.Login, Subjects.AddUser, writer);
+            using (var writer = new DarkRiftWriter())
+            {
+                writer.Write(username);
+                writer.Write(HashPassword.ReturnHash(password));
+                Helper.SendToServer(Tags.Login, Subjects.AddUser, writer);
+            }
         }
 
         public static void Logout()
         {
-            SendToServer(Tags.Login, Subjects.LogoutUser, new object[0]);
-        }
-
-        private static void SendToServer(byte tag, ushort subject, object data)
-        {
-            if (DarkRiftAPI.isConnected)
-            {
-                DarkRiftAPI.SendMessageToServer(tag, subject, data);
-            }
-            else
-            {
-                Debug.Log("Not connected to server");
-            }
-            BindToDataEvent();
+            Helper.SendToServer(Tags.Login, Subjects.LogoutUser, new object[0]);
         }
 
         private static void OnDataHandler(byte tag, ushort subject, object data)
@@ -61,11 +56,13 @@ namespace Network.Login
             {
                 if (subject == Subjects.LoginSuccess)
                 {
-                    var reader = (DarkRiftReader)data;
-                    UserID = reader.ReadInt32();
-                    IsLoggedIn = true;
+                    using (var reader = (DarkRiftReader)data)
+                    {
+                        UserID = reader.ReadInt32();
+                        IsLoggedIn = true;
 
-                    onSuccessfulLogin?.Invoke(UserID);
+                        onSuccessfulLogin?.Invoke(UserID);
+                    } 
                 }
                 if (subject == Subjects.LoginFailed)
                 {
@@ -83,15 +80,6 @@ namespace Network.Login
                 }
                 if (subject == Subjects.LogoutSuccess)
                     onSuccessfulLogout?.Invoke();
-            }
-        }
-
-        private static void BindToDataEvent()
-        {
-            if (DarkRiftAPI.isConnected)
-            {
-                DarkRiftAPI.onData -= OnDataHandler;
-                DarkRiftAPI.onData += OnDataHandler;
             }
         }
     }

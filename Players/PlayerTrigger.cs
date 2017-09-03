@@ -8,6 +8,13 @@ namespace Players
 {
     public class PlayerTrigger : MonoBehaviour
     {
+        public delegate void PlayerDeathEventHandler(PlayerManager playerManager);
+        public delegate void FinishedLevelEventHandler();
+
+        public static event PlayerDeathEventHandler onPlayerDeath;
+        public static event FinishedLevelEventHandler onFinishedLevel;
+    
+
         private PlayerManager _playerManager;
 
         private void Awake()
@@ -21,14 +28,22 @@ namespace Players
             // Enter Finishzone
             if (other.CompareTag("Finish"))
             {
-                GameControl.GameState.FinishedLevel = true;
+                if (!GameControl.GameState.FinishedLevel)
+                {
+                    GameControl.GameState.FinishedLevel = true;
+                    onFinishedLevel?.Invoke();
+                }
             }
             
             // Safety Death Trigger
             if (((other.CompareTag("Enemy") && !_playerManager.IsSafe || other.CompareTag("Strong Enemy"))
                  && !_playerManager.IsInvulnerable) && !_playerManager.GodModeActive)
             {
-                _playerManager.IsDead = true;
+                if (!_playerManager.IsDead)
+                {
+                    _playerManager.IsDead = true;
+                    onPlayerDeath?.Invoke(_playerManager);
+                }
             }
         }
 
@@ -38,7 +53,11 @@ namespace Players
             if (((other.CompareTag("Enemy") && !_playerManager.IsSafe || other.CompareTag("Strong Enemy"))
                  && !_playerManager.IsInvulnerable) && !_playerManager.GodModeActive)
             {
-                _playerManager.IsDead = true;
+                if (!_playerManager.IsDead)
+                {
+                    _playerManager.IsDead = true;
+                    onPlayerDeath?.Invoke(_playerManager);
+                }
             }
         }
     }

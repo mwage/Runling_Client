@@ -15,10 +15,10 @@ namespace Launcher
         private Settings _settings;
         private HighScores _highScores;
 
-        public static GameState GameState { get { return Instance._gameState; } }
-        public static InputManager InputManager { get { return Instance._inputManager; } }
-        public static Settings Settings { get { return Instance._settings; } }
-        public static HighScores HighScores { get { return Instance._highScores; } }
+        public static GameState GameState => Instance._gameState;
+        public static InputManager InputManager => Instance._inputManager;
+        public static Settings Settings => Instance._settings;
+        public static HighScores HighScores => Instance._highScores;
 
         public const int Version = 2;
 
@@ -38,42 +38,5 @@ namespace Launcher
             if (SceneManager.GetActiveScene().name == "Launcher")
                 SceneManager.LoadScene("Login");
         }
-
-        #region HelperMethods
-
-        public static string GetFriendlyName(string input)
-        {
-            var sb = new StringBuilder();
-            foreach (var c in input)
-            {
-                if (char.IsUpper(c))
-                    sb.Append(" ");
-                sb.Append(c);
-            }
-
-            if (input.Length > 0 && char.IsUpper(input[0]))
-                sb.Remove(0, 1);
-
-            return sb.ToString();
-        }
-
-
-        public static string GenerateRoomName(string roomName)
-        {
-            if (PhotonNetwork.offlineMode)
-                return "SoloSLA";
-            var rooms = PhotonNetwork.GetRoomList();
-            var roomNames = rooms.Select(room => room.Name).ToList();
-            int i = 0;
-            var internalName = roomName + i;
-
-            if (roomNames.Contains(internalName))
-            {
-                i++;
-                internalName = roomName + i;
-            }
-            return internalName;
-        }
-        #endregion
     }
 }

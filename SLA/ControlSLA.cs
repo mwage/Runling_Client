@@ -33,20 +33,5 @@ namespace SLA
             _initializeGame.InitializePlayer();
             _initializeGame.InitializeGame();
         }
-
-       private void Update()
-        {
-            if (PlayerManager != null)
-                CheckIfDead();
-        }
-
-        private void CheckIfDead()
-        {
-            if (PlayerManager.CheckIfDead && PlayerManager.IsDead)
-            {
-                _death.Death(PlayerManager);
-                _levelManager.EndLevel(1);
-            }
-        }
     }
 }

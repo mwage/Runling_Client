@@ -14,7 +14,6 @@ namespace RLR
         public GameObject HighScoreText;
 
         public PlayerManager PlayerManager;
-        public bool CheckIfFinished;
 
         private LevelManagerRLR _levelManager;
         private InitializeGameRLR _initializeGame;
@@ -25,6 +24,7 @@ namespace RLR
             _levelManager = GetComponent<LevelManagerRLR>();
             _initializeGame = GetComponent<InitializeGameRLR>();
             _death = GetComponent<DeathRLR>();
+            PlayerTrigger.onFinishedLevel += FinishedLevel;
         }
 
         private void Start()
@@ -58,25 +58,14 @@ namespace RLR
             _initializeGame.InitializeGame();
         }
 
-        //update when dead
-        private void Update()
+        public void FinishedLevel()
         {
-            if (PlayerManager != null)
-                CheckIfDead();
+            _levelManager.EndLevel(0);
         }
 
-        private void CheckIfDead()
+        private void OnDestroy()
         {
-            if (PlayerManager.IsDead && PlayerManager.CheckIfDead)
-            {
-                _death.Death(PlayerManager);
-            }
-
-            if (GameControl.GameState.FinishedLevel && CheckIfFinished)
-            {
-                CheckIfFinished = false;
-                _levelManager.EndLevel(0);
-            }
+            PlayerTrigger.onFinishedLevel -= FinishedLevel;
         }
     }
 }

@@ -16,14 +16,12 @@ namespace RLR
         {
             _initializeGame = GetComponent<InitializeGameRLR>();
             _levelManager = GetComponent<LevelManagerRLR>();
+            PlayerTrigger.onPlayerDeath += Death;
         }
 
         //events following Deathtrigger
         public void Death(PlayerManager playerManager)
         {
-            playerManager.CheckIfDead = false;
-            playerManager.IsImmobile = true;
-            playerManager.CheckIfDead = false;
             playerManager.IsImmobile = true;
             playerManager.IsInvulnerable = true;
             playerManager.Model.SetActive(false);
@@ -54,6 +52,7 @@ namespace RLR
             }
         }
 
+
         private static IEnumerator Respawn(int countdownFrom, float shieldDuration, InitializeGameRLR initializeGame, PlayerManager playerManager)
         {
             yield return new WaitForSeconds(1);
@@ -74,7 +73,6 @@ namespace RLR
                     playerManager.Shield.SetActive(true);
                     playerManager.IsDead = false;
                     playerManager.IsInvulnerable = true;
-                    playerManager.CheckIfDead = true;
                     
                 }
                 yield return new WaitForSeconds(1);
@@ -88,6 +86,11 @@ namespace RLR
 
             playerManager.Shield.SetActive(false);
             playerManager.IsInvulnerable = false;
+        }
+
+        private void OnDestroy()
+        {
+            PlayerTrigger.onPlayerDeath -= Death;
         }
     }
 }

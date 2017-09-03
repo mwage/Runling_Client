@@ -70,6 +70,7 @@ namespace SLA
         //Load next level or end game
         public void EndLevel(float delay)
         {
+            Debug.Log("Ending Level");
             StartCoroutine((GameControl.GameState.CurrentLevel == _levels.Count && GameControl.GameState.SetGameMode != GameMode.Practice) ? EndGameSLA(delay) : NextLevel(delay));
         }
 

@@ -111,8 +111,14 @@ namespace Characters.Types
 
         public void DisableAllSkills()
         {
-            Ability1.Disable(this);
-            Ability2.Disable(this);
+            if (Ability1 != null)
+            {
+                Ability1.Disable(this);
+            }
+            if (Ability2 != null)
+            {
+                Ability2.Disable(this);
+            }
         }
 
         protected virtual void ActivateOrDeactivateAbility1()

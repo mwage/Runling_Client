@@ -64,6 +64,7 @@ namespace RLR
         // Load next level
         public void EndLevel(float delay)
         {
+            Debug.Log("Ending Level");
             StartCoroutine(GameControl.GameState.CurrentLevel == _levels.Count ? EndGameRLR(delay) : LoadNextLevel(0));
         }
 

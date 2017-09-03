@@ -51,7 +51,7 @@ namespace RLR
         //set Spawnimmunity once game starts
         public void InitializeGame()
         {
-            _controlRLR.CheckIfFinished = true;
+            GameControl.GameState.FinishedLevel = false;
             StartCoroutine(PrepareLevel());
         }
 
@@ -91,7 +91,6 @@ namespace RLR
             playerManager.IsDead = false;
             playerManager.IsImmobile = true;
             playerManager.IsInvulnerable = true;
-            playerManager.CheckIfDead = true;
             playerManager.Model.SetActive(true);
 
             playerManager.transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));

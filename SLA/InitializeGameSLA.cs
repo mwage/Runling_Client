@@ -74,7 +74,6 @@ namespace SLA
             playerManager.IsDead = false;
             playerManager.IsImmobile = false;
             playerManager.IsInvulnerable = true;
-            playerManager.CheckIfDead = true;
             playerManager.Model.SetActive(true);
             playerManager.Shield.SetActive(true);
 
