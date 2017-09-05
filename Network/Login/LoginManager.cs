@@ -25,6 +25,11 @@ namespace Network.Login
             DarkRiftAPI.onData += OnDataHandler;
         }
 
+        private void OnDestroy()
+        {
+            DarkRiftAPI.onData -= OnDataHandler;
+        }
+
         public static void Login(string username, string password)
         {
             using (var writer = new DarkRiftWriter())

@@ -13,7 +13,13 @@ namespace SLA
         {
             _score = GetComponent<ScoreSLA>();
             _levelManager = GetComponent<LevelManagerSLA>();
+
             PlayerTrigger.onPlayerDeath += Death;
+        }
+
+        private void OnDestroy()
+        {
+            PlayerTrigger.onPlayerDeath -= Death;
         }
 
         public void Death(PlayerManager playerManager)
@@ -28,11 +34,6 @@ namespace SLA
                 _score.SetHighScore();
 
             _levelManager.EndLevel(1);
-        }
-
-        private void OnDestroy()
-        {
-            PlayerTrigger.onPlayerDeath -= Death;
         }
     }
 }

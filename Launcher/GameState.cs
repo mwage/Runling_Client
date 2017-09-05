@@ -31,7 +31,7 @@ namespace Launcher
         public GameObject DronesParent;
 
         // TS random placeholder
-        public TSRandom Random = TSRandom.New(0);
+        public TSRandom Random;
 
         // Voting selection (mabe substitute via inscene vote later on)
         public Difficulty SetDifficulty = Difficulty.Hard;

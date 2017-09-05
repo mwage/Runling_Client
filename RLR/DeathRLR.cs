@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using Launcher;
 using Players;
-using RLR.Levels;
 using TMPro;
 using UnityEngine;
 
@@ -16,7 +15,13 @@ namespace RLR
         {
             _initializeGame = GetComponent<InitializeGameRLR>();
             _levelManager = GetComponent<LevelManagerRLR>();
+
             PlayerTrigger.onPlayerDeath += Death;
+        }
+
+        private void OnDestroy()
+        {
+            PlayerTrigger.onPlayerDeath -= Death;
         }
 
         //events following Deathtrigger
@@ -86,11 +91,6 @@ namespace RLR
 
             playerManager.Shield.SetActive(false);
             playerManager.IsInvulnerable = false;
-        }
-
-        private void OnDestroy()
-        {
-            PlayerTrigger.onPlayerDeath -= Death;
         }
     }
 }

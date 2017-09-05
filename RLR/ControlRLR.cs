@@ -24,7 +24,13 @@ namespace RLR
             _levelManager = GetComponent<LevelManagerRLR>();
             _initializeGame = GetComponent<InitializeGameRLR>();
             _death = GetComponent<DeathRLR>();
+
             PlayerTrigger.onFinishedLevel += FinishedLevel;
+        }
+
+        private void OnDestroy()
+        {
+            PlayerTrigger.onFinishedLevel -= FinishedLevel;
         }
 
         private void Start()
@@ -61,11 +67,6 @@ namespace RLR
         public void FinishedLevel()
         {
             _levelManager.EndLevel(0);
-        }
-
-        private void OnDestroy()
-        {
-            PlayerTrigger.onFinishedLevel -= FinishedLevel;
         }
     }
 }

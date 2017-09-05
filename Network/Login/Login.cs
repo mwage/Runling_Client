@@ -33,10 +33,7 @@ namespace Network.Login
                 UsernameInput.text = PlayerPrefs.GetString("username");
             if (PlayerPrefs.HasKey("password") && _rememberPassword)
                 PasswordInput.text = PlayerPrefs.GetString("password");
-        }
 
-        private void Start()
-        {
             LoginManager.onSuccessfulLogin += LoadMainMenu;
             LoginManager.onFailedLogin += FailedLogin;
             LoginManager.onSuccessfulAddUser += SuccessfulRegister;
@@ -44,7 +41,7 @@ namespace Network.Login
             LoginManager.onSuccessfulLogout += SuccessfulLogout;
         }
 
-        private void OnApplicationQuit()
+        private void OnDestroy()
         {
             LoginManager.onSuccessfulLogin -= LoadMainMenu;
             LoginManager.onFailedLogin -= FailedLogin;

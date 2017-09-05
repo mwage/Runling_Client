@@ -27,7 +27,7 @@ namespace MP.TSGame.SLA
             PlayerManager = new PlayerManager[PhotonNetwork.room.PlayerCount];
 
 //             TODO: Replace by randomly rolled seed
-//            GameControl.GameState.Random = TSRandom.New(Random.Range(0, 1000));
+            GameControl.GameState.Random = TSRandom.New(0);
         }
 
         public override void OnSyncedStart()
