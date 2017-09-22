@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
-namespace Network
+namespace Network.Tags
 {
     public class Tags : MonoBehaviour
     {
-        public const byte Login = 1;
+        public const byte Login = 0;
     }
 }

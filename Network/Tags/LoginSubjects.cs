@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 
-namespace Network
+namespace Network.Tags
 {
-    public class Subjects : MonoBehaviour
+    public class LoginSubjects : MonoBehaviour
     {
+        public const ushort Keys = 0;
         public const ushort LoginUser = 1;
         public const ushort LogoutUser = 2;
         public const ushort AddUser = 3;

@@ -1,11 +1,9 @@
-﻿using DarkRift;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
-using UnityEngine;
 
 public static class Helper
 {
-    public static string GetFriendlyName(string input)
+    public static string GetFriendlyName(this string input)
     {
         var sb = new StringBuilder();
         foreach (var c in input)
@@ -36,17 +34,5 @@ public static class Helper
             internalName = roomName + i;
         }
         return internalName;
-    }
-
-    public static void SendToServer(byte tag, ushort subject, object data)
-    {
-        if (DarkRiftAPI.isConnected)
-        {
-            DarkRiftAPI.SendMessageToServer(tag, subject, data);
-        }
-        else
-        {
-            Debug.Log("Not connected to server");
-        }
     }
 }

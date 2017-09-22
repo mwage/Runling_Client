@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Text;
+﻿using DarkRift.Client.Unity;
 using UnityEngine.SceneManagement;
 
 namespace Launcher
@@ -9,6 +8,8 @@ namespace Launcher
         protected GameControl()
         {
         }
+
+        public static UnityClient Client;
 
         private GameState _gameState;
         private InputManager _inputManager;
@@ -30,6 +31,7 @@ namespace Launcher
             _inputManager = new InputManager();
             _settings = new Settings();
             _highScores = new HighScores();
+            Client = GetComponent<UnityClient>();
         }
 
         //Start Game

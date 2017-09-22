@@ -1,4 +1,5 @@
 ﻿using DarkRift;
+using Launcher;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -38,7 +39,6 @@ namespace Network.Login
             LoginManager.onFailedLogin += FailedLogin;
             LoginManager.onSuccessfulAddUser += SuccessfulRegister;
             LoginManager.onFailedAddUser += FailedAddUser;
-            LoginManager.onSuccessfulLogout += SuccessfulLogout;
         }
 
         private void OnDestroy()
@@ -47,32 +47,30 @@ namespace Network.Login
             LoginManager.onFailedLogin -= FailedLogin;
             LoginManager.onSuccessfulAddUser -= SuccessfulRegister;
             LoginManager.onFailedAddUser -= FailedAddUser;
-            LoginManager.onSuccessfulLogout -= SuccessfulLogout;
         }
-
 
         #region Buttons
 
         private void Update()
         {
-            LoginButton.interactable = DarkRiftAPI.isConnected && UsernameInput.text.Length >= 2 && PasswordInput.text.Length >= 2;
+            LoginButton.interactable = GameControl.Client.Connected && UsernameInput.text.Length >= 2 && PasswordInput.text.Length >= 2;
             AddUserButton.interactable = LoginButton.IsInteractable();
             OfflineButton.interactable = UsernameInput.text.Length >= 2;
 
-            if (!DarkRiftAPI.isConnected)
+            // Maybe add an option to try to reconnect
+            if (!GameControl.Client.Connected)
                 Debug.Log("not connected");
         }
 
         public void OfflineMode()
         {
             ConnectingScreen("Starting...");
-            LoadMainMenu(0);
+            LoadMainMenu();
         }
 
         public void Cancel()
         {
             LoginScreen("Runling Login", "Please enter Username and Password!", Color.white);
-//            TODO: Let server know you canceled the login / add user?
         }
 
         public void RememberPasswordToggle()
@@ -103,7 +101,7 @@ namespace Network.Login
 
         private void FailedLogin(int reason)
         {
-            if (reason == 0)
+            if (reason == 1)
             {
                 PasswordInput.text = "";
                 LoginScreen("Login Failed!","Username/Password Combination unknown. Make sure you enter the right username and password.", Color.red);
@@ -116,7 +114,7 @@ namespace Network.Login
 
         private void FailedAddUser(int reason)
         {
-            if (reason == 0)
+            if (reason == 1)
             {
                 LoginScreen("Failed to create user!", "Username already taken. Please choose a different one!", Color.red);
             }
@@ -153,14 +151,9 @@ namespace Network.Login
             ControlPanel.SetActive(true);
         }
 
-        private static void LoadMainMenu(int userID)
+        private static void LoadMainMenu()
         {
             SceneManager.LoadScene("MainMenu");
-        }
-
-        private static void SuccessfulLogout()
-        {
-            Debug.Log("Logged out successfully");
         }
     }
 }
