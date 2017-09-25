@@ -5,16 +5,17 @@ namespace UI.Main_Menu
 {
     public class SoloMenu : PunBehaviour
     {
-        [SerializeField] private MainMenuManager _mainMenuManager;
-        [SerializeField] private GameObject _normalSolo;
-        [SerializeField] private GameObject _error;
+        public GameObject NormalSolo;
+        public GameObject Error;
 
+        private MainMenuManager _mainMenuManager;
         private MainMenu _mainMenu;
         private SLAMenu _slaMenu;
         private RLRMenu _rlrMenu;
         
         private void Awake()
         {
+            _mainMenuManager = transform.parent.GetComponent<MainMenuManager>();
             _mainMenu = _mainMenuManager.MainMenu;
             _slaMenu = _mainMenuManager.SLAMenu;
             _rlrMenu = _mainMenuManager.RLRMenu;
@@ -24,13 +25,13 @@ namespace UI.Main_Menu
         {
             if (PhotonNetwork.room == null)
             {
-                _error.SetActive(false);
-                _normalSolo.SetActive(true);
+                Error.SetActive(false);
+                NormalSolo.SetActive(true);
             }
             else
             {
-                _normalSolo.SetActive(false);
-                _error.SetActive(true);
+                NormalSolo.SetActive(false);
+                Error.SetActive(true);
             }
         }
 
@@ -66,8 +67,8 @@ namespace UI.Main_Menu
 
         public override void OnJoinedLobby()
         {
-            _error.SetActive(false);
-            _normalSolo.SetActive(true);
+            Error.SetActive(false);
+            NormalSolo.SetActive(true);
         }
         #endregion
     }

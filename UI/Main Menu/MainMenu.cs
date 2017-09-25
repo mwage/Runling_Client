@@ -1,5 +1,5 @@
-using Launcher;
-using UI.RLR_Menus.Characters;
+using Network.Login;
+using Network.Rooms;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,15 +10,16 @@ namespace UI.Main_Menu
 
     public class MainMenu : MonoBehaviour
     {
-        [SerializeField] private MainMenuManager _mainMenuManager;
-        [SerializeField] private Text _multiplayerButtonText;
+        public Text MultiplayerButtonText;
 
+        private MainMenuManager _mainMenuManager;
         private OptionsMenu _optionsMenu;
         private SoloMenu _soloMenu;
         private MultiplayerMenu _multiplayerMenu;
 
         private void Awake()
         {
+            _mainMenuManager = transform.parent.GetComponent<MainMenuManager>();
             _optionsMenu = _mainMenuManager.OptionsMenu;
             _soloMenu = _mainMenuManager.SoloMenu;
             _multiplayerMenu = _mainMenuManager.MultiplayerMenu;
@@ -26,13 +27,13 @@ namespace UI.Main_Menu
 
         private void Update()
         {
-            if (PhotonNetwork.connected && !PhotonNetwork.offlineMode)
+            if (LoginManager.IsLoggedIn)
             {
-                _multiplayerButtonText.text = PhotonNetwork.room != null ? "Back to Lobby" : "Multiplayer";
+                MultiplayerButtonText.text = RoomManager.CurrentRoom == null ? "Multiplayer" : "Back to Lobby";
             }
             else
             {
-                _multiplayerButtonText.text = "Connect";
+                MultiplayerButtonText.text = "Login";
             }
         }
 
@@ -40,14 +41,14 @@ namespace UI.Main_Menu
 
         public void Multiplayer()
         {
-            if (PhotonNetwork.connected && !PhotonNetwork.offlineMode)
+            if (LoginManager.IsLoggedIn)
             {
                 gameObject.SetActive(false);
                 _multiplayerMenu.gameObject.SetActive(true);
             }
             else
             {
-                SceneManager.LoadScene("Connect TS");
+                SceneManager.LoadScene("Login");
             }
         }
 
@@ -63,22 +64,17 @@ namespace UI.Main_Menu
             _optionsMenu.gameObject.SetActive(true);
         }
 
+        public void Logout()
+        {
+            LoginManager.Logout();
+        }
+
         public void Quit()
         {
             Application.Quit();
         }
-
-        public void OnCreatedRoom() // need for test
-        {
-            PhotonNetwork.room.IsOpen = false;
-            PhotonNetwork.room.IsVisible = false;
-            SceneManager.LoadScene("RLR");
-            _mainMenuManager.gameObject.SetActive(false);
-        }
         #endregion
     }
-
-
 }
 
 

@@ -11,12 +11,11 @@ namespace UI.Main_Menu
 {
     public class RLRMenu : PunBehaviour
     {
-        [SerializeField] private MainMenuManager _mainMenuManager;
-
         public GameObject PrevMenu;
         public GameObject LaunchRLR;
         public GameObject PickCharacterMenu;
-        
+
+        private MainMenuManager _mainMenuManager;
         private HighScoreMenuRLR _highScoreMenu;
         private SceneLoader _sceneLoader;
 
@@ -25,6 +24,7 @@ namespace UI.Main_Menu
 
         private void Awake()
         {
+            _mainMenuManager = transform.parent.GetComponent<MainMenuManager>();
             _highScoreMenu = _mainMenuManager.HighScoreMenuRLR;
             _sceneLoader = _mainMenuManager.SceneLoader;
         }

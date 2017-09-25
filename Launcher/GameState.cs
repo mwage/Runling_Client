@@ -5,18 +5,31 @@ using UnityEngine;
 
 namespace Launcher
 {
-    public enum Difficulty
+    public enum Difficulty : byte
     {
         Normal,
         Hard
     }
 
-    public enum GameMode
+    public enum GameType : byte
+    {
+        Arena,
+        Runling
+    }
+
+    public enum GameMode : byte
     {
         Classic,
         TimeMode,
         Practice,
         Team
+    }
+
+    public enum PlayerColor : byte
+    {
+        Green,
+        Red,
+        Blue
     }
 
     public class GameState

@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-
-namespace Network.Tags
+﻿namespace Network.DarkRiftTags
 {
-    public class LoginSubjects : MonoBehaviour
+    public class LoginSubjects
     {
         public const ushort Keys = 0;
         public const ushort LoginUser = 1;

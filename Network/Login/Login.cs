@@ -53,8 +53,12 @@ namespace Network.Login
 
         private void Update()
         {
-            LoginButton.interactable = GameControl.Client.Connected && UsernameInput.text.Length >= 2 && PasswordInput.text.Length >= 2;
-            AddUserButton.interactable = LoginButton.IsInteractable();
+            var condition = GameControl.Client.Connected
+                            && UsernameInput.text.Length >= 2 && PasswordInput.text.Length >= 2
+                            && Rsa.Key.Exponent != null && Rsa.Key.Modulus != null;
+
+            LoginButton.interactable = condition;
+            AddUserButton.interactable = condition;
             OfflineButton.interactable = UsernameInput.text.Length >= 2;
 
             // Maybe add an option to try to reconnect
@@ -97,9 +101,9 @@ namespace Network.Login
         #endregion
 
 
-        #region ProcessServerResponse
+        #region Network Callback
 
-        private void FailedLogin(int reason)
+        private void FailedLogin(byte reason)
         {
             if (reason == 1)
             {
@@ -112,7 +116,7 @@ namespace Network.Login
             }
         }
 
-        private void FailedAddUser(int reason)
+        private void FailedAddUser(byte reason)
         {
             if (reason == 1)
             {

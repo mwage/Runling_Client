@@ -1,7 +1,12 @@
-﻿using Launcher;
+﻿using DarkRift;
+using DarkRift.Client;
+using Launcher;
+using Network.DarkRiftTags;
+using Network.Rooms;
 using UI.RLR_Menus;
 using UI.SLA_Menus;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace UI.Main_Menu
 {
@@ -37,9 +42,11 @@ namespace UI.Main_Menu
         private float _cameraSpeed;
         private Vector3 _oldPos;
         private Quaternion _oldRot;
+        #endregion
 
         private void Awake()
         {
+            #region CameraVariables
             CameraPosMainMenu = Camera.transform.position;
             CameraPosRLR = new Vector3(0, 35, 70);
             CameraPosSLA = new Vector3(0, 35, 60);
@@ -49,19 +56,16 @@ namespace UI.Main_Menu
             _targetPos = Camera.transform.position;
             _targetRot = Camera.transform.rotation;
             _cameraSpeed = 100;
+            #endregion
 
-            if (!PhotonNetwork.connected)
-            {
-                PhotonNetwork.offlineMode = true;
-            }
-
-            if (PhotonNetwork.room != null)
-            {
-                PhotonNetwork.LeaveRoom();
-            }
+            RoomManager.CurrentRoom = null;
+            GameControl.Client.MessageReceived += OnDataHandler;
         }
-        #endregion
 
+        private void OnDestroy()
+        {
+            GameControl.Client.MessageReceived -= OnDataHandler;
+        }
 
         public void MoveCamera(Vector3 newPos, Quaternion newRot)
         {
@@ -120,6 +124,18 @@ namespace UI.Main_Menu
                 }
             }
             #endregion
+        }
+
+        private static void OnDataHandler(object sender, MessageReceivedEventArgs e)
+        {
+            var message = e.Message as TagSubjectMessage;
+
+            if (message != null && message.Tag == Tags.Login && message.Subject == LoginSubjects.LogoutSuccess)
+            {
+                RoomManager.CurrentRoom = null;
+                RoomManager.LeaveRoom();
+                SceneManager.LoadScene("Login");
+            }
         }
     }
 }

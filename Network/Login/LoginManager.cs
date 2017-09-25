@@ -3,27 +3,24 @@ using UnityEngine;
 using DarkRift;
 using DarkRift.Client;
 using Launcher;
+using Network.DarkRiftTags;
 
 
 namespace Network.Login
 {
-    using Tags;
-
     public class LoginManager : MonoBehaviour
     {
-        public static bool IsLoggedIn { private set; get; }
+        public static bool IsLoggedIn { get; private set; }
 
         public delegate void SuccessfulLoginEventHandler();
-        public delegate void FailedLoginEventHandler(int reason);
+        public delegate void FailedLoginEventHandler(byte errorId);
         public delegate void SuccessfulAddUserEventHandler();
-        public delegate void FailedAddUserEventHandler(int reason);
-        public delegate void SuccessfulLogoutEventHandler();
+        public delegate void FailedAddUserEventHandler(byte errorId);
 
         public static event SuccessfulLoginEventHandler onSuccessfulLogin;
         public static event FailedLoginEventHandler onFailedLogin;
         public static event SuccessfulAddUserEventHandler onSuccessfulAddUser;
         public static event FailedAddUserEventHandler onFailedAddUser;
-        public static event SuccessfulLogoutEventHandler onSuccessfulLogout;
 
         private void Awake()
         {
@@ -34,6 +31,8 @@ namespace Network.Login
         {
             GameControl.Client.MessageReceived -= OnDataHandler;
         }
+        
+        #region Network Calls
 
         public static void Login(string username, string password)
         {
@@ -55,47 +54,59 @@ namespace Network.Login
             GameControl.Client.SendMessage(message, SendMode.Reliable);
         }
 
+        public static void Logout()
+        {
+            IsLoggedIn = false;
+            GameControl.Client.SendMessage(new TagSubjectMessage(Tags.Login, LoginSubjects.LogoutUser, new DarkRiftWriter()), SendMode.Reliable);
+        }
+        #endregion
+
         private static void OnDataHandler(object sender, MessageReceivedEventArgs e)
         {
             var message = e.Message as TagSubjectMessage;
 
-            if (message != null && message.Tag == Tags.Login)
+            if (message == null || message.Tag != Tags.Login)
+                return;
+
+            // Successfully logged in
+            if (message.Subject == LoginSubjects.LoginSuccess)
             {
-                if (message.Subject == LoginSubjects.LoginSuccess)
-                {
-                    IsLoggedIn = true;
-                    onSuccessfulLogin?.Invoke();
-                }
-                if (message.Subject == LoginSubjects.LoginFailed)
-                {
-                    var reader = message.GetReader();
+                IsLoggedIn = true;
+                onSuccessfulLogin?.Invoke();
+            }
 
-                    if (reader.Length != 1)
-                    {
-                        Debug.LogWarning("Invalid LoginFailed Error data received.");
-                        return;
-                    }
+            // Failed to log in
+            else if (message.Subject == LoginSubjects.LoginFailed)
+            {
+                var reader = message.GetReader();
 
-                    var errorData = reader.ReadByte();
-                    onFailedLogin?.Invoke(errorData);
-                }
-                if (message.Subject == LoginSubjects.AddUserSuccess)
+                if (reader.Length != 1)
                 {
-                    onSuccessfulAddUser?.Invoke();
+                    Debug.LogWarning("Invalid LoginFailed Error data received.");
+                    return;
                 }
-                if (message.Subject == LoginSubjects.AddUserFailed)
+
+                onFailedLogin?.Invoke(reader.ReadByte());
+            }
+
+            // Successfully added a new user
+            else if (message.Subject == LoginSubjects.AddUserSuccess)
+            {
+                onSuccessfulAddUser?.Invoke();
+            }
+
+            // Failed to add a new user
+            else if (message.Subject == LoginSubjects.AddUserFailed)
+            {
+                var reader = message.GetReader();
+
+                if (reader.Length != 1)
                 {
-                    var reader = message.GetReader();
-
-                    if (reader.Length != 1)
-                    {
-                        Debug.LogWarning("Invalid LoginFailed Error data received.");
-                        return;
-                    }
-
-                    var errorData = reader.ReadByte();
-                    onFailedAddUser?.Invoke(errorData);
+                    Debug.LogWarning("Invalid LoginFailed Error data received.");
+                    return;
                 }
+
+                onFailedAddUser?.Invoke(reader.ReadByte());
             }
         }
     }

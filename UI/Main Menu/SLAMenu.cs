@@ -7,15 +7,15 @@ namespace UI.Main_Menu
 {
     public class SLAMenu : PunBehaviour
     {
-        [SerializeField] private MainMenuManager _mainMenuManager;
-
         public GameObject PrevMenu;
-        
+
+        private MainMenuManager _mainMenuManager;
         private SceneLoader _sceneLoader;
         private HighScoreMenuSLA _highScoreMenu;
 
         private void Awake()
         {
+            _mainMenuManager = transform.parent.GetComponent<MainMenuManager>();
             _highScoreMenu = _mainMenuManager.HighScoreMenuSLA;
             _sceneLoader = _mainMenuManager.SceneLoader;
         }

@@ -3,7 +3,7 @@ using System.Text;
 using DarkRift;
 using DarkRift.Client;
 using DarkRift.Client.Unity;
-using Network.Tags;
+using Network.DarkRiftTags;
 using UnityEngine;
 
 namespace Launcher
@@ -24,14 +24,14 @@ namespace Launcher
         {
             var message = e.Message as TagSubjectMessage;
 
-            if (message != null && message.Tag == Tags.Login)
+            if (message == null || message.Tag != Tags.Login)
+                return;
+
+            if (message.Subject == LoginSubjects.Keys)
             {
-                if (message.Subject == LoginSubjects.Keys)
-                {
-                    var reader = message.GetReader();
-                    Key.Exponent = reader.ReadBytes();
-                    Key.Modulus = reader.ReadBytes();
-                }
+                var reader = message.GetReader();
+                Key.Exponent = reader.ReadBytes();
+                Key.Modulus = reader.ReadBytes();
             }
         }
 
@@ -43,7 +43,7 @@ namespace Launcher
             {
                 rsa.PersistKeyInCsp = false;
                 rsa.ImportParameters(key);
-                encrypted = rsa.Encrypt(input, false);
+                encrypted = rsa.Encrypt(input, true);
             }
             return encrypted;
         }
