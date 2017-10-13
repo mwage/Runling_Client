@@ -1,6 +1,7 @@
 ﻿using DarkRift;
 using DarkRift.Client;
 using Launcher;
+using Network.Chat;
 using Network.DarkRiftTags;
 using Network.Rooms;
 using UI.RLR_Menus;
@@ -23,6 +24,7 @@ namespace UI.Main_Menu
         public SoloMenu SoloMenu;
         public MultiplayerMenu MultiplayerMenu;
         public SceneLoader SceneLoader;
+        public ChatWindowManager ChatWindowManager;
 
         #region CameraVariables
         public Camera Camera;
@@ -94,7 +96,11 @@ namespace UI.Main_Menu
 
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.NavigateMenu))
             {
-                if (OptionsMenu.gameObject.activeSelf)
+                if (ChatWindowManager.ChatPanels.activeSelf || ChatWindowManager.FriendPanels.activeSelf)
+                {
+                    ChatWindowManager.DeactivatePanels();
+                }
+                else if (OptionsMenu.gameObject.activeSelf)
                 {
                     OptionsMenu.DiscardChanges();
                 }

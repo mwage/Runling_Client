@@ -14,7 +14,7 @@ namespace Launcher
     public enum GameType : byte
     {
         Arena,
-        Runling
+        RunlingRun
     }
 
     public enum GameMode : byte

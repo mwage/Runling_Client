@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using Photon;
 using UnityEngine;
 
 namespace Network.Rooms
 {
-    public class PlayerLayoutGroup : PunBehaviour
+    public class PlayerLayoutGroup : MonoBehaviour
     {
         [SerializeField] private GameObject _playerListingPrefab;
 
@@ -32,8 +31,7 @@ namespace Network.Rooms
 
         private void PlayerJoinedRoom(Player player)
         {
-            var playerListingObject = Instantiate(_playerListingPrefab, transform, false);
-            var playerListing = playerListingObject.GetComponent<PlayerListing>();
+            var playerListing = Instantiate(_playerListingPrefab, transform, false).GetComponent<PlayerListing>();
             playerListing.Initialize(player);
             _playerListings.Add(playerListing);
         }

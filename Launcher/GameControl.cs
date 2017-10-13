@@ -1,4 +1,5 @@
-﻿using DarkRift.Client.Unity;
+﻿using Network;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Launcher
@@ -9,7 +10,7 @@ namespace Launcher
         {
         }
 
-        public static UnityClient Client;
+        public static Client Client;
 
         private GameState _gameState;
         private InputManager _inputManager;
@@ -26,20 +27,25 @@ namespace Launcher
         //Keep Game Manager active and destroy any additional copys
         private void Awake()
         {
-            DontDestroyOnLoad(gameObject);
+            Client = GetComponent<Client>();
             _gameState = new GameState();
             _inputManager = new InputManager();
             _settings = new Settings();
             _highScores = new HighScores();
-            Client = GetComponent<UnityClient>();
+            DontDestroyOnLoad(gameObject);
         }
 
         //Start Game
         private void Start()
         {
-            if (SceneManager.GetActiveScene().name == "Launcher")
+            if (Client.Connect(Client.Address, Client.Port, Client.IpVersion) &&
+                SceneManager.GetActiveScene().name == "Launcher")
             {
                 SceneManager.LoadScene("Login");
+            }
+            else
+            {
+                Debug.Log("Insert reconnect / offline window");
             }
         }
     }

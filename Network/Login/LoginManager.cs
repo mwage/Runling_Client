@@ -1,8 +1,10 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using DarkRift;
 using DarkRift.Client;
 using Launcher;
+using Network.Chat;
 using Network.DarkRiftTags;
 
 
@@ -38,25 +40,25 @@ namespace Network.Login
         {
             var writer = new DarkRiftWriter();
             writer.Write(username);
-            writer.Write(Rsa.Encrypt(Encoding.UTF8.GetBytes(password), Rsa.Key));
+            writer.Write(Rsa.Encrypt(Encoding.UTF8.GetBytes(password)));
 
-            var message = new TagSubjectMessage(Tags.Login, LoginSubjects.LoginUser, writer);
-            GameControl.Client.SendMessage(message, SendMode.Reliable);
+            GameControl.Client.SendMessage(new TagSubjectMessage(Tags.Login, LoginSubjects.LoginUser, writer), SendMode.Reliable);
         }
 
         public static void AddUser(string username, string password)
         {
             var writer = new DarkRiftWriter();
             writer.Write(username);
-            writer.Write(Rsa.Encrypt(Encoding.UTF8.GetBytes(password), Rsa.Key));
+            writer.Write(Rsa.Encrypt(Encoding.UTF8.GetBytes(password)));
 
-            var message = new TagSubjectMessage(Tags.Login, LoginSubjects.AddUser, writer);
-            GameControl.Client.SendMessage(message, SendMode.Reliable);
+            GameControl.Client.SendMessage(new TagSubjectMessage(Tags.Login, LoginSubjects.AddUser, writer), SendMode.Reliable);
         }
 
         public static void Logout()
         {
             IsLoggedIn = false;
+            ChatManager.Messages = new List<ChatMessage>();
+
             GameControl.Client.SendMessage(new TagSubjectMessage(Tags.Login, LoginSubjects.LogoutUser, new DarkRiftWriter()), SendMode.Reliable);
         }
         #endregion
@@ -72,6 +74,8 @@ namespace Network.Login
             if (message.Subject == LoginSubjects.LoginSuccess)
             {
                 IsLoggedIn = true;
+
+
                 onSuccessfulLogin?.Invoke();
             }
 

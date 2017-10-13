@@ -26,14 +26,12 @@ namespace UI.Main_Menu
             _mainMenuManager = transform.parent.GetComponent<MainMenuManager>();
             _mainMenu = _mainMenuManager.MainMenu;
 
-            RoomManager.onSuccessfulCreatedRoom += OnCreatedRoom;
             RoomManager.onSuccessfulLeaveRoom += OnLeaveRoom;
             RoomManager.onSuccessfulJoinRoom += OnJoinedRoom;
         }
 
         private void OnDestroy()
         {
-            RoomManager.onSuccessfulCreatedRoom -= OnCreatedRoom;
             RoomManager.onSuccessfulLeaveRoom -= OnLeaveRoom;
             RoomManager.onSuccessfulJoinRoom -= OnJoinedRoom;
         }
@@ -70,7 +68,7 @@ namespace UI.Main_Menu
 
         public void CreateRoomRLR()
         {
-            RoomManager.CreateRoom(_roomNameInput.CustomRoomName, GameType.Runling, true, PlayerColor.Green);
+            RoomManager.CreateRoom(_roomNameInput.CustomRoomName, GameType.RunlingRun, true, PlayerColor.Green);
         }
 
         public void CreateRoomSLA()
@@ -126,15 +124,9 @@ namespace UI.Main_Menu
 
         #region Network Callbacks
 
-        public void OnCreatedRoom(Player player)
-        {
-            CreatingLobby.SetActive(false);
-            InLobby.SetActive(true);
-            _playerLayoutGroup.JoinedRoom(new List<Player> { player });
-        }
-
         public void OnJoinedRoom(List<Player> playerList)
         {
+            CreatingLobby.SetActive(false);
             OutOfLobby.SetActive(false);
             InLobby.SetActive(true);
             _playerLayoutGroup.JoinedRoom(playerList);

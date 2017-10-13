@@ -1,5 +1,5 @@
-﻿using DarkRift;
-using Launcher;
+﻿using Launcher;
+using Network.Chat;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -55,15 +55,11 @@ namespace Network.Login
         {
             var condition = GameControl.Client.Connected
                             && UsernameInput.text.Length >= 2 && PasswordInput.text.Length >= 2
-                            && Rsa.Key.Exponent != null && Rsa.Key.Modulus != null;
+                            && Rsa.Key != null;
 
             LoginButton.interactable = condition;
             AddUserButton.interactable = condition;
             OfflineButton.interactable = UsernameInput.text.Length >= 2;
-
-            // Maybe add an option to try to reconnect
-            if (!GameControl.Client.Connected)
-                Debug.Log("not connected");
         }
 
         public void OfflineMode()
@@ -103,28 +99,34 @@ namespace Network.Login
 
         #region Network Callback
 
-        private void FailedLogin(byte reason)
+        private void FailedLogin(byte errorId)
         {
-            if (reason == 1)
+            if (errorId == 1)
             {
                 PasswordInput.text = "";
                 LoginScreen("Login Failed!","Username/Password Combination unknown. Make sure you enter the right username and password.", Color.red);
             }
+            else if (errorId == 3)
+            {
+                LoginScreen("Already Logged In",
+                    "This shouldn't happen. Please try again and let us know if the problem persists!", Color.red);
+            }
             else
             {
-                LoginScreen("Server couldn't process Information", "This shouldn't happen. Please try again and let us know if the problem persists!", Color.red);
+                LoginScreen("Server Error",
+                    "This shouldn't happen. Please try again and let us know if the problem persists!", Color.red);
             }
         }
 
-        private void FailedAddUser(byte reason)
+        private void FailedAddUser(byte errorId)
         {
-            if (reason == 1)
+            if (errorId == 1)
             {
-                LoginScreen("Failed to create user!", "Username already taken. Please choose a different one!", Color.red);
+                LoginScreen("Failed to Register!", "Username already taken. Please choose a different one!", Color.red);
             }
             else
             {
-                LoginScreen("Server couldn't process Information", "This shouldn't happen. Please try again and let us know if the problem persists!", Color.red);
+                LoginScreen("Server Error", "This shouldn't happen. Please try again and let us know if the problem persists!", Color.red);
             }
         }
 
@@ -157,6 +159,11 @@ namespace Network.Login
 
         private static void LoadMainMenu()
         {
+            foreach (var group in ChatManager.SavedChatGroups)
+            {
+                ChatManager.JoinChatGroup(group);
+            }
+
             SceneManager.LoadScene("MainMenu");
         }
     }

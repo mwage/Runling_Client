@@ -36,11 +36,6 @@ namespace Network.Rooms
             }
             _roomListings = new List<RoomListing>();
         }
-
-        private void CleanUpRooms()
-        {
-            
-        }
     }
 }
 

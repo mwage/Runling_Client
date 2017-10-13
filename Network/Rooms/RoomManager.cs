@@ -2,6 +2,7 @@
 using DarkRift;
 using DarkRift.Client;
 using Launcher;
+using Network.Chat;
 using Network.DarkRiftTags;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,20 +14,22 @@ namespace Network.Rooms
         public static bool IsHost { get; private set; }
         public static Room CurrentRoom { get; set; }
 
-        public delegate void SuccessfulCreatedRoomEventHandler(Player player);
+        #region Events
+
         public delegate void SuccessfulLeaveRoomEventHandler();
         public delegate void SuccessfulJoinRoomEventHandler(List<Player> playerList);
         public delegate void ReceivedOpenRoomsEventHandler(List<Room> roomList);
         public delegate void PlayerJoinedEventHandler(Player player);
         public delegate void PlayerLeftEventHandler(uint leftId, uint newHostId);
 
-        public static event SuccessfulCreatedRoomEventHandler onSuccessfulCreatedRoom;
         public static event SuccessfulLeaveRoomEventHandler onSuccessfulLeaveRoom;
         public static event SuccessfulJoinRoomEventHandler onSuccessfulJoinRoom;
         public static event ReceivedOpenRoomsEventHandler onReceivedOpenRooms;
         public static event PlayerJoinedEventHandler onPlayerJoined;
         public static event PlayerLeftEventHandler onPlayerLeft;
 
+        #endregion
+        
         private void Awake()
         {
             GameControl.Client.MessageReceived += OnDataHandler;
@@ -63,7 +66,6 @@ namespace Network.Rooms
 
         public static void LeaveRoom()
         {
-            Debug.Log("leaving");
             GameControl.Client.SendMessage(
                 new TagSubjectMessage(Tags.Room, RoomSubjects.Leave, new DarkRiftWriter()),
                 SendMode.Reliable);
@@ -93,28 +95,34 @@ namespace Network.Rooms
 
                 IsHost = player.IsHost;
                 CurrentRoom = room;
-                onSuccessfulCreatedRoom?.Invoke(player);
+                ChatManager.ServerMessage("Created room " + room.Name + "!", MessageType.Room);
+
+                onSuccessfulJoinRoom?.Invoke(new List<Player>{player});
             }
 
             // Failed to create Room
             else if (message.Subject == RoomSubjects.CreateFailed)
             {
+                ChatManager.ServerMessage("Failed to create room.", MessageType.Error);
                 var reader = message.GetReader();
                 if (reader.Length != 1)
                 {
                     Debug.LogWarning("Invalid CreateRoomFailed Error data received.");
                     return;
                 }
-                // If player is not logged in
-                if (reader.ReadByte() == 2)
+
+                switch (reader.ReadByte())
                 {
-                    Debug.Log("Player not logger in!");
-                    SceneManager.LoadScene("Login");
-                }
-                // Invalid data sent to join room
-                else
-                {
-                    Debug.Log("Invalid CreateRoom data sent!");
+                    case 0:
+                        Debug.Log("Invalid CreateRoom data sent!");
+                        break;
+                    case 1:
+                        Debug.Log("Player not logger in!");
+                        SceneManager.LoadScene("Login");
+                        break;
+                    default:
+                        Debug.Log("Invalid errorId!");
+                        break;
                 }
             }
 
@@ -127,7 +135,9 @@ namespace Network.Rooms
                 var room = reader.ReadSerializable<Room>();
                 while (reader.Position < reader.Length)
                 {
-                    playerList.Add(reader.ReadSerializable<Player>());
+                    var player = reader.ReadSerializable<Player>();
+                    playerList.Add(player);
+                    ChatManager.ServerMessage(player.Name + " joined the room.", MessageType.Room);
                 }
 
                 IsHost = playerList.Find(p => p.Id == GameControl.Client.ID).IsHost;
@@ -138,40 +148,43 @@ namespace Network.Rooms
             // Failed to join Room
             else if (message.Subject == RoomSubjects.JoinFailed)
             {
+                var content = "Failed to join room.";
                 var reader = message.GetReader();
                 if (reader.Length != 1)
                 {
                     Debug.LogWarning("Invalid JoinRoomRoomFailed Error data received.");
-                    return;
                 }
-                var errorId = reader.ReadByte();
-
-                // If player is already in a room
-                if (errorId == 1)
-                {
-                    Debug.Log("Player already is in a room!");
-                }
-                // If player is not logged in
-                else if (errorId == 2)
-                {
-                    Debug.Log("Player not logger in!");
-                    SceneManager.LoadScene("Login");
-                }
-                // If room doesn't exist anymore
-                else if (errorId == 3)
-                {
-                    Debug.Log("Room doesn't exist anymore");
-                }
-                // Invalid data sent to join room
                 else
                 {
-                    Debug.Log("Invalid JoinRoom data sent!");
+                    switch (reader.ReadByte())
+                    {
+                        case 0:
+                            Debug.Log("Invalid JoinRoom data sent!");
+                            break;
+                        case 1:
+                            Debug.Log("Player not logger in!");
+                            SceneManager.LoadScene("Login");
+                            break;
+                        case 2:
+                            Debug.Log("Player already is in a room!");
+                            content = "Already in a room.";
+                            break;
+                        case 3:
+                            Debug.Log("Room doesn't exist anymore");
+                            content = "The room doesn't exist anymore.";
+                            break;
+                        default:
+                            Debug.Log("Invalid errorId!");
+                            break;
+                    }
                 }
+                ChatManager.ServerMessage(content, MessageType.Error);
             }
 
             // Successfully left Room
             else if (message.Subject == RoomSubjects.LeaveSuccess)
             {
+                ChatManager.ServerMessage("You left the room.", MessageType.Room);
                 CurrentRoom = null;
                 onSuccessfulLeaveRoom?.Invoke();
             }
@@ -180,7 +193,10 @@ namespace Network.Rooms
             else if (message.Subject == RoomSubjects.PlayerJoined)
             {
                 var reader = message.GetReader();
-                onPlayerJoined?.Invoke(reader.ReadSerializable<Player>());
+                var player = reader.ReadSerializable<Player>();
+                ChatManager.ServerMessage(player.Name + " joined the room.", MessageType.Room);
+
+                onPlayerJoined?.Invoke(player);
             }
 
             // Another player left the Room
@@ -189,6 +205,8 @@ namespace Network.Rooms
                 var reader = message.GetReader();
                 var leftId = reader.ReadUInt32();
                 var newHostId = reader.ReadUInt32();
+                var leaverName = reader.ReadString();
+                ChatManager.ServerMessage(leaverName + " left the room.", MessageType.Room);
 
                 onPlayerLeft?.Invoke(leftId, newHostId);
             }
@@ -209,7 +227,7 @@ namespace Network.Rooms
             // Failed to receive all available Rooms
             else if (message.Subject == RoomSubjects.GetOpenRoomsFailed)
             {
-                Debug.Log("Player not logger in!");
+                Debug.Log("Player not logged in!");
                 SceneManager.LoadScene("Login");
             }
 

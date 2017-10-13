@@ -11,6 +11,8 @@ namespace UI.Main_Menu
     public class MainMenu : MonoBehaviour
     {
         public Text MultiplayerButtonText;
+        public Button MultiplayerButton;
+        public Text LogoutButtonText;
 
         private MainMenuManager _mainMenuManager;
         private OptionsMenu _optionsMenu;
@@ -27,14 +29,9 @@ namespace UI.Main_Menu
 
         private void Update()
         {
-            if (LoginManager.IsLoggedIn)
-            {
-                MultiplayerButtonText.text = RoomManager.CurrentRoom == null ? "Multiplayer" : "Back to Lobby";
-            }
-            else
-            {
-                MultiplayerButtonText.text = "Login";
-            }
+            MultiplayerButtonText.text = RoomManager.CurrentRoom == null ? "Multiplayer" : "Back to Lobby";
+            MultiplayerButton.interactable = LoginManager.IsLoggedIn;
+            LogoutButtonText.text = LoginManager.IsLoggedIn ? "Logout" : "Login";
         }
 
         #region Buttons
@@ -76,5 +73,3 @@ namespace UI.Main_Menu
         #endregion
     }
 }
-
-
