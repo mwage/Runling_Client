@@ -2,11 +2,11 @@
 
 namespace Launcher
 {
+    /// <inheritdoc />
     /// <summary>
     /// Be aware this will not prevent a non singleton constructor
     ///   such as `T myT = new T();`
     /// To prevent that, add `protected T () {}` to your singleton class.
-    /// 
     /// As a note, this is made as MonoBehaviour because we need Coroutines.
     /// </summary>
     public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
@@ -59,7 +59,7 @@ namespace Launcher
         ///   even after stopping playing the Application. Really bad!
         /// So, this was made to be sure we're not creating that buggy ghost object.
         /// </summary>
-        public void OnDestroy()
+        public virtual void OnDestroy()
         {
             _applicationIsQuitting = true;
         }

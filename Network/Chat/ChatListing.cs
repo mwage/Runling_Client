@@ -14,7 +14,7 @@ namespace Network.Chat
         {
             _messageText = GetComponent<Text>();
             _messageText.text = "[" + channel + "]  " + sender + ": " + content;
-            _messageText.color = ChatManager.ChatColors[messageType];
+            _messageText.color = ChatManager.Instance.ChatColors[messageType];
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace Network.Chat
         {
             _messageText = GetComponent<Text>();
             _messageText.text = content;
-            _messageText.color = ChatManager.ChatColors[messageType];
+            _messageText.color = ChatManager.Instance.ChatColors[messageType];
         }
     }
 }

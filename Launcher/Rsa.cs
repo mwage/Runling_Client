@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace Launcher
 {
-    public class Rsa : MonoBehaviour
+    public class Rsa
     {
-        public static string Key;
+        public string Key;
 
-        private void Awake()
+        public Rsa()
         {
             try
             {
@@ -21,7 +21,7 @@ namespace Launcher
             }
         }
 
-        public static byte[] Encrypt(byte[] input)
+        public byte[] Encrypt(byte[] input)
         {
             byte[] encrypted;
 

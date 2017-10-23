@@ -6,5 +6,6 @@
         public const byte Friends = 1;
         public const byte Chat = 2;
         public const byte Room = 3;
+        public const byte GameServerTag = 4;
     }
 }

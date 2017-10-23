@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using DarkRift;
+﻿using DarkRift;
 using DarkRift.Client;
 using Launcher;
 using Network.Chat;
@@ -9,8 +8,12 @@ using UnityEngine.SceneManagement;
 
 namespace Network.Friends
 {
-    public class FriendManager : MonoBehaviour
+    public class FriendManager : Singleton<FriendManager>
     {
+        protected FriendManager()
+        {
+        }
+
         #region Events
 
         public delegate void SuccessfulFriendRequestEventHandler(string friendName);
@@ -34,57 +37,61 @@ namespace Network.Friends
 
         #endregion
 
-        private void Start()
+        private void Awake()
         {
-            GameControl.Client.MessageReceived += OnDataHandler;
+            MainClient.Instance.MessageReceived += OnDataHandler;
         }
 
-        private void OnDestroy()
+        public override void OnDestroy()
         {
-            GameControl.Client.MessageReceived -= OnDataHandler;
+            if (MainClient.Instance != null)
+            {
+                MainClient.Instance.MessageReceived -= OnDataHandler;
+            }
+            base.OnDestroy();
         }
 
         #region Network Calls
 
-        public static void SendFriendRequest(string friendName)
+        public void SendFriendRequest(string friendName)
         {
             var writer = new DarkRiftWriter();
             writer.Write(friendName);
            
-            GameControl.Client.SendMessage(new TagSubjectMessage(Tags.Friends, FriendSubjects.FriendRequest, writer),
+            MainClient.Instance.SendMessage(new TagSubjectMessage(Tags.Friends, FriendSubjects.FriendRequest, writer),
                 SendMode.Reliable);
         }
 
-        public static void DeclineFriendRequest(string friendName)
+        public void DeclineFriendRequest(string friendName)
         {
             var writer = new DarkRiftWriter();
             writer.Write(friendName);
 
-            GameControl.Client.SendMessage(new TagSubjectMessage(Tags.Friends, FriendSubjects.DeclineRequest, writer),
+            MainClient.Instance.SendMessage(new TagSubjectMessage(Tags.Friends, FriendSubjects.DeclineRequest, writer),
                 SendMode.Reliable);
         }
 
-        public static void AcceptFriendRequest(string friendName)
+        public void AcceptFriendRequest(string friendName)
         {
             var writer = new DarkRiftWriter();
             writer.Write(friendName);
 
-            GameControl.Client.SendMessage(new TagSubjectMessage(Tags.Friends, FriendSubjects.AcceptRequest, writer),
+            MainClient.Instance.SendMessage(new TagSubjectMessage(Tags.Friends, FriendSubjects.AcceptRequest, writer),
                 SendMode.Reliable);
         }
 
-        public static void RemoveFriend(string friendName)
+        public void RemoveFriend(string friendName)
         {
             var writer = new DarkRiftWriter();
             writer.Write(friendName);
 
-            GameControl.Client.SendMessage(new TagSubjectMessage(Tags.Friends, FriendSubjects.RemoveFriend, writer),
+            MainClient.Instance.SendMessage(new TagSubjectMessage(Tags.Friends, FriendSubjects.RemoveFriend, writer),
                 SendMode.Reliable);
         }
 
-        public static void GetAllFriends()
+        public void GetAllFriends()
         {
-            GameControl.Client.SendMessage(new TagSubjectMessage(
+            MainClient.Instance.SendMessage(new TagSubjectMessage(
                 Tags.Friends, FriendSubjects.GetAllFriends, new DarkRiftWriter()), SendMode.Reliable);
         }
 
@@ -102,7 +109,7 @@ namespace Network.Friends
             {
                 var reader = message.GetReader();
                 var friendName = reader.ReadString();
-                ChatManager.ServerMessage(friendName + " wants to add you as a friend!", MessageType.Info);
+                ChatManager.Instance.ServerMessage(friendName + " wants to add you as a friend!", MessageType.Info);
 
                 onNewFriendRequest?.Invoke(friendName);
             }           
@@ -111,7 +118,7 @@ namespace Network.Friends
             {
                 var reader = message.GetReader();
                 var friendName = reader.ReadString();
-                ChatManager.ServerMessage("Friend request sent.", MessageType.Info);
+                ChatManager.Instance.ServerMessage("Friend request sent.", MessageType.Info);
 
                 onSuccessfulFriendRequest?.Invoke(friendName);
             }
@@ -151,7 +158,7 @@ namespace Network.Friends
                             break;
                     }
                 }
-                ChatManager.ServerMessage(content, MessageType.Error);
+                ChatManager.Instance.ServerMessage(content, MessageType.Error);
             }
             // Request declined
             else if (message.Subject == FriendSubjects.DeclineRequestSuccess)
@@ -160,14 +167,14 @@ namespace Network.Friends
                 var friendName = reader.ReadString();
                 var isSender = reader.ReadBoolean();
                 var content = isSender ? "Declined " + friendName + "'s friend request." : friendName + " declined your friend request.";
-                ChatManager.ServerMessage(content, MessageType.Error);
+                ChatManager.Instance.ServerMessage(content, MessageType.Error);
 
                 onSuccessfulDeclineRequest?.Invoke(friendName);
             }
             // Request decline failed
             else if (message.Subject == FriendSubjects.DeclineRequestFailed)
             {
-                ChatManager.ServerMessage("Failed to decline request.", MessageType.Error);
+                ChatManager.Instance.ServerMessage("Failed to decline request.", MessageType.Error);
                 var reader = message.GetReader();
                 if (reader.Length != 1)
                 {
@@ -198,14 +205,14 @@ namespace Network.Friends
                 var reader = message.GetReader();
                 var friendName = reader.ReadString();
                 var isSender = reader.ReadBoolean();
-                ChatManager.ServerMessage("Added " + friendName + " to your friendlist.", MessageType.Info);
+                ChatManager.Instance.ServerMessage("Added " + friendName + " to your friendlist.", MessageType.Info);
 
                 onSuccessfulAcceptRequest?.Invoke(friendName, isSender);
             }
             // Request accept failed
             else if (message.Subject == FriendSubjects.AcceptRequestFailed)
             {
-                ChatManager.ServerMessage("Failed to accept request.", MessageType.Error);
+                ChatManager.Instance.ServerMessage("Failed to accept request.", MessageType.Error);
                 var reader = message.GetReader();
                 if (reader.Length != 1)
                 {
@@ -237,14 +244,14 @@ namespace Network.Friends
                 var friendName = reader.ReadString();
                 var isSender = reader.ReadBoolean();
                 var content = isSender ? "Removed " + friendName + " from your friendlist." : friendName + " removed you from his friendlist.";
-                ChatManager.ServerMessage(content, MessageType.Error);
+                ChatManager.Instance.ServerMessage(content, MessageType.Error);
 
                 onSuccessfulRemoveFriend?.Invoke(friendName);
             }
             // Remove friend failed
             else if (message.Subject == FriendSubjects.RemoveFriendFailed)
             {
-                ChatManager.ServerMessage("Failed to remove friend.", MessageType.Error);
+                ChatManager.Instance.ServerMessage("Failed to remove friend.", MessageType.Error);
                 var reader = message.GetReader();
                 if (reader.Length != 1)
                 {
@@ -280,7 +287,7 @@ namespace Network.Friends
 
                 foreach (var friend in onlineFriends)
                 {
-                    ChatManager.ServerMessage(friend + " is online.", MessageType.Info);
+                    ChatManager.Instance.ServerMessage(friend + " is online.", MessageType.Info);
                 }
 
                 onSuccessfulGetAllFriends?.Invoke(onlineFriends, offlineFriends, openRequests, unansweredRequests);
@@ -288,7 +295,7 @@ namespace Network.Friends
             // Get all friends failed
             else if (message.Subject == FriendSubjects.GetAllFriendsFailed)
             {
-                ChatManager.ServerMessage("Failed to load Friendlist!", MessageType.Error);
+                ChatManager.Instance.ServerMessage("Failed to load Friendlist!", MessageType.Error);
                 var reader = message.GetReader();
                 if (reader.Length != 1)
                 {
@@ -299,7 +306,7 @@ namespace Network.Friends
                 switch (reader.ReadByte())
                 {
                     case 1:
-                        Debug.Log("Player not logged in!");
+                        Debug.Log("You're not logged in!");
                         SceneManager.LoadScene("Login");
                         break;
                     case 2:
@@ -315,7 +322,7 @@ namespace Network.Friends
             {
                 var reader = message.GetReader();
                 var friendName = reader.ReadString();
-                ChatManager.ServerMessage(friendName + " is online.", MessageType.Info);
+                ChatManager.Instance.ServerMessage(friendName + " is online.", MessageType.Info);
 
                 onFriendLogin?.Invoke(friendName);
             }           
@@ -324,7 +331,7 @@ namespace Network.Friends
             {
                 var reader = message.GetReader();
                 var friendName = reader.ReadString();
-                ChatManager.ServerMessage(friendName + " is offline.", MessageType.Info);
+                ChatManager.Instance.ServerMessage(friendName + " is offline.", MessageType.Info);
 
                 onFriendLogout?.Invoke(friendName);
             }

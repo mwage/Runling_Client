@@ -10,10 +10,10 @@ namespace Network.Chat
         [SerializeField] private ChannelLayoutGroup _channelLayoutGroup;
         [SerializeField] private ScrollRect _scrollRect;
 
-        private readonly Dictionary<string, List<ChatListing>> _privateMessages = new Dictionary<string, List<ChatListing>>();
-        private Dictionary<string, List<ChatListing>> _groupMessages = new Dictionary<string, List<ChatListing>>();
-        private List<ChatListing> _roomMessages = new List<ChatListing>();
-        private List<ChatListing> _serverMessages = new List<ChatListing>();
+        public readonly Dictionary<string, List<ChatListing>> PrivateMessages = new Dictionary<string, List<ChatListing>>();
+        public readonly Dictionary<string, List<ChatListing>> GroupMessages = new Dictionary<string, List<ChatListing>>();
+        private readonly List<ChatListing> _roomMessages = new List<ChatListing>();
+        private readonly List<ChatListing> _serverMessages = new List<ChatListing>();
 
         public void Initialize()
         {
@@ -36,7 +36,7 @@ namespace Network.Chat
 
         public void AddOldMessages()
         {
-            foreach (var message in ChatManager.Messages)
+            foreach (var message in ChatManager.Instance.Messages)
             {
                 if (message.IsServerMessage)
                 {
@@ -66,15 +66,11 @@ namespace Network.Chat
         {
             var channel = message.ChannelName;
             _channelLayoutGroup.AddPrivateChannel(channel);
-            if (!_privateMessages.ContainsKey(channel))
-            {
-                _privateMessages[channel] = new List<ChatListing>();
-            }
 
             var chatListing = Instantiate(_messagePrefab, Vector3.zero, Quaternion.identity, transform)
                 .GetComponent<ChatListing>();
             chatListing.Initialize(message.MessageType, message.IsSender ? "To" : "From", message.Sender, message.Content);
-            _privateMessages[channel].Add(chatListing);
+            PrivateMessages[channel].Add(chatListing);
 
             // Check if filter hides new message
             var filter = _channelLayoutGroup.ActiveFilter;
@@ -93,7 +89,7 @@ namespace Network.Chat
         {
             var chatListing = Instantiate(_messagePrefab, Vector3.zero, Quaternion.identity, transform)
                 .GetComponent<ChatListing>();
-            chatListing.Initialize(message.MessageType, "Room", message.Sender, message.Content);
+            chatListing.Initialize(message.MessageType, "Lobby", message.Sender, message.Content);
             _roomMessages.Add(chatListing);
 
             // Check if filter hides new message
@@ -111,15 +107,17 @@ namespace Network.Chat
         private void NewGroupMessage(ChatMessage message)
         {
             var groupName = message.ChannelName;
-            if (!_groupMessages.ContainsKey(groupName))
-            {
-                _groupMessages[groupName] = new List<ChatListing>();
-            }
 
             var chatListing = Instantiate(_messagePrefab, Vector3.zero, Quaternion.identity, transform)
                 .GetComponent<ChatListing>();
             chatListing.Initialize(message.MessageType, message.ChannelName, message.Sender, message.Content);
-            _groupMessages[groupName].Add(chatListing);
+
+            if (!GroupMessages.ContainsKey(groupName))
+            {
+                GroupMessages[groupName] = new List<ChatListing>();
+            }
+
+            GroupMessages[groupName].Add(chatListing);
 
             // Check if filter hides new message
             var filter = _channelLayoutGroup.ActiveFilter;
@@ -135,8 +133,6 @@ namespace Network.Chat
 
         private void NewServerMessage(ChatMessage message)
         {
-
-
             var chatListing = Instantiate(_messagePrefab, Vector3.zero, Quaternion.identity, transform)
                 .GetComponent<ChatListing>();
             chatListing.Initialize(message.MessageType, message.Content);
@@ -200,9 +196,9 @@ namespace Network.Chat
 
         private void SetPrivate(bool active, string channelName = null)
         {
-            foreach (var channel in _privateMessages.Values)
+            foreach (var channel in PrivateMessages.Values)
             {
-                if (channelName != null && _privateMessages[channelName] != channel)
+                if (channelName != null && PrivateMessages[channelName] != channel)
                 {
                     SetMessages(channel, !active);
                 }
@@ -215,9 +211,9 @@ namespace Network.Chat
 
         private void SetGroup(bool active, string channelName = null)
         {
-            foreach (var channel in _groupMessages.Values)
+            foreach (var channel in GroupMessages.Values)
             {
-                if (channelName != null && _groupMessages[channelName] != channel)
+                if (channelName != null && GroupMessages[channelName] != channel)
                 {
                     SetMessages(channel, !active);
                 }

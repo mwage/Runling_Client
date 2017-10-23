@@ -1,22 +1,26 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using DarkRift;
+﻿using DarkRift;
 using DarkRift.Client;
 using Launcher;
 using Network.DarkRiftTags;
 using Network.Login;
 using Network.Rooms;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Network.Chat
 {
-    public class ChatManager : MonoBehaviour
+    public class ChatManager : Singleton<ChatManager>
     {
-        public static List<ChatMessage> Messages = new List<ChatMessage>();
-        public static List<string> SavedChatGroups;
+        protected ChatManager()
+        {
+        }
 
-        public static Dictionary<MessageType, Color> ChatColors = new Dictionary<MessageType, Color>();
+        public List<ChatMessage> Messages { get; set; } = new List<ChatMessage>();
+        public List<string> SavedChatGroups { get; private set; }
+
+        public Dictionary<MessageType, Color> ChatColors { get; } = new Dictionary<MessageType, Color>();
 
         #region Events
 
@@ -36,10 +40,9 @@ namespace Network.Chat
         public static event SuccessfulJoinGroupEventHandler onSuccessfulJoinGroup;
         public static event SuccessfulLeaveGroupEventHandler onSuccessfulLeaveGroup;
         
-
         #endregion
 
-        private void Start()
+        private void Awake()
         {
             // Set ChatColors
             ChatColors[MessageType.ChatGroup] = Color.green;
@@ -61,47 +64,50 @@ namespace Network.Chat
                 SavedChatGroups = ArrayPrefs.GetStringArray("ChatGroups").ToList();
             }
 
-            GameControl.Client.MessageReceived += OnDataHandler;
+            MainClient.Instance.MessageReceived += OnDataHandler;
         }
 
-        private void OnDestroy()
+        public override void OnDestroy()
         {
-            GameControl.Client.MessageReceived -= OnDataHandler;
+            if (MainClient.Instance != null)
+            {
+                MainClient.Instance.MessageReceived -= OnDataHandler;
+            }
         }
 
         #region Network Calls
 
-        public static void SendPrivateMessage(string receiver, string message)
+        public void SendPrivateMessage(string receiver, string message)
         {
             var writer = new DarkRiftWriter();
             writer.Write(receiver);
             writer.Write(message);
 
-            GameControl.Client.SendMessage(new TagSubjectMessage(Tags.Chat, ChatSubjects.PrivateMessage, writer),
+            MainClient.Instance.SendMessage(new TagSubjectMessage(Tags.Chat, ChatSubjects.PrivateMessage, writer),
                 SendMode.Reliable);
         }
 
-        public static void SendRoomMessage(string message)
+        public void SendRoomMessage(string message)
         {
             var writer = new DarkRiftWriter();
-            writer.Write(RoomManager.CurrentRoom.Id);
+            writer.Write(RoomManager.Instance.CurrentRoom.Id);
             writer.Write(message);
 
-            GameControl.Client.SendMessage(new TagSubjectMessage(Tags.Chat, ChatSubjects.RoomMessage, writer),
+            MainClient.Instance.SendMessage(new TagSubjectMessage(Tags.Chat, ChatSubjects.RoomMessage, writer),
                 SendMode.Reliable);
         }
 
-        public static void SendGroupMessage(string groupName, string message)
+        public void SendGroupMessage(string groupName, string message)
         {
             var writer = new DarkRiftWriter();
             writer.Write(groupName);
             writer.Write(message);
 
-            GameControl.Client.SendMessage(new TagSubjectMessage(Tags.Chat, ChatSubjects.GroupMessage, writer),
+            MainClient.Instance.SendMessage(new TagSubjectMessage(Tags.Chat, ChatSubjects.GroupMessage, writer),
                 SendMode.Reliable);
         }
 
-        public static void ServerMessage(string content, MessageType messageType)
+        public void ServerMessage(string content, MessageType messageType)
         {
             var message = new ChatMessage("", content, messageType, "", isServerMessage: true);
             Messages.Add(message);
@@ -109,12 +115,12 @@ namespace Network.Chat
             onServerMessage?.Invoke(message);
         }
 
-        public static void JoinChatGroup(string groupName)
+        public void JoinChatGroup(string groupName)
         {
             var writer = new DarkRiftWriter();
             writer.Write(groupName);
 
-            GameControl.Client.SendMessage(new TagSubjectMessage(Tags.Chat, ChatSubjects.JoinGroup, writer),
+            MainClient.Instance.SendMessage(new TagSubjectMessage(Tags.Chat, ChatSubjects.JoinGroup, writer),
                 SendMode.Reliable);
         }
 
@@ -123,13 +129,13 @@ namespace Network.Chat
             var writer = new DarkRiftWriter();
             writer.Write(groupName);
 
-            GameControl.Client.SendMessage(new TagSubjectMessage(Tags.Chat, ChatSubjects.LeaveGroup, writer),
+            MainClient.Instance.SendMessage(new TagSubjectMessage(Tags.Chat, ChatSubjects.LeaveGroup, writer),
                 SendMode.Reliable);
         }
 
         private static void GetActiveGroups()
         {
-            GameControl.Client.SendMessage(new TagSubjectMessage(Tags.Chat, ChatSubjects.GetActiveGroups, new DarkRiftWriter()), SendMode.Reliable);
+            MainClient.Instance.SendMessage(new TagSubjectMessage(Tags.Chat, ChatSubjects.GetActiveGroups, new DarkRiftWriter()), SendMode.Reliable);
         }
 
         #endregion
@@ -141,7 +147,7 @@ namespace Network.Chat
         }
 
         // Commands
-        public static void Command(string message)
+        public void Command(string message)
         {
             var split = message.Split(' ');
             var command = split[0];
@@ -198,7 +204,7 @@ namespace Network.Chat
         }
 
         // Server Responses
-        private static void OnDataHandler(object sender, MessageReceivedEventArgs e)
+        private void OnDataHandler(object sender, MessageReceivedEventArgs e)
         {
             var message = e.Message as TagSubjectMessage;
 
@@ -234,7 +240,7 @@ namespace Network.Chat
                 var reader = message.GetReader();
                 var senderName = reader.ReadString();
                 var content = reader.ReadString();
-                var chatMessage = new ChatMessage(senderName, content, MessageType.Room, "Room");
+                var chatMessage = new ChatMessage(senderName, content, MessageType.Room, "Lobby");
                 Messages.Add(chatMessage);
                 onRoomMessage?.Invoke(chatMessage);
             }
@@ -271,11 +277,9 @@ namespace Network.Chat
                             SceneManager.LoadScene("Login");
                             break;
                         case 2:
-                            Debug.Log("You're not part of this chatgroup.");
                             content = "Not connected to this chat channel. Try leaving and rejoining!";
                             break;
                         case 3:
-                            Debug.Log("Failed to send message. Player is offline.");
                             content = "Player is offline.";
                             break;
                         default:
@@ -321,7 +325,7 @@ namespace Network.Chat
                             SceneManager.LoadScene("Login");
                             break;
                         case 2:
-                            Debug.Log("Alreay in this chatgroup.");
+                            Debug.Log("Already in this chatgroup.");
                             content = "You are already in this chat group.";
                             break;
                         default:

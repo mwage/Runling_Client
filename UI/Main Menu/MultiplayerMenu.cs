@@ -38,7 +38,7 @@ namespace UI.Main_Menu
 
         private void OnEnable()
         {
-            if (RoomManager.CurrentRoom == null)
+            if (RoomManager.Instance.CurrentRoom == null)
             {
                 OutOfLobby.SetActive(true);
                 CreatingLobby.SetActive(false);
@@ -51,13 +51,13 @@ namespace UI.Main_Menu
 
         private void Update()
         {
-            StartButton.interactable = RoomManager.IsHost;
+            StartButton.interactable = RoomManager.Instance.IsHost;
         }
 
         public void Refresh()
         {
             _roomLayoutGroup.DeleteOldRooms();
-            RoomManager.GetOpenRooms();
+            RoomManager.Instance.GetOpenRooms();
         }
 
         public void CreateRoom()
@@ -68,39 +68,17 @@ namespace UI.Main_Menu
 
         public void CreateRoomRLR()
         {
-            RoomManager.CreateRoom(_roomNameInput.CustomRoomName, GameType.RunlingRun, true, PlayerColor.Green);
+            RoomManager.Instance.CreateRoom(_roomNameInput.CustomRoomName, GameType.RunlingRun, true, PlayerColor.Green);
         }
 
         public void CreateRoomSLA()
         {
-            RoomManager.CreateRoom(_roomNameInput.CustomRoomName, GameType.Arena, true, PlayerColor.Green);
+            RoomManager.Instance.CreateRoom(_roomNameInput.CustomRoomName, GameType.Arena, true, PlayerColor.Green);
         }
 
         public void LeaveRoom()
         {
-            RoomManager.LeaveRoom();
-        }
-
-        public void StartGame()
-        {
-//            PhotonNetwork.room.IsOpen = false;
-//            PhotonNetwork.room.IsVisible = false;
-//
-//            switch ((string) PhotonNetwork.room.CustomProperties["GM"])
-//            {
-//                case "RR":
-//                    Debug.Log("Start RLR Game");
-//                    PhotonNetwork.LoadLevel(3);
-//                    break;
-//                case "AR":
-//                    Debug.Log("Start Arena Game");
-//                    PhotonNetwork.LoadLevel(5);
-//                    break;
-//                default:
-//                    Debug.Log("Couldn't load game, invalid selection");
-//                    PhotonNetwork.LoadLevel(2);
-//                    break;
-//            }
+            RoomManager.Instance.LeaveRoom();
         }
 
         public void Back()
@@ -111,13 +89,18 @@ namespace UI.Main_Menu
 
         public void BackToMenu()
         {
-            if (RoomManager.CurrentRoom == null)
+            if (RoomManager.Instance.CurrentRoom == null)
             {
                 InLobby.SetActive(false);
                 CreatingLobby.SetActive(false);
             }
             gameObject.SetActive(false);
             _mainMenu.gameObject.SetActive(true);
+        }
+
+        public void StartGame()
+        {
+            RoomManager.Instance.StartGame();
         }
 
         #endregion

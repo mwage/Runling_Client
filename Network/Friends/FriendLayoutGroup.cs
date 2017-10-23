@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Network.Chat;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,7 +27,7 @@ namespace Network.Friends
             FriendManager.onSuccessfulFriendRequest += UnansweredRequest;
             FriendManager.onNewFriendRequest += NewRequest;
 
-            FriendManager.GetAllFriends();
+            FriendManager.Instance.GetAllFriends();
         }
 
         public void Destroy()
@@ -170,7 +171,13 @@ namespace Network.Friends
 
         public void AddFriend()
         {
-            FriendManager.SendFriendRequest(_addFriendInput.text);
+            if (string.IsNullOrWhiteSpace(_addFriendInput.text))
+            {
+                ChatManager.Instance.ServerMessage("Please enter a valid name.", MessageType.Error);
+                return;
+            }
+
+            FriendManager.Instance.SendFriendRequest(_addFriendInput.text);
         }
 
         public void TogglePanel()

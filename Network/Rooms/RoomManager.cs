@@ -9,10 +9,14 @@ using UnityEngine.SceneManagement;
 
 namespace Network.Rooms
 {
-    public class RoomManager : MonoBehaviour
+    public class RoomManager : Singleton<RoomManager>
     {
-        public static bool IsHost { get; private set; }
-        public static Room CurrentRoom { get; set; }
+        protected RoomManager()
+        {
+        }
+
+        public bool IsHost { get; private set; }
+        public Room CurrentRoom { get; set; }
 
         #region Events
 
@@ -32,17 +36,21 @@ namespace Network.Rooms
         
         private void Awake()
         {
-            GameControl.Client.MessageReceived += OnDataHandler;
+            MainClient.Instance.MessageReceived += OnDataHandler;
         }
 
-        private void OnDestroy()
+        public override void OnDestroy()
         {
-            GameControl.Client.MessageReceived -= OnDataHandler;
+            if (MainClient.Instance != null)
+            {
+                MainClient.Instance.MessageReceived -= OnDataHandler;
+            }
+            base.OnDestroy();
         }
 
         #region Network Calls
 
-        public static void CreateRoom(string roomname, GameType gameType, bool isVisible, PlayerColor color)
+        public void CreateRoom(string roomname, GameType gameType, bool isVisible, PlayerColor color)
         {
             var writer = new DarkRiftWriter();
             writer.Write(roomname);
@@ -50,36 +58,40 @@ namespace Network.Rooms
             writer.Write(isVisible);
             writer.Write((byte) color);
 
-            GameControl.Client.SendMessage(new TagSubjectMessage(Tags.Room, RoomSubjects.Create, writer),
-                SendMode.Reliable);
+            MainClient.Instance.SendMessage(new TagSubjectMessage(Tags.Room, RoomSubjects.Create, writer), SendMode.Reliable);
         }
 
-        public static void JoinRoom(ushort roomId, PlayerColor color)
+        public void JoinRoom(ushort roomId, PlayerColor color)
         {
             var writer = new DarkRiftWriter();
             writer.Write(roomId);
             writer.Write((byte)color);
 
-            GameControl.Client.SendMessage(new TagSubjectMessage(Tags.Room, RoomSubjects.Join, writer),
-                SendMode.Reliable);
+            MainClient.Instance.SendMessage(new TagSubjectMessage(Tags.Room, RoomSubjects.Join, writer), SendMode.Reliable);
         }
 
-        public static void LeaveRoom()
+        public void LeaveRoom()
         {
-            GameControl.Client.SendMessage(
-                new TagSubjectMessage(Tags.Room, RoomSubjects.Leave, new DarkRiftWriter()),
-                SendMode.Reliable);
+            MainClient.Instance.SendMessage(
+                new TagSubjectMessage(Tags.Room, RoomSubjects.Leave, new DarkRiftWriter()), SendMode.Reliable);
         }
 
-        public static void GetOpenRooms()
+        public void GetOpenRooms()
         {
-            GameControl.Client.SendMessage(
-                new TagSubjectMessage(Tags.Room, RoomSubjects.GetOpenRooms, new DarkRiftWriter()),
-                SendMode.Reliable);
+            MainClient.Instance.SendMessage(
+                new TagSubjectMessage(Tags.Room, RoomSubjects.GetOpenRooms, new DarkRiftWriter()), SendMode.Reliable);
         }
+
+        public void StartGame()
+        {
+            var writer = new DarkRiftWriter();
+            writer.Write(Instance.CurrentRoom.Id);
+            MainClient.Instance.SendMessage(new TagSubjectMessage(Tags.Room, RoomSubjects.StartGame, writer), SendMode.Reliable);
+        }
+
         #endregion
 
-        private static void OnDataHandler(object sender, MessageReceivedEventArgs e)
+        private void OnDataHandler(object sender, MessageReceivedEventArgs e)
         {
             var message = e.Message as TagSubjectMessage;
 
@@ -95,15 +107,15 @@ namespace Network.Rooms
 
                 IsHost = player.IsHost;
                 CurrentRoom = room;
-                ChatManager.ServerMessage("Created room " + room.Name + "!", MessageType.Room);
+                ChatManager.Instance.ServerMessage("Created Lobby " + room.Name + "!", MessageType.Room);
 
-                onSuccessfulJoinRoom?.Invoke(new List<Player>{player});
+                onSuccessfulJoinRoom?.Invoke(new List<Player> {player});
             }
 
             // Failed to create Room
             else if (message.Subject == RoomSubjects.CreateFailed)
             {
-                ChatManager.ServerMessage("Failed to create room.", MessageType.Error);
+                ChatManager.Instance.ServerMessage("Failed to create Lobby.", MessageType.Error);
                 var reader = message.GetReader();
                 if (reader.Length != 1)
                 {
@@ -137,10 +149,10 @@ namespace Network.Rooms
                 {
                     var player = reader.ReadSerializable<Player>();
                     playerList.Add(player);
-                    ChatManager.ServerMessage(player.Name + " joined the room.", MessageType.Room);
+                    ChatManager.Instance.ServerMessage(player.Name + "has joined the Lobby.", MessageType.Room);
                 }
 
-                IsHost = playerList.Find(p => p.Id == GameControl.Client.ID).IsHost;
+                IsHost = playerList.Find(p => p.Id == MainClient.Instance.Id).IsHost;
                 CurrentRoom = room;
                 onSuccessfulJoinRoom?.Invoke(playerList);
             }
@@ -148,7 +160,7 @@ namespace Network.Rooms
             // Failed to join Room
             else if (message.Subject == RoomSubjects.JoinFailed)
             {
-                var content = "Failed to join room.";
+                var content = "Failed to join Lobby.";
                 var reader = message.GetReader();
                 if (reader.Length != 1)
                 {
@@ -167,24 +179,24 @@ namespace Network.Rooms
                             break;
                         case 2:
                             Debug.Log("Player already is in a room!");
-                            content = "Already in a room.";
+                            content = "Already in a Lobby.";
                             break;
                         case 3:
-                            Debug.Log("Room doesn't exist anymore");
-                            content = "The room doesn't exist anymore.";
+                            Debug.Log("Room doesn't exist anymore or has already started.");
+                            content = "The room doesn't exist anymore or has already started.";
                             break;
                         default:
                             Debug.Log("Invalid errorId!");
                             break;
                     }
                 }
-                ChatManager.ServerMessage(content, MessageType.Error);
+                ChatManager.Instance.ServerMessage(content, MessageType.Error);
             }
 
             // Successfully left Room
             else if (message.Subject == RoomSubjects.LeaveSuccess)
             {
-                ChatManager.ServerMessage("You left the room.", MessageType.Room);
+                ChatManager.Instance.ServerMessage("You have left the Lobby.", MessageType.Room);
                 CurrentRoom = null;
                 onSuccessfulLeaveRoom?.Invoke();
             }
@@ -194,7 +206,7 @@ namespace Network.Rooms
             {
                 var reader = message.GetReader();
                 var player = reader.ReadSerializable<Player>();
-                ChatManager.ServerMessage(player.Name + " joined the room.", MessageType.Room);
+                ChatManager.Instance.ServerMessage(player.Name + " has joined the Lobby.", MessageType.Room);
 
                 onPlayerJoined?.Invoke(player);
             }
@@ -206,7 +218,12 @@ namespace Network.Rooms
                 var leftId = reader.ReadUInt32();
                 var newHostId = reader.ReadUInt32();
                 var leaverName = reader.ReadString();
-                ChatManager.ServerMessage(leaverName + " left the room.", MessageType.Room);
+                ChatManager.Instance.ServerMessage(leaverName + " has left the Lobby.", MessageType.Room);
+
+                if (newHostId == MainClient.Instance.Id)
+                {
+                    IsHost = true;
+                }
 
                 onPlayerLeft?.Invoke(leftId, newHostId);
             }
@@ -231,7 +248,51 @@ namespace Network.Rooms
                 SceneManager.LoadScene("Login");
             }
 
-            // TODO: color
+//             TODO: color
+
+            // Successfully started Game
+            else if (message.Subject == RoomSubjects.StartGameSuccess)
+            {
+                var reader = message.GetReader();
+                MainClient.Instance.GameServerPort = reader.ReadUInt16();
+
+                // TODO: Differentiate between Arena and RLR
+                GameControl.GameState.Solo = false;
+                SceneManager.LoadScene("SLA");
+            }
+
+            // Failed to start Game
+            else if (message.Subject == RoomSubjects.StartGameFailed)
+            {
+                var content = "Failed to start game.";
+                var reader = message.GetReader();
+                if (reader.Length != 1)
+                {
+                    Debug.LogWarning("Invalid StartGame Error data received.");
+                    return;
+                }
+
+                switch (reader.ReadByte())
+                {
+                    case 0:
+                        Debug.Log("Invalid CreateRoom data sent!");
+                        break;
+                    case 1:
+                        Debug.Log("Player not logged in!");
+                        SceneManager.LoadScene("Login");
+                        break;
+                    case 2:
+                        content = "Only the host can start a game!";
+                        break;
+                    case 3:
+                        content = "Currently no gameserver is available!";
+                        break;
+                    default:
+                        Debug.Log("Invalid errorId!");
+                        break;
+                }
+                ChatManager.Instance.ServerMessage(content, MessageType.Error);
+            }
         }
     }
 }

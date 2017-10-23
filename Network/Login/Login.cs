@@ -39,6 +39,11 @@ namespace Network.Login
             LoginManager.onFailedLogin += FailedLogin;
             LoginManager.onSuccessfulAddUser += SuccessfulRegister;
             LoginManager.onFailedAddUser += FailedAddUser;
+
+            if (!MainClient.Instance.Connect())
+            {
+                Debug.Log("TODO: Failed to connect handling");
+            }
         }
 
         private void OnDestroy()
@@ -53,9 +58,9 @@ namespace Network.Login
 
         private void Update()
         {
-            var condition = GameControl.Client.Connected
+            var condition = MainClient.Instance.Connected
                             && UsernameInput.text.Length >= 2 && PasswordInput.text.Length >= 2
-                            && Rsa.Key != null;
+                            && GameControl.Rsa.Key != null;
 
             LoginButton.interactable = condition;
             AddUserButton.interactable = condition;
@@ -65,7 +70,11 @@ namespace Network.Login
         public void OfflineMode()
         {
             ConnectingScreen("Starting...");
-            LoadMainMenu();
+            if (MainClient.Instance.Connected)
+            {
+                MainClient.Instance.Disconnect();
+            }
+            SceneManager.LoadScene("MainMenu");
         }
 
         public void Cancel()
@@ -159,9 +168,9 @@ namespace Network.Login
 
         private static void LoadMainMenu()
         {
-            foreach (var group in ChatManager.SavedChatGroups)
+            foreach (var group in ChatManager.Instance.SavedChatGroups)
             {
-                ChatManager.JoinChatGroup(group);
+                ChatManager.Instance.JoinChatGroup(group);
             }
 
             SceneManager.LoadScene("MainMenu");

@@ -3,19 +3,29 @@ using System.Net;
 using DarkRift;
 using DarkRift.Client;
 using DarkRift.Dispatching;
+using Launcher;
 using UnityEngine;
 
 namespace Network
 {
-    public sealed class Client : MonoBehaviour
+    public class MainClient : Singleton<MainClient>
     {
-        public IPAddress Address { get; set; } = IPAddress.Loopback;
-        public ushort Port { get; set; } = 4296;
-        public IPVersion IpVersion { get; set; } = IPVersion.IPv4;
-        public uint ID => DarkRiftClient.ID;
-        public bool Connected => DarkRiftClient.Connected;
-        public DarkRiftClient DarkRiftClient { get; private set; }
-        public Dispatcher Dispatcher { get; private set; }
+        protected MainClient()
+        {
+        }
+
+        private readonly IPAddress _ip = IPAddress.Loopback;
+        private const ushort Port = 4296;
+        private const IPVersion IpVersion = IPVersion.IPv4;
+        private DarkRiftClient _darkRiftClient;
+        private Dispatcher _dispatcher;
+
+        public uint Id => _darkRiftClient.ID;
+        public bool Connected => _darkRiftClient.Connected;
+
+        public IPAddress GameServerIp => _ip;
+        public ushort GameServerPort { get; set; } = 4297;
+        public IPVersion GameServerIpVersion => IpVersion;
 
         // Specifies that DarkRift should take care of multithreading and invoke all events from Unity's main thread.
         private volatile bool _invokeFromDispatcher = true;
@@ -29,21 +39,22 @@ namespace Network
 
         private void Awake()
         {
-            Dispatcher = new Dispatcher(true);
-            DarkRiftClient = new DarkRiftClient();
+            _dispatcher = new Dispatcher(true);
+            _darkRiftClient = new DarkRiftClient();
 
-            DarkRiftClient.MessageReceived += Client_MessageReceived;
-            DarkRiftClient.Disconnected += Client_Disconnected;
+            _darkRiftClient.MessageReceived += Client_MessageReceived;
+            _darkRiftClient.Disconnected += Client_Disconnected;
         }
 
         private void Update()
         {
-            Dispatcher.ExecuteDispatcherTasks();
+            _dispatcher.ExecuteDispatcherTasks();
         }
 
-        private void OnDestroy()
+        public override void OnDestroy()
         {
             Close();
+            base.OnDestroy();
         }
 
         private void OnApplicationQuit()
@@ -51,22 +62,23 @@ namespace Network
             Close();
         }
 
-        public bool Connect(IPAddress ip, int port, IPVersion ipVersion)
+        public bool Connect()
         {
+            if (Connected)
+                return true;
+
             try
             {
-                DarkRiftClient.Connect(ip, port, ipVersion);
+                _darkRiftClient.Connect(_ip, Port, IpVersion);
 
                 if (Connected)
                 {
-                    Debug.Log("Connected to " + ip + " on port " + port + " using " + ipVersion + ".");
+                    Debug.Log("Connected to " + _ip + " on port " + Port + " using " + IpVersion + ".");
                     return true;
                 }
-                else
-                {
-                    Debug.Log("Connection failed to " + ip + " on port " + port + " using " + ipVersion + ".");
-                    return false;
-                }
+
+                Debug.Log("Connection failed to " + _ip + " on port " + Port + " using " + IpVersion + ".");
+                return false;
             }
             catch (Exception e)
             {
@@ -75,18 +87,22 @@ namespace Network
             }
         }
 
-        // Connect to a remote asynchronously.
-        public void ConnectInBackground(IPAddress ip, int port, IPVersion ipVersion,
-            DarkRiftClient.ConnectCompleteHandler callback = null)
+        public void Disconnect()
         {
-            DarkRiftClient.ConnectInBackground(ip, port, ipVersion,
+            _darkRiftClient.Disconnect();
+        }
+
+        // Connect to a remote asynchronously.
+        public void ConnectInBackground(DarkRiftClient.ConnectCompleteHandler callback = null)
+        {
+            _darkRiftClient.ConnectInBackground(_ip, Port, IpVersion,
                 delegate(Exception e)
                 {
                     if (callback != null)
                     {
                         if (_invokeFromDispatcher)
                         {
-                            Dispatcher.InvokeAsync(() => callback(e));
+                            _dispatcher.InvokeAsync(() => callback(e));
                         }
                         else
                         {
@@ -94,16 +110,16 @@ namespace Network
                         }
                     }
 
-                    Dispatcher.InvokeAsync(
+                    _dispatcher.InvokeAsync(
                         delegate
                         {
                             if (Connected)
                             {
-                                Debug.Log("Connected to " + ip + " on port " + port + " using " + ipVersion + ".");
+                                Debug.Log("Connected to " + _ip + " on port " + Port + " using " + IpVersion + ".");
                             }
                             else
                             {
-                                Debug.Log("Connection failed to " + ip + " on port " + port + " using " + ipVersion +
+                                Debug.Log("Connection failed to " + _ip + " on port " + Port + " using " + IpVersion +
                                           ".");
                             }
                         }
@@ -114,7 +130,7 @@ namespace Network
 
         public void SendMessage(Message message, SendMode sendMode)
         {
-            DarkRiftClient.SendMessage(message, sendMode);
+            _darkRiftClient.SendMessage(message, sendMode);
         }
 
         private void Client_MessageReceived(object sender, MessageReceivedEventArgs e)
@@ -122,7 +138,7 @@ namespace Network
             //If we're handling multithreading then pass the event to the dispatcher
             if (_invokeFromDispatcher)
             {
-                Dispatcher.InvokeAsync(
+                _dispatcher.InvokeAsync(
                     () =>
                     {
                         if (_sniffData)
@@ -139,7 +155,7 @@ namespace Network
             {
                 if (_sniffData)
                 {
-                    Dispatcher.InvokeAsync(() => Debug.Log("Message Received"));
+                    _dispatcher.InvokeAsync(() => Debug.Log("Message Received"));
                 }
 
                 var handler = MessageReceived;
@@ -152,7 +168,7 @@ namespace Network
             //If we're handling multithreading then pass the event to the dispatcher
             if (_invokeFromDispatcher)
             {
-                Dispatcher.InvokeAsync(() =>
+                _dispatcher.InvokeAsync(() =>
                     {
                         if (_sniffData)
                         {
@@ -168,7 +184,7 @@ namespace Network
             {
                 if (_sniffData)
                 {
-                    Dispatcher.InvokeAsync(() => Debug.Log("Message Received"));
+                    _dispatcher.InvokeAsync(() => Debug.Log("Message Received"));
                 }
 
                 var handler = Disconnected;
@@ -178,7 +194,7 @@ namespace Network
 
         public void Close()
         {
-            DarkRiftClient.Dispose();
+            _darkRiftClient.Dispose();
         }
     }
 }

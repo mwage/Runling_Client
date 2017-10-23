@@ -1,3 +1,4 @@
+using Network;
 using Network.Login;
 using Network.Rooms;
 using UnityEngine;
@@ -29,16 +30,16 @@ namespace UI.Main_Menu
 
         private void Update()
         {
-            MultiplayerButtonText.text = RoomManager.CurrentRoom == null ? "Multiplayer" : "Back to Lobby";
-            MultiplayerButton.interactable = LoginManager.IsLoggedIn;
-            LogoutButtonText.text = LoginManager.IsLoggedIn ? "Logout" : "Login";
+            MultiplayerButtonText.text = RoomManager.Instance.CurrentRoom == null ? "Multiplayer" : "Back to Lobby";
+            MultiplayerButton.interactable = MainClient.Instance.Connected;
+            LogoutButtonText.text = MainClient.Instance.Connected ? "Logout" : "Login";
         }
 
         #region Buttons
 
         public void Multiplayer()
         {
-            if (LoginManager.IsLoggedIn)
+            if (MainClient.Instance.Connected)
             {
                 gameObject.SetActive(false);
                 _multiplayerMenu.gameObject.SetActive(true);
@@ -63,7 +64,14 @@ namespace UI.Main_Menu
 
         public void Logout()
         {
-            LoginManager.Logout();
+            if (MainClient.Instance.Connected)
+            {
+                LoginManager.Logout();
+            }
+            else
+            {
+                SceneManager.LoadScene("Login");
+            }
         }
 
         public void Quit()

@@ -17,5 +17,9 @@
         public const ushort ChangeColor = 12;
         public const ushort ChangeColorSuccess = 13;
         public const ushort ChangeColorFailed = 14;
+        public const ushort StartGame = 15;
+        public const ushort StartGameSuccess = 16;
+        public const ushort StartGameFailed = 17;
+
     }
 }

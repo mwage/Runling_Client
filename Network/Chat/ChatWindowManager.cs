@@ -8,7 +8,7 @@ namespace Network.Chat
     public class ChatWindowManager : MonoBehaviour
     {
         public GameObject ChatPanels;
-        public GameObject FriendPanels;
+        public GameObject FriendPanel;
         [SerializeField] private InputField _inputField;
         [SerializeField] private Text _channelText;
         [SerializeField] private Text _messageText;
@@ -25,6 +25,13 @@ namespace Network.Chat
 
         private void Awake()
         {
+            if (!MainClient.Instance.Connected)
+            {
+                FriendPanel.transform.parent.gameObject.SetActive(false);
+                gameObject.SetActive(false);
+                return;
+            }
+
             _inputFieldTransform = _inputField.GetComponent<RectTransform>();
             _chatLayoutGroup.Initialize();
             _channelLayoutGroup.Initialize(this);
@@ -58,24 +65,12 @@ namespace Network.Chat
                     {
                         SendMessage();
                     }
-                    else
-                    {
-                        if (!FriendPanels.activeSelf)
-                        {
-                            DeactivatePanels();
-                        }
-                        else
-                        {
-                            ChatPanels.SetActive(true);
-                            _placeHolderText.SetActive(false);
-                            _inputField.ActivateInputField();
-                        }
-                    }
+
                     _checkInput = false;
                 }
                 else
                 {
-                    if (!FriendPanels.activeSelf)
+                    if (!FriendPanel.activeSelf)
                     {
                         ActivateInputField(_outputMessageType, _outputChannelName);
                     }
@@ -162,8 +157,8 @@ namespace Network.Chat
         private void ConfigureOutput()
         {
             _channelText.text = _outputChannelName != "" ? "[" + _outputChannelName + "]" : "";
-            _channelText.color = ChatManager.ChatColors[_outputMessageType];
-            _messageText.color = ChatManager.ChatColors[_outputMessageType];
+            _channelText.color = ChatManager.Instance.ChatColors[_outputMessageType];
+            _messageText.color = ChatManager.Instance.ChatColors[_outputMessageType];
         }
 
         // Sets output to selection and activates the input field
@@ -194,7 +189,7 @@ namespace Network.Chat
         public void ActivateChatPanel()
         {
             ChatPanels.SetActive(true);
-            FriendPanels.SetActive(false);
+            FriendPanel.SetActive(false);
             _inputField.ActivateInputField();
             _placeHolderText.SetActive(false);
         }
@@ -203,7 +198,7 @@ namespace Network.Chat
         public void DeactivatePanels()
         {
             ChatPanels.SetActive(false);
-            FriendPanels.SetActive(false);
+            FriendPanel.SetActive(false);
             _placeHolderText.SetActive(true);
         }
 
@@ -211,34 +206,34 @@ namespace Network.Chat
         {
             if (_inputField.text[0] == '/')
             {
-                ChatManager.Command(_inputField.text);
+                ChatManager.Instance.Command(_inputField.text);
             }
             else
             {
                 switch (_outputMessageType)
                 {
                     case MessageType.Private:
-                        ChatManager.SendPrivateMessage(_outputChannelName, _inputField.text);
+                        ChatManager.Instance.SendPrivateMessage(_outputChannelName, _inputField.text);
                         break;
 
                     case MessageType.Room:
-                        if (RoomManager.CurrentRoom == null)
+                        if (RoomManager.Instance.CurrentRoom == null)
                         {
                             Debug.Log("You're currently not in a Room.");
-                            ChatManager.ServerMessage("You're currently not in a Room.", MessageType.Error);
+                            ChatManager.Instance.ServerMessage("You're currently not in a Room.", MessageType.Error);
                         }
                         else
                         {
-                            ChatManager.SendRoomMessage(_inputField.text);
+                            ChatManager.Instance.SendRoomMessage(_inputField.text);
                         }
                         break;
 
                     case MessageType.ChatGroup:
-                            ChatManager.SendGroupMessage(_outputChannelName, _inputField.text);
+                            ChatManager.Instance.SendGroupMessage(_outputChannelName, _inputField.text);
                         break;
 
                     case MessageType.All:
-                        ChatManager.ServerMessage("Not in a channel. Use \"/join channelname\" to join one or \"/list\" to list all active channels!", MessageType.All);
+                        ChatManager.Instance.ServerMessage("Not in a channel. Use \"/join channelname\" to join one or \"/list\" to list all active channels!", MessageType.All);
                         break;
                     default:
                         Debug.Log("Invalid MessageType.");

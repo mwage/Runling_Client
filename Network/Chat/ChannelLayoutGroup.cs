@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Network.Rooms;
+﻿using Network.Rooms;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,10 +37,11 @@ namespace Network.Chat
 
         public void AddPrivateChannel(string channelName)
         {
-            if (ActiveChannels.Exists(c => c.Name == channelName))
+            if (ActiveChannels.Exists(c => c.Name == channelName && c.MessageType == MessageType.Private))
                 return;
 
             AddChannel(MessageType.Private, channelName);
+            _chatLayoutGroup.PrivateMessages[channelName] = new List<ChatListing>();
         }
 
         public void AddGroupChannel(string channelName)
@@ -49,6 +50,7 @@ namespace Network.Chat
                 return;
 
             AddChannel(MessageType.ChatGroup, channelName);
+            _chatLayoutGroup.GroupMessages[channelName] = new List<ChatListing>();
             _chatWindowManager.ActivateInputField(MessageType.ChatGroup, channelName);
         }
 
@@ -59,13 +61,14 @@ namespace Network.Chat
 
         private void AddRoomChannel(List<Player> players)
         {
-            var listing = AddChannel(MessageType.Room, "Room");
+            var listing = AddChannel(MessageType.Room, "Lobby");
+            listing.transform.SetSiblingIndex(1);
             _chatWindowManager.SelectChannel(listing);
         }
 
         private void RemoveRoomChannel()
         {
-            RemoveChannel(MessageType.Room, "Room");
+            RemoveChannel(MessageType.Room, "Lobby");
         }
 
         private ChannelListing AddChannel(MessageType messageType, string channelName)

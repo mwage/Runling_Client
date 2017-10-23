@@ -9,43 +9,44 @@ namespace Launcher
         protected GameControl()
         {
         }
-
-        public static Client Client;
-
+        
         private GameState _gameState;
         private InputManager _inputManager;
         private Settings _settings;
         private HighScores _highScores;
+        private Rsa _rsa;
 
         public static GameState GameState => Instance._gameState;
         public static InputManager InputManager => Instance._inputManager;
         public static Settings Settings => Instance._settings;
         public static HighScores HighScores => Instance._highScores;
+        public static Rsa Rsa => Instance._rsa;
 
         public const int Version = 2;
 
-        //Keep Game Manager active and destroy any additional copys
         private void Awake()
         {
-            Client = GetComponent<Client>();
             _gameState = new GameState();
             _inputManager = new InputManager();
             _settings = new Settings();
             _highScores = new HighScores();
+            _rsa = new Rsa();
             DontDestroyOnLoad(gameObject);
         }
 
-        //Start Game
         private void Start()
         {
-            if (Client.Connect(Client.Address, Client.Port, Client.IpVersion) &&
-                SceneManager.GetActiveScene().name == "Launcher")
+            if (SceneManager.GetActiveScene().name != "Launcher")
+                return;
+
+            if (MainClient.Instance.Connect())
             {
                 SceneManager.LoadScene("Login");
             }
             else
             {
-                Debug.Log("Insert reconnect / offline window");
+                Debug.Log("Todo: reconnect / offline window");
+                SceneManager.LoadScene("MainMenu");
             }
         }
     }

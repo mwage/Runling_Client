@@ -34,6 +34,8 @@ namespace Launcher
 
     public class GameState
     {
+        public bool Solo = false;
+
         // Level/Game management
         public bool GameActive = false;
         public int CurrentLevel = 1;

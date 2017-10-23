@@ -22,7 +22,7 @@ namespace Network.Rooms
         public void Initialize(Room room)
         {
             Room = room;
-            _button.onClick.AddListener(() => RoomManager.JoinRoom(Room.Id, PlayerColor.Green));
+            _button.onClick.AddListener(() => RoomManager.Instance.JoinRoom(Room.Id, PlayerColor.Green));
             RoomNameText.text = Room.Name;
             GameModeText.text = Room.GameType.ToString().GetFriendlyName();
             PlayerCountText.text = Room.CurrentPlayers + "/" + Room.MaxPlayers;
@@ -35,7 +35,7 @@ namespace Network.Rooms
 
         private void Update()
         {
-            _button.interactable = RoomManager.CurrentRoom == null;
+            _button.interactable = RoomManager.Instance.CurrentRoom == null;
         }
     }
 }

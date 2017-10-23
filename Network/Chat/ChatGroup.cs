@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using DarkRift;
+using System.Collections.Generic;
 using System.Linq;
-using DarkRift;
 
 namespace Network.Chat
 {

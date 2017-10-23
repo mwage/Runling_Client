@@ -21,17 +21,17 @@ namespace Network.Friends
 
         public void RemoveFriend()
         {
-            FriendManager.RemoveFriend(FriendName);
+            FriendManager.Instance.RemoveFriend(FriendName);
         }
 
         public void AcceptRequest()
         {
-            FriendManager.AcceptFriendRequest(FriendName);
+            FriendManager.Instance.AcceptFriendRequest(FriendName);
         }
 
         public void DeclineRequest()
         {
-            FriendManager.DeclineFriendRequest(FriendName);
+            FriendManager.Instance.DeclineFriendRequest(FriendName);
         }
 
         private void PrivateMessage()

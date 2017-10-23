@@ -26,6 +26,7 @@ namespace UI.Main_Menu
         {
             GameControl.GameState.SetGameMode = GameMode.Classic;
             GameControl.GameState.CurrentLevel = 1;
+            GameControl.GameState.Solo = true;
 
             _sceneLoader.LoadScene("SLA", 1);
             _mainMenuManager.gameObject.SetActive(false);
@@ -35,6 +36,7 @@ namespace UI.Main_Menu
         {
             GameControl.GameState.SetGameMode = GameMode.Practice;
             GameControl.GameState.CurrentLevel = 1;
+            GameControl.GameState.Solo = true;
 
             _sceneLoader.LoadScene("SLA", 1);
             _mainMenuManager.gameObject.SetActive(false);

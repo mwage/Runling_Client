@@ -1,6 +1,7 @@
 ﻿using DarkRift;
 using DarkRift.Client;
 using Launcher;
+using Network;
 using Network.Chat;
 using Network.DarkRiftTags;
 using Network.Rooms;
@@ -60,13 +61,19 @@ namespace UI.Main_Menu
             _cameraSpeed = 100;
             #endregion
 
-            RoomManager.CurrentRoom = null;
-            GameControl.Client.MessageReceived += OnDataHandler;
+            RoomManager.Instance.CurrentRoom = null;
+            if (MainClient.Instance.Connected)
+            {
+                MainClient.Instance.MessageReceived += OnDataHandler;
+            }
         }
 
         private void OnDestroy()
         {
-            GameControl.Client.MessageReceived -= OnDataHandler;
+            if (MainClient.Instance != null)
+            {
+                MainClient.Instance.MessageReceived -= OnDataHandler;
+            }
         }
 
         public void MoveCamera(Vector3 newPos, Quaternion newRot)
@@ -96,7 +103,7 @@ namespace UI.Main_Menu
 
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.NavigateMenu))
             {
-                if (ChatWindowManager.ChatPanels.activeSelf || ChatWindowManager.FriendPanels.activeSelf)
+                if (ChatWindowManager.ChatPanels.activeSelf || ChatWindowManager.FriendPanel.activeSelf)
                 {
                     ChatWindowManager.DeactivatePanels();
                 }
@@ -138,8 +145,8 @@ namespace UI.Main_Menu
 
             if (message != null && message.Tag == Tags.Login && message.Subject == LoginSubjects.LogoutSuccess)
             {
-                RoomManager.CurrentRoom = null;
-                RoomManager.LeaveRoom();
+                RoomManager.Instance.CurrentRoom = null;
+                RoomManager.Instance.LeaveRoom();
                 SceneManager.LoadScene("Login");
             }
         }

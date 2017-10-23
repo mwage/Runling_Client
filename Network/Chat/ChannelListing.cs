@@ -18,7 +18,7 @@ namespace Network.Chat
             _channelLayoutGroup = layoutGroup;
 
             _channelNameText.text = channelName;
-            _channelNameText.color = ChatManager.ChatColors[messageType];
+            _channelNameText.color = ChatManager.Instance.ChatColors[messageType];
         }
 
         public void ChannelSelected()
