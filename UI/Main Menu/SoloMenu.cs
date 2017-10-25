@@ -1,9 +1,8 @@
-﻿using Photon;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace UI.Main_Menu
 {
-    public class SoloMenu : PunBehaviour
+    public class SoloMenu : MonoBehaviour
     {
         public GameObject NormalSolo;
         public GameObject Error;
@@ -19,20 +18,6 @@ namespace UI.Main_Menu
             _mainMenu = _mainMenuManager.MainMenu;
             _slaMenu = _mainMenuManager.SLAMenu;
             _rlrMenu = _mainMenuManager.RLRMenu;
-        }
-
-        private void OnEnable()
-        {
-            if (PhotonNetwork.room == null)
-            {
-                Error.SetActive(false);
-                NormalSolo.SetActive(true);
-            }
-            else
-            {
-                NormalSolo.SetActive(false);
-                Error.SetActive(true);
-            }
         }
 
         #region Buttons
@@ -57,19 +42,6 @@ namespace UI.Main_Menu
             _mainMenu.gameObject.SetActive(true);
         }
 
-        public void LeaveLobby()
-        {
-            PhotonNetwork.LeaveRoom();
-        }
-        #endregion
-
-        #region PUN Callbacks
-
-        public override void OnJoinedLobby()
-        {
-            Error.SetActive(false);
-            NormalSolo.SetActive(true);
-        }
         #endregion
     }
 }

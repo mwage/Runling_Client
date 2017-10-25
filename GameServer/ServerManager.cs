@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using DarkRift;
 using DarkRift.Server;
 using DarkRift.Server.Unity;
 using Launcher;
+using Network.Rooms;
+using UnityEngine;
+using LogType = DarkRift.LogType;
 
-namespace GameServer.Scripts
+namespace Server.Scripts
 {
     public class ServerManager : Singleton<ServerManager>
     {
@@ -19,6 +23,10 @@ namespace GameServer.Scripts
         public DarkRiftServer Server { get; private set; }
         public Type[] PluginTypes { get; set; }
 
+        public Dictionary<Client, Player> Players { get; } = new Dictionary<Client, Player>();
+        public List<Player> PendingPlayers { get; } = new List<Player>();
+        public System.Random Random = new System.Random();
+
         public ServerSpawnData.LoggingSettings.LogWriterSettings[] LogWriters { get; set; } 
             = new ServerSpawnData.LoggingSettings.LogWriterSettings[0];
         public const string LogFileString = @"Logs/{0:d-M-yyyy}/{0:HH-mm-ss tt}.txt";
@@ -28,6 +36,14 @@ namespace GameServer.Scripts
         {
             //Execute all queued dispatcher tasks
             Server?.ExecuteDispatcherTasks();
+        }
+
+        public void SendToAll(Message message, SendMode sendMode)
+        {
+            foreach (var client in Players.Keys)
+            {
+                client.SendMessage(message, sendMode);
+            }
         }
 
         public void Create()
@@ -93,6 +109,7 @@ namespace GameServer.Scripts
                 client.Disconnect();
             }
             Server.Dispose();
+            Application.Quit();
         }
     }
 }

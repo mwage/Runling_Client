@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Characters.Types;
-using TrueSync;
 using UnityEngine;
 
 namespace Launcher
@@ -44,9 +43,6 @@ namespace Launcher
         // MapState
         public List<GameObject> SafeZones;
         public GameObject DronesParent;
-
-        // TS random placeholder
-        public TSRandom Random;
 
         // Voting selection (mabe substitute via inscene vote later on)
         public Difficulty SetDifficulty = Difficulty.Hard;

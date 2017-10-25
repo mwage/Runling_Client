@@ -1,5 +1,4 @@
 using Launcher;
-using Photon;
 using UI.RLR_Menus;
 using UI.RLR_Menus.Characters;
 using UnityEngine;
@@ -9,7 +8,7 @@ using UnityEngine.UI;
 
 namespace UI.Main_Menu
 {
-    public class RLRMenu : PunBehaviour
+    public class RLRMenu : MonoBehaviour
     {
         public GameObject PrevMenu;
         public GameObject LaunchRLR;

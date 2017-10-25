@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections;
-using Launcher;
-using MP;
 using UnityEngine;
 
 namespace Players

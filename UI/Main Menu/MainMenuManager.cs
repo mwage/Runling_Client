@@ -65,6 +65,7 @@ namespace UI.Main_Menu
             if (MainClient.Instance.Connected)
             {
                 MainClient.Instance.MessageReceived += OnDataHandler;
+                RoomManager.onStartGame += StartGame;
             }
         }
 
@@ -148,6 +149,24 @@ namespace UI.Main_Menu
                 RoomManager.Instance.CurrentRoom = null;
                 RoomManager.Instance.LeaveRoom();
                 SceneManager.LoadScene("Login");
+            }
+        }
+
+        private void StartGame()
+        {
+            gameObject.SetActive(false);
+            ChatWindowManager.DeactivatePanels();
+            switch (RoomManager.Instance.CurrentRoom.GameType)
+            {
+                case GameType.Arena:
+                    MoveCamera(CameraPosSLA, CameraRotSLA);
+                    break;
+                case GameType.RunlingRun:
+                    MoveCamera(CameraPosRLR, CameraRotRLR);
+                    break;
+                default:
+                    Debug.Log("No room set!");
+                    break;
             }
         }
     }

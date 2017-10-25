@@ -25,12 +25,14 @@ namespace Network.Rooms
         public delegate void ReceivedOpenRoomsEventHandler(List<Room> roomList);
         public delegate void PlayerJoinedEventHandler(Player player);
         public delegate void PlayerLeftEventHandler(uint leftId, uint newHostId);
+        public delegate void StartGameEventHandler();
 
         public static event SuccessfulLeaveRoomEventHandler onSuccessfulLeaveRoom;
         public static event SuccessfulJoinRoomEventHandler onSuccessfulJoinRoom;
         public static event ReceivedOpenRoomsEventHandler onReceivedOpenRooms;
         public static event PlayerJoinedEventHandler onPlayerJoined;
         public static event PlayerLeftEventHandler onPlayerLeft;
+        public static event StartGameEventHandler onStartGame;
 
         #endregion
         
@@ -250,15 +252,12 @@ namespace Network.Rooms
 
 //             TODO: color
 
-            // Successfully started Game
+            // Successfully initialized Start
             else if (message.Subject == RoomSubjects.StartGameSuccess)
             {
                 var reader = message.GetReader();
                 MainClient.Instance.GameServerPort = reader.ReadUInt16();
-
-                // TODO: Differentiate between Arena and RLR
                 GameControl.GameState.Solo = false;
-                SceneManager.LoadScene("SLA");
             }
 
             // Failed to start Game
@@ -292,6 +291,31 @@ namespace Network.Rooms
                         break;
                 }
                 ChatManager.Instance.ServerMessage(content, MessageType.Error);
+            }
+
+            // Server ready, launch the game
+            if (message.Subject == RoomSubjects.ServerReady)
+            {
+                if (CurrentRoom == null)
+                {
+                    Debug.Log("CurrentRoom not set.");
+                    return;
+                }
+
+
+                switch (CurrentRoom.GameType)
+                {
+                    case GameType.Arena:
+                        SceneManager.LoadScene("SLA");
+                        break;
+                    case GameType.RunlingRun:
+                        SceneManager.LoadScene("RLR");
+                        break;
+                    default:
+                        Debug.Log("Invalid GameType");
+                        LeaveRoom();
+                        break;
+                }
             }
         }
     }

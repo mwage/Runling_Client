@@ -20,6 +20,6 @@
         public const ushort StartGame = 15;
         public const ushort StartGameSuccess = 16;
         public const ushort StartGameFailed = 17;
-
+        public const ushort ServerReady = 18;
     }
 }

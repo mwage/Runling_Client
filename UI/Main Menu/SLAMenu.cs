@@ -1,11 +1,10 @@
 ﻿using Launcher;
-using Photon;
 using UI.SLA_Menus;
 using UnityEngine;
 
 namespace UI.Main_Menu
 {
-    public class SLAMenu : PunBehaviour
+    public class SLAMenu : MonoBehaviour
     {
         public GameObject PrevMenu;
 

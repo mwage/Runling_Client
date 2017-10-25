@@ -58,7 +58,6 @@ namespace SLA
             catch (Exception e)
             {
                 Debug.Log("Failed to load level " + level + ": " + e.Message + " - " + e.StackTrace);
-                PhotonNetwork.LeaveRoom();
             }
         }
 

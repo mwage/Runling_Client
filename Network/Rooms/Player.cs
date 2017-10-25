@@ -9,6 +9,8 @@ namespace Network.Rooms
         public string Name { get; private set; }
         public bool IsHost { get; set; }
         public PlayerColor Color { get; private set; }
+        public GameMode? Vote { get; set; } = null;
+        public bool FinishedVoting { get; set; } = false;
 
         public void Deserialize(DeserializeEvent e)
         {
