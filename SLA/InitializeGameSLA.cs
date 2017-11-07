@@ -1,9 +1,8 @@
-﻿using System.Collections;
-using Characters.Types;
+﻿using Characters;
 using Launcher;
-using Characters;
-using Players.Camera;
 using Players;
+using Players.Camera;
+using System.Collections;
 using TMPro;
 using UI.SLA_Menus;
 using UnityEngine;
@@ -35,7 +34,7 @@ namespace SLA
 
         public void InitializePlayer()
         {
-            var playerManager = PlayerFactory.Create(new CharacterDto(0, "Arena", 0, 0, 0, 0, 1, 0, 0)).GetComponent<PlayerManager>();
+            var playerManager = PlayerFactory.Create("Manticore");
             playerManager.Model.SetActive(false);
             _controlSLA.PlayerManager = playerManager;
             GetComponent<InputServer>().Init(InGameMenuManager.gameObject, playerManager);

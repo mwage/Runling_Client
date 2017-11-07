@@ -12,7 +12,7 @@ namespace RLR.Levels.Hard
 
         public override void SetChasers()
         {
-            Manager.RunlingChaser.SetChaserPlatforms(new DefaultDrone(9, 1f, DroneColor.BrightGreen, moveDelegate: DroneMovement.ChaserMovement), new[] { 1, 8, 16 }, new[] { 4, 12, 19 });
+            Manager.RunlingChaser.SetChaserPlatforms(new DefaultDrone(9, 1f, DroneColor.BrightGreen), new[] { 1, 8, 16 }, new[] { 4, 12, 19 });
         }
 
         public override void CreateDrones()
@@ -25,7 +25,7 @@ namespace RLR.Levels.Hard
 
             // Spawn blue drones
             DroneFactory.SetPattern(new PatContinuousSpawn(0.15f, 2),
-                new RandomDrone(10, 1, DroneColor.Blue, restrictedZone: 0, droneType: DroneType.FlyingOneWayDrone, moveDelegate: DroneMovement.CurvedMovement));
+                new RandomDrone(10, 1, DroneColor.Blue, restrictedZone: 0, droneType: DroneType.FlyingOneWayDrone));
 
             // Middle reds
             DroneFactory.SpawnDrones(new RedDrone(500, 1, DroneColor.Red, 1000, LaneArea[19], 5, true, DroneType.BouncingDrone), 5);

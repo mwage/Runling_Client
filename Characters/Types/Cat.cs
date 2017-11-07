@@ -4,7 +4,7 @@ using Players;
 
 namespace Characters.Types
 {
-    public class Manticore : ACharacter
+    public class Cat : ACharacter
     {
         public override void Initialize(PlayerManager playerManager, CharacterDto character = null)
         {
@@ -18,8 +18,8 @@ namespace Characters.Types
             {
                 Character = character;
                 InitializeFromDto();
-                Ability1 = new GravityField(this, playerManager);
-                Ability2 = new Freeze(this, playerManager);
+                Ability1 = new Boost(this, playerManager);
+                Ability2 = new Shield(this, playerManager);
             }
         }
     }

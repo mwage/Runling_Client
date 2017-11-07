@@ -1,6 +1,4 @@
 ﻿using Launcher;
-using SLA;
-using UI.OptionsMenu;
 using UnityEngine;
 
 namespace UI.SLA_Menus

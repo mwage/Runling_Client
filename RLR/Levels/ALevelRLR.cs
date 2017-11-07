@@ -2,7 +2,7 @@
 using Drones.DroneTypes;
 using Drones.Movement;
 using Launcher;
-using RLR.GenerateMap;
+using RLR.MapGenerator;
 
 namespace RLR.Levels
 {
@@ -27,7 +27,7 @@ namespace RLR.Levels
 
         public virtual void GenerateMap()
         {
-            MapGeneratorRlr.GenerateMap(15,new float[] {8, 6, 8, 6, 8}, 1.2f, 0.3f, SetAirCollider());
+            MapGeneratorRlr.GenerateMap(20, new float[] {10, 8, 10, 8, 10}, 1.2f, 0.3f, SetAirCollider());
             GameControl.GameState.SafeZones = MapGeneratorRlr.GetSafeZones();
             LaneArea = MapGeneratorRlr.GetDroneSpawnArea();
         }
@@ -39,7 +39,7 @@ namespace RLR.Levels
 
         public virtual void SetChasers()
         {
-            RunlingChaser.SetChaserPlatforms(new DefaultDrone(5f, 1f, DroneColor.DarkGreen, moveDelegate: DroneMovement.ChaserMovement));
+            RunlingChaser.SetChaserPlatforms(new DefaultDrone(5f, 1f, DroneColor.DarkGreen));
         }
     }
 }

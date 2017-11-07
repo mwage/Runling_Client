@@ -7,27 +7,32 @@ using Network.DarkRiftTags;
 using Network.Rooms;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Server.Scripts
 {
     public class ServerSetup : MonoBehaviour
     {
+        [SerializeField] private Text _text;
+
         private void Awake()
         {
             if (MainClient.Instance.Connected)
             {
-                MainClient.Instance.SendMessage(
-                    new TagSubjectMessage(Tags.GameServer, GameServerSubjects.ServerAvailable, new DarkRiftWriter()),
-                    SendMode.Reliable);
+                MainClient.Instance.SendMessage(new TagSubjectMessage(Tags.GameServer, GameServerSubjects.ServerAvailable, new DarkRiftWriter()), SendMode.Reliable);
+
+
+                ServerManager.Instance.Server.Dispatcher.InvokeAsync(() =>
+                {
+                    _text.text = "Successfully connected, waiting for games.";
+                });
             }
             else
             {
                 if (MainClient.Instance.Connect())
                 {
                     // Register as a game server
-                    MainClient.Instance.SendMessage(
-                        new TagSubjectMessage(Tags.GameServer, GameServerSubjects.RegisterServer, new DarkRiftWriter()),
-                        SendMode.Reliable);
+                    MainClient.Instance.SendMessage(new TagSubjectMessage(Tags.GameServer, GameServerSubjects.RegisterServer, new DarkRiftWriter()), SendMode.Reliable);
                 }
                 else
                 {
@@ -68,7 +73,14 @@ namespace Server.Scripts
                 catch (Exception exception)
                 {
                     Debug.Log(exception.Message + exception.StackTrace);
+                    Application.Quit();
+                    return;
                 }
+                
+                ServerManager.Instance.Server.Dispatcher.InvokeAsync(() =>
+                {
+                    _text.text = "Waiting for games...";
+                });
 
                 MainClient.Instance.SendMessage(new TagSubjectMessage(Tags.GameServer, GameServerSubjects.ServerAvailable, new DarkRiftWriter()), SendMode.Reliable);
             }

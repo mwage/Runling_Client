@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using Launcher;
 using UnityEngine;
 
 namespace Players
@@ -11,13 +10,13 @@ namespace Players
 
         public GameObject MouseClickPrefab;
 
-        private const float RotationSpeed = 30;
-        private const float Acceleration = 100;
+        private const float RotationSpeed = 40;
+        private const float Acceleration = 150;
         private const float Deceleration = 100;
+        private const float MinRegisterDistance = 0.2f;
         private const float StopSensitivity = 20; // Adjust for better accuracy at other decelerations
-        private const float ZeroTolerance = 0.001f;
 
-        public bool IsAutoClicking;
+        public bool IsAutoClicking { get; private set; }
 
         private PlayerManager _playerManager;
         private Rigidbody _rb;
@@ -110,33 +109,33 @@ namespace Players
                             ch.GetComponent<Renderer>().material.color = Color.red;
                         }
                     }
+                    return;
+                }
+
+                if ((_clickPos - transform.position).magnitude < MinRegisterDistance)
+                    return;
+
+                _targetPos = new Vector3(_clickPos.x, 0, _clickPos.z);
+                _direction = (_targetPos - _currentPos).normalized;
+                GetRelativeDirection();
+
+                _targetRotation = Quaternion.LookRotation(_direction).eulerAngles.y;
+                _targetRotation = _targetRotation > 0 ? _targetRotation : 360 - _targetRotation;
+                _accelerate = true;
+                _stop = false;
+
+                if ((_targetPos - transform.position).magnitude < 0.5f)
+                {
+                    _rb.velocity = _rotatedDirection * _currentSpeed / 2;
                 }
                 else
                 {
-                    if ((_clickPos - transform.position).magnitude < 0.05f) return;
-
-                    _targetPos = new Vector3(_clickPos.x, 0, _clickPos.z);
-                    _direction = (_targetPos - _currentPos).normalized;
-                    GetRelativeDirection();
-
-                    _targetRotation = Quaternion.LookRotation(_direction).eulerAngles.y;
-                    _targetRotation = _targetRotation > 0 ? _targetRotation : 360 - _targetRotation;
-                    _accelerate = true;
-                    _stop = false;
-
-                    if ((_targetPos - transform.position).magnitude < 0.5f)
-                    {
-                        _rb.velocity = _rotatedDirection * _currentSpeed / 2;
-                    }
-                    else
-                    {
-                        _rb.velocity = _rotatedDirection * _currentSpeed;
-                    }
-
-                    _highestSpeedReached = _rb.velocity.magnitude;
-                    _lastDistance = Mathf.Infinity;
-                    _distanceCounter = 3;
+                    _rb.velocity = _rotatedDirection * _currentSpeed;
                 }
+
+                _highestSpeedReached = _rb.velocity.magnitude;
+                _lastDistance = Mathf.Infinity;
+                _distanceCounter = 3;
             }
         }
 
@@ -172,10 +171,7 @@ namespace Players
                 Decelerate();
             }
 
-            if (Math.Abs(_currentSpeed) > ZeroTolerance) { Rotate(); }
-
-
-            //Debug.Log(Physics.gravity);
+            if (Math.Abs(_currentSpeed) > Mathf.Epsilon) { Rotate(); }
 
             _lastDistance = _distance;
             if (_distanceCounter > 0)
@@ -252,14 +248,14 @@ namespace Players
                 _lastDistance = Mathf.Infinity;
                 _distanceCounter = 3;
 
-                if (Math.Abs(collision.contacts[0].normal.x) < ZeroTolerance)
+                if (Math.Abs(collision.contacts[0].normal.x) < Mathf.Epsilon)
                 {
                     _rb.velocity = new Vector3(1, 0, 0) * _rb.velocity.x;
                     _targetPos = _rb.transform.position + new Vector3(0.1f, 0, 0) * _rb.velocity.x;
                     _direction = (_targetPos - transform.position).normalized;
                     _highestSpeedReached = _rb.velocity.magnitude;
                 }
-                else if (Math.Abs(collision.contacts[0].normal.z) < ZeroTolerance)
+                else if (Math.Abs(collision.contacts[0].normal.z) < Mathf.Epsilon)
                 {
                     _rb.velocity = new Vector3(0, 0, 1) * _rb.velocity.z;
                     _targetPos = transform.position + new Vector3(0, 0, 0.1f) * _rb.velocity.z;

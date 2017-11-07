@@ -1,5 +1,3 @@
-using Characters.Repositories;
-using Characters.Types;
 using UnityEngine;
 
 namespace UI.RLR_Menus.Characters
@@ -10,34 +8,20 @@ namespace UI.RLR_Menus.Characters
         public GameObject ManticorePreview;
         public GameObject Manticore2Preview;
 
-        private ICharacterRepository _characterRepository;
-        private string _character;
-
-        public void Awake()
-        {
-            _characterRepository = new PlayerPrefsCharacterRepository();
-        }
+        private string _character = "Cat";
 
         public void Cancel()
         {
-            gameObject.SetActive(false);
-            PickCharacterMenu.gameObject.SetActive(true);
-            PickCharacterMenu.SetId(null);
+            PickCharacterMenu.PickedSlot = 0;
             PickCharacterMenu.UnselectAllSlots();
+            PickCharacterMenu.gameObject.SetActive(true);
+            gameObject.SetActive(false);
         }
 
         public void Pick()
         {
-            if (_character == null)
-            {
-                return;
-            }
-            _characterRepository.Add(PickCharacterMenu.PickedSlot, _character);
-            
+            PickCharacterMenu.CharacterRepository.Add(PickCharacterMenu.PickedSlot, _character);
             PickCharacterMenu.gameObject.SetActive(true);
-            PickCharacterMenu.SetId(PickCharacterMenu.PickedSlot);
-            // PickCharacterMenu.ActiveSlot.isOn = true;
-            PickCharacterMenu.ActiveSlot.Select();
             gameObject.SetActive(false);
         }
 
@@ -48,12 +32,11 @@ namespace UI.RLR_Menus.Characters
             Manticore2Preview.SetActive(false);
         }
 
-        public void Manticore2PreviewToggle()
+        public void CatPreviewToggle()
         {
-            _character = "Unicorn";
+            _character = "Cat";
             ManticorePreview.SetActive(false);
             Manticore2Preview.SetActive(true);
         }
-
     }
 }

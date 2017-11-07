@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Drones.DroneTypes;
+﻿using Drones.DroneTypes;
 using Drones.Pattern;
-using Launcher;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Drones
@@ -57,8 +56,8 @@ namespace Drones
                 var newDrone = drone.CreateDroneInstance(this, isAdded, area, posDelegate);
                 if (newDrone != null)
                 {
-                    drone.ConfigureDrone(newDrone, this);
                     newDrone.AddComponent<DroneManager>();
+                    drone.ConfigureDrone(newDrone, this);
                 }
                 drones.Add(newDrone);
             }

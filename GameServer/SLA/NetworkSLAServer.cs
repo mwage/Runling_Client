@@ -18,7 +18,12 @@ namespace Server.Scripts.SLA
         {
             MainClient.Instance.SendMessage(new TagSubjectMessage(Tags.GameServer, GameServerSubjects.ServerReady, new DarkRiftWriter()), SendMode.Reliable);
 
-            ServerManager.Instance.Server.ClientManager.ClientConnected += OnClientConnected;
+            ServerManager.Instance.Server.Dispatcher.InvokeAsync(() =>
+            {
+                _text.text = "Connected: 0/" + ServerManager.Instance.PendingPlayers.Count;
+            });
+
+                ServerManager.Instance.Server.ClientManager.ClientConnected += OnClientConnected;
             ServerManager.Instance.Server.ClientManager.ClientDisconnected += OnClientDisconnected;
         }
 
@@ -74,7 +79,7 @@ namespace Server.Scripts.SLA
 
                 ServerManager.Instance.Server.Dispatcher.InvokeWait(() =>
                 {
-                    _text.text = "Identified, remaining: " + ServerManager.Instance.PendingPlayers.Count;
+                    _text.text = "Connected: " + ServerManager.Instance.Players.Count + "/" + ServerManager.Instance.PendingPlayers.Count + ServerManager.Instance.Players.Count;
 
                     if (ServerManager.Instance.PendingPlayers.Count == 0)
                     {

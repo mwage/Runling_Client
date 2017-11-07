@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Drones.DroneTypes;
+using Drones.Movement;
 using Drones.Pattern;
 using Launcher;
 using Players;
@@ -77,7 +78,7 @@ namespace RLR
             {
                 if (_chaserSpawnPlatformIdxs[i] == platformIndex && !safeZoneManager.ReachedChaserPlatform[i, 0] && (i == 0 || safeZoneManager.ReachedChaserPlatform[i-1, 0]))
                 {
-                    var newChaser = LevelManager.DroneFactory.SpawnDrones(new DefaultDrone(_chaserBase, Vector3.zero, 0, playerManager));
+                    var newChaser = LevelManager.DroneFactory.SpawnDrones(new DefaultDrone(_chaserBase, Vector3.zero, 0, new ChaserMovement(playerManager)));
                     safeZoneManager.Chasers.AddRange(newChaser);
 
                     if (_chaserSpawnPlatformIdxs[i] != 0) // sets start position of chaser

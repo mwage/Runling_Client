@@ -1,6 +1,4 @@
-﻿using Characters.Bars;
-using Launcher;
-using UnityEngine.SceneManagement;
+﻿using Launcher;
 using UnityEngine;
 
 

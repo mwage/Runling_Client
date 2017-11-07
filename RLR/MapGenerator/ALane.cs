@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace RLR.GenerateMap
+namespace RLR.MapGenerator
 {
     public abstract class ALane
     {

@@ -20,9 +20,9 @@ namespace Server.Scripts.SLA
 
         private void Awake()
         {
-            ServerManager.Instance.Server.Dispatcher.InvokeWait(() =>
+            ServerManager.Instance.Server.Dispatcher.InvokeAsync(() =>
             {
-                _text.text = "Voting!";
+                _text.text = "Votes: 0-0-0";
             });
 
             _votesPerMode[GameMode.Classic] = 0;
@@ -37,23 +37,12 @@ namespace Server.Scripts.SLA
                 StartCoroutine(Countdown());
             });
 
-//            ServerManager.Instance.Server.ClientManager.ClientConnected += OnClientConnected;
-
+            // Subscribe to all clients
             foreach (var client in ServerManager.Instance.Players.Keys)
             {
                 client.MessageReceived += OnMessageReceived;
             }
         }
-
-        private void OnDisable()
-        {
-//            ServerManager.Instance.Server.ClientManager.ClientConnected -= OnClientConnected;
-        }
-
-//        private void OnClientConnected(object sender, ClientConnectedEventArgs e)
-//        {
-//            e.Client.MessageReceived += OnMessageReceived;
-//        }
 
         private void OnMessageReceived(object sender, MessageReceivedEventArgs e)
         {
@@ -108,7 +97,10 @@ namespace Server.Scripts.SLA
             _votesPerMode[GameMode.Team] = teamVotes;
             _votesPerMode[GameMode.Practice] = practiceVotes;
 
-            Debug.Log(classicVotes + " - " + teamVotes + " - " + practiceVotes);
+            ServerManager.Instance.Server.Dispatcher.InvokeAsync(() =>
+            {
+                _text.text = "Arena - Votes: " + classicVotes + "-" + teamVotes + "-" + practiceVotes;
+            });
 
             var writer = new DarkRiftWriter();
             writer.Write(classicVotes);

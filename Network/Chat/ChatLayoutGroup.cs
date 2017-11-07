@@ -234,7 +234,7 @@ namespace Network.Chat
 
         private void ScrollToEnd()
         {
-            if (_scrollRect.verticalNormalizedPosition < 0.0001f)
+            if (_scrollRect.verticalNormalizedPosition < Mathf.Epsilon)
             {
                 Canvas.ForceUpdateCanvases();
                 _scrollRect.verticalNormalizedPosition = 0;

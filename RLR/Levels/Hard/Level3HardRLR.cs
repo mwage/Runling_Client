@@ -12,7 +12,7 @@ namespace RLR.Levels.Hard
 
         public override void SetChasers()
         {
-            Manager.RunlingChaser.SetChaserPlatforms(new DefaultDrone(9, 1f, DroneColor.BrightGreen, moveDelegate: DroneMovement.ChaserMovement), new[] { 1, 8, 16 }, new[] { 4, 12, 19 });
+            Manager.RunlingChaser.SetChaserPlatforms(new DefaultDrone(9, 1f, DroneColor.BrightGreen), new[] { 1, 8, 16 }, new[] { 4, 12, 19 });
         }
 
         public override void CreateDrones()

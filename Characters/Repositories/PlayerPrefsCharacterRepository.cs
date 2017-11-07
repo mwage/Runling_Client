@@ -1,28 +1,21 @@
 ﻿using System.Collections.Generic;
-using Characters.Repositories;
-using Characters.Types;
 using UnityEngine;
 
 namespace Characters.Repositories
 {
-    public class PlayerPrefsCharacterRepository : ICharacterRepository
+    public class CharacterRepositoryPlayerPrefs : ICharacterRepository
     {
-        
-        public PlayerPrefsCharacterRepository()
-        {
-        }
-
         public void Add(int id, string character)
         {
             if(!PlayerPrefs.HasKey(PrefsStringBuilder(id, "Occupied")))
             {
                 PlayerPrefs.SetInt(PrefsStringBuilder(id, "Occupied"), 1);
-                SetPlayerPrefsCharacterFields(id, character, 0, 0, 0, 0, 1, 0, 0);
+                UpdateRepository(id, character, 0, 0, 0, 0, 1, 0, 0);
                 PlayerPrefs.Save();
             }
             else
             {
-                Debug.Log("U overwrite the character");
+                Debug.Log("You tried to overwrite a character.");
             }
         }
 
@@ -38,23 +31,28 @@ namespace Characters.Repositories
                                   PlayerPrefs.GetInt(PrefsStringBuilder(id, "Exp")),
                                   PlayerPrefs.GetInt(PrefsStringBuilder(id, "Level")),
                                   PlayerPrefs.GetInt(PrefsStringBuilder(id, "Ability1Level")),
-                                  PlayerPrefs.GetInt(PrefsStringBuilder(id, "Ability2Level")),
-                                  true);
+                                  PlayerPrefs.GetInt(PrefsStringBuilder(id, "Ability2Level")));
             }
-            else
-            {
-                return new CharacterDto(false, id); // no saved ling here
-            }
+
+            // No saved character for this slot
+            return new CharacterDto(id, false); 
         }
 
         public List<CharacterDto> GetAll()
         {
-            List<CharacterDto> characters = new List<CharacterDto>();
-            for (int id = 1; id <= LevelingSystem.MaxCharactersAmount; id++)
+            var characters = new List<CharacterDto>();
+            for (var i = 1; i <= LevelingSystem.MaxCharactersAmount; i++)
             {
-                characters.Add(Get(id));
+                characters.Add(Get(i));
             }
             return characters;
+        }
+
+        public void UpdateRepository(CharacterDto character)
+        {
+            UpdateRepository(character.Id, character.Name, character.SpeedPoints, character.RegenPoints,
+                character.EnergyPoints, character.Exp, character.Level, character.FirstAbilityLevel,
+                character.SecondAbilityLevel);
         }
 
         public void Remove(int id)
@@ -66,27 +64,20 @@ namespace Characters.Repositories
             } 
         }
 
-        public void UpdateRepository(int id, string character, int speedPoints, int regenPoints, int energyPoints, // to change for Dto probably or single method for properties
-                           int exp, int level, int abilityFirstLevel, int abilitySecondLevel)
-        {
-            SetPlayerPrefsCharacterFields(id, character, speedPoints, regenPoints, energyPoints, exp, level,
-                                          abilityFirstLevel, abilitySecondLevel);
-        }
-
-        private void SetPlayerPrefsCharacterFields(int id, string character, int speedPoints, int regenPoints, int energyPoints,
-                                                   int exp, int level, int abilityFirstLevel, int abilitySecondLevel)
+        public void UpdateRepository(int id, string characterName, int speedPoints, int regenPoints, int energyPoints,
+                                                   int exp, int level, int firstAbilityLevel, int secondAbilityLevel)
         {
             PlayerPrefs.SetInt(PrefsStringBuilder(id, "SpeedPoints"), speedPoints);
-            PlayerPrefs.SetString(PrefsStringBuilder(id, "Character"), character);
+            PlayerPrefs.SetString(PrefsStringBuilder(id, "Character"), characterName);
             PlayerPrefs.SetInt(PrefsStringBuilder(id, "RegenPoints"), regenPoints);
             PlayerPrefs.SetInt(PrefsStringBuilder(id, "EnergyPoints"), energyPoints);
             PlayerPrefs.SetInt(PrefsStringBuilder(id, "Exp"), exp);
             PlayerPrefs.SetInt(PrefsStringBuilder(id, "Level"), level);
-            PlayerPrefs.SetInt(PrefsStringBuilder(id, "Ability1Level"), abilityFirstLevel);
-            PlayerPrefs.SetInt(PrefsStringBuilder(id, "Ability2Level"), abilitySecondLevel);
+            PlayerPrefs.SetInt(PrefsStringBuilder(id, "Ability1Level"), firstAbilityLevel);
+            PlayerPrefs.SetInt(PrefsStringBuilder(id, "Ability2Level"), secondAbilityLevel);
         }
 
-        private string PrefsStringBuilder(int id, string attribute)
+        private static string PrefsStringBuilder(int id, string attribute)
         {
             return string.Concat("char", id.ToString(), attribute);
         }

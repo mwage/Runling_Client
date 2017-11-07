@@ -1,5 +1,4 @@
-﻿using Launcher;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Characters.Bars

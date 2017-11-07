@@ -1,56 +1,24 @@
-﻿using UnityEngine;
+﻿using Drones.DroneTypes;
+using UnityEngine;
 
 namespace Drones.Movement
 {
-    public class CurvedMovement : ADroneMovement
+    public class CurvedMovement : IDroneMovement
     {
-        private Rigidbody _rb;
-        public float Curving;
-        public float DroneSpeed;
-        public float? CurvingDuration;
+        private readonly float _curving;
+        private readonly float? _curvingDuration;
 
-        private void Start ()
+        public CurvedMovement(float curving, float? curvingDuration = 4)
         {
-            _rb = GetComponent<Rigidbody>();
+            _curving = curving;
+            _curvingDuration = curvingDuration;
         }
 
-        private void FixedUpdate()
+        public void Initialize(GameObject drone, float speed)
         {
-            _rb.AddForce(_rb.transform.right * -Curving, ForceMode.Acceleration);
-            if (Vector3.Cross(_rb.velocity, Vector3.up) != Vector3.zero)
-            {
-                _rb.transform.rotation = Quaternion.LookRotation(_rb.velocity, Vector3.up);
-            }
-            _rb.velocity = _rb.velocity.normalized * DroneSpeed;
-            if (CurvingDuration != null && Curving > Time.fixedDeltaTime * Curving / CurvingDuration.Value)
-            {
-                Curving -= Time.fixedDeltaTime * Curving / CurvingDuration.Value;
-            }
-        }
-
-        public override void Move()
-        {
-
-        }
-
-        public override void Freeze()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void UnFreeze()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void SlowDown(float percentage)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void UnSlowDown()
-        {
-            throw new System.NotImplementedException();
+            var anim = drone.transform.Find("Model")?.GetComponent<Animator>();
+            anim?.SetFloat(ADrone.SpeedHash, 3 + speed / 2);
+            drone.AddComponent<CurvedMovementImplementation>().Initialize(speed, _curving, _curvingDuration);
         }
     }
 }

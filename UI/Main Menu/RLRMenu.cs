@@ -43,7 +43,7 @@ namespace UI.Main_Menu
         public void Update()
         {
             if (_voteDifficulty != null && _voteGameMode != null &&
-                PickCharacterMenu.GetComponent<PickCharacterMenu>().Id != null)
+                PickCharacterMenu.GetComponent<PickCharacterMenu>().PickedSlot != 0)
             {
                 LaunchRLR.GetComponentInChildren<Text>().text = "R U N";
                 LaunchRLR.GetComponent<Button>().interactable = true;
@@ -74,7 +74,6 @@ namespace UI.Main_Menu
             GameControl.GameState.SetGameMode = GameMode.Practice;
 
             SceneManager.LoadScene("RLR");
-            _mainMenuManager.gameObject.SetActive(false);
         }
 
         public void VoteDifficultyNormal()

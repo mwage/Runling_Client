@@ -1,6 +1,5 @@
-﻿using System.IO;
+﻿using Characters.Repositories;
 using Characters.Types;
-using Launcher;
 using Players;
 using UnityEngine;
 
@@ -9,49 +8,54 @@ namespace Characters
     public class PlayerFactory : MonoBehaviour
     {
         public GameObject ManticorePrefab;
-        public GameObject UnicornPrefab;
-
-        private PlayerFactory()
-        {
-        }
-
+        public GameObject CatPrefab;
+        
+        /// <summary>
+        /// Create a character by CharacterDto with it's Abilities (f.e. RLR character).
+        /// </summary>
         public PlayerManager Create(CharacterDto character)
         {
-            switch (character.Character)
+            var playerManager = InstantiateCharacter(character.Name);
+            playerManager?.CharacterController.Initialize(playerManager, character);
+            return playerManager;
+        }
+
+        /// <summary>
+        /// Create a character by name without any skills/energy (f.e. Arena character)
+        /// </summary>
+        public PlayerManager Create(string characterName)
+        {
+            var playerManager = InstantiateCharacter(characterName);
+            playerManager?.CharacterController.Initialize(playerManager);
+            return playerManager;
+        }
+
+        private PlayerManager InstantiateCharacter(string characterName)
+        {
+            switch (characterName)
             {
                 case "Manticore":
-                {
-                    var playerManager = Instantiate(ManticorePrefab, Vector3.zero, Quaternion.identity, transform).GetComponent<PlayerManager>();
-
-                    playerManager.CharacterController = playerManager.gameObject.AddComponent<Manticore>();
-                    playerManager.CharacterController.Initialize(character, playerManager);
-
-                    return playerManager;
-                }
-                case "Unicorn":
-                {
-                    var playerManager = Instantiate(UnicornPrefab, Vector3.zero, Quaternion.identity, transform).GetComponent<PlayerManager>();
-
-                    playerManager.CharacterController = playerManager.gameObject.AddComponent<Unicorn>();
-                    playerManager.CharacterController.Initialize(character, playerManager);
-
-                    return playerManager;
-                    }
-                case "Arena":
-                {
-                    var playerManager = Instantiate(ManticorePrefab, Vector3.zero, Quaternion.identity, transform).GetComponent<PlayerManager>();
-
-                    playerManager.CharacterController = playerManager.gameObject.AddComponent<ArenaCharacter>();
-                    playerManager.CharacterController.Initialize(character, playerManager);
-
-                    return playerManager;
-                }
+                    return InstantiateManticore();
+                case "Cat":
+                    return InstantiateCat();
                 default:
-                {
-                    Debug.Log("you want create non-existed character");
+                    Debug.LogError("You tried to create non-existed character");
                     return null;
-                }
             }
+        }
+
+        private PlayerManager InstantiateCat()
+        {
+            var playerManager = Instantiate(CatPrefab, Vector3.zero, Quaternion.identity, transform).GetComponent<PlayerManager>();
+            playerManager.CharacterController = playerManager.gameObject.AddComponent<Cat>();
+            return playerManager;
+        }
+
+        private PlayerManager InstantiateManticore()
+        {
+            var playerManager = Instantiate(ManticorePrefab, Vector3.zero, Quaternion.identity, transform).GetComponent<PlayerManager>();
+            playerManager.CharacterController = playerManager.gameObject.AddComponent<Manticore>();
+            return playerManager;
         }
     }
 }

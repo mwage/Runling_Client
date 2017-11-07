@@ -1,22 +1,19 @@
 ﻿using Drones.Movement;
 using Drones.Pattern;
-using Players;
 using UnityEngine;
 
 namespace Drones.DroneTypes
 {
     public class MineDrone : ADrone
     {
-        protected readonly IPattern Pattern;
-        protected readonly IDrone SpawnedDrones;
+        private readonly IPattern _pattern;
+        private readonly IDrone _spawnedDrones;
                 
-        public MineDrone(float speed, float size, DroneColor color, IPattern pattern = null, IDrone spawnedDrones = null, DroneType? droneType = null, 
-            DroneMovement.MovementDelegate moveDelegate = null, float? curving = null, float? sinForce = null, float? sinFrequency = null, PlayerManager chaserTarget = null) : 
-            base(speed, size, color, droneType, moveDelegate, curving, sinForce, sinFrequency, chaserTarget)
+        public MineDrone(float speed, float size, DroneColor color, IPattern pattern = null, IDrone spawnedDrones = null, DroneType droneType = DroneType.FlyingBouncingMine,
+            IDroneMovement movementType = null) : base(speed, size, color, droneType, movementType)
         {
-            DroneType = droneType ?? DroneType.FlyingBouncingMine;
-            Pattern = pattern;
-            SpawnedDrones = spawnedDrones;
+            _pattern = pattern;
+            _spawnedDrones = spawnedDrones;
         }
 
         public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null)
@@ -25,9 +22,9 @@ namespace Drones.DroneTypes
             var newDrone = Object.Instantiate(factory.SetDroneType[DroneType], DroneStartPosition.GetRandomPosition(Size, area), 
                 Quaternion.Euler(0, -45 + 90 * direction, 0), factory.transform);
 
-            if (Pattern != null)
+            if (_pattern != null)
             {
-                factory.AddPattern(Pattern, newDrone, SpawnedDrones);
+                factory.AddPattern(_pattern, newDrone, _spawnedDrones);
             }
             return newDrone;
         }

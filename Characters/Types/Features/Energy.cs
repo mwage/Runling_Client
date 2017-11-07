@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Characters.Types.Features
 {
@@ -7,18 +6,18 @@ namespace Characters.Types.Features
     {
         public float Current { get; private set; }
         public int PointsEnergy { get; private set; }
-        public int Max { get { return _baseEnergy + _energyPointRatio * PointsEnergy; } }
+        public int Max => _baseEnergy + _energyPointRatio * PointsEnergy;
         private readonly int _baseEnergy;
         private readonly int _energyPointRatio;
 
         public int PointsRegen { get; private set; }
-        private float _regen { get { return _baseRegen + PointsRegen * _regenPerSecondRatio; } }
+        private float Regen => _baseRegen + PointsRegen * _regenPerSecondRatio;
         private readonly float _regenPerSecondRatio;
         private readonly float _baseRegen;
 
-        public RegenStatus RegenStatus;
-        public float EnergyDrainPerSec;
-        public bool IsExhausted;
+        public RegenStatus RegenStatus { get; set; }
+        public float EnergyDrainPerSec { get; set; }
+        public bool IsExhausted { get; private set; }
 
         public Energy(int pointsEnergy, int pointsRegen, int baseEnergy, int energyPointRatio, float regenPerSecondRatio, float baseRegen)
         {
@@ -28,7 +27,7 @@ namespace Characters.Types.Features
             _energyPointRatio = energyPointRatio;
             _regenPerSecondRatio = regenPerSecondRatio;
             _baseRegen = baseRegen;
-            Current = 0; // change to max later
+            Current = Max;
             RegenStatus = RegenStatus.Regen;
             IsExhausted = false;
         }
@@ -45,14 +44,13 @@ namespace Characters.Types.Features
 
         public void RefreshEnergy()
         {
-            // returns 
             switch (RegenStatus)
             {
-                case (RegenStatus.Blocked):
+                case RegenStatus.Blocked:
                 {
                     return;
                 }
-                case (RegenStatus.Regen):
+                case RegenStatus.Regen:
                 {
                     IsExhausted = false;
                     if (Current >= Max)
@@ -60,10 +58,10 @@ namespace Characters.Types.Features
                         Current = Max;
                         return;
                     }
-                    Current += _regen * Time.deltaTime;
+                    Current += Regen * Time.deltaTime;
                     return;
                 }
-                case (RegenStatus.Drain):
+                case RegenStatus.Drain:
                 {
                     if (Current <= 0F)
                     {
@@ -85,16 +83,12 @@ namespace Characters.Types.Features
 
         public bool UseEnergy(int value)
         {
-            if (value > Current) return false;
+            if (value > Current)
+                return false;
+
             Current -= value;
             return true;
         }
-
-        
-
-
-
-
     }
 
     public enum RegenStatus

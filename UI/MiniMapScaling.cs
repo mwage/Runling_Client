@@ -6,18 +6,17 @@ namespace UI
     public class MiniMapScaling : MonoBehaviour
     {
         public Camera Camera;
-        public float MapSize;
+        private const float MapSize = 5;
 
 
         private void Awake()
         {
-            MapSize = 5;
             SetMiniMapSize(MapSize);
         }
 
         public void SetMiniMapSize(float mapSize)
         {
-            var mapWidth = 1 / MapSize;
+            const float mapWidth = 1 / MapSize;
             var mapHeight = Screen.width / (MapSize * Screen.height);
             Camera.rect = new Rect(0, 0, mapWidth, mapHeight);
         }

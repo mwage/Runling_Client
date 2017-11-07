@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Characters.Types;
 
 namespace Characters.Repositories
 {
@@ -9,6 +8,7 @@ namespace Characters.Repositories
         void Remove(int id);
         CharacterDto Get(int id);
         List<CharacterDto> GetAll();
+        void UpdateRepository(CharacterDto character);
         void UpdateRepository(int id, string character, int speedPoints, int regenPoints, int energyPoints,
             int exp, int level, int abilityFirstLevel, int abilitySecondLevel);
     }

@@ -1,18 +1,16 @@
 ﻿using Characters.Abilities;
-using Characters.Types;
-using Launcher;
 using UnityEngine.UI;
 
 namespace Players.AbilitiesButtons
 {
     public class AbilityButton
     {
-        private bool _isLoaded;
-        private Slider _abilitySlider;
-        private bool _shouldBeAnimated;
-        private PlayerManager _playerManager;
         private AAbility _ability;
-        private string _abilityName;
+        private readonly string _abilityName;
+        private readonly Slider _abilitySlider;
+        private bool _isLoaded;
+        private readonly PlayerManager _playerManager;
+        private bool _shouldBeAnimated;
 
         public AbilityButton(Slider abilitySlider, string abilityName, PlayerManager playerManager)
         {
@@ -32,7 +30,7 @@ namespace Players.AbilitiesButtons
         {
             switch (_abilityName)
             {
-                case ("1"):
+                case "1":
                 {
                     _ability = _playerManager.CharacterController.Ability1;
                     break;
@@ -53,12 +51,8 @@ namespace Players.AbilitiesButtons
         private void SetShouldBeAnimated()
         {
             if (!_shouldBeAnimated)
-            {
-                if (_ability.IsLoaded)
-                {
+                if (_ability.IsUsable)
                     _shouldBeAnimated = true;
-                }
-            }
         }
     }
 }

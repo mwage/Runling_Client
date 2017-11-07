@@ -1,7 +1,6 @@
 ﻿using Launcher;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UI.OptionsMenu;
 
 namespace UI.SLA_Menus
 {

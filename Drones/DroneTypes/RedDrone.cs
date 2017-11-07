@@ -1,39 +1,24 @@
-﻿using System.IO;
-using Drones.Movement;
+﻿using Drones.Movement;
 using UnityEngine;
 
 namespace Drones.DroneTypes
 {
     public class RedDrone : ADrone
     {
-        protected readonly float Acceleration;
-        protected readonly Area Area;
-        protected readonly float WaitTime;
-        protected readonly bool Synchronized;
+        private readonly Area _area;
 
-        public RedDrone(float speed, float size, DroneColor color, float acceleration, Area area, float? waitTime = null, bool? synchronized = null, DroneType? droneType = null) :
-            base(speed, size, color, droneType)
+        public RedDrone(float speed, float size, DroneColor color, float acceleration, Area area, float waitTime = 0.5f, bool synchronized = false, 
+            DroneType droneType = DroneType.FlyingOneWayDrone) :
+            base(speed, size, color, droneType, null)
         {
-            DroneType = droneType ?? DroneType.FlyingOneWayDrone;
-            Acceleration = acceleration;
-            Area = area;
-            Synchronized = synchronized ?? false;
-            WaitTime = waitTime ?? 0.5f;
-            MoveDelegate = delegate {};
+            _area = area;
+            MovementType = new PointToPointMovement(area, Size, acceleration, waitTime, synchronized);
         }
 
         public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null)
         {
             var direction = Random.Range(0, 4);
-            var newDrone = Object.Instantiate(factory.SetDroneType[DroneType], DroneStartPosition.GetRandomPosition(Size, Area), Quaternion.Euler(0, -45 + 90 * direction, 0), factory.transform);
-            var instance = newDrone.AddComponent<PointToPointMovement>();
-            instance.Acceleration = Acceleration;
-            instance.MaxVelocity = Speed;
-            instance.Area = Area;
-            instance.Size = Size;
-            instance.WaitTime = WaitTime;
-            instance.Synchronized = Synchronized;
-
+            var newDrone = Object.Instantiate(factory.SetDroneType[DroneType], DroneStartPosition.GetRandomPosition(Size, _area), Quaternion.Euler(0, -45 + 90 * direction, 0), factory.transform);
             return newDrone;
         }
     }

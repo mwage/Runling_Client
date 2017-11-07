@@ -1,6 +1,5 @@
 ﻿using Launcher;
 using Players;
-using RLR.Levels;
 using TMPro;
 using UnityEngine;
 
@@ -17,13 +16,11 @@ namespace RLR
 
         private LevelManagerRLR _levelManager;
         private InitializeGameRLR _initializeGame;
-        private DeathRLR _death;
 
         private void Awake()
         {
             _levelManager = GetComponent<LevelManagerRLR>();
             _initializeGame = GetComponent<InitializeGameRLR>();
-            _death = GetComponent<DeathRLR>();
 
             PlayerTrigger.onFinishedLevel += FinishedLevel;
         }
@@ -51,7 +48,7 @@ namespace RLR
                 TimeModeUI.SetActive(true);
 
                 CountDownText.GetComponent<TextMeshProUGUI>().text = 
-                    "Countdown: " + (int)((285 + GameControl.GameState.CurrentLevel*15) / 60) + ":" + 
+                    "Countdown: " + (285 + GameControl.GameState.CurrentLevel*15) / 60 + ":" + 
                     ((285 + GameControl.GameState.CurrentLevel*15) % 60).ToString("00.00");
 
                 HighScoreText.GetComponent<TextMeshProUGUI>().text = GameControl.GameState.SetDifficulty == 

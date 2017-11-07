@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Characters.Types;
+﻿using Characters.Types;
 using Drones;
 using Launcher;
 using Players;
-using TMPro;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Characters.Abilities
@@ -14,27 +13,10 @@ namespace Characters.Abilities
     /// </summary>
     public class Freeze : AAbility
     {
-        private readonly PlayerManager _playerManager;       // TODO: Animation
-
-        public override int Cooldown
-        {
-            get { return 10 - Level; }
-        }
-
-        public override int EnergyCost
-        {
-            get { return 10 - Level; }
-        }
-
-        public float DurationTime
-        {
-            get { return Level + 3F; }
-        }
-
-        public float Range
-        {
-            get { return 150F; }
-        }
+        public override int Cooldown => 10 - Level;
+        public override int EnergyCost => 10 - Level;
+        public float DurationTime => Level + 3;
+        public float Range => 150;
 
         public Freeze(ACharacter character, PlayerManager playerManager)
         {
@@ -42,29 +24,32 @@ namespace Characters.Abilities
             Level = character.Ability1Level;
             EnergyDrainPerSecond = 0;
             IsActive = false;
-            _playerManager = playerManager;
+            PlayerManager = playerManager;
+            Character = character;
             SetLoaded();
         }
 
         public List<Transform> DronesInRange = new List<Transform>();
 
-        public override IEnumerator Enable(ACharacter character)
+        public override IEnumerator Enable()
         {
-            if (!IsLoaded)
+            if (!IsUsable)
             {
-                Debug.Log(string.Format("colldown on: {0}", TimeToRenew));
-                yield return null;
+                Debug.Log("On Cooldown: " + TimeToRenew);
+                yield break;
             }
-            if (character.UseEnergy(EnergyCost)) // characterd had enough energy and used it
+            
+            // Check if character has enough energy and use it
+            if (Character.Energy.UseEnergy(EnergyCost))
             {
                 FindDronesInRange(GetDronesTransform());
                 FreezeDrones();
                 TimeToRenew = Cooldown;
-                IsLoaded = false;
+                IsUsable = false;
             }
         }
 
-        public override void Disable(ACharacter character)
+        public override void Disable()
         {
 
         }
@@ -90,7 +75,7 @@ namespace Characters.Abilities
         private void FindDronesInRange(List<Transform> droneTransforms)
         {
             DronesInRange.Clear();
-            var playerTransform = _playerManager.transform;
+            var playerTransform = PlayerManager.transform;
             foreach (var drone in droneTransforms)
             {
                 if (IsInRange(playerTransform, drone, Range))
@@ -100,7 +85,7 @@ namespace Characters.Abilities
             }
         }
 
-        private bool IsInRange(Transform player, Transform drone, float range)
+        private static bool IsInRange(Transform player, Transform drone, float range)
         {
             if ( (drone.position - player.position).sqrMagnitude <= range )
             {

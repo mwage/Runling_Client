@@ -5,11 +5,11 @@ namespace Drones
     public class DroneDirection {
 
         // Generates a random direction
-        public static float RandomDirection(float restrictedZone, float? coneRange = null)
+        public static float RandomDirection(float restrictedZone, float coneRange)
         {
             bool droneAngle;
             float randomDir;
-            var range = coneRange ?? 360;
+            var range = coneRange;
 
             do
             {

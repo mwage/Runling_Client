@@ -22,7 +22,7 @@ namespace RLR.Levels.Hard
 
             // Spawn yellow drones
             DroneFactory.SetPattern(new PatContinuousSpawn(0.1f, 1),
-                new RandomDrone(11, 2, DroneColor.Golden, restrictedZone: 0, droneType: DroneType.FlyingOneWayDrone, moveDelegate: DroneMovement.SinusoidalMovement, sinForce: 50, sinFrequency: 5.5f));
+                new RandomDrone(14, 2, DroneColor.Golden, DroneType.FlyingOneWayDrone, 0, movementType: new SinusoidalMovement(40, 5f)));
         }
     }
 }

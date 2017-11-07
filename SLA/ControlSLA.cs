@@ -8,16 +8,12 @@ namespace SLA
     {
         public GameObject PracticeMode;
 
-        private LevelManagerSLA _levelManager;
         private InitializeGameSLA _initializeGame;
-        private DeathSLA _death;
         public PlayerManager PlayerManager;
 
         private void Awake()
         {
-            _levelManager = GetComponent<LevelManagerSLA>();
             _initializeGame = GetComponent<InitializeGameSLA>();
-            _death = GetComponent<DeathSLA>();
         }
 
         private void Start()

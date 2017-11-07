@@ -1,27 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Drones.DroneTypes;
-using Drones.Pattern;
-using UnityEngine;
-
-namespace Characters.Types.Features
+﻿namespace Characters.Types.Features
 {
     public class Speed
     {
         public int Points { get; private set; }
         
-        public float Current
-        {
-            get { return BaseSpeed + SpeedPointRatio * Points + _bonusSpeed; }
-        }
-        protected float BaseSpeed, SpeedPointRatio;
+        public float Current => BaseSpeed + SpeedPointRatio * Points + _bonusSpeed;
+        protected float BaseSpeed { get; private set; } = 4;
+        protected float SpeedPointRatio { get; } = 0.05f;
         private float _bonusSpeed;
 
-        public Speed(float baseSpeed, float speedPointRatio)
+        public Speed(float baseSpeed, float speedPointRatio, int points = 0)
         {
             BaseSpeed = baseSpeed;
             SpeedPointRatio = speedPointRatio;
-            _bonusSpeed = 0F;
+            Points = points;
+        }
+
+        public Speed (int points = 0)
+        {
+            Points = points;
         }
 
         public void IncrementPoints()
@@ -29,21 +26,14 @@ namespace Characters.Types.Features
             Points++;
         }
 
-        public IEnumerator AddBonusSpeed(float bonusSpeed, float workingTime)
-        {
-            _bonusSpeed += bonusSpeed;
-            yield return new WaitForSeconds(workingTime);
-            _bonusSpeed -= bonusSpeed;
-        }
-
-        public void ActivateBoost(float boostSpeed) // probably need also bool variable to verify if is actiave already
+        public void ActivateBoost(float boostSpeed)
         {
             _bonusSpeed = boostSpeed;
         }
 
         public void DeactivateBoost(float boostSpeed)
         {
-            _bonusSpeed = 0F;
+            _bonusSpeed = 0;
         }
 
         public void SetBaseSpeed (float newSpeed)

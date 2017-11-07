@@ -1,16 +1,12 @@
 ﻿using Drones.DroneTypes;
-using Players;
 using UnityEngine;
 
 namespace Drones.Movement
 {
-    public class ChaserMovement : IDroneMovement
+    public class StraightMovement : IDroneMovement
     {
-        private readonly PlayerManager _target;
-
-        public ChaserMovement(PlayerManager chaserTarget)
+        public StraightMovement()
         {
-            _target = chaserTarget;
         }
 
         public void Initialize(GameObject drone, float speed)
@@ -18,7 +14,7 @@ namespace Drones.Movement
             var anim = drone.transform.Find("Model")?.GetComponent<Animator>();
             anim?.SetFloat(ADrone.SpeedHash, 3 + speed / 2);
 
-            drone.AddComponent<ChaserMovementImplementation>().Initialize(speed, _target);
+            drone.AddComponent<StraightMovementImplementation>().Initialize(speed);
         }
     }
 }

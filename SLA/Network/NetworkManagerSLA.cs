@@ -56,7 +56,7 @@ namespace SLA.Network
 
             if (message.Subject == GameServerSubjects.IdentifyPlayer)
             {
-                Debug.Log("Successfully identified");
+                Debug.Log("TODO: Successfully identified message via chat");
             }
             else if (message.Subject == GameServerSubjects.IdentifyPlayerFailed)
             {

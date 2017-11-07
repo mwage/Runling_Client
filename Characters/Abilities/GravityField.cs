@@ -1,10 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Characters.Types;
+﻿using Characters.Types;
 using Characters.Types.Features;
 using Drones;
 using Launcher;
 using Players;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Characters.Abilities
@@ -14,27 +15,10 @@ namespace Characters.Abilities
     /// </summary>
     public class GravityField : AAbility
     {
-        private PlayerManager _playerManager;       // TODO: animation
-
-        public override int Cooldown
-        {
-            get { return 10 - Level; }
-        }
-
-        public override int EnergyCost
-        {
-            get { return 1 - Level; }
-        }
-
-        public float Range
-        {
-            get { return 150F; }
-        }
-
-        public float Percentage
-        {
-            get { return 0.8F; }
-        }
+        public override int Cooldown => 10 - Level;
+        public override int EnergyCost => 1 - Level;
+        public float Range => 150;
+        public float Percentage => 0.8f;
 
         public GravityField(ACharacter character, PlayerManager playerManager)
         {
@@ -43,27 +27,30 @@ namespace Characters.Abilities
             Level = character.Ability2Level;
             EnergyDrainPerSecond = 1;
             IsActive = false;
-            _playerManager = playerManager;
+            PlayerManager = playerManager;
+            Character = character;
             SetLoaded();
         }
 
         public List<Transform> DronesInRangeNew = new List<Transform>(); //TODO: reserve memory if performance will be bad
         public List<Transform> DronesInRangeOld = new List<Transform>();
 
-        public override IEnumerator Enable(ACharacter character)
+        public override IEnumerator Enable()
         {
-            if (!IsLoaded)
+            if (!IsUsable)
             {
-                Debug.Log(string.Format("colldown on: {0}", TimeToRenew));
-                yield return null;
+                Debug.Log("On Cooldown: " + TimeToRenew);
+                yield break;
             }
-            if (character.UseEnergy(EnergyCost)) // characterd had enough energy and used it
+
+            // Check if character has enough energy and use it
+            if (Character.Energy.UseEnergy(EnergyCost))
             {
-                IsLoaded = false;
+                IsUsable = false;
                 IsActive = true;
                 TimeToRenew = Cooldown;
-                character.Energy.EnergyDrainPerSec = EnergyDrainPerSecond;
-                character.Energy.RegenStatus = RegenStatus.Drain;
+                Character.Energy.EnergyDrainPerSec = EnergyDrainPerSecond;
+                Character.Energy.RegenStatus = RegenStatus.Drain;
 
                 while (IsActive)
                 {
@@ -71,47 +58,34 @@ namespace Characters.Abilities
                     ActivateOnNewDronesInRange();
                     DeactivateOnDronesOutOfRange();
                     DronesInRangeOld = DronesInRangeNew;
-                    yield return new WaitForSeconds(0.01F);
+                    yield return new WaitForSeconds(0.01f);
                 }
             }
         }
 
-        public override void Disable(ACharacter character)
+        public override void Disable()
         {
             IsActive = false;
-            character.Energy.RegenStatus = RegenStatus.Regen;
+            Character.Energy.RegenStatus = RegenStatus.Regen;
             foreach (var drone in DronesInRangeNew)
             {
                 drone.gameObject.GetComponent<DroneManager>().DisableSlowdown();
             }
         }
 
-        private List<Transform> GetDronesTransforms()
+        private static List<Transform> GetDronesTransforms()
         {
-            List<Transform> drones = new List<Transform>();
-            foreach (Transform drone in GameControl.GameState.DronesParent.transform)
-            {
-                drones.Add(drone);
-            }
-            return drones;
+            return GameControl.GameState.DronesParent.transform.Cast<Transform>().ToList();
         }
 
         private List<Transform> FindDronesInRange(List<Transform> droneTransforms)
         {
-            List<Transform> drones = new List<Transform>();
-            foreach (var drone in droneTransforms)
-            {
-                if (IsInRange(_playerManager.transform, drone, Range))
-                {
-                    drones.Add(drone);
-                }
-            }
-            return drones;
+            return droneTransforms.Where(drone => IsInRange(PlayerManager.transform, drone, Range)).ToList();
         }
 
         private void ActivateOnNewDronesInRange()
         {
-            foreach (Transform drone in DronesInRangeNew)
+            foreach (var drone in DronesInRangeNew)
             {
                 if (!DronesInRangeOld.Contains(drone))
                 {
@@ -124,14 +98,13 @@ namespace Characters.Abilities
                     {
                         DronesInRangeNew.Remove(drone); // removes drone from list as that list is later assigned to DronesInRangeOld, which corresponds to UnSlowing drones that are out of range. -> Player dont unslow not his drones.
                     }
-                    
                 }
             }
         }
 
         private void DeactivateOnDronesOutOfRange()
         {
-            foreach (Transform drone in DronesInRangeOld)
+            foreach (var drone in DronesInRangeOld)
             {
                 if (!DronesInRangeNew.Contains(drone))
                 {
@@ -140,7 +113,7 @@ namespace Characters.Abilities
             }
         }
 
-        private bool IsInRange(Transform player, Transform drone, float range)
+        private static bool IsInRange(Transform player, Transform drone, float range)
         {
             return (drone.position - player.position).sqrMagnitude <= range;
         }

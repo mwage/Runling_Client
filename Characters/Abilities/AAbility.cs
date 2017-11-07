@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Characters.Types;
+using Players;
 using UnityEngine;
 
 namespace Characters.Abilities
@@ -12,50 +13,56 @@ namespace Characters.Abilities
         public float TimeToRenew { get; protected set; }
         public abstract int EnergyCost { get; }
         public float EnergyDrainPerSecond { get; protected set; }
-        public bool IsLoaded;
+        public bool IsUsable { get; protected set; }
+        public bool IsActive { get; protected set; }
 
-        public bool IsActive;
+        protected ACharacter Character { get; set; }
+        protected PlayerManager PlayerManager { get; set; }
 
-        public abstract IEnumerator Enable(ACharacter character);
-        public abstract void Disable(ACharacter character);
+        public abstract IEnumerator Enable();
+        public abstract void Disable();
 
 
-        public virtual void UpdateLevel(int currentAbilityLevel)
+        public void UpdateLevel(int currentAbilityLevel)
         {
             Level = currentAbilityLevel;
         }
 
-        public virtual void RefreshCooldown()
+        public void RefreshCooldown()
         {
-            if (IsLoaded) return;
-            if (IsActive) return; // no loading while active
+            if (IsUsable)
+                return;
+
             if (TimeToRenew <= 0)
             {
-                IsLoaded = true;
-                TimeToRenew = 0F;
+                IsUsable = true;
+                TimeToRenew = 0;
             }
             else
             {
                 TimeToRenew -= Time.deltaTime;
             }
-
         }
 
-        public void SetLoaded()
+        protected void SetLoaded()
         {
             TimeToRenew = 0F;
-            IsLoaded = true;
+            IsUsable = true;
         }
 
-        public virtual void IncrementLevel()
+        public void IncrementLevel()
         {
             Level++;
         }
 
-        public virtual float GetLoadingProgress()
+        public float GetLoadingProgress()
         {
-            if (Level == 0) return 0F;
-            if (IsLoaded) return 1F;
+            if (Level == 0)
+                return 0;
+
+            if (IsUsable)
+                return 1;
+
             return 1 - TimeToRenew / Cooldown;
         }
 

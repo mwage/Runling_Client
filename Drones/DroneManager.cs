@@ -5,32 +5,36 @@ namespace Drones
 {
     public class DroneManager : MonoBehaviour
     {
-        public bool IsFrozen;
-        public float TimeToUnfreeze;
+        public bool IsFrozen { get; private set; }
+        public float TimeToUnfreeze { get; private set; }
 
-        public bool IsSlowed;
+        public bool IsSlowed { get; private set; }
 
-        private ADroneMovement _droneMovement;
+        private ADroneMovementImplementation _droneMovement;
 
         private void Awake()
         {
             //droneRb = gameObject.transform.GetComponent<Rigidbody>();
-            TimeToUnfreeze = 0F;
+            TimeToUnfreeze = 0;
         }
 
         private void Initialize()
         {
-            if (_droneMovement != null) return;
-            _droneMovement = gameObject.GetComponent<ADroneMovement>();
+            if (_droneMovement != null)
+                return;
+
+            _droneMovement = gameObject.GetComponent<ADroneMovementImplementation>();
         }
 
         private void Update()
         {
-            if(_droneMovement != null)
+            if (_droneMovement != null)
+            {
                 _droneMovement.Move();
+            }
             else
             {
-                _droneMovement = gameObject.GetComponent<ADroneMovement>();
+                _droneMovement = gameObject.GetComponent<ADroneMovementImplementation>();
                 return;
             }
             if (IsFrozen)

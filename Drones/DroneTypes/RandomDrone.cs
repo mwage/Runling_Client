@@ -6,32 +6,33 @@ namespace Drones.DroneTypes
 {
     public class RandomDrone : ADrone
     {
-        protected float RestrictedZone;
-        protected float? ConeRange;
-        protected float StartDirection;
+        private readonly float _restrictedZone;
+        private readonly float _coneRange;
+        private readonly float _startDirection;
 
-        public RandomDrone(IDrone sourceDrone, float? restrictedZone = null, float? coneRange = null, float? startDirection = null)
+        public RandomDrone(IDrone sourceDrone, float restrictedZone = 1, float coneRange = 360, float startDirection = 0)
         {
             CopyFrom(sourceDrone);
-            RestrictedZone = restrictedZone ?? 1;
-            ConeRange = coneRange;
-            StartDirection = startDirection ?? 0;
+            _restrictedZone = restrictedZone;
+            _coneRange = coneRange;
+            _startDirection = startDirection;
         }
 
-        public RandomDrone(float speed, float size, DroneColor color, DroneType? droneType = null, float? restrictedZone = null, float? coneRange = null, float? startDirection = null,
-            DroneMovement.MovementDelegate moveDelegate = null, float? curving = null, float? sinForce = null, float? sinFrequency = null, PlayerManager chaserTarget = null) : 
-            base(speed, size, color, droneType, moveDelegate, curving, sinForce, sinFrequency, chaserTarget)
+        public RandomDrone(float speed, float size, DroneColor color, DroneType droneType = DroneType.BouncingDrone, float restrictedZone = 1, float coneRange = 360, float startDirection = 0,
+            IDroneMovement movementType = null) : base(speed, size, color, droneType, movementType)
         {
-            RestrictedZone = restrictedZone ?? 1;
-            ConeRange = coneRange;
-            StartDirection = startDirection ?? 0;
+            _restrictedZone = restrictedZone;
+            _coneRange = coneRange;
+            _startDirection = startDirection;
         }
 
         public override GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null)
         {
             Vector3 pos;
             if (posDelegate != null)
+            {
                 pos = posDelegate(Size, area);
+            }
             else
             {
                 pos = isAdded
@@ -40,7 +41,7 @@ namespace Drones.DroneTypes
             }
 
             var newDrone = Object.Instantiate(factory.SetDroneType[DroneType], pos, 
-                Quaternion.Euler(0, StartDirection + DroneDirection.RandomDirection(RestrictedZone, ConeRange), 0), factory.transform);
+                Quaternion.Euler(0, _startDirection + DroneDirection.RandomDirection(_restrictedZone, _coneRange), 0), factory.transform);
             return newDrone;
         }
     }

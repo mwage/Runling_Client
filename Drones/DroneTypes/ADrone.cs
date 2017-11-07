@@ -1,5 +1,4 @@
 ﻿using Drones.Movement;
-using Players;
 using UnityEngine;
 
 namespace Drones.DroneTypes
@@ -7,32 +6,23 @@ namespace Drones.DroneTypes
     public abstract class ADrone : IDrone
     {
         public float Size { get; private set; }
-
-        protected float Speed;
-        protected DroneColor Color;
-        protected DroneType DroneType;
-        protected DroneMovement.MovementDelegate MoveDelegate;
-        protected float? Curving;
-        protected float? SinForce;
-        protected float? SinFrequency;
-        protected PlayerManager ChaserTarget;
+        protected float Speed { get; set; }
+        protected DroneColor Color { get; set; }
+        protected DroneType DroneType { get; set; }
+        protected IDroneMovement MovementType { get; set; }
+        public static int SpeedHash => Animator.StringToHash("DroneSpeed");
 
         protected ADrone()
         {
         }
 
-        protected ADrone(float speed, float size, DroneColor color, DroneType? droneType = null, DroneMovement.MovementDelegate moveDelegate = null, 
-            float? curving = null, float? sinForce = null, float? sinFrequency = null, PlayerManager chaserTarget = null)
+        protected ADrone(float speed, float size, DroneColor color, DroneType droneType, IDroneMovement movementType)
         {
             Speed = speed;
             Size = size;
             Color = color;
-            DroneType = droneType ?? DroneType.BouncingDrone;
-            MoveDelegate = moveDelegate;
-            Curving = curving;
-            SinForce = sinForce;
-            SinFrequency = sinFrequency;
-            ChaserTarget = chaserTarget;
+            DroneType = droneType;
+            MovementType = movementType ?? new StraightMovement();
         }
 
         public abstract GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null);
@@ -65,8 +55,8 @@ namespace Drones.DroneTypes
                 }
             }
 
-            // Move drone
-            DroneMovement.Move(drone, Speed, MoveDelegate, Curving, SinForce, SinFrequency, ChaserTarget);
+            // Set up Drone Movement
+            MovementType.Initialize(drone, Speed);
         }
 
         protected void CopyFrom(IDrone sourceDrone)
@@ -78,14 +68,9 @@ namespace Drones.DroneTypes
                 Size = rhs.Size;
                 Color = rhs.Color;
                 DroneType = rhs.DroneType;
-                MoveDelegate = rhs.MoveDelegate;
-                Curving = rhs.Curving;
-                SinForce = rhs.SinForce;
-                SinFrequency = rhs.SinFrequency;
-                ChaserTarget = rhs.ChaserTarget;
+                MovementType = rhs.MovementType;
             }
         }
-
     }
 
     public enum DroneType

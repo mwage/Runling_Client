@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 
 namespace Players
 {
+    /// <inheritdoc />
     /// <summary>
     /// Class serve all user inputs: camera, player hotkeys, chat, etc
     /// </summary>

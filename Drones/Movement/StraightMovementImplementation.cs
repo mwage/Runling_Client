@@ -2,12 +2,18 @@
 
 namespace Drones.Movement
 {
-    public class StraightBouncingMovement : ADroneMovement
+    public class StraightMovementImplementation : ADroneMovementImplementation
     {
-        private void Start()
+        private void Awake()
         {
             //_droneManager = GetComponent<DroneManager>();
             Rb = gameObject.GetComponent<Rigidbody>();
+        }
+
+        public void Initialize(float speed)
+        {
+            Speed = speed;
+            Rb.AddForce(transform.forward * speed, ForceMode.VelocityChange);
         }
 
         public override void Move()

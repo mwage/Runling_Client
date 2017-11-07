@@ -258,6 +258,7 @@ namespace Network.Rooms
                 var reader = message.GetReader();
                 MainClient.Instance.GameServerPort = reader.ReadUInt16();
                 GameControl.GameState.Solo = false;
+                onStartGame?.Invoke();
             }
 
             // Failed to start Game
@@ -301,7 +302,6 @@ namespace Network.Rooms
                     Debug.Log("CurrentRoom not set.");
                     return;
                 }
-
 
                 switch (CurrentRoom.GameType)
                 {

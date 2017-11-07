@@ -11,30 +11,25 @@ namespace Players
         public GameObject Shield;
         public GameObject GodMode;
 
-        public int CurrentScore = 0;
-        public int TotalScore = 0;
-        public bool IsDead = true;
-        public int Lives = 1;
-        public bool IsImmobile = true;
-        public bool IsSafe = false;
-        public bool IsInvulnerable = true;
-        public bool GodModeActive = false;
-        public bool AutoClickerActive = false;
-        public List<GameObject> Chaser;
-        public ACharacter CharacterController;
-
-        private void Awake()
-        {
-            Chaser = new List<GameObject>();
-        }
+        public int CurrentScore { get; set; }
+        public int TotalScore { get; set; }
+        public bool IsDead { get; set; } = true;
+        public int Lives { get; set; } = 1;
+        public bool IsImmobile { get; set; } = true;
+        public bool IsSafe { get; set; }
+        public bool IsInvulnerable { get; set; } = true;
+        public bool GodModeActive { get; set; }
+        public bool AutoClickerActive { get; set; }
+        public List<GameObject> Chaser { get; } = new List<GameObject>();
+        public ACharacter CharacterController { get; set; }
 
         public void DestroyChaser()
         {
-            for (var i=0; i< Chaser.Count; i++)
+            foreach (var chaser in Chaser)
             {
-                if (Chaser[i] != null)
+                if (chaser != null)
                 {
-                    Destroy(Chaser[i]);
+                    Destroy(chaser);
                 }
             }
             Chaser.Clear();

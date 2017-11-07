@@ -1,74 +1,68 @@
-﻿using System.Collections;
-using UnityEngine;
-using Characters.Types;
+﻿using Characters.Types;
 using Characters.Types.Features;
 using Players;
+using System.Collections;
+using UnityEngine;
 
 namespace Characters.Abilities
 {
     public class Shield : AAbility
     {
-        private readonly PlayerManager _playerManager;
-
-        public override int Cooldown
-        {
-            get { return 10 - Level; }
-        }
-
-        public override int EnergyCost
-        {
-            get { return 10 - Level; }
-        }
-
-        public float DurationTime
-        {
-            get { return Level + 5F; }
-        }
+        public override int Cooldown => 10 - Level;
+        public override int EnergyCost => 10 - Level;
+        public float DurationTime => Level + 5;
 
         public Shield(ACharacter character, PlayerManager playerManager)
         {
-            Name = "Boost";
+            Name = "Shield";
             Level = character.Ability2Level;
             EnergyDrainPerSecond = 0;
             IsActive = false;
-            _playerManager = playerManager;
+            PlayerManager = playerManager;
+            Character = character;
             SetLoaded();
         }
 
 
-        public override IEnumerator Enable(ACharacter character)
+        public override IEnumerator Enable()
         {
-            if (IsActive) yield return null;
-            if (!IsLoaded)
+            if (IsActive)
+                yield break;
+
+            if (!IsUsable)
             {
-                Debug.Log(string.Format("colldown on: {0}", TimeToRenew));
-                yield return null;
+                Debug.Log("On Cooldown: " + TimeToRenew);
+                yield break;
             }
-            if (character.UseEnergy(EnergyCost)) // characterd had enough energy and used it
+
+            // Check if character has enough energy and use it
+            if (Character.Energy.UseEnergy(EnergyCost)) 
             {
-                _playerManager.Shield.SetActive(true);
-                _playerManager.IsInvulnerable = true;
+                PlayerManager.Shield.SetActive(true);
+                PlayerManager.IsInvulnerable = true;
                 TimeToRenew = Cooldown;
-                IsLoaded = false;
+                IsUsable = false;
                 IsActive = true;
-                character.Energy.EnergyDrainPerSec = 0F;
-                if (character.Energy.RegenStatus == RegenStatus.Regen)
+                Character.Energy.EnergyDrainPerSec = 0F;
+                if (Character.Energy.RegenStatus == RegenStatus.Regen)
                 {
-                    character.Energy.RegenStatus = RegenStatus.Blocked;
+                    Character.Energy.RegenStatus = RegenStatus.Blocked;
                 }
 
                 yield return new WaitForSeconds(DurationTime);
-                Disable(character);
+                Disable();
 
             }
         }
 
-        public override void Disable(ACharacter character)
+        public override void Disable()
         {
-            if (!IsActive) return;
-            _playerManager.Shield.SetActive(false);
-            _playerManager.IsInvulnerable = false;
-            character.Energy.RegenStatus = RegenStatus.Regen;
+            if (!IsActive)
+                return;
+
+            PlayerManager.Shield.SetActive(false);
+            PlayerManager.IsInvulnerable = false;
+            Character.Energy.RegenStatus = RegenStatus.Regen;
             IsActive = false;
         }
     }

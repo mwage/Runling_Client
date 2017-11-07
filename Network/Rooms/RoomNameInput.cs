@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Main_Menu.MP
+namespace Network.Rooms
 {
     public class RoomNameInput : MonoBehaviour
     {

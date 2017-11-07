@@ -19,18 +19,14 @@ namespace Characters.Bars
         private void Update()
         {
             if (_characterController != null)
+            {
                 UpdateEnergyBar();
+            }
         }
-//
-//        public void UpdateAll()
-//        {
-//            UpdateEnergyBar();
-//            UpdateLevelBar();
-//        }
 
         public void UpdateEnergyBar()
         {
-            EnergyBar.SetText(string.Format("{0}/{1}", (int)_characterController.Energy.Current, _characterController.Energy.Max));
+            EnergyBar.SetText($"{(int) _characterController.Energy.Current}/{_characterController.Energy.Max}");
             EnergyBar.SetProgress(_characterController.Energy.Current / _characterController.Energy.Max);
         }
 

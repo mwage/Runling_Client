@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Characters.Types;
+﻿using Characters.Repositories;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Launcher

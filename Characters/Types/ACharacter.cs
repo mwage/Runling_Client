@@ -1,4 +1,5 @@
 ﻿using Characters.Abilities;
+using Characters.Repositories;
 using Characters.Types.Features;
 using Launcher;
 using Players;
@@ -8,19 +9,23 @@ namespace Characters.Types
 {
     public abstract class ACharacter : MonoBehaviour
     {
-        public int Exp { get; protected set; }
-        public int Level { get; protected set; }
-        public int Ability1Level { get; protected set; }
-        public int Ability2Level { get; protected set; }
-        public int UnspentPoints { get; protected set; }
-        public Energy Energy;
-        public Speed Speed;
+        public int Exp { get; private set; }
+        public int Level { get; private set; }
+        public int Ability1Level { get; private set; }
+        public int Ability2Level { get; private set; }
+        public int UnspentPoints { get; private set; }
+        public Energy Energy { get; private set; }
+        public Speed Speed { get; private set; }
 
         public AAbility Ability1 { get; protected set; }
         public AAbility Ability2 { get; protected set; }
+        protected CharacterDto Character { get; set; }
 
-        public void Update()
+        private void Update()
         {
+            if (Character == null)
+                return;
+
             Energy.RefreshEnergy();
             RefreshCooldowns();
             if (Energy.IsExhausted)
@@ -29,34 +34,44 @@ namespace Characters.Types
             }
         }
 
-        protected void InitializeBase(CharacterDto chacterDto)
+        /// <summary>
+        /// Initialize a RLR character from characterDto
+        /// </summary>
+        protected void InitializeFromDto()
         {
-            Energy = new Energy(chacterDto.EnergyPoints, chacterDto.RegenPoints, 20, 5, 0.5F, 1F);
-            Speed = new Speed(10F, 0.05F);
-            Exp = chacterDto.Exp;
-            Level = chacterDto.Level;
-            Ability1Level = chacterDto.AbilityFirstLevel;
-            Ability2Level = chacterDto.AbilitySecondLevel;
+            Energy = new Energy(Character.EnergyPoints, Character.RegenPoints, 20, 5, 0.5f, 1);
+            Speed = new Speed(Character.SpeedPoints);
+            Exp = Character.Exp;
+            Level = Character.Level;
+            Ability1Level = Character.FirstAbilityLevel;
+            Ability2Level = Character.SecondAbilityLevel;
 
             TESTMODE();
         }
 
-        protected void TESTMODE()
+        /// <summary>
+        /// Initializes speed for a non-Dto character (Arena)
+        /// </summary>
+        protected void InitializeSpeed()
+        {
+            Speed = new Speed(10, 0);
+        }
+
+        private void TESTMODE()
         {
             Ability1Level = 1;
             Ability2Level = 1;
         }
 
-        public abstract void Initialize(CharacterDto character, PlayerManager playerManager);
+        public abstract void Initialize(PlayerManager playerManager, CharacterDto character = null);
 
-        public virtual void AddExp(int exp)
+        public void AddExp(int exp)
         {
             Exp += exp;
-            //Debug.Log(string.Format("Added {0} exp", exp));
             IncrementLevelIfPossible();
         }
 
-        public virtual void IncrementLevelIfPossible()
+        private void IncrementLevelIfPossible()
         {
             while (Exp >= LevelingSystem.LevelExperienceCurve[Level])
             {
@@ -65,126 +80,107 @@ namespace Characters.Types
             }
         }
 
-        public virtual void IncrementSpeedPoints()
+        public void IncrementSpeedPoints()
         {
-            if (UnspentPoints < GetSpeedPropertyCost()) return;
-            Speed.IncrementPoints();
-            UnspentPoints -= GetSpeedPropertyCost();
+            if (UnspentPoints > GetSpeedPropertyCost())
+            {
+                Speed.IncrementPoints();
+                UnspentPoints -= GetSpeedPropertyCost();
+            }
         }
 
-        public virtual void IncrementRegenPoints()
+        public void IncrementRegenPoints()
         {
-            if (UnspentPoints < GetRegenPropertyCost()) return;
-            Energy.IncreasePointsRegen();
-            UnspentPoints -= GetRegenPropertyCost();
+            if (UnspentPoints > GetRegenPropertyCost())
+            {
+                Energy.IncreasePointsRegen();
+                UnspentPoints -= GetRegenPropertyCost();
+            }
         }
 
-        public virtual void IncrementEnergyPoints()
+        public void IncrementEnergyPoints()
         {
-            if (UnspentPoints < GetEnergyPropertyCost()) return;
-            Energy.IncreasePointsEnergy();
-            UnspentPoints -= GetEnergyPropertyCost();
+            if (UnspentPoints > GetEnergyPropertyCost())
+            {
+                Energy.IncreasePointsEnergy();
+                UnspentPoints -= GetEnergyPropertyCost();
+            }
         }
 
-        public virtual void IncrementAbilityFirstLevel()
+        public void IncrementFirstAbilityLevel()
         {
             if (UnspentPoints > LevelingSystem.AbilityPointsCostPerLevel && Ability1Level < LevelingSystem.AbilityMaxLevel)
             {
                 Ability1Level++;
+                Ability1.IncrementLevel();
                 UnspentPoints-= LevelingSystem.AbilityPointsCostPerLevel;
             }
         }
 
-        public virtual void IncrementAbilitySecondLevel()
+        public void IncrementSecondAbilityLevel()
         {
             if (UnspentPoints > LevelingSystem.AbilityPointsCostPerLevel && Ability2Level < LevelingSystem.AbilityMaxLevel)
             {
                 Ability2Level++;
+                Ability2.IncrementLevel();
                 UnspentPoints -= LevelingSystem.AbilityPointsCostPerLevel;
             }
         }
 
-        public virtual bool UseEnergy(int value)
-        {
-            return Energy.UseEnergy(value);
-        }
-
         public void DisableAllSkills()
         {
-            if (Ability1 != null)
-            {
-                Ability1.Disable(this);
-            }
-            if (Ability2 != null)
-            {
-                Ability2.Disable(this);
-            }
+            Ability1?.Disable();
+            Ability2?.Disable();
         }
 
-        protected virtual void ActivateOrDeactivateAbility1()
+        private void ActivateOrDeactivateAbility(AAbility ability)
         {
-            if (!Ability1.IsActive)
+            if (!ability.IsActive)
             {
-                StartCoroutine(Ability1.Enable(this));
+                StartCoroutine(ability.Enable());
             }
             else
             {
-                Ability1.Disable(this);
+                ability.Disable();
             }
-            
         }
 
-        protected virtual void ActivateOrDeactivateAbility2()
-        {
-            if (!Ability2.IsActive)
-            {
-                StartCoroutine(Ability2.Enable(this));
-            }
-            else
-            {
-                Ability2.Disable(this);
-            }
-            
-        }
-
-        public virtual void InputAbilities()
+        public void InputAbilities()
         {
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.Ability1))
             {
-                ActivateOrDeactivateAbility1();
+                ActivateOrDeactivateAbility(Ability1);
             }
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.Ability2))
             {
-                ActivateOrDeactivateAbility2();
+                ActivateOrDeactivateAbility(Ability2);
             }
         }
 
-        public virtual void RefreshCooldowns()
+        private void RefreshCooldowns()
         {
-            if (Ability1 != null)
-                Ability1.RefreshCooldown();
-            if (Ability2 != null)
-                Ability2.RefreshCooldown();
+            Ability1?.RefreshCooldown();
+            Ability2?.RefreshCooldown();
         }
 
-        public virtual int GetSpeedPropertyCost()
+        public int GetSpeedPropertyCost()
         {
             return GetPropertyCost(Speed.Points);
         }
 
-        public virtual int GetEnergyPropertyCost()
+        public int GetEnergyPropertyCost()
         {
             return GetPropertyCost(Energy.PointsEnergy);
         }
 
-        public virtual int GetRegenPropertyCost()
+        public int GetRegenPropertyCost()
         {
             return GetPropertyCost(Energy.PointsRegen);
         }
 
-        protected virtual int GetPropertyCost(int propertyPoints)
+        private static int GetPropertyCost(int propertyPoints)
         {
-            for (int i = 0; i < LevelingSystem.PropertyCostModifierLevels.Length; i++)
+            for (var i = 0; i < LevelingSystem.PropertyCostModifierLevels.Length; i++)
             {
                 if (propertyPoints < LevelingSystem.PropertyCostModifierLevels[i])
                 {

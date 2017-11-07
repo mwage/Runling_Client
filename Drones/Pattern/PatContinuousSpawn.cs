@@ -32,7 +32,9 @@ namespace Drones.Pattern {
             var addPattern = parentDrone != null;
             while (true)
             {
-                if (parentDrone == null && addPattern) { yield break; }
+                if (parentDrone == null && addPattern)
+                    yield break;
+
                 if (parentDrone != null)
                 {
                     factory.SpawnDrones(drone, DroneCount, posDelegate: delegate

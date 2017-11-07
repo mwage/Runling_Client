@@ -14,7 +14,6 @@ namespace Players
         private const float Acceleration = 100;
         private const float Deceleration = 100;
         private const float StopSensitivity = 20; // Adjust for better accuracy at other decelerations
-        private const float ZeroTolerance = 0.001f;
         private const float MaxSpeed = 10f;
 
         public bool AutoClickerActive;
@@ -172,7 +171,7 @@ namespace Players
                 Decelerate();
             }
 
-            if (Math.Abs(_currentSpeed) > ZeroTolerance) { Rotate(); }
+            if (Math.Abs(_currentSpeed) > Mathf.Epsilon) { Rotate(); }
 
 
             //Debug.Log(Physics.gravity);
@@ -252,14 +251,14 @@ namespace Players
                 _lastDistance = Mathf.Infinity;
                 _distanceCounter = 3;
 
-                if (Math.Abs(collision.contacts[0].normal.x) < ZeroTolerance)
+                if (Math.Abs(collision.contacts[0].normal.x) < Mathf.Epsilon)
                 {
                     _rb.velocity = new Vector3(1, 0, 0) * _rb.velocity.x;
                     _targetPos = _rb.transform.position + new Vector3(0.1f, 0, 0) * _rb.velocity.x;
                     _direction = (_targetPos - transform.position).normalized;
                     _highestSpeedReached = _rb.velocity.magnitude;
                 }
-                else if (Math.Abs(collision.contacts[0].normal.z) < ZeroTolerance)
+                else if (Math.Abs(collision.contacts[0].normal.z) < Mathf.Epsilon)
                 {
                     _rb.velocity = new Vector3(0, 0, 1) * _rb.velocity.z;
                     _targetPos = transform.position + new Vector3(0, 0, 0.1f) * _rb.velocity.z;

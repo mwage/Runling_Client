@@ -1,78 +1,51 @@
-﻿using System.Collections;
-using Characters.Types;
+﻿using Characters.Types;
 using Characters.Types.Features;
 using Players;
+using System.Collections;
 
 namespace Characters.Abilities
 {
     public class Boost : AAbility
     {
-        private readonly PlayerManager _playerManager;   // Use later for boost animation
-
-        public float BoostSpeed
-        {
-            get { return Level*3F + 5F; }
-        }
-
-        public override int Cooldown
-        {
-            get { return 1; }
-        }
-
-        public override int EnergyCost
-        {
-            get { return 6 - Level; }
-        }
+        private float BoostSpeed => Level*3 + 5;
+        public override int Cooldown => 1;
+        public override int EnergyCost => 6 - Level;
 
         public Boost(ACharacter character, PlayerManager playerManager)
         {
             Name = "Boost";
             Level = character.Ability1Level;
-            //EnergyCost = CalculateEnergyCost();
-            EnergyDrainPerSecond = 1F;
+            EnergyDrainPerSecond = 1;
             IsActive = false;
-            _playerManager = playerManager;
+            PlayerManager = playerManager;
+            Character = character;
         }
 
-        public override IEnumerator Enable(ACharacter character)
+        public override IEnumerator Enable()
         {
-            if (IsActive) yield return null;
-            if (character.UseEnergy(EnergyCost)) // character had enough energy and used it
+            if (IsActive)
+                yield break;
+
+            // Check if character has enough energy and use it
+            if (Character.Energy.UseEnergy(EnergyCost))
             {
-                character.Speed.ActivateBoost(BoostSpeed);
+                Character.Speed.ActivateBoost(BoostSpeed);
                 IsActive = true;
                 TimeToRenew = Cooldown;
-                IsLoaded = false;
-                character.Energy.EnergyDrainPerSec = EnergyDrainPerSecond;
-                character.Energy.RegenStatus = RegenStatus.Drain;
+                IsUsable = false;
+                Character.Energy.EnergyDrainPerSec = EnergyDrainPerSecond;
+                Character.Energy.RegenStatus = RegenStatus.Drain;
             }
         }
 
-        public override void Disable(ACharacter character)
+        public override void Disable()
         {
-            if (!IsActive) return;
-            character.Speed.DeactivateBoost(BoostSpeed);
-            character.Energy.RegenStatus = RegenStatus.Regen;
+            if (!IsActive)
+                return;
+
+            Character.Speed.DeactivateBoost(BoostSpeed);
+            Character.Energy.RegenStatus = RegenStatus.Regen;
             IsActive = false;
         }
-
-        public override void IncrementLevel()
-        {
-            Level++;
-
-        }
-
-        
-
-
-
-
-
-
-
-
-
-
-
     }
 }

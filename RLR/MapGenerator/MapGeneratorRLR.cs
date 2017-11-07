@@ -2,7 +2,7 @@
 using Drones;
 using UnityEngine;
 
-namespace RLR.GenerateMap
+namespace RLR.MapGenerator
 {
     public class MapGeneratorRLR : MonoBehaviour
     {

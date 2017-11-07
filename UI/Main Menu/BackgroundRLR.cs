@@ -2,7 +2,7 @@
 using Drones.DroneTypes;
 using Drones.Movement;
 using Drones.Pattern;
-using RLR.GenerateMap;
+using RLR.MapGenerator;
 using UnityEngine;
 
 namespace UI.Main_Menu
@@ -32,7 +32,7 @@ namespace UI.Main_Menu
 
             // Spawn yellow drones
             DroneFactory.SetPattern(new Pat360Drones(32, repeat: true, pulseDelay: 5),
-                new DefaultDrone(12, 2, DroneColor.Golden, moveDelegate: DroneMovement.CurvedMovement, curving: 10));
+                new DefaultDrone(12, 2, DroneColor.Golden, movementType: new CurvedMovement(10)));
         }
     }
 }
