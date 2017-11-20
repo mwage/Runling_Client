@@ -33,7 +33,6 @@ namespace RLR
         private void Start()
         {
             // Set current Level and movespeed, load drones and spawn immunity
-            GameControl.GameState.GameActive = true;
 
             _initializeGame.InitializePlayer();
 

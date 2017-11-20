@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using Launcher;
+using Network.Synchronization;
 using UnityEngine;
 
 namespace Players
@@ -8,12 +10,10 @@ namespace Players
     {
         #region Variables
 
-        public GameObject MouseClickPrefab;
-
         private const float RotationSpeed = 40;
         private const float Acceleration = 150;
         private const float Deceleration = 100;
-        private const float MinRegisterDistance = 0.2f;
+        private const float MinRegisterDistance = 0.15f;
         private const float StopSensitivity = 20; // Adjust for better accuracy at other decelerations
 
         public bool IsAutoClicking { get; private set; }
@@ -21,7 +21,7 @@ namespace Players
         private PlayerManager _playerManager;
         private Rigidbody _rb;
 
-        private Vector3 _targetPos, _clickPos, _currentPos;
+        private Vector3 _targetPos, _currentPos;
         private Vector3 _normal;
         private Vector3 _direction, _rotatedDirection;
         private float _targetRotation;
@@ -42,13 +42,19 @@ namespace Players
             _playerManager = GetComponent<PlayerManager>();
             _rb = GetComponent<Rigidbody>();
             _targetPos = transform.position;
-            _anim = GetComponent<Animator>();
+            if (!_playerManager.OnServer)
+            {
+                _anim = GetComponent<Animator>();
+            }
         }
         #endregion
 
         #region UserInput
         private void Update()
         {
+            if (_playerManager.OnServer)
+                return;
+
             if (_playerManager.AutoClickerActive)
             {
                 if (!IsAutoClicking)
@@ -57,7 +63,6 @@ namespace Players
                     IsAutoClicking = true;
                 }
             }
-
 
             if (!_playerManager.AutoClickerActive)
             {
@@ -68,11 +73,10 @@ namespace Players
                 }
             }
 
-
             // On right mouseclick, set new target location
             if (Input.GetMouseButtonDown(1))
             {
-                MoveToPosition(Input.mousePosition);
+                HandleClick();
             }
 
             // Control animation
@@ -83,67 +87,95 @@ namespace Players
         {
             while (true)
             {
-                MoveToPosition(Input.mousePosition);
+                HandleClick();
                 yield return new WaitForSeconds(0.05f);
             }
         }
+        
+        private void HandleClick()
+        {
+            var clickPosition = CalculateClickPosition(Input.mousePosition);
 
-        private void MoveToPosition(Vector3 position)
+            if (clickPosition == null)
+                return;
+
+            if (GameControl.GameState.Solo)
+            {
+                MoveToPosition(clickPosition.Value);
+            }
+            else
+            {
+                SyncPlayerManager.SendClickPosition(clickPosition.Value);
+            }
+
+            PlayClickAnimation(clickPosition.Value);
+        }
+
+        private static Vector3? CalculateClickPosition(Vector3 position)
         {
             RaycastHit hit;
             var ray = UnityEngine.Camera.main.ScreenPointToRay(position);
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, DefLayer))
             {
-                _clickPos = hit.point;
-
-                // Play click animation
-                var click = Instantiate(MouseClickPrefab, _clickPos, Quaternion.Euler(0, 45, 0));
-                if (_playerManager.IsImmobile)
-                {
-                    foreach (Transform child in click.transform)
-                    {
-                        child.GetComponent<Renderer>().material.color = Color.red;
-                        foreach (Transform ch in child)
-                        {
-                            ch.GetComponent<Renderer>().material.color = Color.red;
-                        }
-                    }
-                    return;
-                }
-
-                if ((_clickPos - transform.position).magnitude < MinRegisterDistance)
-                    return;
-
-                _targetPos = new Vector3(_clickPos.x, 0, _clickPos.z);
-                _direction = (_targetPos - _currentPos).normalized;
-                GetRelativeDirection();
-
-                _targetRotation = Quaternion.LookRotation(_direction).eulerAngles.y;
-                _targetRotation = _targetRotation > 0 ? _targetRotation : 360 - _targetRotation;
-                _accelerate = true;
-                _stop = false;
-
-                if ((_targetPos - transform.position).magnitude < 0.5f)
-                {
-                    _rb.velocity = _rotatedDirection * _currentSpeed / 2;
-                }
-                else
-                {
-                    _rb.velocity = _rotatedDirection * _currentSpeed;
-                }
-
-                _highestSpeedReached = _rb.velocity.magnitude;
-                _lastDistance = Mathf.Infinity;
-                _distanceCounter = 3;
+                return hit.point;
             }
+            return null;
         }
 
+        private void PlayClickAnimation(Vector3 clickPos)
+        {
+            var click = Instantiate(_playerManager.MouseClickPrefab, clickPos, Quaternion.Euler(0, 45, 0));
+            if (_playerManager.IsImmobile)
+            {
+                foreach (Transform child in click.transform)
+                {
+                    child.GetComponent<Renderer>().material.color = Color.red;
+                    foreach (Transform ch in child)
+                    {
+                        ch.GetComponent<Renderer>().material.color = Color.red;
+                    }
+                }
+            }
+        }
+        
         #endregion
 
+        public void MoveToPosition(Vector3 clickPos)
+        {
+            if (_playerManager.IsImmobile || (clickPos - transform.position).magnitude < MinRegisterDistance)
+                    return;
+
+            _targetPos = new Vector3(clickPos.x, 0, clickPos.z);
+            _direction = (_targetPos - _currentPos).normalized;
+            GetRelativeDirection();
+
+            _targetRotation = Quaternion.LookRotation(_direction).eulerAngles.y;
+            _targetRotation = _targetRotation > 0 ? _targetRotation : 360 - _targetRotation;
+            _accelerate = true;
+            _stop = false;
+
+            if ((_targetPos - transform.position).magnitude < 0.5f)
+            {
+                _rb.velocity = _rotatedDirection * _currentSpeed / 2;
+            }
+            else
+            {
+                _rb.velocity = _rotatedDirection * _currentSpeed;
+            }
+
+            _highestSpeedReached = _rb.velocity.magnitude;
+            _lastDistance = Mathf.Infinity;
+            _distanceCounter = 3;
+        }
+
         #region Physics
+
         private void FixedUpdate()
         {
+            if (!_playerManager.OnServer && !GameControl.GameState.Solo)
+                return;
+
             _maxSpeed = _playerManager.CharacterController.Speed.Current;
             _currentPos = new Vector3(_rb.transform.position.x, 0, _rb.transform.position.z);
             _currentSpeed = _rb.velocity.magnitude;

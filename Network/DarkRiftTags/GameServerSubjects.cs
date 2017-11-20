@@ -8,6 +8,8 @@
         public const ushort ServerReady = 3;
         public const ushort IdentifyPlayer = 4;
         public const ushort IdentifyPlayerFailed = 5;
+        public const ushort PlayerJoined = 6;
 
+        public const ushort TestModeSLA = 100;
     }
 }

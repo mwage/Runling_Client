@@ -1,7 +1,7 @@
 ﻿using DarkRift;
 using Launcher;
 
-namespace Network.Rooms
+namespace Network.Synchronization.Data
 {
     public class Room : IDarkRiftSerializable
     {

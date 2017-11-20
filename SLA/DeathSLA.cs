@@ -27,13 +27,17 @@ namespace SLA
             playerManager.IsImmobile = true;
             playerManager.IsInvulnerable = true;
             playerManager.Model.SetActive(false);
-            playerManager.DestroyChaser();
 
-            // Check if highscore and save it
-            if (GameControl.GameState.SetGameMode != GameMode.Practice)
-                _score.SetHighScore();
+            if (GameControl.GameState.Solo)
+            {
+                playerManager.DestroyChaser();
 
-            _levelManager.EndLevel(1);
+                // Check if highscore and save it
+                if (GameControl.GameState.SetGameMode != GameMode.Practice)
+                    _score.SetHighScore();
+
+                _levelManager.EndLevel(1);
+            }
         }
     }
 }

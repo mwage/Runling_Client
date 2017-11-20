@@ -11,5 +11,12 @@
 
         // Ingame
         public const byte Voting = 20;
+        public const byte SyncPlayer = 21;
+        public const byte SyncDrone = 22;
+        public const byte SyncGame = 23;
+
+        // Ingame mode specific
+        public const byte SLA = 100;
+        public const byte RLR = 110;
     }
 }

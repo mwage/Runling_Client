@@ -1,10 +1,11 @@
-﻿using System;
-using DarkRift;
+﻿using DarkRift;
 using DarkRift.Client;
 using Launcher;
 using Network;
 using Network.DarkRiftTags;
-using Network.Rooms;
+using Network.Synchronization;
+using System;
+using Network.Synchronization.Data;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;

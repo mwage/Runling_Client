@@ -4,10 +4,10 @@ namespace SLA.Levels
 {
     public abstract class ALevelSLA : ILevelSLA
     {
-        protected readonly LevelManagerSLA Manager;
+        protected readonly ILevelManagerSLA Manager;
         protected readonly DroneFactory DroneFactory;
 
-        protected ALevelSLA(LevelManagerSLA manager)
+        protected ALevelSLA(ILevelManagerSLA manager)
         {
             Manager = manager;
             DroneFactory = Manager.DroneFactory;

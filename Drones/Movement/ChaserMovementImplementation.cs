@@ -28,7 +28,6 @@ namespace Drones.Movement
 
         private void FixedUpdate()
         {
-            Debug.Log((_droneManager == null).ToString());
             if (_target == null)
                 return;
 

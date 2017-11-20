@@ -8,34 +8,31 @@ namespace SLA
 {
     public class ScoreSLA : MonoBehaviour
     {
-        private ControlSLA _controlSLA;
         public GameObject PlayerScorePrefab;
         public Transform ScoreLayoutGroup;
         public Text NewHighScore;
 
-        public int[] LevelScoreCurGame = new int[LevelManagerSLA.NumLevels];
-        private GameObject _playerScores;
-        public Text CurrentScoreText;
-        private Text _totalScoreText;
+        public int[] LevelScoreCurGame { get; } = new int[LevelManagerSLA.NumLevels];
+        public Text CurrentScoreText { get; private set; }
 
-//        TODO: get playername without photon
-//        private Text _playerNameText;
+        private ControlSLA _controlSLA;
+        private GameObject _playerScores;
+        private Text _totalScoreText;
 
         private void Awake()
         {
             _controlSLA = GetComponent<ControlSLA>();
         }
 
-        private void Start()
+        public void SetName(string playerName)
         {
-                _playerScores = Instantiate(PlayerScorePrefab, ScoreLayoutGroup);
-//                _playerNameText = _playerScores.transform.Find("PlayerName").GetComponent<Text>();
-                CurrentScoreText = _playerScores.transform.Find("CurrentScore").GetComponent<Text>();
-                _totalScoreText = _playerScores.transform.Find("TotalScore").GetComponent<Text>();
+            _playerScores = Instantiate(PlayerScorePrefab, ScoreLayoutGroup);
+            _playerScores.transform.Find("PlayerName").GetComponent<Text>().text = playerName;
+            CurrentScoreText = _playerScores.transform.Find("CurrentScore").GetComponent<Text>();
+            _totalScoreText = _playerScores.transform.Find("TotalScore").GetComponent<Text>();
 
-//                _playerNameText.text = PhotonNetwork.player.NickName;
-                CurrentScoreText.text = "0";
-                _totalScoreText.text = "0";
+            CurrentScoreText.text = "0";
+            _totalScoreText.text = "0";
         }
 
         public void StartScore()
@@ -65,13 +62,13 @@ namespace SLA
         public void SetHighScore()
         {
             var playerManager = _controlSLA.PlayerManager;
-            LevelScoreCurGame[GameControl.GameState.CurrentLevel - 1] = playerManager.CurrentScore;
+            LevelScoreCurGame[_controlSLA.CurrentLevel - 1] = playerManager.CurrentScore;
 
-            if (playerManager.CurrentScore > GameControl.HighScores.HighScoreSLA[GameControl.GameState.CurrentLevel])
+            if (playerManager.CurrentScore > GameControl.HighScores.HighScoreSLA[_controlSLA.CurrentLevel])
             {
                 NewHighScoreSLA(playerManager);
-                GameControl.HighScores.HighScoreSLA[GameControl.GameState.CurrentLevel] = playerManager.CurrentScore;
-                PlayerPrefs.SetInt("HighScoreSLA" + GameControl.GameState.CurrentLevel, GameControl.HighScores.HighScoreSLA[GameControl.GameState.CurrentLevel]);
+                GameControl.HighScores.HighScoreSLA[_controlSLA.CurrentLevel] = playerManager.CurrentScore;
+                PlayerPrefs.SetInt("HighScoreSLA" + _controlSLA.CurrentLevel, GameControl.HighScores.HighScoreSLA[_controlSLA.CurrentLevel]);
             }
 
             SetGameHighScore(playerManager);

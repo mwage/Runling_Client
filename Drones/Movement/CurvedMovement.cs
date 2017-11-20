@@ -17,7 +17,10 @@ namespace Drones.Movement
         public void Initialize(GameObject drone, float speed)
         {
             var anim = drone.transform.Find("Model")?.GetComponent<Animator>();
-            anim?.SetFloat(ADrone.SpeedHash, 3 + speed / 2);
+            if (anim != null)
+            {
+                anim.SetFloat(ADrone.SpeedHash, 3 + speed / 2);
+            }
             drone.AddComponent<CurvedMovementImplementation>().Initialize(speed, _curving, _curvingDuration);
         }
     }

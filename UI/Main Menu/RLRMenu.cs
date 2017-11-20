@@ -69,6 +69,7 @@ namespace UI.Main_Menu
         public void StartGameSOLOHARDRLRTEST()
         {
             GameControl.GameState.CurrentLevel = 1;
+            GameControl.GameState.Solo = true;
             GameControl.GameState.CharacterDto = PickCharacterMenu.GetComponent<PickCharacterMenu>().GetCharacterDto();
             GameControl.GameState.SetDifficulty = Difficulty.Hard;
             GameControl.GameState.SetGameMode = GameMode.Practice;

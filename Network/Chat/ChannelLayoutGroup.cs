@@ -1,5 +1,7 @@
 ﻿using Network.Rooms;
+using Network.Synchronization;
 using System.Collections.Generic;
+using Network.Synchronization.Data;
 using UnityEngine;
 using UnityEngine.UI;
 

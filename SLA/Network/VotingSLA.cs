@@ -1,7 +1,9 @@
 ﻿using DarkRift;
 using DarkRift.Client;
 using Launcher;
+using Network;
 using Network.DarkRiftTags;
+using Network.Synchronization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +12,7 @@ namespace SLA.Network
 {
     public class VotingSLA : MonoBehaviour
     {
-        [SerializeField] private NetworkManagerSLA _networkManager;
+        [SerializeField] private SetupNetworkSLA _setupNetwork;
         [SerializeField] private GameObject _votingCanvas;
         [SerializeField] private Button _finishButton;
         [SerializeField] private Text _classicVoteText;
@@ -23,12 +25,13 @@ namespace SLA.Network
 
         private void Awake()
         {
-            _networkManager.GameClient.MessageReceived += OnDataHandler;
+            GameClient.Instance.MessageReceived += OnDataHandler;
+            SyncGameManager.onCountdown += OnCountdown;
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
-            _networkManager.GameClient.MessageReceived -= OnDataHandler;
+            SyncGameManager.onCountdown -= OnCountdown;
         }
 
         #region Buttons
@@ -58,18 +61,17 @@ namespace SLA.Network
             if (gameMode == _currentGameMode)
                 return;
 
-            Debug.Log("Sending: " + gameMode);
             var writer = new DarkRiftWriter();
             writer.Write((byte)gameMode);
 
-            _networkManager.GameClient.SendMessage(new TagSubjectMessage(Tags.Voting, VotingSubjects.SubmitVote, writer), SendMode.Reliable);
+            GameClient.Instance.SendMessage(new TagSubjectMessage(Tags.Voting, VotingSubjects.SubmitVote, writer), SendMode.Reliable);
             _currentGameMode = gameMode;
         }
 
         public void Finish()
         {
             _finishButton.gameObject.SetActive(false);
-            _networkManager.GameClient.SendMessage(new TagSubjectMessage(Tags.Voting, VotingSubjects.FinishVoting, new DarkRiftWriter()), SendMode.Reliable);
+            GameClient.Instance.SendMessage(new TagSubjectMessage(Tags.Voting, VotingSubjects.FinishVoting, new DarkRiftWriter()), SendMode.Reliable);
         }
 
         #endregion
@@ -89,13 +91,10 @@ namespace SLA.Network
             // Votes changed
             else if (message.Subject == VotingSubjects.VoteUpdate)
             {
-                Debug.Log("received votes");
                 var reader = message.GetReader();
                 var classicVotes = reader.ReadByte();
                 var teamVotes = reader.ReadByte();
                 var practiceVotes = reader.ReadByte();
-
-                Debug.Log(classicVotes + " - " + teamVotes + " - " + practiceVotes);
 
                 _classicVoteText.text = classicVotes.ToString();
                 _teamVoteText.text = teamVotes.ToString();
@@ -115,21 +114,22 @@ namespace SLA.Network
 
                 // Start Game
                 gameObject.SetActive(false);
-                _networkManager.Game.SetActive(true);
+                _setupNetwork.Game.SetActive(true);
             }
-            // Countdown update
-            else if (message.Subject == VotingSubjects.Countdown)
+        }
+
+        private void OnCountdown(ushort counter)
+        {
+            if (_currentCountdown != null)
             {
-                var reader = message.GetReader();
-                var newNumber = reader.ReadByte();
-                if (_currentCountdown != null)
-                {
-                    Destroy(_currentCountdown.gameObject);
-                }
-                _currentCountdown = Instantiate(_countdownPrefab, _votingCanvas.transform);
-                _currentCountdown.GetComponent<RectTransform>().anchoredPosition = new Vector2(-200, 150);
-                _currentCountdown.GetComponent<TextMeshProUGUI>().text = newNumber.ToString();
+                Destroy(_currentCountdown.gameObject);
             }
+            if (counter == 0)
+                return;
+
+            _currentCountdown = Instantiate(_countdownPrefab, _votingCanvas.transform);
+            _currentCountdown.GetComponent<RectTransform>().anchoredPosition = new Vector2(-200, 150);
+            _currentCountdown.GetComponent<TextMeshProUGUI>().text = counter.ToString();
         }
     }
 }

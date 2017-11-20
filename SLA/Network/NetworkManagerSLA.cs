@@ -3,65 +3,70 @@ using DarkRift.Client;
 using Launcher;
 using Network;
 using Network.DarkRiftTags;
+using Players;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace SLA.Network
 {
     public class NetworkManagerSLA : MonoBehaviour
     {
-        public GameObject Game;
-        public GameObject Voting;
-        public GameClient GameClient;
+        [SerializeField] private InitializeGameSLA _initializeGame;
+
+        private ControlSLA _controlSLA;
 
         private void Awake()
         {
-            GameClient = GetComponent<GameClient>();
             if (GameControl.GameState.Solo)
-            {
-                Voting.SetActive(false);
-                Game.SetActive(true);
-                gameObject.SetActive(false);
                 return;
-            }
 
-            Voting.SetActive(true);
+            _controlSLA = _initializeGame.gameObject.GetComponent<ControlSLA>();
 
-            if (GameClient.Connect(MainClient.Instance.GameServerIp, MainClient.Instance.GameServerPort,
-                MainClient.Instance.GameServerIpVersion))
-            {
-                Debug.Log("Connected to game server");
-
-                GameClient.MessageReceived += OnDataHandler;
-                
-                // Identify
-                var writer = new DarkRiftWriter();
-                writer.Write(MainClient.Instance.Id);
-                GameClient.SendMessage(new TagSubjectMessage(Tags.GameServer, GameServerSubjects.IdentifyPlayer, writer), SendMode.Reliable);
-            }
-            else
-            {
-                Debug.Log("Failed to connect to game server");
-                Debug.Log("TODO: Insert proper failed to connect logic!");
-                SceneManager.LoadScene("MainMenu");
-            }
+            GameClient.Instance.MessageReceived += OnDataHandler;
         }
 
         private void OnDataHandler(object sender, MessageReceivedEventArgs e)
         {
             var message = e.Message as TagSubjectMessage;
 
-            if (message == null || message.Tag != Tags.GameServer)
+            if (message == null || message.Tag != Tags.SLA)
                 return;
 
-            if (message.Subject == GameServerSubjects.IdentifyPlayer)
+            // Initialize Players
+            if (message.Subject == SLASubjects.InitializePlayers)
             {
-                Debug.Log("TODO: Successfully identified message via chat");
+                foreach (var player in GameClient.Instance.Players)
+                {
+                    PlayerManager playerManager;
+
+                    if (player.Id == GameClient.Instance.Id)
+                    {
+                        Debug.Log("Initializing me");
+                        playerManager = _initializeGame.InitializePlayer(player);
+                    }
+                    else
+                    {
+                        Debug.Log("Initializing another player");
+                        playerManager = _initializeGame.InitializeOtherPlayer(player);
+                    }
+                    _controlSLA.PlayerManagers[playerManager.Player.Id] = playerManager;
+                }
             }
-            else if (message.Subject == GameServerSubjects.IdentifyPlayerFailed)
+            else if (message.Subject == SLASubjects.PrepareLevel)
             {
-                Debug.Log("Failed to identify player");
-                SceneManager.LoadScene("MainMenu");
+                var reader = message.GetReader();
+                _controlSLA.CurrentLevel = reader.ReadByte();
+                _initializeGame.PrepareLevel();
+            }
+            else if (message.Subject == SLASubjects.StartLevel)
+            {
+                foreach (var playerManager in _controlSLA.PlayerManagers.Values)
+                {
+                    _initializeGame.StartLevel(playerManager);
+                }
+            }
+            else if (message.Subject == SLASubjects.HidePanels)
+            {
+                _initializeGame.HidePanels();
             }
         }
     }

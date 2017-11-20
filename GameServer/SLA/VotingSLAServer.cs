@@ -5,6 +5,7 @@ using DarkRift;
 using DarkRift.Server;
 using Launcher;
 using Network.DarkRiftTags;
+using Server.Scripts.Synchronization;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,7 @@ namespace Server.Scripts.SLA
     public class VotingSLAServer : MonoBehaviour
     {
         [SerializeField] private Text _text;
+        [SerializeField] private ControlSLAServer _controlSLA;
         private const byte CountdownFrom = 30;
         public GameObject Game;
 
@@ -112,23 +114,20 @@ namespace Server.Scripts.SLA
 
         private IEnumerator Countdown()
         {
-            for (var i = CountdownFrom; i > 0; i--)
+            for (ushort i = CountdownFrom; i > 0; i--)
             {
-                var writer = new DarkRiftWriter();
-                writer.Write(i);
-                ServerManager.Instance.SendToAll(new TagSubjectMessage(Tags.Voting, VotingSubjects.Countdown, writer), SendMode.Reliable);
-
+                SyncGameServer.Countdown(i);
                 yield return new WaitForSeconds(1);
             }
-
+            SyncGameServer.Countdown(0);
             Finish();
         }
 
         private void Finish()
         {
-            var gameMode = SetGameMode();
+            _controlSLA.GameMode = SetGameMode();
             var writer = new DarkRiftWriter();
-            writer.Write((byte)gameMode);
+            writer.Write((byte)_controlSLA.GameMode);
 
             ServerManager.Instance.SendToAll(new TagSubjectMessage(Tags.Voting, VotingSubjects.StartGame, writer), SendMode.Reliable);
 

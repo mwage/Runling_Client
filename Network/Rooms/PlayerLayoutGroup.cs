@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Network.Synchronization;
+using System.Collections.Generic;
+using Network.Synchronization.Data;
 using UnityEngine;
 
 namespace Network.Rooms

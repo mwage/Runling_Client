@@ -1,39 +1,72 @@
 ﻿using Drones.Movement;
+using Drones.Pattern;
+using Network.Synchronization;
 using UnityEngine;
 
 namespace Drones.DroneTypes
 {
     public abstract class ADrone : IDrone
     {
+        public float Speed { get; protected set; }
         public float Size { get; private set; }
-        protected float Speed { get; set; }
-        protected DroneColor Color { get; set; }
-        protected DroneType DroneType { get; set; }
-        protected IDroneMovement MovementType { get; set; }
+        public DroneColor Color { get; protected set; }
+        public DroneType DroneType { get; protected set; }
+        public IDroneMovement MovementType { get; set; }
+        protected IPattern Pattern { get; set; }
+        protected IDrone SpawnedDrones { get; set; }
+
         public static int SpeedHash => Animator.StringToHash("DroneSpeed");
 
         protected ADrone()
         {
         }
 
-        protected ADrone(float speed, float size, DroneColor color, DroneType droneType, IDroneMovement movementType)
+        protected ADrone(float speed, float size, DroneColor color, DroneType droneType, IDroneMovement movementType, 
+            IPattern pattern = null, IDrone spawnedDrones = null)
         {
             Speed = speed;
             Size = size;
             Color = color;
             DroneType = droneType;
             MovementType = movementType ?? new StraightMovement();
+            Pattern = pattern;
+            SpawnedDrones = spawnedDrones;
         }
 
         public abstract GameObject CreateDroneInstance(DroneFactory factory, bool isAdded, Area area, StartPositionDelegate posDelegate = null);
 
-        public void ConfigureDrone(GameObject drone, DroneFactory factory)
+        public void ConfigureDrone(GameObject drone, DroneFactory factory, DroneStateManager data = null)
+        {
+            drone.transform.localScale = Size * Vector3.one;
+
+            if (!factory.IsServer)
+            {
+                AdjustVisuals(drone, factory);
+            }
+            else
+            {
+                
+            }
+
+            // Set up Drone Movement
+            MovementType?.Initialize(drone, Speed);
+
+            // Add pattern if drone has one
+            if (Pattern != null)
+            {
+                factory.AddPattern(Pattern, drone, SpawnedDrones);
+            }
+        }
+
+        private void AdjustVisuals(GameObject drone, DroneFactory factory)
         {
             var model = drone.transform.Find("Model");
 
             foreach (Transform child in model)
             {
-                if (child.name == "Top") continue;
+                if (child.name == "Top")
+                    continue;
+
                 if (child.name == "Sphere")
                 {
                     foreach (Transform ch in child)
@@ -44,8 +77,6 @@ namespace Drones.DroneTypes
                 child.GetComponent<Renderer>().material = factory.SetDroneMaterial[Color];
             }
 
-            drone.transform.localScale = Size * Vector3.one;
-
             if (DroneType == DroneType.BouncingDrone || DroneType == DroneType.FlyingBouncingDrone ||
                 DroneType == DroneType.FlyingOneWayDrone)
             {
@@ -54,9 +85,6 @@ namespace Drones.DroneTypes
                     model.transform.localPosition += new Vector3(0, (Size - 1) / 7, 0);
                 }
             }
-
-            // Set up Drone Movement
-            MovementType.Initialize(drone, Speed);
         }
 
         protected void CopyFrom(IDrone sourceDrone)
@@ -69,11 +97,13 @@ namespace Drones.DroneTypes
                 Color = rhs.Color;
                 DroneType = rhs.DroneType;
                 MovementType = rhs.MovementType;
+                Pattern = rhs.Pattern;
+                SpawnedDrones = rhs.SpawnedDrones;
             }
         }
     }
 
-    public enum DroneType
+    public enum DroneType : byte
     {
         BouncingDrone,
         FlyingBouncingDrone,
@@ -83,7 +113,7 @@ namespace Drones.DroneTypes
         FlyingOneWayMine
     }
 
-    public enum DroneColor
+    public enum DroneColor : byte
     {
         Grey,
         Blue,

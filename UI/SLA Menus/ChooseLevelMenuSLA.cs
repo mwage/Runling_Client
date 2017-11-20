@@ -1,4 +1,5 @@
 ﻿using Launcher;
+using SLA;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,98 +8,113 @@ namespace UI.SLA_Menus
     public class ChooseLevelMenuSLA : MonoBehaviour
     {
         [SerializeField] private InGameMenuManagerSLA _inGameMenuManagerSLA;
+        [SerializeField] private ControlSLA _controlSLA;
+        [SerializeField] private LevelManagerSLA _levelManager;
 
         #region Buttons
 
         public void Level1()
         {
-            GameControl.GameState.CurrentLevel = 1;
+            _controlSLA.CurrentLevel = 1;
+            _levelManager.EndLevel(0);
+            gameObject.SetActive(false);
             Time.timeScale = 1;
-            SceneManager.LoadScene("SLA");
         }
 
         public void Level2()
         {
-            GameControl.GameState.CurrentLevel = 2;
+            _controlSLA.CurrentLevel = 2;
+            _levelManager.EndLevel(0);
+            gameObject.SetActive(false);
             Time.timeScale = 1;
-            SceneManager.LoadScene("SLA");
         }
 
         public void Level3()
         {
-            GameControl.GameState.CurrentLevel = 3;
+            _controlSLA.CurrentLevel = 3;
+            _levelManager.EndLevel(0);
+            gameObject.SetActive(false);
             Time.timeScale = 1;
-            SceneManager.LoadScene("SLA");
         }
 
         public void Level4()
         {
-            GameControl.GameState.CurrentLevel = 4;
+            _controlSLA.CurrentLevel = 4;
+            _levelManager.EndLevel(0);
+            gameObject.SetActive(false);
             Time.timeScale = 1;
-            SceneManager.LoadScene("SLA");
         }
 
         public void Level5()
         {
-            GameControl.GameState.CurrentLevel = 5;
+            _controlSLA.CurrentLevel = 5;
+            _levelManager.EndLevel(0);
+            gameObject.SetActive(false);
             Time.timeScale = 1;
-            SceneManager.LoadScene("SLA");
         }
 
         public void Level6()
         {
-            GameControl.GameState.CurrentLevel = 6;
+            _controlSLA.CurrentLevel = 6;
+            _levelManager.EndLevel(0);
+            gameObject.SetActive(false);
             Time.timeScale = 1;
-            SceneManager.LoadScene("SLA");
         }
 
         public void Level7()
         {
-            GameControl.GameState.CurrentLevel = 7;
+            _controlSLA.CurrentLevel = 7;
+            _levelManager.EndLevel(0);
+            gameObject.SetActive(false);
             Time.timeScale = 1;
-            SceneManager.LoadScene("SLA");
         }
 
         public void Level8()
         {
-            GameControl.GameState.CurrentLevel = 8;
+            _controlSLA.CurrentLevel = 8;
+            _levelManager.EndLevel(0);
+            gameObject.SetActive(false);
             Time.timeScale = 1;
-            SceneManager.LoadScene("SLA");
         }
 
         public void Level9()
         {
-            GameControl.GameState.CurrentLevel = 9;
+            _controlSLA.CurrentLevel = 9;
+            _levelManager.EndLevel(0);
+            gameObject.SetActive(false);
             Time.timeScale = 1;
-            SceneManager.LoadScene("SLA");
         }
 
         public void Level10()
         {
-            GameControl.GameState.CurrentLevel = 10;
+            _controlSLA.CurrentLevel = 10;
+            _levelManager.EndLevel(0);
+            gameObject.SetActive(false);
             Time.timeScale = 1;
-            SceneManager.LoadScene("SLA");
         }
 
         public void Level11()
         {
-            GameControl.GameState.CurrentLevel = 11;
+            _controlSLA.CurrentLevel = 11;
+            _levelManager.EndLevel(0);
+            gameObject.SetActive(false);
             Time.timeScale = 1;
-            SceneManager.LoadScene("SLA");
         }
 
         public void Level12()
         {
-            GameControl.GameState.CurrentLevel = 12;
+            _controlSLA.CurrentLevel = 12;
+            _levelManager.EndLevel(0);
+            gameObject.SetActive(false);
             Time.timeScale = 1;
-            SceneManager.LoadScene("SLA");
         }
 
         public void Level13()
         {
-            GameControl.GameState.CurrentLevel = 13;
+            _controlSLA.CurrentLevel = 13;
+            _levelManager.EndLevel(0);
+            gameObject.SetActive(false);
             Time.timeScale = 1;
-            SceneManager.LoadScene("SLA");
         }
 
         public void Back()
@@ -107,5 +123,6 @@ namespace UI.SLA_Menus
             _inGameMenuManagerSLA.InGameMenu.gameObject.SetActive(true);
         }
         #endregion
+
     }
 }

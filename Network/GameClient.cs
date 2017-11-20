@@ -1,19 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using DarkRift;
 using DarkRift.Client;
 using DarkRift.Dispatching;
+using Launcher;
+using Network.Synchronization;
+using Network.Synchronization.Data;
 using UnityEngine;
 
 namespace Network
 {
-    public class GameClient : MonoBehaviour
+    public class GameClient : SceneSingleton<GameClient>
     {
+        protected GameClient()
+        {
+        }
+
         private DarkRiftClient _darkRiftClient;
         private Dispatcher _dispatcher;
 
         public uint Id => _darkRiftClient.ID;
         public bool Connected => _darkRiftClient.Connected;
+
+        public List<Player> Players { get; } = new List<Player>();
 
         // Specifies that DarkRift should take care of multithreading and invoke all events from Unity's main thread.
         private volatile bool _invokeFromDispatcher = true;
@@ -39,9 +49,10 @@ namespace Network
             _dispatcher.ExecuteDispatcherTasks();
         }
 
-        private void OnDestroy()
+        public override void OnDestroy()
         {
             Close();
+            base.OnDestroy();
         }
 
         private void OnApplicationQuit()

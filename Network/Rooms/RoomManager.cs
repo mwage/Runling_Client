@@ -4,6 +4,8 @@ using DarkRift.Client;
 using Launcher;
 using Network.Chat;
 using Network.DarkRiftTags;
+using Network.Synchronization;
+using Network.Synchronization.Data;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

@@ -4,6 +4,24 @@ using UnityEngine;
 
 namespace Launcher
 {
+    public class GameState
+    {
+        public bool Solo { get; set; } = false;
+
+        // Level/Game management (remove when refactoring RLR)
+        public int CurrentLevel { get; set; } = 1;
+        public bool FinishedLevel { get; set; } = false;
+
+        // MapState (remove when refactoring RLR)
+        public List<GameObject> SafeZones { get; set; }
+        public GameObject DronesParent { get; set; }
+
+        // Voting selection (maybe substitute via inscene vote later on)
+        public Difficulty SetDifficulty { get; set; } = Difficulty.Hard;
+        public GameMode SetGameMode { get; set; } = GameMode.Practice;
+        public CharacterDto CharacterDto { get; set; }
+    }
+
     public enum Difficulty : byte
     {
         Normal,
@@ -29,24 +47,5 @@ namespace Launcher
         Green,
         Red,
         Blue
-    }
-
-    public class GameState
-    {
-        public bool Solo = false;
-
-        // Level/Game management
-        public bool GameActive = false;
-        public int CurrentLevel = 1;
-        public bool FinishedLevel = false;
-
-        // MapState
-        public List<GameObject> SafeZones;
-        public GameObject DronesParent;
-
-        // Voting selection (mabe substitute via inscene vote later on)
-        public Difficulty SetDifficulty = Difficulty.Hard;
-        public GameMode SetGameMode = GameMode.Practice;
-        public CharacterDto CharacterDto;
     }
 }

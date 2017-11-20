@@ -4,19 +4,25 @@ using SLA.Levels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Drones.DroneTypes;
+using Drones.Movement;
 using UnityEngine;
 
 namespace SLA
 {
-    public class LevelManagerSLA : MonoBehaviour
+    public class LevelManagerSLA : MonoBehaviour, ILevelManagerSLA
     {
         public GameObject Win;
-        public DroneFactory DroneFactory;
-        public ControlSLA ControlSLA;
+        [SerializeField] private DroneFactory _droneFactory;
 
+        public DroneFactory DroneFactory => _droneFactory;
+
+
+        public const int NumLevels = 13;             //currently last level available in SLA
+
+        private ControlSLA _controlSLA;
         private ScoreSLA _score;
         private InitializeGameSLA _initializeGameSLA;
-        public static int NumLevels = 13;             //currently last level available in SLA
         private List<ILevelSLA> _levels;
         
 
@@ -24,6 +30,8 @@ namespace SLA
         {
             _score = GetComponent<ScoreSLA>();
             _initializeGameSLA = GetComponent<InitializeGameSLA>();
+            _controlSLA = GetComponent<ControlSLA>();
+
             InitializeLevels();
         }
 
@@ -60,6 +68,12 @@ namespace SLA
             }
         }
 
+        public void SpawnChaser(IDrone drone, Vector3? position = null)
+        {
+            drone.MovementType = new ChaserMovement(_controlSLA.PlayerManager);
+            _controlSLA.PlayerManager.Chaser.AddRange(DroneFactory.SpawnDrones(drone));
+        }
+
         public float GetMovementSpeed(int level)
         {
             return _levels[level - 1].GetMovementSpeed();
@@ -68,8 +82,7 @@ namespace SLA
         //Load next level or end game
         public void EndLevel(float delay)
         {
-            Debug.Log("Ending Level");
-            StartCoroutine((GameControl.GameState.CurrentLevel == _levels.Count && GameControl.GameState.SetGameMode != GameMode.Practice) ? EndGameSLA(delay) : NextLevel(delay));
+            StartCoroutine(_controlSLA.CurrentLevel == _levels.Count && GameControl.GameState.SetGameMode != GameMode.Practice ? EndGameSLA(delay) : NextLevel(delay));
         }
 
         //load in all but the last level
@@ -79,8 +92,8 @@ namespace SLA
 
             _score.NewHighScore.transform.parent.gameObject.SetActive(false);
 
-            DroneFactory.StopAllCoroutines();
-            foreach (Transform child in DroneFactory.transform)
+            _droneFactory.StopAllCoroutines();
+            foreach (Transform child in _droneFactory.transform)
             {
                 Destroy(child.gameObject);
             }
@@ -90,10 +103,10 @@ namespace SLA
             _score.CurrentScoreText.text = "0";
             if (GameControl.GameState.SetGameMode != GameMode.Practice)
             {
-                GameControl.GameState.CurrentLevel++;
+                _controlSLA.CurrentLevel++;
             }
 
-            _initializeGameSLA.InitializeGame();
+            _controlSLA.InitializeLevel();
         }
 
         //load win screen after the last level

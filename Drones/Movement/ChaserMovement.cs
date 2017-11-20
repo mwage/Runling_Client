@@ -1,4 +1,5 @@
-﻿using Drones.DroneTypes;
+﻿using System;
+using Drones.DroneTypes;
 using Players;
 using UnityEngine;
 
@@ -16,7 +17,10 @@ namespace Drones.Movement
         public void Initialize(GameObject drone, float speed)
         {
             var anim = drone.transform.Find("Model")?.GetComponent<Animator>();
-            anim?.SetFloat(ADrone.SpeedHash, 3 + speed / 2);
+            if (anim != null)
+            {
+                anim.SetFloat(ADrone.SpeedHash, 3 + speed / 2);
+            }
 
             drone.AddComponent<ChaserMovementImplementation>().Initialize(speed, _target);
         }

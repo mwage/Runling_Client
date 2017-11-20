@@ -44,7 +44,7 @@ namespace RLR
 
         private void Update()
         {
-            if (_countdown > 0 && !GameControl.GameState.FinishedLevel && GameControl.GameState.GameActive)
+            if (_countdown > 0 && !GameControl.GameState.FinishedLevel)
             {
                 _timer = Time.time - _initializationTime;
                 if (GameControl.GameState.SetGameMode == GameMode.TimeMode)

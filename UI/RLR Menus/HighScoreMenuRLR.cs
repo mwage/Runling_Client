@@ -32,7 +32,7 @@ namespace UI.RLR_Menus
             // Descriptions
             _descriptionText = Instantiate(ScorePrefab, background.transform);
             _descriptionText.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Level";
-            if (GameControl.GameState.GameActive && GameControl.GameState.SetGameMode != GameMode.Practice)
+            if (Score != null && GameControl.GameState.SetGameMode != GameMode.Practice)
             {
                 _descriptionText.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "Cur:";
                 _descriptionText.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "PB:";
@@ -63,7 +63,7 @@ namespace UI.RLR_Menus
             _timeModeScore.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(100, 20);
 
 
-            if (!GameControl.GameState.GameActive)
+            if (Score == null)
             {
                 _descriptionText.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "Normal";
                 _descriptionText.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "Hard";
@@ -72,7 +72,7 @@ namespace UI.RLR_Menus
 
         public void SetNumbers()
         {
-            if (GameControl.GameState.GameActive && GameControl.GameState.SetGameMode != GameMode.Practice)
+            if (Score != null && GameControl.GameState.SetGameMode != GameMode.Practice)
             {
                 SetHighScoresIngame();
                 SetCurrentScores();

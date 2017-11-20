@@ -28,12 +28,12 @@ namespace Players
             if (SceneManager.GetActiveScene().name == "RLR")
             {
                 _inGameMenuManagerRLR = ingameMenuManager.GetComponent<InGameMenuManagerRLR>();
-                _playerManager = GetComponent<ControlRLR>().PlayerManager;
+                _playerManager = playerManager;
             }
             else
             {
                 _inGameMenuManagerSLA = ingameMenuManager.GetComponent<InGameMenuManagerSLA>();
-                _playerManager = GetComponent<ControlSLA>().PlayerManager;
+                _playerManager = playerManager;
             }
             _initialized = true;
         }

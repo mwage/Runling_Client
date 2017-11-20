@@ -20,7 +20,6 @@ namespace RLR
 
         public void BackToMenu()
         {
-            GameControl.GameState.GameActive = false;
             SceneManager.LoadScene("MainMenu");
         }
 

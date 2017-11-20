@@ -1,8 +1,9 @@
 ﻿using Characters;
 using Launcher;
+using Network.Synchronization;
+using Network.Synchronization.Data;
 using Players;
 using Players.Camera;
-using System.Collections;
 using TMPro;
 using UI.SLA_Menus;
 using UnityEngine;
@@ -23,6 +24,7 @@ namespace SLA
         private ControlSLA _controlSLA;
         private LevelManagerSLA _levelManager;
         private ScoreSLA _score;
+        private GameObject _currentCountdown;
 
 
         private void Awake()
@@ -32,76 +34,90 @@ namespace SLA
             _score = GetComponent<ScoreSLA>();
         }
 
-        public void InitializePlayer()
+        public PlayerManager InitializePlayer(Player player)
         {
             var playerManager = PlayerFactory.Create("Manticore");
             playerManager.Model.SetActive(false);
-            _controlSLA.PlayerManager = playerManager;
+            playerManager.Player = player;
             GetComponent<InputServer>().Init(InGameMenuManager.gameObject, playerManager);
             CameraHandleMovement.InitializeFollowTarget(playerManager.gameObject);
+            playerManager.PlayerMovement = playerManager.gameObject.AddComponent<PlayerMovement>();
+
+            if (GameControl.GameState.Solo)
+            {
+                _score.SetName(player.Name);
+            }
+            else
+            {
+                playerManager.PlayerStateManager = playerManager.gameObject.AddComponent<PlayerStateManager>();
+            }
+
+            return playerManager;
         }
 
-        public void InitializeGame()
+        public PlayerManager InitializeOtherPlayer(Player player)
         {
-            StartCoroutine(PrepareLevel());
+            var playerManager = PlayerFactory.Create("Manticore");
+            playerManager.Model.SetActive(false);
+            playerManager.Player = player;
+            return playerManager;
         }
 
-        private IEnumerator PrepareLevel()
+        public void PrepareLevel()
         {
             CameraHandleMovement.SetCameraHandlePosition(Vector3.zero);
 
             // Show level highscore and current level
-            CurrentPr.text = GameControl.HighScores.HighScoreSLA[GameControl.GameState.CurrentLevel].ToString();
+            CurrentPr.text = GameControl.HighScores.HighScoreSLA[_controlSLA.CurrentLevel].ToString();
             var levelText = LevelTextObject.GetComponent<TextMeshProUGUI>();
-            levelText.text = "Level " + GameControl.GameState.CurrentLevel;
+            levelText.text = "Level " + _controlSLA.CurrentLevel;
             LevelTextObject.SetActive(true);
             CurrentPrWindow.SetActive(true);
-            yield return new WaitForSeconds (3);
+        }
+
+        public void HidePanels()
+        {
             LevelTextObject.SetActive(false);
             CurrentPrWindow.SetActive(false);
-            yield return new WaitForSeconds (1);
-
-            
-            SpawnPlayer(_controlSLA.PlayerManager);
-            _levelManager.LoadDrones(GameControl.GameState.CurrentLevel);
-
-            StartCoroutine(StartCountdown());
         }
 
-        private void SpawnPlayer(PlayerManager playerManager)
+        public void SpawnPlayer(PlayerManager playerManager, Vector3 position, float rotation = 0)
         {
-            playerManager.IsDead = false;
-            playerManager.IsImmobile = false;
-            playerManager.IsInvulnerable = true;
-            playerManager.Model.SetActive(true);
-            playerManager.Shield.SetActive(true);
 
-            playerManager.CharacterController.Speed.SetBaseSpeed(_levelManager.GetMovementSpeed(GameControl.GameState.CurrentLevel));
-            playerManager.transform.position = Vector3.zero;
-            playerManager.transform.rotation = Quaternion.identity;
+                playerManager.IsDead = false;
+                playerManager.IsImmobile = false;
+                playerManager.IsInvulnerable = true;
+                playerManager.Model.SetActive(true);
+                playerManager.Shield.SetActive(true);
+                playerManager.transform.position = position;
+                playerManager.transform.eulerAngles = new Vector3(0, rotation, 0);
+                playerManager.CharacterController.Speed.SetBaseSpeed(_levelManager.GetMovementSpeed(_controlSLA.CurrentLevel));
         }
 
-        private IEnumerator StartCountdown()
+        public void Countdown(int counter)
         {
-            yield return new WaitForSeconds (1);
-
-            for (var i = 0; i < 3; i++)
+            if (_currentCountdown != null)
             {
-                var countdown = Instantiate(CountdownPrefab, GameObject.Find("Canvas").transform);
-                countdown.GetComponent<TextMeshProUGUI>().text = (3 - i).ToString();
-                yield return new WaitForSeconds(1);
-                Destroy(countdown);
+                Destroy(_currentCountdown);
             }
 
-            StartLevel();
+            if (counter == 0)
+                return;
+
+            _currentCountdown = Instantiate(CountdownPrefab, GameObject.Find("Canvas").transform);
+            _currentCountdown.GetComponent<TextMeshProUGUI>().text = counter.ToString();
+
         }
 
-        private void StartLevel()
+        public void StartLevel(PlayerManager playerManager)
         {
-            _controlSLA.PlayerManager.Shield.SetActive(false);
-            _controlSLA.PlayerManager.IsInvulnerable = false;
+            playerManager.Shield.SetActive(false);
+            playerManager.IsInvulnerable = false;
 
-            _score.StartScore();
+            if (GameControl.GameState.Solo)
+            {
+                _score.StartScore();
+            }
         }
     }
 }

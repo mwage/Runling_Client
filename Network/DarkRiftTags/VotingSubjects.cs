@@ -7,6 +7,5 @@
         public const ushort VoteUpdate = 2;
         public const ushort FinishVoting = 3;
         public const ushort StartGame = 4;
-        public const ushort Countdown = 5;
     }
 }

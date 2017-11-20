@@ -38,7 +38,6 @@ namespace UI.SLA_Menus
 
         public void RestartGame()
         {
-            GameControl.GameState.CurrentLevel = 1;
             Time.timeScale = 1;
 
             SceneManager.LoadScene("SLA");
@@ -52,7 +51,6 @@ namespace UI.SLA_Menus
 
         public void BackToMenu()
         {
-            GameControl.GameState.GameActive = false;
             Time.timeScale = 1;
             SceneManager.LoadScene("MainMenu");
         }

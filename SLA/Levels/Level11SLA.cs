@@ -5,7 +5,7 @@ namespace SLA.Levels
 {
     public class Level11SLA : ALevelSLA
     {
-        public Level11SLA(LevelManagerSLA manager) : base(manager)
+        public Level11SLA(ILevelManagerSLA manager) : base(manager)
         {
         }
 

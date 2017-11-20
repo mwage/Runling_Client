@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 using Characters.Types;
+using Network.Synchronization;
+using Network.Synchronization.Data;
 using UnityEngine;
 
 namespace Players
@@ -10,6 +13,7 @@ namespace Players
         public GameObject Trigger;
         public GameObject Shield;
         public GameObject GodMode;
+        public GameObject MouseClickPrefab;
 
         public int CurrentScore { get; set; }
         public int TotalScore { get; set; }
@@ -21,7 +25,13 @@ namespace Players
         public bool GodModeActive { get; set; }
         public bool AutoClickerActive { get; set; }
         public List<GameObject> Chaser { get; } = new List<GameObject>();
+        public Player Player { get; set; }
+        public PlayerMovement PlayerMovement { get; set; }
         public ACharacter CharacterController { get; set; }
+
+        // Serverside
+        public bool OnServer { get; set; } = false;
+        public PlayerStateManager PlayerStateManager { get; set; }
 
         public void DestroyChaser()
         {

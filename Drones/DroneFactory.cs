@@ -1,5 +1,8 @@
 ﻿using Drones.DroneTypes;
 using Drones.Pattern;
+using Network.Synchronization;
+using Network.Synchronization.Data;
+using Server.Scripts.Synchronization;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,9 +27,12 @@ namespace Drones
         public Material DarkGreenMaterial;
         public Material CyanMaterial;
         public Material BrightGreenMaterial;
+        
+        public Dictionary<DroneType, GameObject> SetDroneType { get; } = new Dictionary<DroneType,GameObject>();
+        public Dictionary<DroneColor, Material> SetDroneMaterial { get; } = new Dictionary<DroneColor, Material>();
 
-        public Dictionary<DroneType, GameObject> SetDroneType = new Dictionary<DroneType,GameObject>();
-        public Dictionary<DroneColor, Material> SetDroneMaterial = new Dictionary<DroneColor, Material>();
+        public Dictionary<ushort, DroneStateManager> Drones { get; } = new Dictionary<ushort, DroneStateManager>();
+        public bool IsServer { get; set; } = false;
 
         private void Awake()
         {
@@ -50,18 +56,32 @@ namespace Drones
         public List<GameObject> SpawnDrones(IDrone drone, int droneCount = 1, bool isAdded = false, Area area = new Area(), StartPositionDelegate posDelegate = null)
         {
             var drones = new List<GameObject>();
+            var droneDatas = new List<SpawnDroneData>();
 
             for (var i = 0; i < droneCount; i++)
             {
                 var newDrone = drone.CreateDroneInstance(this, isAdded, area, posDelegate);
-                if (newDrone != null)
+                newDrone.AddComponent<DroneManager>();
+
+                if (IsServer)
                 {
-                    newDrone.AddComponent<DroneManager>();
+                    var data = AddDroneData(newDrone);
+                    drone.ConfigureDrone(newDrone, this);
+                    droneDatas.Add(new SpawnDroneData(
+                        new DroneState(data.Id, newDrone.transform.position.x, newDrone.transform.position.z), 
+                        drone.Speed, drone.Size, drone.Color, drone.DroneType));
+                }
+                else
+                {
                     drone.ConfigureDrone(newDrone, this);
                 }
                 drones.Add(newDrone);
             }
 
+            if (IsServer)
+            {
+                SyncDroneServer.SpawnDrones(droneDatas);
+            }
             return drones;
         }
 
@@ -93,6 +113,21 @@ namespace Drones
         {
             SpawnDrones(drone, droneCount, area: area, posDelegate: posDelegate);
             AddDrones(drone, delay, area, posDelegate);
+        }
+
+        private DroneStateManager AddDroneData(GameObject drone)
+        {
+            ushort id = 0;
+            while (Drones.ContainsKey(id))
+            {
+                id++;
+            }
+
+            var droneData = drone.AddComponent<DroneStateManager>();
+            droneData.Id = id;
+            droneData.DroneFactory = this;
+            Drones[id] = droneData;
+            return droneData;
         }
     }
 

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using DarkRift;
+﻿using DarkRift;
 using DarkRift.Server;
 using DarkRift.Server.Unity;
 using Launcher;
-using Network.Rooms;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using Network.Synchronization.Data;
 using UnityEngine;
 using LogType = DarkRift.LogType;
 
@@ -21,7 +21,6 @@ namespace Server.Scripts
         public ushort Port { get; set; } = 4297;
         public IPVersion IpVersion { get; set; } = IPVersion.IPv4;
         public DarkRiftServer Server { get; private set; }
-        public Type[] PluginTypes { get; set; }
 
         public Dictionary<Client, Player> Players { get; } = new Dictionary<Client, Player>();
         public List<Player> PendingPlayers { get; } = new List<Player>();
@@ -42,7 +41,7 @@ namespace Server.Scripts
         {
             foreach (var client in Players.Keys)
             {
-                client.SendMessage(message, sendMode);
+                client?.SendMessage(message, sendMode);
             }
         }
 
@@ -86,12 +85,9 @@ namespace Server.Scripts
             spawnData.Logging.LogWriters.Add(fileWriter);
             spawnData.Logging.LogWriters.Add(consoleWriter);
             spawnData.Logging.LogWriters.Add(debugWriter);
-            
-            //Plugins
-            if (PluginTypes != null)
-            {
-                spawnData.Plugins.PluginTypes.AddRange(PluginTypes);
-            }
+
+            // Plugins
+//            spawnData.Plugins.PluginTypes.Add(typeof(DbConnector));
 
             Server = new DarkRiftServer(spawnData);
             Server.Start();

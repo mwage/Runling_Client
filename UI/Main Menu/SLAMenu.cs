@@ -24,7 +24,6 @@ namespace UI.Main_Menu
         public void StartGame()
         {
             GameControl.GameState.SetGameMode = GameMode.Classic;
-            GameControl.GameState.CurrentLevel = 1;
             GameControl.GameState.Solo = true;
 
             _sceneLoader.LoadScene("SLA", 1);
@@ -34,7 +33,6 @@ namespace UI.Main_Menu
         public void Practice()
         {
             GameControl.GameState.SetGameMode = GameMode.Practice;
-            GameControl.GameState.CurrentLevel = 1;
             GameControl.GameState.Solo = true;
 
             _sceneLoader.LoadScene("SLA", 1);

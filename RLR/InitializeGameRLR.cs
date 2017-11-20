@@ -41,6 +41,7 @@ namespace RLR
         {
             var playerManager = PlayerFactory.Create(GameControl.GameState.CharacterDto);
             _controlRLR.PlayerManager = playerManager;
+            playerManager.PlayerMovement = playerManager.gameObject.AddComponent<PlayerMovement>();
             GetComponent<InputServer>().Init(InGameMenuManager.gameObject, playerManager);
             _playerBarsManager.Initialize(playerManager);
             _safeZoneManager = playerManager.Trigger.AddComponent<SafeZoneManager>();
