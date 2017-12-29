@@ -1,11 +1,11 @@
 ﻿using Drones;
+using Drones.DroneTypes;
+using Drones.Movement;
 using Launcher;
 using SLA.Levels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Drones.DroneTypes;
-using Drones.Movement;
 using UnityEngine;
 
 namespace SLA
@@ -17,19 +17,16 @@ namespace SLA
 
         public DroneFactory DroneFactory => _droneFactory;
 
-
         public const int NumLevels = 13;             //currently last level available in SLA
 
         private ControlSLA _controlSLA;
         private ScoreSLA _score;
-        private InitializeGameSLA _initializeGameSLA;
         private List<ILevelSLA> _levels;
         
 
         public void Awake()
         {
             _score = GetComponent<ScoreSLA>();
-            _initializeGameSLA = GetComponent<InitializeGameSLA>();
             _controlSLA = GetComponent<ControlSLA>();
 
             InitializeLevels();
@@ -70,8 +67,8 @@ namespace SLA
 
         public void SpawnChaser(IDrone drone, Vector3? position = null)
         {
-            drone.MovementType = new ChaserMovement(_controlSLA.PlayerManager);
-            _controlSLA.PlayerManager.Chaser.AddRange(DroneFactory.SpawnDrones(drone));
+            drone.MovementType = new ChaserMovement(_controlSLA.PlayerManagers[0]);
+            _controlSLA.PlayerManagers[0].Chaser.AddRange(DroneFactory.SpawnDrones(drone));
         }
 
         public float GetMovementSpeed(int level)
@@ -100,7 +97,11 @@ namespace SLA
 
             yield return new WaitForSeconds(delay);
 
-            _score.CurrentScoreText.text = "0";
+            foreach (var playerManager in _controlSLA.PlayerManagers.Values)
+            {
+                _score.Scores[playerManager].ResetCurrent();
+            }
+
             if (GameControl.GameState.SetGameMode != GameMode.Practice)
             {
                 _controlSLA.CurrentLevel++;
@@ -114,7 +115,6 @@ namespace SLA
         {
             yield return new WaitForSeconds (delay);
             _score.NewHighScore.transform.parent.gameObject.SetActive(false);
-            _initializeGameSLA.InGameMenuManager.CloseMenus();
             Win.gameObject.SetActive(true);
         }
     }

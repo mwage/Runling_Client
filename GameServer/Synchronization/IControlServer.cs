@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Players;
+﻿using Players;
+using System.Collections.Generic;
 
 namespace Server.Scripts.Synchronization
 {

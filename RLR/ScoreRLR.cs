@@ -37,7 +37,7 @@ namespace RLR
 
         public void StartTimer()
         {
-            _timeLimit = 285 + 15 * GameControl.GameState.CurrentLevel;
+            _timeLimit = 285 + 15 * _controlRLR.CurrentLevel;
             _initializationTime = Time.time;
             _countdown = _timeLimit;
         }
@@ -57,7 +57,7 @@ namespace RLR
 
         public void AddScore()
         {
-                _controlRLR.PlayerManager.TotalScore += _difficultyMultiplier * GameControl.GameState.CurrentLevel;
+                _controlRLR.PlayerManager.TotalScore += _difficultyMultiplier * _controlRLR.CurrentLevel;
                 CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " + _controlRLR.PlayerManager.TotalScore;
                 SetTimeModeHighScore();
         }
@@ -73,26 +73,26 @@ namespace RLR
         {
             if (GameControl.GameState.FinishedLevel && GameControl.GameState.SetGameMode != GameMode.Practice)
             {
-                FinishTimeCurGame[GameControl.GameState.CurrentLevel - 1] = _timer;
+                FinishTimeCurGame[_controlRLR.CurrentLevel - 1] = _timer;
 
                 switch (GameControl.GameState.SetDifficulty)
                 {
                     case Difficulty.Normal:
-                        if (_timer < GameControl.HighScores.HighScoreRLRNormal[GameControl.GameState.CurrentLevel] || GameControl.HighScores.HighScoreRLRNormal[GameControl.GameState.CurrentLevel] < 0.1f)
+                        if (_timer < GameControl.HighScores.HighScoreRLRNormal[_controlRLR.CurrentLevel] || GameControl.HighScores.HighScoreRLRNormal[_controlRLR.CurrentLevel] < 0.1f)
                         {
                             StartCoroutine(NewHighScore(_timer));
-                            GameControl.HighScores.HighScoreRLRNormal[GameControl.GameState.CurrentLevel] = _timer;
-                            PlayerPrefs.SetFloat("HighScoreRLRNormal" + GameControl.GameState.CurrentLevel,
-                                GameControl.HighScores.HighScoreRLRNormal[GameControl.GameState.CurrentLevel]);
+                            GameControl.HighScores.HighScoreRLRNormal[_controlRLR.CurrentLevel] = _timer;
+                            PlayerPrefs.SetFloat("HighScoreRLRNormal" + _controlRLR.CurrentLevel,
+                                GameControl.HighScores.HighScoreRLRNormal[_controlRLR.CurrentLevel]);
                         }
                         break;
                     case Difficulty.Hard:
-                        if (_timer < GameControl.HighScores.HighScoreRLRHard[GameControl.GameState.CurrentLevel] || GameControl.HighScores.HighScoreRLRHard[GameControl.GameState.CurrentLevel] < 0.1f)
+                        if (_timer < GameControl.HighScores.HighScoreRLRHard[_controlRLR.CurrentLevel] || GameControl.HighScores.HighScoreRLRHard[_controlRLR.CurrentLevel] < 0.1f)
                         {
                             StartCoroutine(NewHighScore(_timer));
-                            GameControl.HighScores.HighScoreRLRHard[GameControl.GameState.CurrentLevel] = _timer;
-                            PlayerPrefs.SetFloat("HighScoreRLRHard" + GameControl.GameState.CurrentLevel,
-                                GameControl.HighScores.HighScoreRLRHard[GameControl.GameState.CurrentLevel]);
+                            GameControl.HighScores.HighScoreRLRHard[_controlRLR.CurrentLevel] = _timer;
+                            PlayerPrefs.SetFloat("HighScoreRLRHard" + _controlRLR.CurrentLevel,
+                                GameControl.HighScores.HighScoreRLRHard[_controlRLR.CurrentLevel]);
                         }
                         break;
                 }

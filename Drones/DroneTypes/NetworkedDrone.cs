@@ -22,8 +22,7 @@ namespace Drones.DroneTypes
 
             var drone = Object.Instantiate(factory.SetDroneType[DroneType], _position, Quaternion.identity, factory.transform);
             var data = drone.AddComponent<DroneStateManager>();
-            data.Id = _state.Id;
-            data.DroneFactory = factory;
+            data.Initialize(_state.Id, factory);
             if (factory.Drones.ContainsKey(_state.Id))
             {
                 Debug.LogError("ID " + _state.Id + " already taken!");

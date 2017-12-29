@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections;
-using Launcher;
-using Network.Synchronization;
 using UnityEngine;
 
 namespace Players
@@ -10,13 +7,13 @@ namespace Players
     {
         #region Variables
 
+        public const int DefLayer = 1 << 15; // Ground Layer for Raycasting;
+
         private const float RotationSpeed = 40;
         private const float Acceleration = 150;
         private const float Deceleration = 100;
         private const float MinRegisterDistance = 0.15f;
         private const float StopSensitivity = 20; // Adjust for better accuracy at other decelerations
-
-        public bool IsAutoClicking { get; private set; }
 
         private PlayerManager _playerManager;
         private Rigidbody _rb;
@@ -32,114 +29,24 @@ namespace Players
         private bool _accelerate;
         private bool _stop = true;
 
-        private Coroutine _autoClickRoutine;
-        private const int DefLayer = 1 << 15; // Ground Layer for Raycasting;
         private Animator _anim;
         private readonly int _speedHash = Animator.StringToHash("Speed");
-        
+
+
         private void Awake()
         {
             _playerManager = GetComponent<PlayerManager>();
             _rb = GetComponent<Rigidbody>();
+            _anim = _playerManager.GetComponent<Animator>();
             _targetPos = transform.position;
-            if (!_playerManager.OnServer)
-            {
-                _anim = GetComponent<Animator>();
-            }
         }
         #endregion
 
-        #region UserInput
         private void Update()
         {
-            if (_playerManager.OnServer)
-                return;
-
-            if (_playerManager.AutoClickerActive)
-            {
-                if (!IsAutoClicking)
-                {
-                    _autoClickRoutine = StartCoroutine(DoAutoclick());
-                    IsAutoClicking = true;
-                }
-            }
-
-            if (!_playerManager.AutoClickerActive)
-            {
-                if (IsAutoClicking)
-                {
-                    StopCoroutine(_autoClickRoutine);
-                    IsAutoClicking = false;
-                }
-            }
-
-            // On right mouseclick, set new target location
-            if (Input.GetMouseButtonDown(1))
-            {
-                HandleClick();
-            }
-
             // Control animation
             _anim.SetFloat(_speedHash, _currentSpeed);
         }
-
-        private IEnumerator DoAutoclick()
-        {
-            while (true)
-            {
-                HandleClick();
-                yield return new WaitForSeconds(0.05f);
-            }
-        }
-        
-        private void HandleClick()
-        {
-            var clickPosition = CalculateClickPosition(Input.mousePosition);
-
-            if (clickPosition == null)
-                return;
-
-            if (GameControl.GameState.Solo)
-            {
-                MoveToPosition(clickPosition.Value);
-            }
-            else
-            {
-                SyncPlayerManager.SendClickPosition(clickPosition.Value);
-            }
-
-            PlayClickAnimation(clickPosition.Value);
-        }
-
-        private static Vector3? CalculateClickPosition(Vector3 position)
-        {
-            RaycastHit hit;
-            var ray = UnityEngine.Camera.main.ScreenPointToRay(position);
-
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, DefLayer))
-            {
-                return hit.point;
-            }
-            return null;
-        }
-
-        private void PlayClickAnimation(Vector3 clickPos)
-        {
-            var click = Instantiate(_playerManager.MouseClickPrefab, clickPos, Quaternion.Euler(0, 45, 0));
-            if (_playerManager.IsImmobile)
-            {
-                foreach (Transform child in click.transform)
-                {
-                    child.GetComponent<Renderer>().material.color = Color.red;
-                    foreach (Transform ch in child)
-                    {
-                        ch.GetComponent<Renderer>().material.color = Color.red;
-                    }
-                }
-            }
-        }
-        
-        #endregion
 
         public void MoveToPosition(Vector3 clickPos)
         {
@@ -173,9 +80,6 @@ namespace Players
 
         private void FixedUpdate()
         {
-            if (!_playerManager.OnServer && !GameControl.GameState.Solo)
-                return;
-
             _maxSpeed = _playerManager.CharacterController.Speed.Current;
             _currentPos = new Vector3(_rb.transform.position.x, 0, _rb.transform.position.z);
             _currentSpeed = _rb.velocity.magnitude;

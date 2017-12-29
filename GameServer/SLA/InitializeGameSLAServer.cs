@@ -2,6 +2,8 @@
 using Network.Synchronization;
 using Network.Synchronization.Data;
 using Players;
+using Server.Scripts.Synchronization;
+using SLA;
 using UnityEngine;
 
 namespace Server.Scripts.SLA
@@ -11,11 +13,13 @@ namespace Server.Scripts.SLA
         public PlayerFactory PlayerFactory;
         private ControlSLAServer _controlSLA;
         private LevelManagerSLAServer _levelManager;
+        private ScoreSLAServer _score;
 
         private void Awake()
         {
             _controlSLA = GetComponent<ControlSLAServer>();
             _levelManager = GetComponent<LevelManagerSLAServer>();
+            _score = GetComponent<ScoreSLAServer>();
         }
 
         public PlayerManager InitializePlayer(Player player)
@@ -23,11 +27,11 @@ namespace Server.Scripts.SLA
             var playerManager = PlayerFactory.Create("Manticore");
             playerManager.Model.SetActive(false);
             playerManager.Player = player;
-            playerManager.OnServer = true;
             playerManager.PlayerMovement = playerManager.gameObject.AddComponent<PlayerMovement>();
             var data = playerManager.gameObject.AddComponent<PlayerStateManager>();
             data.Id = playerManager.Player.Id;
             playerManager.PlayerStateManager = data;
+            _score.Scores[playerManager] = new ScoreDataSLA(playerManager, LevelManagerSLAServer.NumLevels);
             return playerManager;
         }
 
@@ -42,11 +46,11 @@ namespace Server.Scripts.SLA
             playerManager.CharacterController.Speed.SetBaseSpeed(_levelManager.GetMovementSpeed(_controlSLA.CurrentLevel));
 
             playerManager.transform.position = _controlSLA.PlayerManagers.Values.Count != 1
-                ? Vector3.zero + Quaternion.Euler(0, 360f * (playerManager.Player.Id - 1) / _controlSLA.PlayerManagers.Count, 0) * Vector3.right * 2
+                ? Vector3.zero + Quaternion.Euler(0, 360f * playerManager.Player.Id / _controlSLA.PlayerManagers.Count, 0) * Vector3.right * 2
                 : Vector3.zero;
 
             playerManager.transform.rotation = _controlSLA.PlayerManagers.Values.Count != 1 
-                ? Quaternion.LookRotation(Vector3.zero, Vector3.up)
+                ? Quaternion.LookRotation(Vector3.zero - playerManager.transform.position, Vector3.up)
                 : Quaternion.identity;
 
             return new PlayerState(playerManager.Player.Id, playerManager.transform.position.x, 
@@ -55,7 +59,7 @@ namespace Server.Scripts.SLA
 
         public void StartLevel()
         {
-            NetworkManagerSLAServer.StartLevel();
+            SyncGameServer.StartLevel();
 
             foreach (var playerManager in _controlSLA.PlayerManagers.Values)
             {
@@ -66,7 +70,7 @@ namespace Server.Scripts.SLA
                 playerManager.IsInvulnerable = false;
             }
 
-//            _score.StartScore();
+            _score.StartScore();
         }
     }
 }

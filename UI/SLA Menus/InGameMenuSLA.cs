@@ -4,62 +4,48 @@ using UnityEngine.SceneManagement;
 
 namespace UI.SLA_Menus
 {
-    using OptionsMenu;
-
-    public class InGameMenuSLA : MonoBehaviour
+    public class InGameMenuSLA : AMenu
     {
-        [SerializeField] private InGameMenuManagerSLA _inGameMenuManagerSLA;
+        public GameObject RestartGameButton;
+        public GameObject ChooseLevelButton;
 
-        private OptionsMenu _optionsMenu;
-        private HighScoreMenuSLA _highScoreMenuSLA;
-        private ChooseLevelMenuSLA _chooseLevelMenu;
+        private MenuManager _menuManager;
 
         private void Awake()
         {
-            _optionsMenu = _inGameMenuManagerSLA.OptionsMenu;
-            _highScoreMenuSLA = _inGameMenuManagerSLA.HighScoreMenuSLA;
-            _chooseLevelMenu = _inGameMenuManagerSLA.ChooseLevelMenu;
+            _menuManager = transform.parent.GetComponent<MenuManager>();
+        }
+        
+        private void OnEnable()
+        {
+            _menuManager.InputServer.InMenu = true;
+            _menuManager.ActiveMenu?.gameObject.SetActive(false);
+            _menuManager.ActiveMenu = this;
+
+            var isPractice = GameControl.GameState.SetGameMode == GameMode.Practice;
+            RestartGameButton.SetActive(!isPractice);
+            ChooseLevelButton.SetActive(isPractice);
         }
 
         #region Buttons
 
-        public void BackToGame()
+        public override void Back()
         {
-            gameObject.SetActive(false);
-            _inGameMenuManagerSLA.MenuOn = false;
-            Time.timeScale = 1;
-        }
-
-        public void HighScores()
-        {
-            gameObject.SetActive(false);
-            _highScoreMenuSLA.gameObject.SetActive(true);
+            _menuManager.CloseMenu(this);
         }
 
         public void RestartGame()
         {
             Time.timeScale = 1;
-
             SceneManager.LoadScene("SLA");
         }
 
-        public void Options()
-        {
-            gameObject.SetActive(false);
-            _optionsMenu.gameObject.SetActive(true);
-        }
-
-        public void BackToMenu()
+        public void BackToMainMenu()
         {
             Time.timeScale = 1;
             SceneManager.LoadScene("MainMenu");
         }
 
-        public void ChooseLevel()
-        {
-            gameObject.SetActive(false);
-            _chooseLevelMenu.gameObject.SetActive(true);
-        }
         #endregion
     }
 }

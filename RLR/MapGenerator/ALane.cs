@@ -4,17 +4,25 @@ namespace RLR.MapGenerator
 {
     public abstract class ALane
     {
-        public Vector3 Pos, Rot, Sc;
         public GameObject PlatformPrefab;
         public GameObject LanePrefab;
-        public static float WallSize, ColliderWallSize;
-        public readonly float LaneWidth, LaneLength;
 
-        protected ALane(Vector3 position, Vector3 rotation, Vector3 scale)
+        public static float WallSize { get; set; }
+        public static float ColliderWallSize { get; set; }
+        public float LaneWidth { get; }
+        public float LaneLength { get; }
+        public Vector3 Pos { get; set; }
+        public Vector3 Rot { get; set; }
+        public Vector3 Sc { get; set; }
+
+        private readonly MapGeneratorRLR _mapGenerator;
+
+        protected ALane(Vector3 position, Vector3 rotation, Vector3 scale, MapGeneratorRLR mapGenerator)
         {
             Pos = position;
             Rot = rotation;
             Sc = scale;
+            _mapGenerator = mapGenerator;
             LaneWidth = scale.z;
             LaneLength = scale.x;
         }
@@ -42,6 +50,7 @@ namespace RLR.MapGenerator
                     if (ch.CompareTag("Ground"))
                     {
                         ch.transform.localScale = new Vector3(LaneLength, localScale.y, LaneWidth);
+                        SetLaneTexture(ch);
                     }
 
                     // Position and scale walls and colliders
@@ -49,13 +58,13 @@ namespace RLR.MapGenerator
                     {
                         ch.transform.localScale = new Vector3(LaneLength, localScale.y, WallSize);
                         ch.transform.localPosition = new Vector3(0, localPos.y, (LaneWidth + WallSize) / 2);
-                        SetWallTexture(ch);
+                        SetHorizontalWallTexture(ch);
                     }
                     else if (ch.CompareTag("Bottom"))
                     {
                         ch.transform.localScale = new Vector3(LaneLength, localScale.y, WallSize);
                         ch.transform.localPosition = new Vector3(0, localPos.y, -(LaneWidth + WallSize) / 2);
-                        SetWallTexture(ch);
+                        SetHorizontalWallTexture(ch);
                     }
                 }
             }
@@ -97,8 +106,7 @@ namespace RLR.MapGenerator
                         SetDroneCollider(ch, child, -(nextLineWidth + WallSize) / 2, 0F, WallSize, LaneWidth);
                     }
 
-                    // Scale ground
-                    // suitable for standards, 2nd of center
+                    // Scale Ground
                     if (ch.CompareTag("Ground") || ch.CompareTag("SafeZone"))
                     {
                         SetWallOrPlayerCollider(ch, child, 0F, 0F, nextLineWidth, LaneWidth);
@@ -107,7 +115,7 @@ namespace RLR.MapGenerator
                     // Set material tiling
                     if (ch.CompareTag("Ground"))
                     {
-                       // SetPlatformTexture(ch);
+                        SetPlatformTexture(ch);
                     }
                 }
             }
@@ -132,37 +140,53 @@ namespace RLR.MapGenerator
             {
                 obj.transform.localScale = new Vector3(scX, obj.transform.localScale.y, scZ);
                 obj.transform.localPosition = new Vector3(posX, obj.transform.localPosition.y, posZ);
-                SetWallTexture(obj);
-            }
-        }
-
-        protected void SetTexture(Transform ch)
-        {
-            if (ch.parent.name == "VisibleObjects" && ch.name != "Ground")
-            {
-                SetWallTexture(ch);
-            }
-            else if (ch.name == "Ground")
-            {
-                SetPlatformTexture(ch);
+                SetHorizontalWallTexture(obj);
             }
         }
 
         protected void SetPlatformTexture(Transform ch)
         {
-            if (ch.parent.name == "VisibleObjects")
-            {
-                ch.GetComponent<Renderer>().material.mainTextureScale = new Vector2(ch.localScale.x / 2, ch.localScale.z / 2);
-                ch.GetComponent<Renderer>().material.SetTextureScale("_BumpMap", new Vector2(ch.localScale.x / 2, ch.localScale.z / 2));
-            }
+            SetGroundTexture(ch, _mapGenerator.PlatformTilingX, _mapGenerator.PlatformTilingZ);
         }
 
-        protected void SetWallTexture(Transform ch)
+        protected void SetHorizontalWallTexture(Transform ch)
+        {
+            SetWallTexture(ch, _mapGenerator.WallTilingX, _mapGenerator.WallTilingY);
+        }
+
+        protected void SetVerticalWallTexture(Transform ch)
+        {
+            SetWallTexture(ch, _mapGenerator.WallTilingX, _mapGenerator.WallTilingY);
+        }
+
+        protected void SetLaneTexture(Transform ch)
+        {
+            SetGroundTexture(ch, _mapGenerator.LaneTilingX, _mapGenerator.LaneTilingZ);
+        }
+
+        private void SetGroundTexture(Transform ch, float tilingX, float tilingZ)
         {
             if (ch.parent.name == "VisibleObjects")
             {
-                ch.GetComponent<Renderer>().material.mainTextureScale = new Vector2(ch.localScale.x/2 , ch.localScale.z/2);
-                ch.GetComponent<Renderer>().material.SetTextureScale("_BumpMap", new Vector2(ch.localScale.x/2, ch.localScale.z/2));
+                ch.GetComponent<Renderer>().material.mainTextureScale = new Vector2(ch.localScale.x / tilingX, ch.localScale.z / tilingZ);
+                ch.GetComponent<Renderer>().material.SetTextureScale("_BumpMap", new Vector2(ch.localScale.x / tilingX, ch.localScale.z / tilingZ));
+            }
+        }
+
+        private void SetWallTexture(Transform ch, float tilingX, float tilingZ)
+        {
+            if (ch.parent.name == "VisibleObjects")
+            {
+                if (ch.CompareTag("Top") || ch.CompareTag("Bottom"))
+                {
+                    ch.GetComponent<Renderer>().material.mainTextureScale = new Vector2(ch.localScale.x / tilingX, ch.localScale.y / tilingZ);
+                    ch.GetComponent<Renderer>().material.SetTextureScale("_BumpMap", new Vector2(ch.localScale.x / tilingX, ch.localScale.y / tilingZ));
+                }
+                else
+                {
+                    ch.GetComponent<Renderer>().material.mainTextureScale = new Vector2(ch.localScale.z / tilingX, ch.localScale.y / tilingZ);
+                    ch.GetComponent<Renderer>().material.SetTextureScale("_BumpMap", new Vector2(ch.localScale.z / tilingX, ch.localScale.y / tilingZ));
+                }
             }
         }
     }

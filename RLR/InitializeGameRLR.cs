@@ -1,7 +1,7 @@
-﻿using System.Collections;
-using Characters;
+﻿using Characters;
 using Characters.Bars;
 using Launcher;
+using Network.Synchronization.Data;
 using Players;
 using Players.AbilitiesButtons;
 using Players.Camera;
@@ -13,11 +13,11 @@ namespace RLR
 {
     public class InitializeGameRLR : MonoBehaviour
     {
-        public InGameMenuManagerRLR InGameMenuManager;
         public CameraHandleMovement CameraHandleMovement;
         public PlayerFactory PlayerFactory;
         public GameObject LevelTextObject;
         public GameObject CountdownPrefab;
+        public GameObject LivesText;
 
         private LevelManagerRLR _levelManager;
         private ControlRLR _controlRLR;
@@ -26,6 +26,7 @@ namespace RLR
         private PlayerBarsManager _playerBarsManager;
         private AbilityButtonManager _abilityButtonManager;
         private SafeZoneManager _safeZoneManager;
+        private GameObject _currentCountdown;
 
         private void Awake()
         {
@@ -37,55 +38,59 @@ namespace RLR
             _abilityButtonManager = PlayerFactory.GetComponent<AbilityButtonManager>();
         }
 
-        public void InitializePlayer()
+        public PlayerManager InitializePlayer(Player player)
         {
             var playerManager = PlayerFactory.Create(GameControl.GameState.CharacterDto);
-            _controlRLR.PlayerManager = playerManager;
-            playerManager.PlayerMovement = playerManager.gameObject.AddComponent<PlayerMovement>();
-            GetComponent<InputServer>().Init(InGameMenuManager.gameObject, playerManager);
+
+            _abilityButtonManager.InitializeAbilityButtons(playerManager);
+            playerManager.Player = player;
+
+            return playerManager;
+        }
+
+        public void InitializeControls(PlayerManager playerManager)
+        {
+            GetComponent<InputServer>().Initialize(playerManager);
+            CameraHandleMovement.InitializeFollowTarget(playerManager.gameObject);
             _playerBarsManager.Initialize(playerManager);
+        }
+
+        public void InitializeSafeZones(PlayerManager playerManager)
+        {
             _safeZoneManager = playerManager.Trigger.AddComponent<SafeZoneManager>();
             _safeZoneManager.InitializeTrigger(_playerBarsManager, _runlingChaser);
-            _abilityButtonManager.InitializeAbilityButtons(playerManager);
         }
 
-        //set Spawnimmunity once game starts
-        public void InitializeGame()
+        public void ChangeLives(PlayerManager playerManager, int lives)
         {
-            GameControl.GameState.FinishedLevel = false;
-            StartCoroutine(PrepareLevel());
+            playerManager.Lives = lives;
+            LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + lives;
         }
 
-        private IEnumerator PrepareLevel()
+        public void PrepareLevel()
         {
             // load map
-            _levelManager.GenerateMap(GameControl.GameState.CurrentLevel);
-            _levelManager.GenerateChasers(GameControl.GameState.CurrentLevel);
+            _levelManager.GenerateMap(_controlRLR.CurrentLevel);
+            _levelManager.GenerateChasers(_controlRLR.CurrentLevel);
             _runlingChaser.InitializeChaserPlatforms(_safeZoneManager);
-
-            // Load player
-            SpawnPlayer(_controlRLR.PlayerManager);
 
             // set camera
             GameControl.Settings.CameraRange = _levelManager.MapGenerator.GetAirColliderRange() / 2.5f;
-            CameraHandleMovement.SetCameraHandlePosition(
-                new Vector3(_controlRLR.PlayerManager.transform.localPosition.x, 0,
-                    _controlRLR.PlayerManager.transform.localPosition.z));
-
-            // generate drones
-            _levelManager.LoadDrones(GameControl.GameState.CurrentLevel);
 
             // Show current level
             var levelText = LevelTextObject.GetComponent<TextMeshProUGUI>();
-            levelText.text = "Level " + GameControl.GameState.CurrentLevel;
+            levelText.text = "Level " + _controlRLR.CurrentLevel;
             LevelTextObject.SetActive(true);
-            yield return new WaitForSeconds(2);
-            LevelTextObject.SetActive(false);
-
-            StartCoroutine(StartCountdown());
         }
 
-        private void SpawnPlayer(PlayerManager playerManager)
+        public void SetCameraPosition(PlayerManager playerManager)
+        {
+            CameraHandleMovement.SetCameraHandlePosition(
+                new Vector3(playerManager.transform.localPosition.x, 0,
+                    playerManager.transform.localPosition.z));
+        }
+
+        public void SpawnPlayer(PlayerManager playerManager)
         {
             var startPlatform = GameControl.GameState.SafeZones[0];
 
@@ -103,26 +108,29 @@ namespace RLR
             _safeZoneManager.VisitedSafeZones = new bool[GameControl.GameState.SafeZones.Count];
         }
 
-        private IEnumerator StartCountdown()
+        public void HideText()
         {
-            yield return new WaitForSeconds(1);
-
-            // Countdown
-            for (var i = 0; i < 3; i++)
-            {
-                var countdown = Instantiate(CountdownPrefab, GameObject.Find("Canvas").transform);
-                countdown.GetComponent<TextMeshProUGUI>().text = (3 - i).ToString();
-                yield return new WaitForSeconds(1);
-                Destroy(countdown);
-            }
-
-            StartLevel();
+            LevelTextObject.SetActive(false);
         }
 
-        private void StartLevel()
+        public void Countdown(int counter)
         {
-            _controlRLR.PlayerManager.IsInvulnerable = false;
-            _controlRLR.PlayerManager.IsImmobile = false;
+            if (_currentCountdown != null)
+            {
+                Destroy(_currentCountdown);
+            }
+
+            if (counter == 0)
+                return;
+
+            _currentCountdown = Instantiate(CountdownPrefab, GameObject.Find("Canvas").transform);
+            _currentCountdown.GetComponent<TextMeshProUGUI>().text = counter.ToString();
+        }
+
+        public void StartLevel(PlayerManager playerManager)
+        {
+            playerManager.IsInvulnerable = false;
+            playerManager.IsImmobile = false;
             _scoreRLR.StartTimer();
         }
     }

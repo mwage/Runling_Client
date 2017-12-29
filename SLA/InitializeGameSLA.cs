@@ -1,11 +1,9 @@
 ﻿using Characters;
 using Launcher;
-using Network.Synchronization;
 using Network.Synchronization.Data;
 using Players;
 using Players.Camera;
 using TMPro;
-using UI.SLA_Menus;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +11,6 @@ namespace SLA
 {
     public class InitializeGameSLA : MonoBehaviour
     {
-        public InGameMenuManagerSLA InGameMenuManager;
         public CameraHandleMovement CameraHandleMovement;
         public PlayerFactory PlayerFactory;
         public GameObject LevelTextObject;
@@ -39,28 +36,15 @@ namespace SLA
             var playerManager = PlayerFactory.Create("Manticore");
             playerManager.Model.SetActive(false);
             playerManager.Player = player;
-            GetComponent<InputServer>().Init(InGameMenuManager.gameObject, playerManager);
-            CameraHandleMovement.InitializeFollowTarget(playerManager.gameObject);
-            playerManager.PlayerMovement = playerManager.gameObject.AddComponent<PlayerMovement>();
-
-            if (GameControl.GameState.Solo)
-            {
-                _score.SetName(player.Name);
-            }
-            else
-            {
-                playerManager.PlayerStateManager = playerManager.gameObject.AddComponent<PlayerStateManager>();
-            }
+            _score.InitializeScore(playerManager);
 
             return playerManager;
         }
 
-        public PlayerManager InitializeOtherPlayer(Player player)
+        public void InitializeControls(PlayerManager playerManager)
         {
-            var playerManager = PlayerFactory.Create("Manticore");
-            playerManager.Model.SetActive(false);
-            playerManager.Player = player;
-            return playerManager;
+            GetComponent<InputServer>().Initialize(playerManager);
+            CameraHandleMovement.InitializeFollowTarget(playerManager.gameObject);
         }
 
         public void PrepareLevel()
@@ -83,15 +67,14 @@ namespace SLA
 
         public void SpawnPlayer(PlayerManager playerManager, Vector3 position, float rotation = 0)
         {
-
-                playerManager.IsDead = false;
-                playerManager.IsImmobile = false;
-                playerManager.IsInvulnerable = true;
-                playerManager.Model.SetActive(true);
-                playerManager.Shield.SetActive(true);
-                playerManager.transform.position = position;
-                playerManager.transform.eulerAngles = new Vector3(0, rotation, 0);
-                playerManager.CharacterController.Speed.SetBaseSpeed(_levelManager.GetMovementSpeed(_controlSLA.CurrentLevel));
+            playerManager.IsDead = false;
+            playerManager.IsImmobile = false;
+            playerManager.IsInvulnerable = true;
+            playerManager.Model.SetActive(true);
+            playerManager.Shield.SetActive(true);
+            playerManager.transform.position = position;
+            playerManager.transform.eulerAngles = new Vector3(0, rotation, 0);
+            playerManager.CharacterController.Speed.SetBaseSpeed(_levelManager.GetMovementSpeed(_controlSLA.CurrentLevel));
         }
 
         public void Countdown(int counter)
@@ -106,7 +89,6 @@ namespace SLA
 
             _currentCountdown = Instantiate(CountdownPrefab, GameObject.Find("Canvas").transform);
             _currentCountdown.GetComponent<TextMeshProUGUI>().text = counter.ToString();
-
         }
 
         public void StartLevel(PlayerManager playerManager)

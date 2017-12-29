@@ -1,5 +1,4 @@
-﻿using DarkRift;
-using Drones;
+﻿using Drones;
 using Network.Synchronization.Data;
 using Server.Scripts.Synchronization;
 using UnityEngine;
@@ -8,9 +7,9 @@ namespace Network.Synchronization
 {
     public class DroneStateManager : MonoBehaviour
     {
-        public ushort Id { get; set; }
-        public DroneFactory DroneFactory { get; set; }
+        public ushort Id { get; private set; }
 
+        private DroneFactory _droneFactory;
         private Vector3 _lastSentPosition;
 
         private void Awake()
@@ -18,17 +17,23 @@ namespace Network.Synchronization
             _lastSentPosition = transform.position;
         }
 
+        public void Initialize(ushort id, DroneFactory droneFactory)
+        {
+            Id = id;
+            _droneFactory = droneFactory;
+        }
+
         private void OnDestroy()
         {
-            if (DroneFactory == null)
+            if (_droneFactory == null)
                 return;
 
-            if (DroneFactory.IsServer)
+            if (_droneFactory.IsServer)
             {
                 SyncDroneServer.DestroyDrone(Id);
             }
 
-            DroneFactory.Drones.Remove(Id);
+            _droneFactory.Drones.Remove(Id);
         }
 
         public DroneState GetPositionData(float minMoveDistance)

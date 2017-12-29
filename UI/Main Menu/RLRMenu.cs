@@ -10,7 +10,6 @@ namespace UI.Main_Menu
 {
     public class RLRMenu : MonoBehaviour
     {
-        public GameObject PrevMenu;
         public GameObject LaunchRLR;
         public GameObject PickCharacterMenu;
 
@@ -30,6 +29,7 @@ namespace UI.Main_Menu
 
         private void OnEnable()
         {
+            PickCharacterMenu.gameObject.SetActive(true);
             _voteDifficulty = null;
             _voteGameMode = null;
         }
@@ -58,9 +58,9 @@ namespace UI.Main_Menu
         #region Buttons
         public void StartGame()
         {
-            GameControl.GameState.CurrentLevel = 1;
             GameControl.GameState.CharacterDto = PickCharacterMenu.GetComponent<PickCharacterMenu>().GetCharacterDto();
             SetModes();
+            GameControl.GameState.Solo = true;
 
             _sceneLoader.LoadScene("RLR", 1);
             _mainMenuManager.gameObject.SetActive(false);
@@ -68,7 +68,6 @@ namespace UI.Main_Menu
 
         public void StartGameSOLOHARDRLRTEST()
         {
-            GameControl.GameState.CurrentLevel = 1;
             GameControl.GameState.Solo = true;
             GameControl.GameState.CharacterDto = PickCharacterMenu.GetComponent<PickCharacterMenu>().GetCharacterDto();
             GameControl.GameState.SetDifficulty = Difficulty.Hard;
@@ -112,12 +111,11 @@ namespace UI.Main_Menu
         {
             gameObject.SetActive(false);
             PickCharacterMenu.SetActive(false);
-            PrevMenu.gameObject.SetActive(true);
-            transform.Find("Mode/Classic").GetComponent<Toggle>().isOn = false;
-            transform.Find("Mode/Practice").GetComponent<Toggle>().isOn = false;
-            transform.Find("Mode/Time").GetComponent<Toggle>().isOn = false;
-            transform.Find("Difficulty/Normal").GetComponent<Toggle>().isOn = false;
-            transform.Find("Difficulty/Hard").GetComponent<Toggle>().isOn = false;
+            transform.Find("Selection/Mode/Classic").GetComponent<Toggle>().isOn = false;
+            transform.Find("Selection/Mode/Practice").GetComponent<Toggle>().isOn = false;
+            transform.Find("Selection/Mode/Time").GetComponent<Toggle>().isOn = false;
+            transform.Find("Selection/Difficulty/Normal").GetComponent<Toggle>().isOn = false;
+            transform.Find("Selection/Difficulty/Hard").GetComponent<Toggle>().isOn = false;
             _mainMenuManager.MoveCamera(_mainMenuManager.CameraPosMainMenu, _mainMenuManager.CameraRotMainMenu);
         }
         #endregion

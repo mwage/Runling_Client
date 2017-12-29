@@ -34,9 +34,13 @@ namespace Server.Scripts.Synchronization
 
         #region Network Calls
 
+        public static void InitializePlayers()
+        {
+            ServerManager.Instance.SendToAll(new TagSubjectMessage(Tags.SyncPlayer, SyncPlayerSubjects.InitializePlayers, new DarkRiftWriter()), SendMode.Reliable);
+        }
+
         public static void SpawnPlayers(List<PlayerState> playerStates)
         {
-            // TODO: maybe group data with other players and send together, use playersync data instead of pos/id seperately)
             var writer = new DarkRiftWriter();
             foreach (var playerState in playerStates)
             {

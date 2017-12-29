@@ -1,14 +1,12 @@
-﻿using System;
-using Launcher;
+﻿using Launcher;
 using Players.Camera;
+using System;
 using UnityEngine;
 
 namespace UI.OptionsMenu
 {
-    public class OptionsMenu : MonoBehaviour
+    public class OptionsMenu : AMenu
     {
-
-        public GameObject Menu;
         public SetHotkeys SetHotkeys;
         public SetCamera SetCamera;
         public CameraHandleMovement CameraHandleMovement;
@@ -18,20 +16,36 @@ namespace UI.OptionsMenu
         public GameObject CameraSubmenu;
         public GameObject GraphicsSubmenu;
 
-        #region Buttons
+        private MenuManager _menuManager;
 
+        private void Awake()
+        {
+            _menuManager = transform.parent.GetComponent<MenuManager>();
+        }
+
+        private void OnEnable()
+        {
+            _menuManager.ActiveMenu?.gameObject.SetActive(false);
+            _menuManager.ActiveMenu = this;
+        }
+
+        #region Buttons
+        
         public void DiscardChanges()
         {
             SubmenuBuilder.DeleteHotkeyPrefabs(SetCamera.HotkeyList); 
             SubmenuBuilder.DeleteHotkeyPrefabs(SetHotkeys.HotkeyList);
             GameControl.InputManager.LoadHotkeys();
-            var watchedPoint = CameraHandleMovement.GetWatchedPoint();
+
+            if (CameraHandleMovement != null && CameraMovement != null)
+            {
+                var watchedPoint = CameraHandleMovement.GetWatchedPoint();
+                CameraHandleMovement.SetCameraHandlePosition(watchedPoint);
+                CameraMovement.SetCameraPitch(GameControl.Settings.CameraAngle.Val);
+            }
+
             GameControl.Settings.LoadSettings();
-            CameraHandleMovement.SetCameraHandlePosition(watchedPoint);
-            CameraMovement.SetCameraPitch(GameControl.Settings.CameraAngle.Val);
-            
-            gameObject.SetActive(false);
-            Menu.gameObject.SetActive(true);
+            _menuManager.Menu.SetActive(true);
         }
 
         public void SaveChanges()
@@ -44,8 +58,7 @@ namespace UI.OptionsMenu
             }
             SetCamera.SaveCameraOptions();
 
-            gameObject.SetActive(false);
-            Menu.gameObject.SetActive(true);
+            _menuManager.Menu.SetActive(true);
         }
 
         public void GeneralHotkeysToggle()
@@ -69,5 +82,10 @@ namespace UI.OptionsMenu
             GraphicsSubmenu.SetActive(true);
         }
         #endregion
+
+        public override void Back()
+        {
+            DiscardChanges();
+        }
     }
 }

@@ -1,6 +1,9 @@
-﻿using DarkRift;
+﻿using System.Collections.Generic;
+using DarkRift;
 using DarkRift.Client;
 using Network.DarkRiftTags;
+using Network.Synchronization.Data;
+using SLA;
 using UnityEngine;
 
 namespace Network.Synchronization
@@ -10,8 +13,14 @@ namespace Network.Synchronization
         #region Events
 
         public delegate void CountdownEventHandler(ushort counter);
+        public delegate void PrepareLevelEventHandler(int currentLevel);
+        public delegate void StartLevelEventHandler();
+        public delegate void HidePanelsEventHandler();
 
         public static event CountdownEventHandler onCountdown;
+        public static event PrepareLevelEventHandler onPrepareLevel;
+        public static event StartLevelEventHandler onStartLevel;
+        public static event HidePanelsEventHandler onHidePanels;
 
         #endregion
 
@@ -35,7 +44,23 @@ namespace Network.Synchronization
             {
                 var reader = message.GetReader();
                 var counter = reader.ReadUInt16();
+
                 onCountdown?.Invoke(counter);
+            }
+            else if (message.Subject == SyncGameSubjects.PrepareLevel)
+            {
+                var reader = message.GetReader();
+                var currentLevel = reader.ReadByte();
+
+                onPrepareLevel?.Invoke(currentLevel);
+            }
+            else if (message.Subject == SyncGameSubjects.StartLevel)
+            {
+                onStartLevel?.Invoke();
+            }
+            else if (message.Subject == SyncGameSubjects.HidePanels)
+            {
+                onHidePanels?.Invoke();
             }
         }
     }

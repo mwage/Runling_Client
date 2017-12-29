@@ -9,10 +9,10 @@ namespace Server.Scripts.Synchronization
     {
         [SerializeField] private DroneFactory _droneFactory;
 
-        private const float SendRateDrones = 15;
-        private const float MinMoveDistanceDrone = 0.2f;
+        private const float SendRateDrones = 60;
+        private const float MinMoveDistanceDrone = 0.05f;
 
-        private const float SendRatePlayers =30;
+        private const float SendRatePlayers = 60;
         private const float MinMoveDistancePlayer = 0.05f;
 
 

@@ -4,7 +4,7 @@ namespace RLR.MapGenerator
 {
     public class LaneSecondOffCenter : ALane
     {
-        public LaneSecondOffCenter(Vector3 position, Vector3 rotation, Vector3 scale) : base(position, rotation, scale)
+        public LaneSecondOffCenter(Vector3 position, Vector3 rotation, Vector3 scale, MapGeneratorRLR mapGenerator) : base(position, rotation, scale, mapGenerator)
         {
         }
 

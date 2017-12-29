@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Drones;
+﻿using Drones;
 using Launcher;
 using RLR.Levels;
 using RLR.MapGenerator;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,7 +17,6 @@ namespace RLR
         public MapGeneratorRLR MapGenerator;
         public RunlingChaser RunlingChaser;
         public GameObject Win;
-        public GameObject LivesText;
 
         private InitializeGameRLR _initializeGame;
         private ScoreRLR _score;
@@ -64,8 +63,7 @@ namespace RLR
         // Load next level
         public void EndLevel(float delay)
         {
-            Debug.Log("Ending Level");
-            StartCoroutine(GameControl.GameState.CurrentLevel == _levels.Count ? EndGameRLR(delay) : LoadNextLevel(0));
+            StartCoroutine(_controlRLR.CurrentLevel == _levels.Count ? EndGameRLR(delay) : LoadNextLevel(0));
         }
 
         // End game
@@ -90,16 +88,15 @@ namespace RLR
             {
                 _score.AddRemainingCountdown();
                 _score.CurrentScoreText.GetComponent<TextMeshProUGUI>().text = "Current Score: " +_controlRLR.PlayerManager.TotalScore;
-                _controlRLR.PlayerManager.Lives = 3;
-                LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + _controlRLR.PlayerManager.Lives;
+                _initializeGame.ChangeLives(_controlRLR.PlayerManager, 3);
             }
             if (GameControl.GameState.SetGameMode != GameMode.Practice)
             {
                _score.SetHighScore();
             }
             GameControl.GameState.FinishedLevel = false;
-            GameControl.GameState.CurrentLevel++;
-            _initializeGame.InitializeGame();
+            _controlRLR.CurrentLevel++;
+            _controlRLR.InitializeLevel();
         }
 
         // Load after the last level
@@ -122,7 +119,6 @@ namespace RLR
 
             // Load win screen
             yield return new WaitForSeconds(delay);
-            _initializeGame.InGameMenuManager.CloseMenus();
             if (GameControl.GameState.SetGameMode != GameMode.Practice)
             {
                 _score.SetHighScore();

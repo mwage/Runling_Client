@@ -22,9 +22,9 @@ namespace Players.AbilitiesButtons
 
         public void LateUpdate()
         {
-            _ability1.SetProgress();
-            _ability2.SetProgress();
-            _ultimatum.SetProgress();
+            _ability1?.SetProgress();
+            _ability2?.SetProgress();
+            _ultimatum?.SetProgress();
         }
     }
 }

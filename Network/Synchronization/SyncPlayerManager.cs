@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using DarkRift;
+﻿using DarkRift;
 using DarkRift.Client;
 using Network.DarkRiftTags;
 using Network.Synchronization.Data;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Network.Synchronization
@@ -12,10 +11,12 @@ namespace Network.Synchronization
     {
         #region Events
 
-        public delegate void SpawnPlayersEventHandler(PlayerState playerState);
+        public delegate void InitializePlayersEventHandler();
+        public delegate void SpawnPlayersEventHandler(List<PlayerState> playerState);
         public delegate void PlayerDeathEventHandler(uint playerId);
         public delegate void UpdatePlayersEventHandler(List<PlayerState> playerStates);
 
+        public static event InitializePlayersEventHandler onInitializePlayers;
         public static event SpawnPlayersEventHandler onSpawnPlayers;
         public static event PlayerDeathEventHandler onPlayerDeath;
         public static event UpdatePlayersEventHandler onUpdatePlayers;
@@ -47,12 +48,22 @@ namespace Network.Synchronization
             if (message == null || message.Tag != Tags.SyncPlayer)
                 return;
 
-            if (message.Subject == SyncPlayerSubjects.SpawnPlayers)
+            // Initialize Players
+            if (message.Subject == SyncPlayerSubjects.InitializePlayers)
+            {
+                onInitializePlayers?.Invoke();
+            }
+            else if (message.Subject == SyncPlayerSubjects.SpawnPlayers)
             {
                 var reader = message.GetReader();
-                var playerState = reader.ReadSerializable<PlayerState>();
+                var playerStates = new List<PlayerState>();
 
-                onSpawnPlayers?.Invoke(playerState);
+                while (reader.Position < reader.Length)
+                {
+                    playerStates.Add(reader.ReadSerializable<PlayerState>());
+                }
+
+                onSpawnPlayers?.Invoke(playerStates);
             }
             else if (message.Subject == SyncPlayerSubjects.PlayerDied)
             {
@@ -63,8 +74,8 @@ namespace Network.Synchronization
             }
             else if (message.Subject == SyncPlayerSubjects.UpdatePlayerState)
             {
-                var playerStates = new List<PlayerState>();
                 var reader = message.GetReader();
+                var playerStates = new List<PlayerState>();
 
                 while (reader.Position < reader.Length)
                 {

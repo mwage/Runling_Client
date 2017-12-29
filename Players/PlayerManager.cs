@@ -1,8 +1,8 @@
-﻿
-using System.Collections.Generic;
-using Characters.Types;
+﻿using Characters.Types;
 using Network.Synchronization;
 using Network.Synchronization.Data;
+using System.Collections.Generic;
+using SLA;
 using UnityEngine;
 
 namespace Players
@@ -13,10 +13,7 @@ namespace Players
         public GameObject Trigger;
         public GameObject Shield;
         public GameObject GodMode;
-        public GameObject MouseClickPrefab;
 
-        public int CurrentScore { get; set; }
-        public int TotalScore { get; set; }
         public bool IsDead { get; set; } = true;
         public int Lives { get; set; } = 1;
         public bool IsImmobile { get; set; } = true;
@@ -29,9 +26,11 @@ namespace Players
         public PlayerMovement PlayerMovement { get; set; }
         public ACharacter CharacterController { get; set; }
 
-        // Serverside
-        public bool OnServer { get; set; } = false;
+        // Networking
         public PlayerStateManager PlayerStateManager { get; set; }
+
+        // TODO: Remove when implementing score for RLR    
+        public int TotalScore { get; set; }
 
         public void DestroyChaser()
         {
@@ -42,6 +41,7 @@ namespace Players
                     Destroy(chaser);
                 }
             }
+
             Chaser.Clear();
         }
     }

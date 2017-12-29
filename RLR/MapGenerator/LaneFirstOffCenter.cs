@@ -5,7 +5,8 @@ namespace RLR.MapGenerator
     public class LaneFirstOffCenter : ALane
     {
         private readonly float _centerSize;
-        public LaneFirstOffCenter(Vector3 position, Vector3 rotation, Vector3 scale, float centerSize) : base(position, rotation, scale)
+        public LaneFirstOffCenter(Vector3 position, Vector3 rotation, Vector3 scale, float centerSize, MapGeneratorRLR mapGenerator) 
+            : base(position, rotation, scale, mapGenerator)
         {
             _centerSize = centerSize;
         }

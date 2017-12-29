@@ -12,12 +12,9 @@ using UnityEngine.SceneManagement;
 
 namespace UI.Main_Menu
 {
-    using OptionsMenu;
-
     public class MainMenuManager : MonoBehaviour
     {
         public MainMenu MainMenu;
-        public OptionsMenu OptionsMenu;
         public SLAMenu SLAMenu;
         public HighScoreMenuSLA HighScoreMenuSLA;
         public RLRMenu RLRMenu;
@@ -99,45 +96,6 @@ namespace UI.Main_Menu
                 Camera.transform.position = Vector3.Lerp(_oldPos, _targetPos, _currentPos);
                 Camera.transform.rotation = Quaternion.Slerp(_oldRot, _targetRot, _currentRot);
             }
-
-            #region NavigateMenu
-
-            if (GameControl.InputManager.GetButtonDown(HotkeyAction.NavigateMenu))
-            {
-                if (ChatWindowManager.ChatPanels.activeSelf || ChatWindowManager.FriendPanel.activeSelf)
-                {
-                    ChatWindowManager.DeactivatePanels();
-                }
-                else if (OptionsMenu.gameObject.activeSelf)
-                {
-                    OptionsMenu.DiscardChanges();
-                }
-                else if (SoloMenu.gameObject.activeSelf)
-                {
-                    SoloMenu.BackToMenu();
-                }
-                else if (MultiplayerMenu.gameObject.activeSelf)
-                {
-                    MultiplayerMenu.BackToMenu();
-                }
-                else if (SLAMenu.gameObject.activeSelf)
-                {
-                    SLAMenu.BackToMenu();
-                }
-                else if (RLRMenu.gameObject.activeSelf)
-                {
-                    RLRMenu.BackToMenu();
-                }
-                else if (HighScoreMenuSLA.gameObject.activeSelf)
-                {
-                    HighScoreMenuSLA.Back();
-                }
-                else if (HighScoreMenuRLR.gameObject.activeSelf)
-                {
-                    HighScoreMenuRLR.Back();
-                }
-            }
-            #endregion
         }
 
         private static void OnDataHandler(object sender, MessageReceivedEventArgs e)
@@ -168,6 +126,17 @@ namespace UI.Main_Menu
                     Debug.Log("No room set!");
                     break;
             }
+        }
+
+        public void CloseAll()
+        {
+            SoloMenu.gameObject.SetActive(false);
+            MultiplayerMenu.gameObject.SetActive(false);
+            SLAMenu.gameObject.SetActive(false);
+            RLRMenu.gameObject.SetActive(false);
+            HighScoreMenuSLA.gameObject.SetActive(false);
+            HighScoreMenuRLR.gameObject.SetActive(false);
+            ChatWindowManager.DeactivatePanels();
         }
     }
 }

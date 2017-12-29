@@ -4,7 +4,7 @@ namespace RLR.MapGenerator
 {
     public class LaneStandard : ALane
     {
-        public LaneStandard(Vector3 position, Vector3 rotation, Vector3 scale) : base(position, rotation, scale)
+        public LaneStandard(Vector3 position, Vector3 rotation, Vector3 scale, MapGeneratorRLR mapGenerator) : base(position, rotation, scale, mapGenerator)
         {
         }
 

@@ -12,6 +12,7 @@ namespace Players
         public RunlingChaser RunlingChaser;
         private PlayerManager _playerManager;
         private ScoreRLR _score;
+        private ControlRLR _controlRLR;
         private PlayerBarsManager _playerBarsManager;
         public bool[,] ReachedChaserPlatform;
         public List<GameObject> Chasers;
@@ -27,6 +28,7 @@ namespace Players
             _playerBarsManager = playerBarsManager;
             RunlingChaser = runlingChaser;
             _score = RunlingChaser.GetComponent<ScoreRLR>();
+            _controlRLR = RunlingChaser.GetComponent<ControlRLR>();
         }
 
         #region Trigger
@@ -94,7 +96,7 @@ namespace Players
         private void AddExp(int currentSafeZoneIdx)
         {
             _playerManager.CharacterController.AddExp(LevelingSystem.CalculateExp(currentSafeZoneIdx,
-                GameControl.GameState.CurrentLevel, GameControl.GameState.SetDifficulty,
+                _controlRLR.CurrentLevel, GameControl.GameState.SetDifficulty,
                 GameControl.GameState.SetGameMode));
         }
 

@@ -15,8 +15,9 @@
         public const byte SyncDrone = 22;
         public const byte SyncGame = 23;
 
-        // Ingame mode specific
+        // Gamemode specific
         public const byte SLA = 100;
-        public const byte RLR = 110;
+        public const byte RLR = 101;
     }
+
 }

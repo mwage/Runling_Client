@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Drones;
+﻿using Drones;
 using Drones.DroneTypes;
 using Drones.Movement;
 using Launcher;
 using SLA;
 using SLA.Levels;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Server.Scripts.SLA
@@ -19,15 +20,15 @@ namespace Server.Scripts.SLA
 
         public const int NumLevels = 13;             //currently last level available in SLA
 
-//        private ScoreSLA _score;
-
         private ControlSLAServer _controlSLA;
         private List<ILevelSLA> _levels;
+        private ScoreSLAServer _score;
 
         public void Awake()
         {
-//            _score = GetComponent<ScoreSLA>();
             _controlSLA = GetComponent<ControlSLAServer>();
+            _score = GetComponent<ScoreSLAServer>();
+
             _droneFactory.IsServer = true;
             InitializeLevels();
         }
@@ -93,8 +94,6 @@ namespace Server.Scripts.SLA
         {
             yield return new WaitForSeconds(delay);
 
-//            _score.NewHighScore.transform.parent.gameObject.SetActive(false);
-
             DroneFactory.StopAllCoroutines();
             foreach (Transform child in DroneFactory.transform)
             {
@@ -103,7 +102,12 @@ namespace Server.Scripts.SLA
 
             yield return new WaitForSeconds(delay);
 
-//            _score.CurrentScoreText.text = "0";
+            foreach (var playerManager in _controlSLA.PlayerManagers.Values)
+            {
+                _score.Scores[playerManager].ResetCurrent();
+                NetworkManagerSLAServer.UpdateScore(_score.Scores.Values.ToList());
+            }
+
             if (_controlSLA.GameMode != GameMode.Practice)
             {
                 _controlSLA.CurrentLevel++;
@@ -116,7 +120,6 @@ namespace Server.Scripts.SLA
         private IEnumerator EndGameSLA(float delay)
         {
             yield return new WaitForSeconds(delay);
-//            _score.NewHighScore.transform.parent.gameObject.SetActive(false);
         }
     }
 }

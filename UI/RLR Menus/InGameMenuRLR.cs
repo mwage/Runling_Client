@@ -4,44 +4,41 @@ using UnityEngine.SceneManagement;
 
 namespace UI.RLR_Menus
 {
-    using OptionsMenu;
-
-    public class InGameMenuRLR : MonoBehaviour
+    public class InGameMenuRLR : AMenu
     {
-        [SerializeField] private InGameMenuManagerRLR _inGameMenuManagerRLR;
+        public GameObject RestartGameButton;
+        public GameObject ChooseLevelButton;
 
-        private OptionsMenu _optionsMenu;
-        private ChooseLevelMenuRLR _chooseLevelMenu;
-        private HighScoreMenuRLR _highScoreMenuRLR;
+        private MenuManager _menuManager;
 
         private void Awake()
         {
-            _optionsMenu = _inGameMenuManagerRLR.OptionsMenu;
-            _chooseLevelMenu = _inGameMenuManagerRLR.ChooseLevelMenu;
-            _highScoreMenuRLR = _inGameMenuManagerRLR.HighScoreMenuRLR;
+            _menuManager = transform.parent.GetComponent<MenuManager>();
+        }
+
+        private void OnEnable()
+        {
+            _menuManager.InputServer.InMenu = true;
+            _menuManager.ActiveMenu?.gameObject.SetActive(false);
+            _menuManager.ActiveMenu = this;
+
+            var isPractice = GameControl.GameState.SetGameMode == GameMode.Practice;
+            RestartGameButton.SetActive(!isPractice);
+            ChooseLevelButton.SetActive(isPractice);
         }
 
         #region Buttons
 
-        public void BackToGame()
+        public override void Back()
         {
-            gameObject.SetActive(false);
-            _inGameMenuManagerRLR.MenuOn = false;
-            Time.timeScale = 1;
+            _menuManager.CloseMenu(this);
         }
 
         public void RestartGame()
         {
-            GameControl.GameState.CurrentLevel = 1;
             Time.timeScale = 1;
 
             SceneManager.LoadScene("RLR");
-        }
-
-        public void Options()
-        {
-            gameObject.SetActive(false);
-            _optionsMenu.gameObject.SetActive(true);
         }
 
         public void BackToMenu()
@@ -50,17 +47,6 @@ namespace UI.RLR_Menus
             SceneManager.LoadScene("MainMenu");
         }
 
-        public void ChooseLevel()
-        {
-            gameObject.SetActive(false);
-            _chooseLevelMenu.gameObject.SetActive(true);
-        }
-
-        public void HighScores()
-        {
-            gameObject.SetActive(false);
-            _highScoreMenuRLR.gameObject.SetActive(true);
-        }
         #endregion
     }
 }

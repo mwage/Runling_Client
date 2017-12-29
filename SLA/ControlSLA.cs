@@ -1,8 +1,8 @@
 ﻿using Launcher;
+using Network.Synchronization.Data;
 using Players;
 using System.Collections;
 using System.Collections.Generic;
-using Network.Synchronization.Data;
 using UnityEngine;
 
 namespace SLA
@@ -11,10 +11,9 @@ namespace SLA
     {
         public GameObject PracticeMode;
 
-
-        public PlayerManager PlayerManager { get; private set; }
-        public Dictionary<uint, PlayerManager> PlayerManagers { get; } = new Dictionary<uint, PlayerManager>(); // for Multiplayer
+        public Dictionary<uint, PlayerManager> PlayerManagers { get; } = new Dictionary<uint, PlayerManager>();
         public int CurrentLevel { get; set; } = 1;
+        public Coroutine PrepareLevelCoroutine { get; private set; }
 
         private InitializeGameSLA _initializeGame;
         private LevelManagerSLA _levelManager;
@@ -38,7 +37,10 @@ namespace SLA
             if (!GameControl.GameState.Solo)
                 return;
 
-            PlayerManager = _initializeGame.InitializePlayer(new Player(0, PlayerPrefs.GetString("username"), PlayerColor.Green));
+            var playerManager = _initializeGame.InitializePlayer(new Player(0, PlayerPrefs.GetString("username"), PlayerColor.Green));
+            _initializeGame.InitializeControls(playerManager);
+            playerManager.PlayerMovement = playerManager.gameObject.AddComponent<PlayerMovement>();
+            PlayerManagers[0] = playerManager;
             InitializeLevel();
         }
 
@@ -56,7 +58,7 @@ namespace SLA
             yield return new WaitForSeconds(1);
 
             // Spawn Players and Drones
-            _initializeGame.SpawnPlayer(PlayerManager, Vector3.zero);
+            _initializeGame.SpawnPlayer(PlayerManagers[0], Vector3.zero);
             _levelManager.LoadDrones(CurrentLevel);
 
             yield return new WaitForSeconds(1);
@@ -72,7 +74,7 @@ namespace SLA
                 }
             }
 
-            _initializeGame.StartLevel(PlayerManager);
+            _initializeGame.StartLevel(PlayerManagers[0]);
         }
     }
 }

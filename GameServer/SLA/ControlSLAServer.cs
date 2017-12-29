@@ -1,9 +1,9 @@
 ﻿using Launcher;
+using Network.Synchronization.Data;
 using Players;
 using Server.Scripts.Synchronization;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,7 +37,7 @@ namespace Server.Scripts.SLA
             {
                 PlayerManagers[player.Id] = _initializeGame.InitializePlayer(player);
             }
-            NetworkManagerSLAServer.InitializePlayers();
+            SyncPlayerServer.InitializePlayers();
 
             InitializeLevel();
         }
@@ -53,9 +53,9 @@ namespace Server.Scripts.SLA
         private IEnumerator PrepareLevel()
         {
             // Show Highscore and current level
-            NetworkManagerSLAServer.PrepareLevel(CurrentLevel);
+            SyncGameServer.PrepareLevel(CurrentLevel);
             yield return new WaitForSeconds(3);
-            NetworkManagerSLAServer.HidePanels();
+            SyncGameServer.HidePanels();
             yield return new WaitForSeconds(1);
 
             ServerManager.Instance.Server.Dispatcher.InvokeAsync(() =>
@@ -64,7 +64,13 @@ namespace Server.Scripts.SLA
             });
 
             // Spawn Players and Drones
-            var playerStates = PlayerManagers.Values.Select(playerManager => _initializeGame.SpawnPlayer(playerManager)).ToList();
+            var playerStates = new List<PlayerState>();
+
+            foreach (var playerManager in PlayerManagers.Values)
+            {
+                playerStates.Add(_initializeGame.SpawnPlayer(playerManager));
+            }
+    
             SyncPlayerServer.SpawnPlayers(playerStates);
 
             _levelManager.LoadDrones(CurrentLevel);

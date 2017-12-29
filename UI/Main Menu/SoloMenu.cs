@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Network.Rooms;
+using UnityEngine;
 
 namespace UI.Main_Menu
 {
@@ -8,16 +9,22 @@ namespace UI.Main_Menu
         public GameObject Error;
 
         private MainMenuManager _mainMenuManager;
-        private MainMenu _mainMenu;
+
         private SLAMenu _slaMenu;
         private RLRMenu _rlrMenu;
         
         private void Awake()
         {
             _mainMenuManager = transform.parent.GetComponent<MainMenuManager>();
-            _mainMenu = _mainMenuManager.MainMenu;
             _slaMenu = _mainMenuManager.SLAMenu;
             _rlrMenu = _mainMenuManager.RLRMenu;
+
+            RoomManager.onSuccessfulLeaveRoom += OnLeaveRoom;
+        }
+
+        private void OnDestroy()
+        {
+            RoomManager.onSuccessfulLeaveRoom -= OnLeaveRoom;
         }
 
         #region Buttons
@@ -39,9 +46,14 @@ namespace UI.Main_Menu
         public void BackToMenu()
         {
             gameObject.SetActive(false);
-            _mainMenu.gameObject.SetActive(true);
         }
 
         #endregion
+
+        private void OnLeaveRoom()
+        {
+            Error.SetActive(false);
+            NormalSolo.SetActive(true);
+        }
     }
 }

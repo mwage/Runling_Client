@@ -194,7 +194,7 @@ namespace Network
 
         public void Close()
         {
-            _darkRiftClient.Dispose();
+            _darkRiftClient?.Dispose();
         }
     }
 }

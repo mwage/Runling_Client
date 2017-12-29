@@ -3,7 +3,6 @@ using DarkRift.Client;
 using Launcher;
 using Network;
 using Network.DarkRiftTags;
-using Network.Synchronization;
 using Network.Synchronization.Data;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -23,7 +22,8 @@ namespace SLA.Network
         private void Awake()
         {            
             ////////////////////////////// For faster testing only! /////////////////////////
-            _testMode = true;
+            _testMode = false;
+            GameControl.GameState.Solo = true;
             /////////////////////////////////////////////////////////////////////////////////
             
             if (GameControl.GameState.Solo)

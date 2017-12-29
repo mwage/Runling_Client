@@ -3,9 +3,8 @@ using DarkRift.Server;
 using Launcher;
 using Network;
 using Network.DarkRiftTags;
-using Network.Synchronization;
-using System.Linq;
 using Network.Synchronization.Data;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -26,7 +25,7 @@ namespace Server.Scripts.SLA
         private void Awake()
         {
             ////////////////////////////// For faster testing only! /////////////////////////
-            _testMode = true;
+            _testMode = false;
             
             if (_testMode)
             {

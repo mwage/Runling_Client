@@ -5,14 +5,15 @@ using UnityEngine;
 
 namespace UI.RLR_Menus
 {
-    public class HighScoreMenuRLR : MonoBehaviour {
-
+    public class HighScoreMenuRLR : AMenu
+    {
         public GameObject Menu;
         public GameObject ScorePrefab;
         public GameObject Background;
         public ControlRLR ControlRLR;
-        public ScoreRLR Score;
 
+        private ScoreRLR _score;
+        private MenuManager _menuManager;
         private GameObject _descriptionText;
         private readonly GameObject[] _levelScore = new GameObject[LevelManagerRLR.NumLevels];
         private GameObject _timeModeScore;
@@ -20,10 +21,18 @@ namespace UI.RLR_Menus
         private void Awake()
         {
             CreateTextObjects(Background);
+            _score = ControlRLR?.GetComponent<ScoreRLR>();
+            _menuManager = transform.parent.GetComponent<MenuManager>();
         }
 
         private void OnEnable()
         {
+            if (_menuManager != null)
+            {
+                _menuManager.ActiveMenu?.gameObject.SetActive(false);
+                _menuManager.ActiveMenu = this;
+            }
+
             SetNumbers();
         }
 
@@ -32,7 +41,7 @@ namespace UI.RLR_Menus
             // Descriptions
             _descriptionText = Instantiate(ScorePrefab, background.transform);
             _descriptionText.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Level";
-            if (Score != null && GameControl.GameState.SetGameMode != GameMode.Practice)
+            if (_score != null && GameControl.GameState.SetGameMode != GameMode.Practice)
             {
                 _descriptionText.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "Cur:";
                 _descriptionText.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "PB:";
@@ -63,7 +72,7 @@ namespace UI.RLR_Menus
             _timeModeScore.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(100, 20);
 
 
-            if (Score == null)
+            if (_score == null)
             {
                 _descriptionText.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "Normal";
                 _descriptionText.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "Hard";
@@ -72,7 +81,7 @@ namespace UI.RLR_Menus
 
         public void SetNumbers()
         {
-            if (Score != null && GameControl.GameState.SetGameMode != GameMode.Practice)
+            if (_score != null && GameControl.GameState.SetGameMode != GameMode.Practice)
             {
                 SetHighScoresIngame();
                 SetCurrentScores();
@@ -130,11 +139,11 @@ namespace UI.RLR_Menus
                 case Difficulty.Normal:
                     for (var i = 0; i < LevelManagerRLR.NumLevels; i++)
                     {
-                        if (Score.FinishTimeCurGame[i] > 0.1f)
+                        if (_score.FinishTimeCurGame[i] > 0.1f)
                         {
-                            _levelScore[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = Score.FinishTimeCurGame[i] > 60
-                                ? (int)Score.FinishTimeCurGame[i] / 60 + ":" + (Score.FinishTimeCurGame[i] % 60).ToString("00.00")
-                                : Score.FinishTimeCurGame[i].ToString("f2");
+                            _levelScore[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = _score.FinishTimeCurGame[i] > 60
+                                ? (int)_score.FinishTimeCurGame[i] / 60 + ":" + (_score.FinishTimeCurGame[i] % 60).ToString("00.00")
+                                : _score.FinishTimeCurGame[i].ToString("f2");
                         }
                         else
                         {
@@ -142,7 +151,7 @@ namespace UI.RLR_Menus
                         }
 
                         // New records are shown green
-                        if ((Score.FinishTimeCurGame[i] <= GameControl.HighScores.HighScoreRLRNormal[i + 1] || GameControl.HighScores.HighScoreRLRNormal[i + 1] < 0.1f) && Score.FinishTimeCurGame[i] > 0.1f)
+                        if ((_score.FinishTimeCurGame[i] <= GameControl.HighScores.HighScoreRLRNormal[i + 1] || GameControl.HighScores.HighScoreRLRNormal[i + 1] < 0.1f) && _score.FinishTimeCurGame[i] > 0.1f)
                         {
                             _levelScore[i].transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = Color.green;
                         }
@@ -164,11 +173,11 @@ namespace UI.RLR_Menus
                 case Difficulty.Hard:
                     for (var i = 0; i < LevelManagerRLR.NumLevels; i++)
                     {
-                        if (Score.FinishTimeCurGame[i] > 0.1f)
+                        if (_score.FinishTimeCurGame[i] > 0.1f)
                         {
-                            _levelScore[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = Score.FinishTimeCurGame[i] > 60
-                                ? (int)Score.FinishTimeCurGame[i] / 60 + ":" + (Score.FinishTimeCurGame[i] % 60).ToString("00.00")
-                                : Score.FinishTimeCurGame[i].ToString("f2");
+                            _levelScore[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = _score.FinishTimeCurGame[i] > 60
+                                ? (int)_score.FinishTimeCurGame[i] / 60 + ":" + (_score.FinishTimeCurGame[i] % 60).ToString("00.00")
+                                : _score.FinishTimeCurGame[i].ToString("f2");
                         }
                         else
                         {
@@ -176,7 +185,7 @@ namespace UI.RLR_Menus
                         }
 
                         // New records are shown green
-                        if ((Score.FinishTimeCurGame[i] <= GameControl.HighScores.HighScoreRLRHard[i + 1] || GameControl.HighScores.HighScoreRLRHard[i + 1] < 0.1f) && Score.FinishTimeCurGame[i] > 0.1f)
+                        if ((_score.FinishTimeCurGame[i] <= GameControl.HighScores.HighScoreRLRHard[i + 1] || GameControl.HighScores.HighScoreRLRHard[i + 1] < 0.1f) && _score.FinishTimeCurGame[i] > 0.1f)
                         {
                             _levelScore[i].transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = Color.green;
                         }
@@ -233,10 +242,17 @@ namespace UI.RLR_Menus
             _timeModeScore.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = GameControl.HighScores.HighScoreRLRHard[0].ToString("f0");
         }
         
-        public void Back()
+        public override void Back()
         {
-            gameObject.SetActive(false);
-            Menu.gameObject.SetActive(true);
+            if (_menuManager != null)
+            {
+                _menuManager.Menu.SetActive(true);
+            }
+            else
+            {
+                gameObject.SetActive(false);
+                Menu.gameObject.SetActive(true);
+            }
         }
     }
 }

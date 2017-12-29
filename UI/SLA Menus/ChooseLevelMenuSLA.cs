@@ -1,128 +1,120 @@
-﻿using Launcher;
+﻿using Players;
 using SLA;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace UI.SLA_Menus
 {
-    public class ChooseLevelMenuSLA : MonoBehaviour
+    public class ChooseLevelMenuSLA : AMenu
     {
-        [SerializeField] private InGameMenuManagerSLA _inGameMenuManagerSLA;
         [SerializeField] private ControlSLA _controlSLA;
-        [SerializeField] private LevelManagerSLA _levelManager;
+
+        private LevelManagerSLA _levelManager;
+        private InitializeGameSLA _initializeGame;
+        private MenuManager _menuManager;
+
+        private void Awake()
+        {
+            _initializeGame = _controlSLA?.GetComponent<InitializeGameSLA>();
+            _levelManager = _controlSLA?.GetComponent<LevelManagerSLA>();
+            _menuManager = transform.parent.GetComponent<MenuManager>();
+        }
+
+        private void OnEnable()
+        {
+            _menuManager.ActiveMenu?.gameObject.SetActive(false);
+            _menuManager.ActiveMenu = this;
+        }
 
         #region Buttons
 
         public void Level1()
         {
-            _controlSLA.CurrentLevel = 1;
-            _levelManager.EndLevel(0);
-            gameObject.SetActive(false);
-            Time.timeScale = 1;
+            PickLevel(1);
         }
 
         public void Level2()
         {
-            _controlSLA.CurrentLevel = 2;
-            _levelManager.EndLevel(0);
-            gameObject.SetActive(false);
-            Time.timeScale = 1;
+            PickLevel(2);
         }
 
         public void Level3()
         {
-            _controlSLA.CurrentLevel = 3;
-            _levelManager.EndLevel(0);
-            gameObject.SetActive(false);
-            Time.timeScale = 1;
+            PickLevel(3);
         }
 
         public void Level4()
         {
-            _controlSLA.CurrentLevel = 4;
-            _levelManager.EndLevel(0);
-            gameObject.SetActive(false);
-            Time.timeScale = 1;
+            PickLevel(4);
         }
 
         public void Level5()
         {
-            _controlSLA.CurrentLevel = 5;
-            _levelManager.EndLevel(0);
-            gameObject.SetActive(false);
-            Time.timeScale = 1;
+            PickLevel(5);
         }
 
         public void Level6()
         {
-            _controlSLA.CurrentLevel = 6;
-            _levelManager.EndLevel(0);
-            gameObject.SetActive(false);
-            Time.timeScale = 1;
+            PickLevel(6);
         }
 
         public void Level7()
         {
-            _controlSLA.CurrentLevel = 7;
-            _levelManager.EndLevel(0);
-            gameObject.SetActive(false);
-            Time.timeScale = 1;
+            PickLevel(7);
         }
 
         public void Level8()
         {
-            _controlSLA.CurrentLevel = 8;
-            _levelManager.EndLevel(0);
-            gameObject.SetActive(false);
-            Time.timeScale = 1;
+            PickLevel(8);
         }
 
         public void Level9()
         {
-            _controlSLA.CurrentLevel = 9;
-            _levelManager.EndLevel(0);
-            gameObject.SetActive(false);
-            Time.timeScale = 1;
+            PickLevel(9);
         }
 
         public void Level10()
         {
-            _controlSLA.CurrentLevel = 10;
-            _levelManager.EndLevel(0);
-            gameObject.SetActive(false);
-            Time.timeScale = 1;
+            PickLevel(10);
         }
 
         public void Level11()
         {
-            _controlSLA.CurrentLevel = 11;
-            _levelManager.EndLevel(0);
-            gameObject.SetActive(false);
-            Time.timeScale = 1;
+            PickLevel(11);
         }
 
         public void Level12()
         {
-            _controlSLA.CurrentLevel = 12;
-            _levelManager.EndLevel(0);
-            gameObject.SetActive(false);
-            Time.timeScale = 1;
+            PickLevel(12);
         }
 
         public void Level13()
         {
-            _controlSLA.CurrentLevel = 13;
-            _levelManager.EndLevel(0);
-            gameObject.SetActive(false);
-            Time.timeScale = 1;
+            PickLevel(13);
         }
 
-        public void Back()
+        private void PickLevel(int level)
         {
-            gameObject.SetActive(false);
-            _inGameMenuManagerSLA.InGameMenu.gameObject.SetActive(true);
+            _controlSLA.CurrentLevel = level;
+            _controlSLA.StopAllCoroutines();
+            _initializeGame.Countdown(0);
+            KillPlayer(_controlSLA.PlayerManagers[0]);
+            _levelManager.EndLevel(0);
+
+            _menuManager.CloseMenu(this);
+        }
+
+        private static void KillPlayer(PlayerManager playerManager)
+        {
+            playerManager.IsImmobile = true;
+            playerManager.IsInvulnerable = true;
+            playerManager.Model.SetActive(false);
+            playerManager.Shield.SetActive(false);
+        }
+
+        public override void Back()
+        {
+            _menuManager.Menu.SetActive(true);
         }
         #endregion
-
     }
 }

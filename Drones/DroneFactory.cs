@@ -34,6 +34,8 @@ namespace Drones
         public Dictionary<ushort, DroneStateManager> Drones { get; } = new Dictionary<ushort, DroneStateManager>();
         public bool IsServer { get; set; } = false;
 
+        private ushort _lastId;
+
         private void Awake()
         {
             SetDroneType[DroneType.BouncingDrone] = BouncingDrone;
@@ -117,16 +119,14 @@ namespace Drones
 
         private DroneStateManager AddDroneData(GameObject drone)
         {
-            ushort id = 0;
-            while (Drones.ContainsKey(id))
+            do
             {
-                id++;
-            }
-
+                _lastId++;
+            } while (Drones.ContainsKey(_lastId));
+            
             var droneData = drone.AddComponent<DroneStateManager>();
-            droneData.Id = id;
-            droneData.DroneFactory = this;
-            Drones[id] = droneData;
+            droneData.Initialize(_lastId, this);
+            Drones[_lastId] = droneData;
             return droneData;
         }
     }

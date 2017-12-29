@@ -49,8 +49,7 @@ namespace RLR
                     }
                     else
                     {
-                        playerManager.Lives -= 1;
-                        _levelManager.LivesText.GetComponent<TextMeshProUGUI>().text = "Lives remaining: " + playerManager.Lives;
+                        _initializeGame.ChangeLives(playerManager, playerManager.Lives - 1);
                         StartCoroutine(Respawn(10, 3, _initializeGame, playerManager));
                         break;
                     }

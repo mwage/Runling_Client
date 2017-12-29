@@ -14,11 +14,19 @@ namespace RLR.MapGenerator
         public GameObject SecondLineOfCenterPrefab;
         public GameObject StartPlatform;
         public GameObject FlyingDroneCollider;
-        private float _flyingDroneColliderOffset;
+
+        public float WallTilingX = 2;
+        public float WallTilingY = 2;
+        public float PlatformTilingX = 2;
+        public float PlatformTilingZ = 2;
+        public float LaneTilingX = 2;
+        public float LaneTilingZ = 2;
 
         protected List<ALane> Lanes;
         protected List<GameObject> SafeZones ;
         protected List<GameObject> AirCollider ;
+
+        private float _flyingDroneColliderOffset;
 
         public void GenerateMap(int centerSize, float[] lanesWidth, float gapBetweenLines, float wallSize, float airColliderOffset)
         {
@@ -105,14 +113,14 @@ namespace RLR.MapGenerator
             ALane.ColliderWallSize = colliderWidth;
         }
 
-        private static List<ALane> CalculateLanesParameters(int spiralsAmount, float[] linesWidth, float gap, float centerSize)
+        private List<ALane> CalculateLanesParameters(int spiralsAmount, float[] linesWidth, float gap, float centerSize)
         {
             var lanes = new List<ALane>
             {
-                new LaneFirstOffCenter(new Vector3(-(gap + centerSize + linesWidth[0] / 2), 0, -gap / 2), new Vector3(0F, -90F, 0F), new Vector3(gap + 2 * centerSize, 1F, linesWidth[0]), centerSize),
-                new LaneSecondOffCenter(new Vector3(-(linesWidth[0] / 2), 0, -(centerSize + gap + linesWidth[0] / 2)), new Vector3(0F, 180F, 0F), new Vector3(2 * gap + 2 * centerSize + linesWidth[0], 1F, linesWidth[0])),
-                new LaneStandard(new Vector3(centerSize + gap + linesWidth[0] / 2, 0, 0), new Vector3(0F, 90F, 0F), new Vector3(2 * (gap + centerSize), 1F, linesWidth[0])),
-                new LaneStandard(new Vector3(-(gap + linesWidth[0]) / 2, 0, centerSize + gap + linesWidth[0] / 2), new Vector3(0F, 0F, 0F), new Vector3(3 * gap + 2 * centerSize + linesWidth[0], 1F, linesWidth[0]))
+                new LaneFirstOffCenter(new Vector3(-(gap + centerSize + linesWidth[0] / 2), 0, -gap / 2), new Vector3(0F, -90F, 0F), new Vector3(gap + 2 * centerSize, 1F, linesWidth[0]), centerSize, this),
+                new LaneSecondOffCenter(new Vector3(-(linesWidth[0] / 2), 0, -(centerSize + gap + linesWidth[0] / 2)), new Vector3(0F, 180F, 0F), new Vector3(2 * gap + 2 * centerSize + linesWidth[0], 1F, linesWidth[0]), this),
+                new LaneStandard(new Vector3(centerSize + gap + linesWidth[0] / 2, 0, 0), new Vector3(0F, 90F, 0F), new Vector3(2 * (gap + centerSize), 1F, linesWidth[0]), this),
+                new LaneStandard(new Vector3(-(gap + linesWidth[0]) / 2, 0, centerSize + gap + linesWidth[0] / 2), new Vector3(0F, 0F, 0F), new Vector3(3 * gap + 2 * centerSize + linesWidth[0], 1F, linesWidth[0]), this)
             };
 
             // create first (near center) lines, left one is first, then bottom right top
@@ -122,28 +130,28 @@ namespace RLR.MapGenerator
                 {
                     lanes.Add(new LaneStandard(new Vector3(lanes[4 * (i - 1)].Pos.x - gap - (linesWidth[i] + linesWidth[i - 1]) / 2, 0F, lanes[4 * (i - 1)].Pos.z - linesWidth[i - 1] / 2),
                                                 new Vector3(0F, -90F, 0F),
-                                                new Vector3(lanes[4 * (i - 1)].Sc.x + 2 * gap + linesWidth[i - 1], 1F, linesWidth[i])));
+                                                new Vector3(lanes[4 * (i - 1)].Sc.x + 2 * gap + linesWidth[i - 1], 1F, linesWidth[i]), this));
 
                     lanes.Add(new LaneStandard(new Vector3(0F, 0F, lanes[4 * (i - 1) + 1].Pos.z - (gap + (linesWidth[i - 1] + linesWidth[i]) / 2)),
                                                 new Vector3(0F, 180F, 0F),
-                                                new Vector3(lanes[4 * (i - 1) + 1].Sc.x + 2 * gap + linesWidth[i - 1], 1F, linesWidth[i])));
+                                                new Vector3(lanes[4 * (i - 1) + 1].Sc.x + 2 * gap + linesWidth[i - 1], 1F, linesWidth[i]), this));
                 }
                 else
                 {
                     lanes.Add(new LaneStandard(new Vector3(lanes[4 * (i - 1)].Pos.x - gap - (linesWidth[i] + linesWidth[i - 1]) / 2, 0F, lanes[4 * (i - 1)].Pos.z + (linesWidth[i - 2] - linesWidth[i - 1]) / 2),
                                                 new Vector3(0F, -90F, 0F),
-                                                new Vector3(lanes[4 * (i - 1)].Sc.x + 2 * gap + linesWidth[i - 1] + linesWidth[i - 2], 1F, linesWidth[i])));
+                                                new Vector3(lanes[4 * (i - 1)].Sc.x + 2 * gap + linesWidth[i - 1] + linesWidth[i - 2], 1F, linesWidth[i]), this));
 
                     lanes.Add(new LaneStandard(new Vector3(0F, 0F, lanes[4 * (i - 1) + 1].Pos.z - (gap + (linesWidth[i - 1] + linesWidth[i]) / 2)),
                                                 new Vector3(0F, 180F, 0F),
-                                                new Vector3(lanes[4 * (i - 1) + 1].Sc.x + 2 * gap + 2 * linesWidth[i - 1], 1F, linesWidth[i])));
+                                                new Vector3(lanes[4 * (i - 1) + 1].Sc.x + 2 * gap + 2 * linesWidth[i - 1], 1F, linesWidth[i]), this));
                 }
                 lanes.Add(new LaneStandard(new Vector3(lanes[4 * (i - 1) + 2].Pos.x + gap + (linesWidth[i] + linesWidth[i - 1]) / 2, 0F, 0F),
                                             new Vector3(0F, 90F, 0F),
-                                            new Vector3(lanes[4 * (i - 1) + 2].Sc.x + 2 * gap + 2 * linesWidth[i - 1], 1F, linesWidth[i])));
+                                            new Vector3(lanes[4 * (i - 1) + 2].Sc.x + 2 * gap + 2 * linesWidth[i - 1], 1F, linesWidth[i]), this));
                 lanes.Add(new LaneStandard(new Vector3(lanes[4 * (i - 1) + 3].Pos.x + (-linesWidth[i] + linesWidth[i - 1]) / 2, 0F, lanes[4 * (i - 1) + 3].Pos.z + gap + (linesWidth[i - 1] + linesWidth[i]) / 2),
                                             new Vector3(0F, 0F, 0F),
-                                            new Vector3(lanes[4 * (i - 1) + 3].Sc.x + 2 * gap + linesWidth[i - 1] + linesWidth[i], 1F, linesWidth[i])));
+                                            new Vector3(lanes[4 * (i - 1) + 3].Sc.x + 2 * gap + linesWidth[i - 1] + linesWidth[i], 1F, linesWidth[i]), this));
             }
             return lanes;
         }

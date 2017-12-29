@@ -25,8 +25,6 @@ namespace RLR
 
         public void RestartGame()
         {
-            GameControl.GameState.CurrentLevel = 1;
-
             SceneManager.LoadScene("RLR");
         }
     }

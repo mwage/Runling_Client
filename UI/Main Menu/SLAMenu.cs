@@ -6,8 +6,6 @@ namespace UI.Main_Menu
 {
     public class SLAMenu : MonoBehaviour
     {
-        public GameObject PrevMenu;
-
         private MainMenuManager _mainMenuManager;
         private SceneLoader _sceneLoader;
         private HighScoreMenuSLA _highScoreMenu;
@@ -48,7 +46,6 @@ namespace UI.Main_Menu
         public void BackToMenu()
         {
             gameObject.SetActive(false);
-            PrevMenu.gameObject.SetActive(true);
             _mainMenuManager.MoveCamera(_mainMenuManager.CameraPosMainMenu, _mainMenuManager.CameraRotMainMenu);
         }
         #endregion

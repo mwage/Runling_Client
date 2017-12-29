@@ -1,6 +1,8 @@
-﻿using System.Collections;
-using Launcher;
+﻿using Launcher;
 using Players;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,62 +14,64 @@ namespace SLA
         public Transform ScoreLayoutGroup;
         public Text NewHighScore;
 
-        public int[] LevelScoreCurGame { get; } = new int[LevelManagerSLA.NumLevels];
-        public Text CurrentScoreText { get; private set; }
+        public Dictionary<PlayerManager, ScoreDataSLA> Scores { get; } = new Dictionary<PlayerManager, ScoreDataSLA>();
 
         private ControlSLA _controlSLA;
-        private GameObject _playerScores;
-        private Text _totalScoreText;
 
         private void Awake()
         {
             _controlSLA = GetComponent<ControlSLA>();
         }
 
-        public void SetName(string playerName)
+        public void InitializeScore(PlayerManager playerManager)
         {
-            _playerScores = Instantiate(PlayerScorePrefab, ScoreLayoutGroup);
-            _playerScores.transform.Find("PlayerName").GetComponent<Text>().text = playerName;
-            CurrentScoreText = _playerScores.transform.Find("CurrentScore").GetComponent<Text>();
-            _totalScoreText = _playerScores.transform.Find("TotalScore").GetComponent<Text>();
-
-            CurrentScoreText.text = "0";
-            _totalScoreText.text = "0";
+            var playerScore = Instantiate(PlayerScorePrefab, ScoreLayoutGroup);
+            playerScore.transform.Find("PlayerName").GetComponent<Text>().text = playerManager.Player.Name;
+            var currentScoreText = playerScore.transform.Find("CurrentScore").GetComponent<Text>();
+            var totalScoreText = playerScore.transform.Find("TotalScore").GetComponent<Text>();
+            Scores[playerManager] = new ScoreDataSLA(playerManager, LevelManagerSLA.NumLevels, currentScoreText, totalScoreText);
         }
 
         public void StartScore()
         {
-            _controlSLA.PlayerManager.CurrentScore = 0;
-            StartCoroutine(AddScore());
+            if (GameControl.GameState.Solo)
+            {
+                StartCoroutine(AddScore());
+            }
         }
 
         private IEnumerator AddScore()
         {
-            while (!_controlSLA.PlayerManager.IsDead)
+            yield return new WaitForSeconds(0.25f);
+            while (!_controlSLA.PlayerManagers[0].IsDead)
             {
+                UpdateScore(_controlSLA.PlayerManagers[0]);
                 yield return new WaitForSeconds (0.25f);
-                UpdateScore(_controlSLA.PlayerManager);
             }
         }
 
         private void UpdateScore(PlayerManager playerManager)
         {
-                playerManager.CurrentScore += 2;
-                playerManager.TotalScore += 2;
-                CurrentScoreText.text = playerManager.CurrentScore.ToString();
-                _totalScoreText.text = playerManager.TotalScore.ToString();
+            Scores[playerManager].IncrementScore(2);
         }
 
-
-        public void SetHighScore()
+        public void SortScores()
         {
-            var playerManager = _controlSLA.PlayerManager;
-            LevelScoreCurGame[_controlSLA.CurrentLevel - 1] = playerManager.CurrentScore;
+            var totalScores = Scores.Values.ToList();
+            totalScores.Sort((score1, score2) => score2.TotalScore.CompareTo(score1.TotalScore));
 
-            if (playerManager.CurrentScore > GameControl.HighScores.HighScoreSLA[_controlSLA.CurrentLevel])
+            for (var i = 0; i < totalScores.Count; i++)
+            {
+                totalScores[i].SetSiblingIndex(i);
+            }
+        }
+
+        public void SetHighScore(PlayerManager playerManager)
+        {
+            if (Scores[playerManager].CurrentScore > GameControl.HighScores.HighScoreSLA[_controlSLA.CurrentLevel])
             {
                 NewHighScoreSLA(playerManager);
-                GameControl.HighScores.HighScoreSLA[_controlSLA.CurrentLevel] = playerManager.CurrentScore;
+                GameControl.HighScores.HighScoreSLA[_controlSLA.CurrentLevel] = Scores[playerManager].CurrentScore;
                 PlayerPrefs.SetInt("HighScoreSLA" + _controlSLA.CurrentLevel, GameControl.HighScores.HighScoreSLA[_controlSLA.CurrentLevel]);
             }
 
@@ -78,15 +82,15 @@ namespace SLA
 
         public void NewHighScoreSLA(PlayerManager playerManager)
         {
-            NewHighScore.text = "New Highscore: " + playerManager.CurrentScore;
+            NewHighScore.text = "New Highscore: " + Scores[playerManager].CurrentScore;
             NewHighScore.transform.parent.gameObject.SetActive(true);
         }
 
         public void SetGameHighScore(PlayerManager playerManager)
         {
-            if (playerManager.TotalScore > GameControl.HighScores.HighScoreSLA[0])
+            if (Scores[playerManager].TotalScore > GameControl.HighScores.HighScoreSLA[0])
             {
-                GameControl.HighScores.HighScoreSLA[0] = playerManager.TotalScore;
+                GameControl.HighScores.HighScoreSLA[0] = Scores[playerManager].TotalScore;
             }
             PlayerPrefs.SetInt("HighScoreSLAGame", GameControl.HighScores.HighScoreSLA[0]);
         }

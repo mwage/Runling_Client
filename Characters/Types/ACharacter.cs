@@ -149,11 +149,17 @@ namespace Characters.Types
         {
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.Ability1))
             {
-                ActivateOrDeactivateAbility(Ability1);
+                if (Ability1 != null)
+                {
+                    ActivateOrDeactivateAbility(Ability1);
+                }
             }
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.Ability2))
             {
-                ActivateOrDeactivateAbility(Ability2);
+                if (Ability2 != null)
+                {
+                    ActivateOrDeactivateAbility(Ability2);
+                }
             }
         }
 

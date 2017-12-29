@@ -1,82 +1,92 @@
-﻿using Launcher;
+﻿using Players;
+using RLR;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace UI.RLR_Menus
 {
-    public class ChooseLevelMenuRLR : MonoBehaviour
+    public class ChooseLevelMenuRLR : AMenu
     {
-        [SerializeField] private InGameMenuManagerRLR _inGameMenuManagerRLR;
+        [SerializeField] private ControlRLR _controlRLR;
+
+        private LevelManagerRLR _levelManager;
+        private InitializeGameRLR _initializeGame;
+        private MenuManager _menuManager;
+
+        private void Awake()
+        {
+            _initializeGame = _controlRLR.GetComponent<InitializeGameRLR>();
+            _levelManager = _controlRLR.GetComponent<LevelManagerRLR>();
+            _menuManager = transform.parent.GetComponent<MenuManager>();
+        }
+
+        private void OnEnable()
+        {
+            _menuManager.ActiveMenu?.gameObject.SetActive(false);
+            _menuManager.ActiveMenu = this;
+        }
 
         #region Buttons
 
         public void Level1()
         {
-            GameControl.GameState.CurrentLevel = 1;
-            Time.timeScale = 1;
-            SceneManager.LoadScene("RLR");
+            PickLevel(1);
         }
 
         public void Level2()
         {
-            GameControl.GameState.CurrentLevel = 2;
-            Time.timeScale = 1;
-            SceneManager.LoadScene("RLR");
+            PickLevel(2);
         }
 
         public void Level3()
         {
-            GameControl.GameState.CurrentLevel = 3;
-            Time.timeScale = 1;
-            SceneManager.LoadScene("RLR");
+            PickLevel(3);
         }
 
         public void Level4()
         {
-            GameControl.GameState.CurrentLevel = 4;
-            Time.timeScale = 1;
-            SceneManager.LoadScene("RLR");
+            PickLevel(4);
         }
 
         public void Level5()
         {
-            GameControl.GameState.CurrentLevel = 5;
-            Time.timeScale = 1;
-            SceneManager.LoadScene("RLR");
+            PickLevel(5);
         }
 
         public void Level6()
         {
-            GameControl.GameState.CurrentLevel = 6;
-            Time.timeScale = 1;
-            SceneManager.LoadScene("RLR");
+            PickLevel(6);
         }
 
         public void Level7()
         {
-            GameControl.GameState.CurrentLevel = 7;
-            Time.timeScale = 1;
-            SceneManager.LoadScene("RLR");
+            PickLevel(7);
         }
 
         public void Level8()
         {
-            GameControl.GameState.CurrentLevel = 8;
-            Time.timeScale = 1;
-            SceneManager.LoadScene("RLR");
+            PickLevel(8);
         }
 
         public void Level9()
         {
-            GameControl.GameState.CurrentLevel = 9;
-            Time.timeScale = 1;
-            SceneManager.LoadScene("RLR");
+            PickLevel(9);
         }
 
-        public void Back()
+        private void PickLevel(int level)
         {
-            gameObject.SetActive(false);
-            _inGameMenuManagerRLR.InGameMenu.gameObject.SetActive(true);
+            _controlRLR.CurrentLevel = level - 1;
+            _controlRLR.StopAllCoroutines();
+            _levelManager.EndLevel(0);
+
+            // if there is an active countdown, destroy it
+            _initializeGame.Countdown(0);
+
+            _menuManager.CloseMenu(this);
+        }
+
+        public override void Back()
+        {
+            _menuManager.Menu.SetActive(true);
         }
         #endregion
     }

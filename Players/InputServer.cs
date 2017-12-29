@@ -1,11 +1,6 @@
 ﻿using Launcher;
 using Players.Camera;
-using RLR;
-using SLA;
-using UI.RLR_Menus;
-using UI.SLA_Menus;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Players
 {
@@ -16,66 +11,51 @@ namespace Players
     public class InputServer : MonoBehaviour
     {
         public CameraHandleMovement CameraHandleMovement;
+        public GameObject MouseClickPrefab;
+        public GameObject PauseScreen;
+
+        public bool InMenu { get; set; }
 
         private PlayerManager _playerManager;
-        private InGameMenuManagerRLR _inGameMenuManagerRLR;
-        private InGameMenuManagerSLA _inGameMenuManagerSLA;
+        private MouseInput _mouseInput;
         private bool _initialized;
+        private bool _pause;
 
+        public delegate void NavigateMenuEventHandler();
 
-        public void Init(GameObject ingameMenuManager, PlayerManager playerManager)
+        public event NavigateMenuEventHandler onNavigateMenu;
+
+        public void Initialize (PlayerManager playerManager)
         {
-            if (SceneManager.GetActiveScene().name == "RLR")
-            {
-                _inGameMenuManagerRLR = ingameMenuManager.GetComponent<InGameMenuManagerRLR>();
-                _playerManager = playerManager;
-            }
-            else
-            {
-                _inGameMenuManagerSLA = ingameMenuManager.GetComponent<InGameMenuManagerSLA>();
-                _playerManager = playerManager;
-            }
+            _playerManager = playerManager;
+            _mouseInput = new MouseInput(playerManager, this);
             _initialized = true;
         }
 
         public void Update()
         {
-            if (!_initialized)
+            MenuInput();
+
+            if (!_initialized || InMenu)
                 return;
 
-            InputAutoClicker();
-            InputGodMode();
+            _mouseInput.ProcessInput();
+            AutoClickerInput();
+            GodModeInput();
+            PauseInput();
             _playerManager.CharacterController.InputAbilities();
         }
 
         public void LateUpdate()
         {
-            if (!_initialized)
+            if (!_initialized || InMenu)
                 return;
-
-            if (IsMenuActive())
-                return;
-
+            
             CameraHandleMovement.ServeInput();
-        }
-
-        private bool IsMenuActive()
-        {
-            if (_inGameMenuManagerRLR != null)
-            {
-                if (_inGameMenuManagerRLR.MenuOn)
-                    return true;
-            }
-            else
-            {
-                if (_inGameMenuManagerSLA.MenuOn)
-                    return true;
-            }
-            return false;
         }
        
 
-        public void InputAutoClicker()
+        public void AutoClickerInput()
         {
             // Start autoclicking
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateClicker))
@@ -90,7 +70,7 @@ namespace Players
             }
         }
 
-        private void InputGodMode()
+        private void GodModeInput()
         {
             // Become invulnerable
             if (GameControl.InputManager.GetButtonDown(HotkeyAction.ActivateGodmode))
@@ -104,6 +84,34 @@ namespace Players
             {
                 _playerManager.GodModeActive = false;
                 _playerManager.GodMode.SetActive(false);
+            }
+        }
+
+        private void MenuInput()
+        {
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.NavigateMenu))
+            {
+                onNavigateMenu?.Invoke();
+            }
+        }
+
+        private void PauseInput()
+        {
+            //pause game
+            if (GameControl.InputManager.GetButtonDown(HotkeyAction.Pause))
+            {
+                if (!_pause)
+                {
+                    Time.timeScale = 0;
+                    _pause = true;
+                    PauseScreen.SetActive(true);
+                }
+                else if (_pause)
+                {
+                    Time.timeScale = 1;
+                    _pause = false;
+                    PauseScreen.SetActive(false);
+                }
             }
         }
     }

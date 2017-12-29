@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Network.Synchronization;
+﻿using Network.Synchronization;
 using Network.Synchronization.Data;
-using TMPro;
+using System.Collections.Generic;
+using Network;
 using UnityEngine;
 
 namespace SLA.Network
@@ -19,32 +18,60 @@ namespace SLA.Network
             _death = _initializeGame.gameObject.GetComponent<DeathSLA>();
             _controlSLA = _initializeGame.gameObject.GetComponent<ControlSLA>();
 
-            SyncPlayerManager.onSpawnPlayers += SpawnPlayer;
+            SyncPlayerManager.onInitializePlayers += InitializePlayers;
+            SyncPlayerManager.onSpawnPlayers += SpawnPlayers;
             SyncPlayerManager.onPlayerDeath += PlayerDeath;
             SyncPlayerManager.onUpdatePlayers += UpdatePlayers;
 
             SyncGameManager.onCountdown += Countdown;
+            SyncGameManager.onPrepareLevel += PrepareLevel;
+            SyncGameManager.onStartLevel += StartLevel;
+            SyncGameManager.onHidePanels += HidePanels;
         }
 
         private void OnDestroy()
         {
-            SyncPlayerManager.onSpawnPlayers -= SpawnPlayer;
+            SyncPlayerManager.onInitializePlayers -= InitializePlayers;
+            SyncPlayerManager.onSpawnPlayers -= SpawnPlayers;
             SyncPlayerManager.onPlayerDeath -= PlayerDeath;
             SyncPlayerManager.onUpdatePlayers -= UpdatePlayers;
+
+            SyncGameManager.onCountdown -= Countdown;
+            SyncGameManager.onPrepareLevel -= PrepareLevel;
+            SyncGameManager.onStartLevel -= StartLevel;
+            SyncGameManager.onHidePanels -= HidePanels;
         }
 
         #region PlayerSync
 
-        private void SpawnPlayer(PlayerState playerState)
+        private void InitializePlayers()
         {
-            if (_controlSLA.PlayerManagers.ContainsKey(playerState.Id))
+            foreach (var player in GameClient.Instance.Players)
             {
-                _initializeGame.SpawnPlayer(_controlSLA.PlayerManagers[playerState.Id], 
-                    new Vector3(playerState.PosX, 0, playerState.PosZ), playerState.Rotation);
+                var playerManager = _initializeGame.InitializePlayer(player);
+                playerManager.PlayerStateManager = playerManager.gameObject.AddComponent<PlayerStateManager>();
+                _controlSLA.PlayerManagers[player.Id] = playerManager;
+
+                if (player.Id == GameClient.Instance.Id)
+                {
+                    _initializeGame.InitializeControls(playerManager);
+                }
             }
-            else
+        }
+
+        private void SpawnPlayers(List<PlayerState> playerStates)
+        {
+            foreach (var playerState in playerStates)
             {
-                Debug.LogError("No player with ID = " + playerState.Id + " found!");
+                if (_controlSLA.PlayerManagers.ContainsKey(playerState.Id))
+                {
+                    _initializeGame.SpawnPlayer(_controlSLA.PlayerManagers[playerState.Id],
+                        new Vector3(playerState.PosX, 0, playerState.PosZ), playerState.Rotation);
+                }
+                else
+                {
+                    Debug.LogError("No player with ID = " + playerState.Id + " found!");
+                }
             }
         }
 
@@ -67,7 +94,7 @@ namespace SLA.Network
                 if (_controlSLA.PlayerManagers.ContainsKey(state.Id))
                 {
                     _controlSLA.PlayerManagers[state.Id].PlayerStateManager
-                        .UpdatePosition(state.PosX, state.PosZ, state.Rotation);
+                        ?.UpdatePosition(state.PosX, state.PosZ, state.Rotation);
                 }
                 else
                 {
@@ -86,6 +113,25 @@ namespace SLA.Network
             {
                 _initializeGame.Countdown(counter);
             }
+        }
+
+        private void PrepareLevel(int currentLevel)
+        {
+            _controlSLA.CurrentLevel = currentLevel;
+            _initializeGame.PrepareLevel();
+        }
+
+        private void StartLevel()
+        {
+            foreach (var playerManager in _controlSLA.PlayerManagers.Values)
+            {
+                _initializeGame.StartLevel(playerManager);
+            }
+        }
+
+        private void HidePanels()
+        {
+            _initializeGame.HidePanels();
         }
 
         #endregion

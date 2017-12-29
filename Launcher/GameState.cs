@@ -9,7 +9,6 @@ namespace Launcher
         public bool Solo { get; set; } = false;
 
         // Level/Game management (remove when refactoring RLR)
-        public int CurrentLevel { get; set; } = 1;
         public bool FinishedLevel { get; set; } = false;
 
         // MapState (remove when refactoring RLR)

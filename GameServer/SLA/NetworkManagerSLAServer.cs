@@ -1,11 +1,14 @@
 ﻿using DarkRift;
 using DarkRift.Server;
 using Network.DarkRiftTags;
+using SLA;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Server.Scripts.SLA
 {
-    public class NetworkManagerSLAServer : MonoBehaviour {
+    public class NetworkManagerSLAServer : MonoBehaviour
+    {
 
         private void Awake()
         {
@@ -19,27 +22,15 @@ namespace Server.Scripts.SLA
 
         #region Network Calls
 
-        public static void InitializePlayers()
-        {
-            ServerManager.Instance.SendToAll(new TagSubjectMessage(Tags.SLA, SLASubjects.InitializePlayers, new DarkRiftWriter()), SendMode.Reliable);
-        }
-
-        public static void PrepareLevel(byte currentLevel)
+        public static void UpdateScore(List<ScoreDataSLA> scoreDatas)
         {
             var writer = new DarkRiftWriter();
-            writer.Write(currentLevel);
+            foreach (var data in scoreDatas)
+            {
+                writer.Write(data);
+            }
 
-            ServerManager.Instance.SendToAll(new TagSubjectMessage(Tags.SLA, SLASubjects.PrepareLevel, writer), SendMode.Reliable);
-        }
-
-        public static void StartLevel()
-        {
-            ServerManager.Instance.SendToAll(new TagSubjectMessage(Tags.SLA, SLASubjects.StartLevel, new DarkRiftWriter()), SendMode.Reliable);
-        }
-
-        public static void HidePanels()
-        {
-            ServerManager.Instance.SendToAll(new TagSubjectMessage(Tags.SLA, SLASubjects.HidePanels, new DarkRiftWriter()), SendMode.Reliable);
+            ServerManager.Instance.SendToAll(new TagSubjectMessage(Tags.SLA, SLASubjects.UpdateScore, writer), SendMode.Reliable);
         }
 
         #endregion

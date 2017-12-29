@@ -1,8 +1,8 @@
 ﻿using Launcher;
+using Network;
 using Network.Rooms;
-using Network.Synchronization;
-using System.Collections.Generic;
 using Network.Synchronization.Data;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,20 +13,16 @@ namespace UI.Main_Menu
         [SerializeField] private RoomLayoutGroup _roomLayoutGroup;
         [SerializeField] private PlayerLayoutGroup _playerLayoutGroup;
         [SerializeField] private RoomNameInput _roomNameInput;
+        [SerializeField] private GameObject _normalMultiplayer;
+        [SerializeField] private GameObject _error;
 
         public GameObject OutOfLobby;
         public GameObject CreatingLobby;
         public GameObject InLobby;
         public Button StartButton;
 
-        private MainMenuManager _mainMenuManager;
-        private MainMenu _mainMenu;
-
         private void Awake()
         {
-            _mainMenuManager = transform.parent.GetComponent<MainMenuManager>();
-            _mainMenu = _mainMenuManager.MainMenu;
-
             RoomManager.onSuccessfulLeaveRoom += OnLeaveRoom;
             RoomManager.onSuccessfulJoinRoom += OnJoinedRoom;
         }
@@ -39,6 +35,13 @@ namespace UI.Main_Menu
 
         private void OnEnable()
         {
+            if (!MainClient.Instance.Connected)
+            {
+                _normalMultiplayer.SetActive(false);
+                _error.SetActive(true);
+                return;
+            }
+
             if (RoomManager.Instance.CurrentRoom == null)
             {
                 OutOfLobby.SetActive(true);
@@ -96,7 +99,6 @@ namespace UI.Main_Menu
                 CreatingLobby.SetActive(false);
             }
             gameObject.SetActive(false);
-            _mainMenu.gameObject.SetActive(true);
         }
 
         public void StartGame()

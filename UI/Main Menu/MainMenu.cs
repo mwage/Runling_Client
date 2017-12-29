@@ -7,8 +7,6 @@ using UnityEngine.UI;
 
 namespace UI.Main_Menu
 {
-    using OptionsMenu;
-
     public class MainMenu : MonoBehaviour
     {
         public Text MultiplayerButtonText;
@@ -16,14 +14,12 @@ namespace UI.Main_Menu
         public Text LogoutButtonText;
 
         private MainMenuManager _mainMenuManager;
-        private OptionsMenu _optionsMenu;
         private SoloMenu _soloMenu;
         private MultiplayerMenu _multiplayerMenu;
 
         private void Awake()
         {
             _mainMenuManager = transform.parent.GetComponent<MainMenuManager>();
-            _optionsMenu = _mainMenuManager.OptionsMenu;
             _soloMenu = _mainMenuManager.SoloMenu;
             _multiplayerMenu = _mainMenuManager.MultiplayerMenu;
         }
@@ -31,7 +27,6 @@ namespace UI.Main_Menu
         private void Update()
         {
             MultiplayerButtonText.text = RoomManager.Instance.CurrentRoom == null ? "Multiplayer" : "Back to Lobby";
-            MultiplayerButton.interactable = MainClient.Instance.Connected;
             LogoutButtonText.text = MainClient.Instance.Connected ? "Logout" : "Login";
         }
 
@@ -39,45 +34,20 @@ namespace UI.Main_Menu
 
         public void Multiplayer()
         {
-            if (MainClient.Instance.Connected)
-            {
-                gameObject.SetActive(false);
-                _multiplayerMenu.gameObject.SetActive(true);
-            }
-            else
-            {
-                SceneManager.LoadScene("Login");
-            }
+            _mainMenuManager.CloseAll();
+            _multiplayerMenu.gameObject.SetActive(true);
+            _mainMenuManager.MoveCamera(_mainMenuManager.CameraPosMainMenu, _mainMenuManager.CameraRotMainMenu);
         }
 
         public void Solo()
         {
-            gameObject.SetActive(false);
+            _mainMenuManager.CloseAll();
+            _soloMenu.NormalSolo.SetActive(RoomManager.Instance.CurrentRoom == null);
+            _soloMenu.Error.SetActive(RoomManager.Instance.CurrentRoom != null);
             _soloMenu.gameObject.SetActive(true);
+            _mainMenuManager.MoveCamera(_mainMenuManager.CameraPosMainMenu, _mainMenuManager.CameraRotMainMenu);
         }
 
-        public void Options()
-        {
-            gameObject.SetActive(false);
-            _optionsMenu.gameObject.SetActive(true);
-        }
-
-        public void Logout()
-        {
-            if (MainClient.Instance.Connected)
-            {
-                LoginManager.Logout();
-            }
-            else
-            {
-                SceneManager.LoadScene("Login");
-            }
-        }
-
-        public void Quit()
-        {
-            Application.Quit();
-        }
         #endregion
     }
 }
