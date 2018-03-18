@@ -1,9 +1,8 @@
 ﻿using DarkRift;
 using DarkRift.Server;
-using Launcher;
-using Network;
-using Network.DarkRiftTags;
-using Network.Synchronization.Data;
+using Game.Scripts.GameSettings;
+using Game.Scripts.Network.DarkRiftTags;
+using Game.Scripts.Network.Data;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -45,7 +44,10 @@ namespace Server.Scripts.SLA
                 {
                     _syncManager.SetActive(true);
                 });
-                MainClient.Instance.SendMessage(new TagSubjectMessage(Tags.GameServer, GameServerSubjects.ServerReady, new DarkRiftWriter()), SendMode.Reliable);
+                using (var msg = Message.CreateEmpty(GameServerTags.ServerReady))
+                {
+                    MasterClient.Instance.SendMessage(msg, SendMode.Reliable);
+                }
             }
 
             ServerManager.Instance.Server.Dispatcher.InvokeAsync(() =>
@@ -89,80 +91,105 @@ namespace Server.Scripts.SLA
 
         private void OnMessageReceived(object sender, MessageReceivedEventArgs e)
         {
-            var message = e.Message as TagSubjectMessage;
-            if (message == null || message.Tag != Tags.GameServer)
-                return;
-
-            var client = (Client)sender;
-
-            // Identify Player
-            if (message.Subject == GameServerSubjects.IdentifyPlayer)
+            using (var message = e.GetMessage())
             {
-                var reader = message.GetReader();
-                var mainId = reader.ReadUInt32();
-                var player = ServerManager.Instance.PendingPlayers.FirstOrDefault(p => p.Id == mainId);
-                if (player == null)
-                {
-                    Debug.Log("Failed to identify player");
-                    client.SendMessage(new TagSubjectMessage(Tags.GameServer, GameServerSubjects.IdentifyPlayerFailed, new DarkRiftWriter()), SendMode.Reliable);
+                // Check if message is meant for this plugin
+                if (message.Tag < Tags.TagsPerPlugin * Tags.GameServer || message.Tag >= Tags.TagsPerPlugin * (Tags.GameServer + 1))
                     return;
-                }
 
-                ServerManager.Instance.Server.Dispatcher.InvokeAsync(() =>
+                var client = e.Client;
+
+
+                // Identify Player
+                if (message.Tag == GameServerTags.IdentifyPlayer)
                 {
-                    ServerManager.Instance.PendingPlayers.Remove(player);
-                    ServerManager.Instance.Players[client] = player;
-                    ServerManager.Instance.Players[client].Id = client.GlobalID;
-
-                    foreach (var cl in ServerManager.Instance.Players.Keys)
+                    uint mainId;
+                    using (var reader = message.GetReader())
                     {
-                        var writer = new DarkRiftWriter();
-
-                        if (cl == client)
+                        mainId = reader.ReadUInt32();
+                    }
+                    var player = ServerManager.Instance.PendingPlayers.FirstOrDefault(p => p.Id == mainId);
+                    if (player == null)
+                    {
+                        Debug.Log("Failed to identify player");
+                        using (var msg = Message.CreateEmpty(GameServerTags.IdentifyPlayerFailed))
                         {
-                            // Let player know who's already in the game
-                            foreach (var pl in ServerManager.Instance.Players.Values)
+                            client.SendMessage(msg, SendMode.Reliable);
+                        }
+                        return;
+                    }
+
+                    ServerManager.Instance.Server.Dispatcher.InvokeAsync(() =>
+                    {
+                        ServerManager.Instance.PendingPlayers.Remove(player);
+                        ServerManager.Instance.Players[client] = player;
+                        ServerManager.Instance.Players[client].Id = client.ID;
+
+                        foreach (var cl in ServerManager.Instance.Players.Keys)
+                        {
+                            if (cl == client)
                             {
-                                writer.Write(pl);
+                                // Let player know who's already in the game
+                                using (var writer = DarkRiftWriter.Create())
+                                {
+                                    foreach (var pl in ServerManager.Instance.Players.Values)
+                                    {
+                                        writer.Write(pl);
+                                    }
+
+                                    using (var msg = Message.Create(GameServerTags.IdentifyPlayer, writer))
+                                    {
+                                        client.SendMessage(msg, SendMode.Reliable);
+                                    }
+                                }
                             }
-                            client.SendMessage(
-                                new TagSubjectMessage(Tags.GameServer, GameServerSubjects.IdentifyPlayer, writer),
-                                SendMode.Reliable);
+                            else
+                            {
+                                // Let others know who joined
+                                using (var writer = DarkRiftWriter.Create())
+                                {
+                                    writer.Write(player);
+
+                                    using (var msg = Message.Create(GameServerTags.PlayerJoined, writer))
+                                    {
+                                        cl.SendMessage(msg, SendMode.Reliable);
+                                    }
+                                }
+                            }
                         }
-                        else
+
+                        _text.text = "Connected: " + ServerManager.Instance.Players.Count + "/" +
+                                     ServerManager.Instance.PendingPlayers.Count + ServerManager.Instance.Players.Count;
+
+                        if (ServerManager.Instance.PendingPlayers.Count == 0)
                         {
-                            // Let others know who joined
-                            writer.Write(player);
-                            cl.SendMessage(
-                                new TagSubjectMessage(Tags.GameServer, GameServerSubjects.PlayerJoined, writer),
-                                SendMode.Reliable);
+                            _voting.SetActive(true);
+                        }
+                    });
+                }
+                ////////////////////////////// For faster testing only! /////////////////////////
+                else if (message.Tag == GameServerTags.TestModeSLA)
+                {
+                    ServerManager.Instance.Players[client] = new Player(client.ID, "AwesomeName", PlayerColor.Green);
+
+                    using (var writer = DarkRiftWriter.Create())
+                    {
+                        writer.Write(ServerManager.Instance.Players[client]);
+
+                        using (var msg = Message.Create(GameServerTags.IdentifyPlayer, writer))
+                        {
+                            client.SendMessage(msg, SendMode.Reliable);
                         }
                     }
 
-                    _text.text = "Connected: " + ServerManager.Instance.Players.Count + "/" + ServerManager.Instance.PendingPlayers.Count + ServerManager.Instance.Players.Count;
-
-                    if (ServerManager.Instance.PendingPlayers.Count == 0)
-                    {
-                        _voting.SetActive(true);
-                    }
-                });
+                    ServerManager.Instance.Server.Dispatcher.InvokeWait(() =>
+                        {
+                            _voting.SetActive(true);
+                        }
+                    );
+                }
+                ////////////////////////////////////////////////////////////////////////////////
             }
-            ////////////////////////////// For faster testing only! /////////////////////////
-            if (message.Subject == GameServerSubjects.TestModeSLA)
-            {
-                ServerManager.Instance.Players[client] = new Player(client.GlobalID, "AwesomeName", PlayerColor.Green);
-
-                var writer = new DarkRiftWriter();
-                writer.Write(ServerManager.Instance.Players[client]);
-                client.SendMessage(new TagSubjectMessage(Tags.GameServer, GameServerSubjects.IdentifyPlayer, writer), SendMode.Reliable);
-
-                ServerManager.Instance.Server.Dispatcher.InvokeWait(() =>
-                    {
-                        _voting.SetActive(true);
-                    }
-                );
-            }
-            ////////////////////////////////////////////////////////////////////////////////
         }
     }
 }

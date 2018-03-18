@@ -1,7 +1,7 @@
 ﻿using DarkRift;
-using DarkRift.Server;
-using Network.DarkRiftTags;
-using Network.Synchronization.Data;
+using Game.Scripts.Drones;
+using Game.Scripts.Network.DarkRiftTags;
+using Game.Scripts.Network.Data;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,68 +9,70 @@ namespace Server.Scripts.Synchronization
 {
     public class SyncDroneServer : MonoBehaviour
     {
+        [SerializeField] private DroneFactory _droneFactory;
 
         private void Awake()
         {
-            ServerManager.Instance.Server.ClientManager.ClientConnected += OnClientConnected;
+            _droneFactory.onSpawnDrones += SpawnDrones;
+            _droneFactory.onDestroyDrone += DestroyDrone;
         }
 
         private void OnDestroy()
         {
-            if (ServerManager.Instance != null)
-            {
-                ServerManager.Instance.Server.ClientManager.ClientConnected -= OnClientConnected;
-            }
+            _droneFactory.onSpawnDrones -= SpawnDrones;
+            _droneFactory.onDestroyDrone -= DestroyDrone;
         }
 
         #region NetworkCalls
 
-        public static void SpawnDrones(List<SpawnDroneData> droneDatas)
+        public void SpawnDrones(List<SpawnDroneData> droneDatas)
         {
-            var writer = new DarkRiftWriter();
-            foreach (var droneData in droneDatas)
+            using (var writer = DarkRiftWriter.Create())
             {
-                writer.Write(droneData);
-            }
+                foreach (var droneData in droneDatas)
+                {
+                    writer.Write(droneData);
+                }
 
-            ServerManager.Instance.SendToAll(new TagSubjectMessage(Tags.SyncDrone, SyncDroneSubjects.SpawnDrone, writer), SendMode.Reliable);
+                using (var msg = Message.Create(SyncDroneTags.SpawnDrone, writer))
+                {
+                    ServerManager.Instance.SendToAll(msg, SendMode.Reliable);
+                }
+            }
         }
 
         public static void UpdateDroneData(List<DroneState> droneStates)
         {
-            var writer = new DarkRiftWriter();
-            foreach (var state in droneStates)
+            using (var writer = DarkRiftWriter.Create())
             {
-                writer.Write(state);
-            }
+                foreach (var state in droneStates)
+                {
+                    writer.Write(state);
+                }
 
-            // TODO: Change sendmode to unreliable
-            ServerManager.Instance.SendToAll(new TagSubjectMessage(Tags.SyncDrone, SyncDroneSubjects.UpdateDroneState, writer), SendMode.Reliable);
+                // TODO: Change sendmode to unreliable with jitterbuffer
+
+                using (var msg = Message.Create(SyncDroneTags.UpdateDroneState, writer))
+                {
+                    ServerManager.Instance.SendToAll(msg, SendMode.Reliable);
+                }
+            }
         }
 
-        public static void DestroyDrone(ushort droneId)
+        public void DestroyDrone(ushort droneId)
         {
-            var writer = new DarkRiftWriter();
-            writer.Write(droneId);
+            using (var writer = DarkRiftWriter.Create())
+            {
+                writer.Write(droneId);
 
-            ServerManager.Instance.SendToAll(new TagSubjectMessage(Tags.SyncDrone, SyncDroneSubjects.DestroyDrone, writer), SendMode.Reliable);
+                using (var msg = Message.Create(SyncDroneTags.DestroyDrone, writer))
+                {
+                    ServerManager.Instance.SendToAll(msg, SendMode.Reliable);
+                }
+            }
         }
 
         #endregion
 
-        private void OnClientConnected(object sender, ClientConnectedEventArgs e)
-        {
-            e.Client.MessageReceived += OnMessageReceived;
-        }
-
-        private void OnMessageReceived(object sender, MessageReceivedEventArgs e)
-        {
-            var message = e.Message as TagSubjectMessage;
-            if (message == null || message.Tag != Tags.SyncDrone)
-                return;
-
-            var client = (Client) sender;
-
-        }
     }
 }

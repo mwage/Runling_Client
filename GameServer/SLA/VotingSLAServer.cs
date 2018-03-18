@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Client.Scripts.Launcher;
 using DarkRift;
 using DarkRift.Server;
-using Launcher;
-using Network.DarkRiftTags;
+using Game.Scripts.GameSettings;
+using Game.Scripts.Network.DarkRiftTags;
 using Server.Scripts.Synchronization;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,7 +33,10 @@ namespace Server.Scripts.SLA
             _votesPerMode[GameMode.Practice] = 0;
 
             // Send everyone to start voting
-            ServerManager.Instance.SendToAll(new TagSubjectMessage(Tags.Voting, VotingSubjects.StartVoting, new DarkRiftWriter()), SendMode.Reliable);
+            using (var msg = Message.CreateEmpty(VotingTags.StartVoting))
+            {
+                ServerManager.Instance.SendToAll(msg, SendMode.Reliable);
+            }
 
             ServerManager.Instance.Server.Dispatcher.InvokeAsync(() =>
             {
@@ -48,28 +52,33 @@ namespace Server.Scripts.SLA
 
         private void OnMessageReceived(object sender, MessageReceivedEventArgs e)
         {
-            var message = e.Message as TagSubjectMessage;
-            if (message == null || message.Tag != Tags.Voting)
-                return;
-
-            var client = (Client) sender;
-
-            // Vote got submitted
-            if (message.Subject == VotingSubjects.SubmitVote)
+            using (var message = e.GetMessage())
             {
-                var reader = message.GetReader();
-                ServerManager.Instance.Players[client].Vote = (GameMode)reader.ReadByte();
-                UpdateVotes();
-            }
-            else if (message.Subject == VotingSubjects.FinishVoting)
-            {
-                Debug.Log("Player finished voting.");
-                ServerManager.Instance.Players[client].FinishedVoting = true;
-
-                if (ServerManager.Instance.Players.Values.Any(player => !player.FinishedVoting))
+                // Check if message is meant for this plugin
+                if (message.Tag < Tags.TagsPerPlugin * Tags.Voting || message.Tag >= Tags.TagsPerPlugin * (Tags.Voting + 1))
                     return;
 
-                Finish();
+                var client = e.Client;
+
+                // Vote got submitted
+                if (message.Tag == VotingTags.SubmitVote)
+                {
+                    using (var reader = message.GetReader())
+                    {
+                        ServerManager.Instance.Players[client].Vote = (GameMode)reader.ReadByte();
+                    }
+                    UpdateVotes();
+                }
+                else if (message.Tag == VotingTags.FinishVoting)
+                {
+                    Debug.Log("Player finished voting.");
+                    ServerManager.Instance.Players[client].FinishedVoting = true;
+
+                    if (ServerManager.Instance.Players.Values.Any(player => !player.FinishedVoting))
+                        return;
+
+                    Finish();
+                }
             }
         }
 
@@ -104,12 +113,17 @@ namespace Server.Scripts.SLA
                 _text.text = "Arena - Votes: " + classicVotes + "-" + teamVotes + "-" + practiceVotes;
             });
 
-            var writer = new DarkRiftWriter();
-            writer.Write(classicVotes);
-            writer.Write(teamVotes);
-            writer.Write(practiceVotes);
+            using (var writer = DarkRiftWriter.Create())
+            {
+                writer.Write(classicVotes);
+                writer.Write(teamVotes);
+                writer.Write(practiceVotes);
 
-            ServerManager.Instance.SendToAll(new TagSubjectMessage(Tags.Voting, VotingSubjects.VoteUpdate, writer), SendMode.Reliable);
+                using (var msg = Message.Create(VotingTags.VoteUpdate, writer))
+                {
+                    ServerManager.Instance.SendToAll(msg, SendMode.Reliable);
+                }
+            }
         }
 
         private IEnumerator Countdown()
@@ -126,10 +140,16 @@ namespace Server.Scripts.SLA
         private void Finish()
         {
             _controlSLA.GameMode = SetGameMode();
-            var writer = new DarkRiftWriter();
-            writer.Write((byte)_controlSLA.GameMode);
 
-            ServerManager.Instance.SendToAll(new TagSubjectMessage(Tags.Voting, VotingSubjects.StartGame, writer), SendMode.Reliable);
+            using (var writer = DarkRiftWriter.Create())
+            {
+                writer.Write((byte)_controlSLA.GameMode);
+
+                using (var msg = Message.Create(VotingTags.StartGame, writer))
+                {
+                    ServerManager.Instance.SendToAll(msg, SendMode.Reliable);
+                }
+            }
 
             ServerManager.Instance.Server.Dispatcher.InvokeWait(() =>
             {

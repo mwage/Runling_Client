@@ -1,16 +1,16 @@
-﻿using Characters;
-using Network.Synchronization;
-using Network.Synchronization.Data;
-using Players;
+﻿using Game.Scripts.Characters;
+using Game.Scripts.Network;
+using Game.Scripts.Network.Data;
+using Game.Scripts.Players;
+using Game.Scripts.SLA;
 using Server.Scripts.Synchronization;
-using SLA;
 using UnityEngine;
 
 namespace Server.Scripts.SLA
 {
     public class InitializeGameSLAServer : MonoBehaviour
     {
-        public PlayerFactory PlayerFactory;
+        public CharacterBuilder CharacterBuilder;
         private ControlSLAServer _controlSLA;
         private LevelManagerSLAServer _levelManager;
         private ScoreSLAServer _score;
@@ -24,7 +24,7 @@ namespace Server.Scripts.SLA
 
         public PlayerManager InitializePlayer(Player player)
         {
-            var playerManager = PlayerFactory.Create("Manticore");
+            var playerManager = CharacterBuilder.Create("Cat");
             playerManager.Model.SetActive(false);
             playerManager.Player = player;
             playerManager.PlayerMovement = playerManager.gameObject.AddComponent<PlayerMovement>();
@@ -43,7 +43,7 @@ namespace Server.Scripts.SLA
             playerManager.Model.SetActive(true);
             playerManager.Shield.SetActive(true);
 
-            playerManager.CharacterController.Speed.SetBaseSpeed(_levelManager.GetMovementSpeed(_controlSLA.CurrentLevel));
+            playerManager.CharacterManager.Speed.SetBaseSpeed(_levelManager.GetMovementSpeed(_controlSLA.CurrentLevel));
 
             playerManager.transform.position = _controlSLA.PlayerManagers.Values.Count != 1
                 ? Vector3.zero + Quaternion.Euler(0, 360f * playerManager.Player.Id / _controlSLA.PlayerManagers.Count, 0) * Vector3.right * 2

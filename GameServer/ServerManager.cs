@@ -1,11 +1,11 @@
 ﻿using DarkRift;
 using DarkRift.Server;
 using DarkRift.Server.Unity;
-using Launcher;
+using Game.Scripts;
+using Game.Scripts.Network.Data;
 using System;
 using System.Collections.Generic;
 using System.Net;
-using Network.Synchronization.Data;
 using UnityEngine;
 using LogType = DarkRift.LogType;
 
@@ -17,19 +17,24 @@ namespace Server.Scripts
         {
         }
 
+        // Settings to change in editor
+        public bool EventsFromDispatcher = true;
+        public bool LogToFile = true;
+        public bool LogToUnityConsole = true;
+        public bool LogToDebug = true;
+
         public IPAddress Address { get; set; } = IPAddress.Any;
         public ushort Port { get; set; } = 4297;
         public IPVersion IpVersion { get; set; } = IPVersion.IPv4;
         public DarkRiftServer Server { get; private set; }
 
-        public Dictionary<Client, Player> Players { get; } = new Dictionary<Client, Player>();
+        public Dictionary<IClient, Player> Players { get; } = new Dictionary<IClient, Player>();
         public List<Player> PendingPlayers { get; } = new List<Player>();
         public System.Random Random = new System.Random();
 
-        public ServerSpawnData.LoggingSettings.LogWriterSettings[] LogWriters { get; set; } 
-            = new ServerSpawnData.LoggingSettings.LogWriterSettings[0];
-        public const string LogFileString = @"Logs/{0:d-M-yyyy}/{0:HH-mm-ss tt}.txt";
+        private const string LogFileString = @"Logs/{0:d-M-yyyy}/{0:HH-mm-ss tt}.txt";
         private const string DataDirectory = @"/data";
+
 
         private void Update()
         {
@@ -49,46 +54,54 @@ namespace Server.Scripts
         {
             if (Server != null)
             {
-                throw new InvalidOperationException("The server has already been created! (Is CreateOnEnable enabled?)");
+                throw new InvalidOperationException("The server has already been created!");
             }
-               
+          
             var spawnData = new ServerSpawnData(Address, Port, IpVersion);
 
+            //Server settings
+            spawnData.Server.MaxStrikes = 5;
+            spawnData.Server.UseFallbackNetworking = true;      //Unity is broken, work around it...
+            spawnData.EventsFromDispatcher = EventsFromDispatcher;
+
+            //Plugin search settings
+            spawnData.PluginSearch.PluginTypes.AddRange(UnityServerHelper.SearchForPlugins());
+            spawnData.PluginSearch.PluginTypes.Add(typeof(UnityConsoleWriter));
+
             //Data settings
-            spawnData.Data.Settings["directory"] = DataDirectory;
+            spawnData.Data.Directory = DataDirectory;
 
             //Logging settings
-            spawnData.Plugins.PluginTypes.Add(typeof(UnityConsoleWriter));
+            spawnData.Plugins.LoadByDefault = true;
 
-            var fileWriter = new ServerSpawnData.LoggingSettings.LogWriterSettings
+            if (LogToFile)
             {
-                Name = "FileWriter1",
-                Type = "FileWriter",
-                LogLevels = new[] {LogType.Trace, LogType.Info, LogType.Warning, LogType.Error, LogType.Fatal}
-            };
-            fileWriter.Settings["file"] = LogFileString;
-            
-            var consoleWriter = new ServerSpawnData.LoggingSettings.LogWriterSettings
+                var fileWriter = new ServerSpawnData.LoggingSettings.LogWriterSettings();
+                fileWriter.Name = "FileWriter1";
+                fileWriter.Type = "FileWriter";
+                fileWriter.LogLevels = new[] { LogType.Trace, LogType.Info, LogType.Warning, LogType.Error, LogType.Fatal };
+                fileWriter.Settings["file"] = LogFileString;
+                spawnData.Logging.LogWriters.Add(fileWriter);
+            }
+
+            if (LogToUnityConsole)
             {
-                Name = "UnityConsoleWriter1",
-                Type = "UnityConsoleWriter",
-                LogLevels = new[] {LogType.Info, LogType.Warning, LogType.Error, LogType.Fatal}
-            };
+                var consoleWriter = new ServerSpawnData.LoggingSettings.LogWriterSettings();
+                consoleWriter.Name = "UnityConsoleWriter1";
+                consoleWriter.Type = "UnityConsoleWriter";
+                consoleWriter.LogLevels = new[] { LogType.Info, LogType.Warning, LogType.Error, LogType.Fatal };
+                spawnData.Logging.LogWriters.Add(consoleWriter);
+            }
 
-            var debugWriter = new ServerSpawnData.LoggingSettings.LogWriterSettings
+            if (LogToDebug)
             {
-                Name = "DebugWriter1",
-                Type = "DebugWriter",
-                LogLevels = new[] {LogType.Warning, LogType.Error, LogType.Fatal}
-            };
-
-            spawnData.Logging.LogWriters.Add(fileWriter);
-            spawnData.Logging.LogWriters.Add(consoleWriter);
-            spawnData.Logging.LogWriters.Add(debugWriter);
-
-            // Plugins
-//            spawnData.Plugins.PluginTypes.Add(typeof(DbConnector));
-
+                var debugWriter = new ServerSpawnData.LoggingSettings.LogWriterSettings();
+                debugWriter.Name = "DebugWriter1";
+                debugWriter.Type = "DebugWriter";
+                debugWriter.LogLevels = new[] { LogType.Warning, LogType.Error, LogType.Fatal };
+                spawnData.Logging.LogWriters.Add(debugWriter);
+            }
+           
             Server = new DarkRiftServer(spawnData);
             Server.Start();
         }

@@ -1,9 +1,10 @@
-﻿using Drones;
-using Drones.DroneTypes;
-using Drones.Movement;
-using Launcher;
-using SLA;
-using SLA.Levels;
+﻿using Game.Scripts.Drones;
+using Game.Scripts.Drones.DroneTypes;
+using Game.Scripts.Drones.Movement;
+using Game.Scripts.GameSettings;
+using Game.Scripts.SLA;
+using Game.Scripts.SLA.Levels;
+using Game.Scripts.SLA.Levels.Normal;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -105,7 +106,7 @@ namespace Server.Scripts.SLA
             foreach (var playerManager in _controlSLA.PlayerManagers.Values)
             {
                 _score.Scores[playerManager].ResetCurrent();
-                NetworkManagerSLAServer.UpdateScore(_score.Scores.Values.ToList());
+                SyncSLAServer.UpdateScore(_score.Scores.Values.ToList());
             }
 
             if (_controlSLA.GameMode != GameMode.Practice)
@@ -117,7 +118,7 @@ namespace Server.Scripts.SLA
         }
 
         //load win screen after the last level
-        private IEnumerator EndGameSLA(float delay)
+        private static IEnumerator EndGameSLA(float delay)
         {
             yield return new WaitForSeconds(delay);
         }

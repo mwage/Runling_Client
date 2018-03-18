@@ -1,5 +1,5 @@
 ﻿using DarkRift;
-using Network.DarkRiftTags;
+using Game.Scripts.Network.DarkRiftTags;
 using UnityEngine;
 
 namespace Server.Scripts.Synchronization
@@ -10,27 +10,44 @@ namespace Server.Scripts.Synchronization
 
         public static void Countdown(ushort counter)
         {
-            var writer = new DarkRiftWriter();
-            writer.Write(counter);
-            ServerManager.Instance.SendToAll(new TagSubjectMessage(Tags.SyncGame, SyncGameSubjects.Countdown, writer), SendMode.Reliable);
+            using (var writer = DarkRiftWriter.Create())
+            {
+                writer.Write(counter);
+
+                using (var msg = Message.Create(SyncGameTags.Countdown, writer))
+                {
+                    ServerManager.Instance.SendToAll(msg, SendMode.Reliable);
+                }
+            }
         }
 
         public static void PrepareLevel(byte currentLevel)
         {
-            var writer = new DarkRiftWriter();
-            writer.Write(currentLevel);
+            using (var writer = DarkRiftWriter.Create())
+            {
+                writer.Write(currentLevel);
 
-            ServerManager.Instance.SendToAll(new TagSubjectMessage(Tags.SyncGame, SyncGameSubjects.PrepareLevel, writer), SendMode.Reliable);
+                using (var msg = Message.Create(SyncGameTags.PrepareLevel, writer))
+                {
+                    ServerManager.Instance.SendToAll(msg, SendMode.Reliable);
+                }
+            }
         }
 
         public static void StartLevel()
         {
-            ServerManager.Instance.SendToAll(new TagSubjectMessage(Tags.SyncGame, SyncGameSubjects.StartLevel, new DarkRiftWriter()), SendMode.Reliable);
+            using (var msg = Message.CreateEmpty(SyncGameTags.StartLevel))
+            {
+                ServerManager.Instance.SendToAll(msg, SendMode.Reliable);
+            }
         }
 
         public static void HidePanels()
         {
-            ServerManager.Instance.SendToAll(new TagSubjectMessage(Tags.SyncGame, SyncGameSubjects.HidePanels, new DarkRiftWriter()), SendMode.Reliable);
+            using (var msg = Message.CreateEmpty(SyncGameTags.HidePanels))
+            {
+                ServerManager.Instance.SendToAll(msg, SendMode.Reliable);
+            }
         }
 
         #endregion

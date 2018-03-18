@@ -1,4 +1,4 @@
-﻿using Players;
+﻿using Game.Scripts.Players;
 using System.Collections.Generic;
 
 namespace Server.Scripts.Synchronization

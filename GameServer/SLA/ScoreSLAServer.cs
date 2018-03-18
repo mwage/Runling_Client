@@ -1,8 +1,8 @@
-﻿using Players;
-using SLA;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Game.Scripts.Players;
+using Game.Scripts.SLA;
 using UnityEngine;
 
 namespace Server.Scripts.SLA
@@ -39,7 +39,7 @@ namespace Server.Scripts.SLA
                     }
                 }
 
-                NetworkManagerSLAServer.UpdateScore(_playersToUpdate);
+                SyncSLAServer.UpdateScore(_playersToUpdate);
                 _playersToUpdate.Clear();
 
                 yield return new WaitForSeconds(0.25f);

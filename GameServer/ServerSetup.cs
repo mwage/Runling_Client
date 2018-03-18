@@ -1,11 +1,9 @@
 ﻿using DarkRift;
 using DarkRift.Client;
-using Launcher;
-using Network;
-using Network.DarkRiftTags;
-using Network.Synchronization;
+using Game.Scripts.GameSettings;
+using Game.Scripts.Network.DarkRiftTags;
+using Game.Scripts.Network.Data;
 using System;
-using Network.Synchronization.Data;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -18,10 +16,12 @@ namespace Server.Scripts
 
         private void Awake()
         {
-            if (MainClient.Instance.Connected)
+            if (MasterClient.Instance.Connected)
             {
-                MainClient.Instance.SendMessage(new TagSubjectMessage(Tags.GameServer, GameServerSubjects.ServerAvailable, new DarkRiftWriter()), SendMode.Reliable);
-
+                using (var msg = Message.CreateEmpty(GameServerTags.ServerAvailable))
+                {
+                    MasterClient.Instance.SendMessage(msg, SendMode.Reliable);
+                }
 
                 ServerManager.Instance.Server.Dispatcher.InvokeAsync(() =>
                 {
@@ -30,10 +30,13 @@ namespace Server.Scripts
             }
             else
             {
-                if (MainClient.Instance.Connect())
+                if (MasterClient.Instance.Connect())
                 {
-                    // Register as a game server
-                    MainClient.Instance.SendMessage(new TagSubjectMessage(Tags.GameServer, GameServerSubjects.RegisterServer, new DarkRiftWriter()), SendMode.Reliable);
+                    // Register as a game server, TODO: Some kind of secret to make sure only your gameservers can register as such
+                    using (var msg = Message.CreateEmpty(GameServerTags.RegisterServer))
+                    {
+                        MasterClient.Instance.SendMessage(msg, SendMode.Reliable);
+                    }
                 }
                 else
                 {
@@ -43,78 +46,93 @@ namespace Server.Scripts
                 }
             }
 
-            MainClient.Instance.MessageReceived += OnDataHandler;
-            MainClient.Instance.Disconnected += OnDisconnect;
+            MasterClient.Instance.MessageReceived += OnDataHandler;
+            MasterClient.Instance.Disconnected += OnDisconnect;
         }
 
         private void OnDestroy()
         {
-            if (MainClient.Instance != null)
+            if (MasterClient.Instance != null)
             {
-                MainClient.Instance.MessageReceived -= OnDataHandler;
+                MasterClient.Instance.MessageReceived -= OnDataHandler;
             }
         }
 
         private void OnDataHandler(object sender, MessageReceivedEventArgs e)
         {
-            var message = e.Message as TagSubjectMessage;
-
-            if (message == null || message.Tag != Tags.GameServer)
-                return;
-
-            // Successful register
-            if (message.Subject == GameServerSubjects.RegisterServer)
+            using (var message = e.GetMessage())
             {
-                var reader = message.GetReader();
-                try
-                {
-                    ServerManager.Instance.Port = reader.ReadUInt16();
-                    ServerManager.Instance.Create();
-                }
-                catch (Exception exception)
-                {
-                    Debug.Log(exception.Message + exception.StackTrace);
-                    Application.Quit();
+                // Check if message is meant for this plugin
+                if (message.Tag < Tags.TagsPerPlugin * Tags.GameServer || message.Tag >= Tags.TagsPerPlugin * (Tags.GameServer + 1))
                     return;
-                }
-                
-                ServerManager.Instance.Server.Dispatcher.InvokeAsync(() =>
-                {
-                    _text.text = "Waiting for games...";
-                });
 
-                MainClient.Instance.SendMessage(new TagSubjectMessage(Tags.GameServer, GameServerSubjects.ServerAvailable, new DarkRiftWriter()), SendMode.Reliable);
-            }
-            // New game
-            if (message.Subject == GameServerSubjects.InitializeGame)
-            {
-                var reader = message.GetReader();
-                var gameType = (GameType) reader.ReadByte();
-                while (reader.Position < reader.Length)
+                // Successful register
+                switch (message.Tag)
                 {
-                    var player = reader.ReadSerializable<Player>();
-                    ServerManager.Instance.PendingPlayers.Add(player);
-                }
-
-                switch (gameType)
-                {
-                    case GameType.Arena:
-                        ServerManager.Instance.Server.Dispatcher.InvokeWait(() =>
+                    case GameServerTags.RegisterServer:
+                    {
+                        try
                         {
-                            SceneManager.LoadScene("ServerSLA");
+                            using (var reader = message.GetReader())
+                            {
+                                ServerManager.Instance.Port = reader.ReadUInt16();
+                            }
+                            ServerManager.Instance.Create();
+                        }
+                        catch (Exception exception)
+                        {
+                            Debug.Log(exception.Message + exception.StackTrace);
+                            Application.Quit();
+                            return;
+                        }
+
+                        ServerManager.Instance.Server.Dispatcher.InvokeAsync(() =>
+                        {
+                            _text.text = "Waiting for games...";
                         });
 
-                        break;
-                    case GameType.RunlingRun:
-                        ServerManager.Instance.Server.Dispatcher.InvokeWait(() =>
+                        using (var msg = Message.CreateEmpty(GameServerTags.ServerAvailable))
                         {
-                            SceneManager.LoadScene("ServerRLR");
-                        });
+                            MasterClient.Instance.SendMessage(msg, SendMode.Reliable);
+                        }
                         break;
-                    default:
-                        Debug.Log("Invalid Gamemode");
-                        ServerManager.Instance.Close();
+                    }
+                    case GameServerTags.InitializeGame:
+                    {
+                        GameType gameType;
+
+                        using (var reader = message.GetReader())
+                        {
+                            gameType = (GameType)reader.ReadByte();
+                            while (reader.Position < reader.Length)
+                            {
+                                var player = reader.ReadSerializable<Player>();
+                                ServerManager.Instance.PendingPlayers.Add(player);
+                            }
+                        }
+
+                        switch (gameType)
+                        {
+                            case GameType.Arena:
+                                ServerManager.Instance.Server.Dispatcher.InvokeWait(() =>
+                                {
+                                    SceneManager.LoadScene("ServerSLA");
+                                });
+
+                                break;
+                            case GameType.RunlingRun:
+                                ServerManager.Instance.Server.Dispatcher.InvokeWait(() =>
+                                {
+                                    SceneManager.LoadScene("ServerRLR");
+                                });
+                                break;
+                            default:
+                                Debug.Log("Invalid Gamemode");
+                                ServerManager.Instance.Close();
+                                break;
+                        }
                         break;
+                    }
                 }
             }
         }

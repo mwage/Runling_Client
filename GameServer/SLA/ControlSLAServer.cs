@@ -1,6 +1,6 @@
-﻿using Launcher;
-using Network.Synchronization.Data;
-using Players;
+﻿using Game.Scripts.GameSettings;
+using Game.Scripts.Network.Data;
+using Game.Scripts.Players;
 using Server.Scripts.Synchronization;
 using System.Collections;
 using System.Collections.Generic;
